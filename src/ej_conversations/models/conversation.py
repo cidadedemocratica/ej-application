@@ -280,6 +280,11 @@ class Conversation(TimeStampedModel):
         except ObjectDoesNotExist:
             self.make_favorite(user)
 
+    def palette_class(self):
+        from ej_boards.models import BoardSubscription
+        board = BoardSubscription.objects.get(conversation_id=self.id).board
+        return 'Palette' + board.palette
+
 
 class ConversationTag(TaggedItemBase):
     """
