@@ -1,6 +1,6 @@
 <div class="ConversationCard-container">
-      <div class="ConversationCard {{conversation.palette_class()}}">
-        <div class="ConversationTags {{conversation.palette_class()}}-light">
+      <div class="ConversationCard {{conversation.palette}}">
+        <div class="ConversationTags {{conversation.light_palette}}">
             <i class="fa fa-tags"></i>
               {% if tag %}
                 {# Only conversation first tag is shown in card to prevent overflow #}
@@ -10,7 +10,7 @@
               {% endif %}
         </div>
         <div class="ConversationCard-actions ">
-            <ul class="ConversationCard-statistics {{conversation.palette_class()}}-text">
+            <ul class="ConversationCard-statistics {{conversation.text_palette}}">
                 <li><i class="fa fa-comment"></i> {{ n_comments }}</li>
                 <li><i class="fa fa-sliders-h"></i> {{ n_votes }}</li>
                 <li><i class="fa fa-star"></i> {{ n_followers }}</li>
@@ -19,7 +19,7 @@
         <div class="ConversationCard-cover">
             <h1 up-expand><a href="{{ url }}">{{ conversation.text }}</a></h1>
         </div>
-        <div class="ConversationCard-actions {{conversation.palette_class()}}">{{ action_button(_('Participate now!'), url) }}</div>
+        <div class="ConversationCard-actions {{conversation.palette}}">{{ action_button(_('Participate now!'), url) }}</div>
     </div>
     {% if user_can_moderate %}
         <a class="ConversationCard-moderation" href="{{ url }}moderate/">

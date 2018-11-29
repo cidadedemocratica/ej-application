@@ -146,5 +146,6 @@ def comment_form(conversation, request=None, comment_content=None, **kwargs):
         'user_is_owner': conversation.author == user,
         'csrf_input': csrf_input(request),
         'comment_content': comment_content,
+        'board_palette': conversation.light_palette,
         'login_anchor': login_anchor,
     }

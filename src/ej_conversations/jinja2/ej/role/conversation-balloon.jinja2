@@ -1,5 +1,5 @@
 <div class="ConversationDetail">
-    <div class="ConversationDetail-banner">
+    <div class="ConversationDetail-banner {{conversation.palette}}-light">
         <div class="ConversationTags"><i class="fa fa-tags"></i>
             {% if tags %}
               {{ ', '.join(tags) }}
@@ -15,7 +15,7 @@
         </ul>
     </div>
 
-    <div class="ConversationDetail-arrow"></div>
+    <div class="ConversationDetail-arrow {{conversation.text_palette}}"></div>
     <div class="ConversationDetail-social">
         {% if show_user_actions %}
             <form method="post" class="Favorite-conversation" id="Favorite-form">

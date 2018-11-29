@@ -280,7 +280,19 @@ class Conversation(TimeStampedModel):
         except ObjectDoesNotExist:
             self.make_favorite(user)
 
-    def palette_class(self):
+    @property
+    def light_palette(self):
+      return self.get_palette() + '-light'
+
+    @property
+    def text_palette(self):
+      return self.get_palette() + '-text'
+
+    @property
+    def palette(self):
+      return self.get_palette()
+
+    def get_palette(self):
         from ej_boards.models import BoardSubscription
         board = BoardSubscription.objects.get(conversation_id=self.id).board
         return 'Palette' + board.palette

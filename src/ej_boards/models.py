@@ -36,6 +36,9 @@ class Board(TimeStampedModel):
       ('Blue', 'Blue'),
       ('Grey', 'Grey'),
       ('Pink', 'Pink'),
+      ('Green', 'Green'),
+      ('Orange', 'Orange'),
+      ('Purple', 'Purple'),
     )
     palette = models.CharField(max_length=10, 
                               choices=PALLET_CHOICES,
