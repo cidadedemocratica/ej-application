@@ -1,5 +1,6 @@
 {% extends 'base.jinja2' %}
 
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
 
 {% block content %}
     <div class="Link">

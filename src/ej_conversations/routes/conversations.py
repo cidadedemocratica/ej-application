@@ -24,6 +24,7 @@ def conversation_list(request):
         'title': _('Public conversations'),
         'subtitle': _('Participate of conversations and give your opinion with comments and votes!'),
         'description': _('Participate of conversations and give your opinion with comments and votes!'),
+        'board_palette': 'PaletteBlue'
     }
 
 
@@ -93,6 +94,7 @@ def get_conversation_detail_context(request, conversation):
         'comments_under_moderation': n_comments_under_moderation,
         'comments_made': comments_made,
         'max_comments': max_comments_per_conversation(),
+        'board_palette': conversation.palette
     }
 
 
