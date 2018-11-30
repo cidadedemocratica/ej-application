@@ -182,7 +182,7 @@ def board_edit(request, board):
     if request.user != board.owner:
         raise PermissionError
     if request.method == 'POST':
-        form = BoardForm(request.POST, instance=board)
+        form = BoardForm(request.POST, request.FILES, instance=board)
         if form.is_valid():
             form.instance.save()
             return redirect(board.get_absolute_url())

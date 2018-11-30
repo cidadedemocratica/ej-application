@@ -28,11 +28,18 @@
     {% endif %}
 
 
-    <div class="ConversationList Container">
-        <div class="ConversationList-title">
-            <h1>{{ title }}</h1>
+    <div class="ConversationList">
+        {% if current_board is defined and current_board.image %}
+          <div class="ConversationList-title">
+            <img src="{{current_board.image.url}}">
             <p>{{ description }}</p>
-        </div>
+          </div>
+        {% else %}
+          <div class="ConversationList-title">
+              <h1> {{ title }}</h1>
+              <p>{{ description }}</p>
+          </div>
+        {% endif %}
 
         {% if is_a_board is defined %}
             <div class="ConversationList-urls">

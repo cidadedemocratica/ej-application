@@ -16,7 +16,7 @@
         <h1 class="Board-Title">{{ _('Create board') }}</h1>
         <p>{{ _('Fill up the form to create a new conversation board') }}</p>
         {% endblock %}
-        <form id="create-board-form" method="post" class="Form BoardForm">
+        <form id="create-board-form" method="post" class="Form BoardForm" enctype="multipart/form-data">
             {{ csrf_input }}
             {{ form.as_p() }}
             <div>

@@ -40,9 +40,13 @@ class Board(TimeStampedModel):
       ('Orange', 'Orange'),
       ('Purple', 'Purple'),
     )
-    palette = models.CharField(max_length=10, 
+    palette = models.CharField(_('Palette'),
+                               max_length=10,
                               choices=PALLET_CHOICES,
                               default='Blue')
+
+    image = models.ImageField(_('Image'),
+                              null=True)
 
     @property
     def conversations(self):

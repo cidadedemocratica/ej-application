@@ -118,8 +118,10 @@ $profile-label-clear-color: #30BFD3 !default;
         text-align: center;
     }
 
-    @media screen and (min-width: $breakpoint-large) {
-        max-width: ($breakpoint-large * 0.9);
+    img {
+      max-width: 245px;
+      width: 100%;
+      max-height: 60px;
     }
 }
 
