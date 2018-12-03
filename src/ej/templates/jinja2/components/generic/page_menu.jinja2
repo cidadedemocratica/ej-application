@@ -1,7 +1,7 @@
 {% from 'components/generic/elements.jinja2' import link %}
 
-{% macro menu(user, palette='PaletteBlue') %}
-    <nav class="NavMenu {{palette}}">
+{% macro menu(user, palette='bluePalette') %}
+    <nav class="NavMenu NavMenu--{{palette}}">
         <ul>
             <li>{{ icon_link(_('About'), 'help:about-us', 'far fa-comment') }}</li>
             <li>{{ icon_link(_('Frequently Asked Questions'), 'help:faq', 'far fa-question-circle') }}</li>

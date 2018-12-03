@@ -1,6 +1,6 @@
 /*
- BOARDS
- ======================================================================== */
+BOARDS
+======================================================================== */
 
 @import '../2_tools/index';
 
@@ -13,12 +13,61 @@ $board-top-menu-border: 1px #DDDDDD solid;
         font-size: $font-size-small;
         color: $board-label-color;
         margin-left: $spacing-unit-small;
+  }
+
+  &-paletteItem {
+    display: flex;
+    border-radius: 50% 50%;
+    div {
+      width: 25px;
+      height: 25px;
+      margin-left: 10px;
+      border-radius: 50% 50%;
+
+      &[class^="Blue-dark"] {
+        background-color: #30BFD3;
+      }
+      &[class^="Blue-light"] {
+        background-color: #C4F2F4;
+      }
+
+      &[class^="Pink-dark"] {
+        background-color: #FF3D72;
+      }
+      &[class^="Pink-light"] {
+        background-color: #FFE3EA;
+      }
+      &[class^="Orange-dark"] {
+        background-color: #F5700A;
+      }
+      &[class^="Orange-light"] {
+        background-color: #FFE1CA;
+      }
+      &[class^="Grey-dark"] {
+        background-color: #666666;
+      }
+      &[class^="Grey-light"] {
+        background-color: #EEEEEE;
+      }
+      &[class^="Green-dark"] {
+        background-color: #36C273;
+      }
+      &[class^="Green-light"] {
+        background-color: #B4FDD4;
+      }
+      &[class^="Purple-dark"] {
+        background-color: #7758B3;
+      }
+      &[class^="Purple-light"] {
+        background-color: #E7DBFF;
+      }
+>>>>>>> 151365a7... Overwrite django default radio widget template.
     }
+  }
 
 }
 
 .Board{
-
     &-TopMenu {
         display: flex;
         flex-direction: row;
@@ -43,6 +92,11 @@ $board-top-menu-border: 1px #DDDDDD solid;
     &-Title {
         color: $board-title-color;
     }
+  }
+
+  &-Title {
+    color: $color-content;
+  }
 }
 
 .BoardList {
@@ -53,13 +107,14 @@ $board-top-menu-border: 1px #DDDDDD solid;
             color: $color-magenta;
         }
     }
+  }
 
-    &-linkList {
-        margin: $board-ul-margin;
-    }
+  &-linkList {
+    margin: $board-ul-margin;
+  }
 
-    &-linkList li {
-        list-style-type: none;
-        margin: $board-link-margin;
-    }
+  &-linkList li {
+    list-style-type: none;
+    margin: $board-link-margin;
+  }
 }

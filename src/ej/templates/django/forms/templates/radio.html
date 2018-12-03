@@ -1,0 +1,27 @@
+{% with id=widget.attrs.id%}
+<div id="{{id}}_{{index}}" style="display: flex; flex-wrap: wrap;">
+  {% for group, options, index in widget.optgroups %}
+  {% for color in options %}
+  <div style="display: flex; flex-grow: 1; margin: 0px 40px 20px 0px;">
+    <div>
+      <input type="checkbox" {{ color.selected|yesno:"checked," }} name="palette" value="{{color.value}}" onclick="toggleSelect(this)">
+    </div>
+    <div class="BoardForm-paletteItem">
+      <div class="{{color.value}}-dark"></div>
+      <div class="{{color.value}}-light"></div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endfor %}
+</div>
+{% endwith %}
+
+<script>
+  function toggleSelect(selectedPalette) {
+    var inputs = document.querySelectorAll("input[name^=palette");
+    inputs.forEach((input) => {
+      if (input.value != selectedPalette.value)
+        input.checked = false;
+    });
+  }
+</script>

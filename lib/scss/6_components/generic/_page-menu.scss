@@ -110,89 +110,88 @@ $nav-menu-ul-padding: 0 !default;
             margin-left: $spacing-unit;
         }
     }
-}
-
-.PalettePink {
-  background-color: #FF3D72;
-  &-light {
-    background-color: #FFE3EA;
-    color: #FF3D72;
-
-    textarea {
-      color: #FF3D72;
+    &--pinkPalette {
+      background-color: #FF3D72;
+      &-light {
+        background-color: #FFE3EA;
+        color: #FF3D72;
+        textarea {
+          color: #FF3D72;
+        }
+      }
+      &-text {
+        color: #FFE3EA;
+      }
     }
-  }
-  &-text {
-    color: #FFE3EA;
-  }
-}
 
-.PaletteBlue  {
-  background-color: #30BFD3;
-  &-light {
-    background-color: #C4F2F4;
-    color: #30BFD3;
-    textarea {
+  &--bluePalette  {
+    background-color: #30BFD3;
+    &-light {
+      background-color: #C4F2F4;
       color: #30BFD3;
+      textarea {
+        color: #30BFD3;
+      }
+    }
+    &-text {
+      color: #C4F2F4;
     }
   }
-  &-text {
-    color: #C4F2F4;
-  }
-}
 
-.PaletteGrey {
-  background-color: #666666;
-  &-light {
-    background-color: #EEEEEE;
-    color: #666666;
-    textarea {
+  &--greyPalette {
+    background-color: #666666;
+    &-light {
+      background-color: #EEEEEE;
       color: #666666;
+      textarea {
+        color: #666666;
+      }
+    }
+    &-text {
+      color: #EEEEEE;
     }
   }
-  &-text {
-    color: #EEEEEE;
-  }
-}
 
-.PaletteGreen {
-  background-color:  #36C273;
-  &-light {
-    background-color: #B4FDD4;
-    color: #36C273;
-    textarea {
+  &--greenPalette {
+    background-color:  #36C273;
+    &-light {
+      background-color: #B4FDD4;
       color: #36C273;
+      textarea {
+        color: #36C273;
+      }
+    }
+    &-text {
+      color: #B4FDD4;
     }
   }
-  &-text {
-    color: #B4FDD4;
-  }
-}
 
-.PaletteOrange {
-  background-color:  #F5700A;
-  &-light {
-    background-color: #FFE1CA;
-    color: #F5700A;
-    textarea {
+  &--orangePalette {
+    background-color:  #F5700A;
+    &-light {
+      background-color: #FFE1CA;
       color: #F5700A;
+      textarea {
+        color: #F5700A;
+      }
+    }
+    &-text {
+      color: #FFE1CA;
     }
   }
-  &-text {
-    color: #FFE1CA;
+
+  &--purplePalette {
+    background-color:  #7758B3;
+    &-light {
+      background-color: #E7DBFF;
+      color: #7758B3;
+      textarea {
+        color: #7758B3;
+      }
+    }
+    &-text {
+      color: #E7DBFF;
+    }
   }
 }
 
-.PalettePurple {
-  background-color:  #7758B3;
-  &-light {
-    background-color: #E7DBFF;
-    color: #7758B3;
-    textarea {
-      color: #7758B3;
-    }
-  }
-  &-text {
-    color: #E7DBFF;
-  }
-}

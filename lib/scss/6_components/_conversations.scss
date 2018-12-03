@@ -143,7 +143,91 @@ $profile-label-clear-color: #30BFD3 !default;
     font-weight: bold;
     text-align: center;
     padding: $spacing-unit-small + $spacing-unit-tiny $spacing-unit-small $spacing-unit-small $spacing-unit-small;
-    background-color: $conversation-top-background;
+
+    &--pinkPalette {
+      background-color: #FF3D72;
+      &-light {
+        background-color: #FFE3EA;
+        color: #FF3D72;
+        textarea {
+          color: #FF3D72;
+        }
+      }
+      &-text {
+        color: #FFE3EA;
+      }
+    }
+
+  &--bluePalette  {
+    background-color: #30BFD3;
+    &-light {
+      background-color: #C4F2F4;
+      color: #30BFD3;
+      textarea {
+        color: #30BFD3;
+      }
+    }
+    &-text {
+      color: #C4F2F4;
+    }
+  }
+
+  &--greyPalette {
+    background-color: #666666;
+    &-light {
+      background-color: #EEEEEE;
+      color: #666666;
+      textarea {
+        color: #666666;
+      }
+    }
+    &-text {
+      color: #EEEEEE;
+    }
+  }
+
+  &--greenPalette {
+    background-color:  #36C273;
+    &-light {
+      background-color: #B4FDD4;
+      color: #36C273;
+      textarea {
+        color: #36C273;
+      }
+    }
+    &-text {
+      color: #B4FDD4;
+    }
+  }
+
+  &--orangePalette {
+    background-color:  #F5700A;
+    &-light {
+      background-color: #FFE1CA;
+      color: #F5700A;
+      textarea {
+        color: #F5700A;
+      }
+    }
+    &-text {
+      color: #FFE1CA;
+    }
+  }
+
+  &--purplePalette {
+    background-color:  #7758B3;
+    &-light {
+      background-color: #E7DBFF;
+      color: #7758B3;
+      textarea {
+        color: #7758B3;
+      }
+    }
+    &-text {
+      color: #E7DBFF;
+    }
+  }
+
 }
 
 .ConversationCard {
@@ -261,6 +345,89 @@ $profile-label-clear-color: #30BFD3 !default;
         }
     }
 
+    &--pinkPalette {
+      background-color: #FF3D72;
+      &-light {
+        background-color: #FFE3EA;
+        color: #FF3D72;
+        textarea {
+          color: #FF3D72;
+        }
+      }
+      &-text {
+        color: #FFE3EA;
+      }
+    }
+
+  &--bluePalette  {
+    background-color: #30BFD3;
+    &-light {
+      background-color: #C4F2F4;
+      color: #30BFD3;
+      textarea {
+        color: #30BFD3;
+      }
+    }
+    &-text {
+      color: #C4F2F4;
+    }
+  }
+
+  &--greyPalette {
+    background-color: #666666;
+    &-light {
+      background-color: #EEEEEE;
+      color: #666666;
+      textarea {
+        color: #666666;
+      }
+    }
+    &-text {
+      color: #EEEEEE;
+    }
+  }
+
+  &--greenPalette {
+    background-color:  #36C273;
+    &-light {
+      background-color: #B4FDD4;
+      color: #36C273;
+      textarea {
+        color: #36C273;
+      }
+    }
+    &-text {
+      color: #B4FDD4;
+    }
+  }
+
+  &--orangePalette {
+    background-color:  #F5700A;
+    &-light {
+      background-color: #FFE1CA;
+      color: #F5700A;
+      textarea {
+        color: #F5700A;
+      }
+    }
+    &-text {
+      color: #FFE1CA;
+    }
+  }
+
+  &--purplePalette {
+    background-color:  #7758B3;
+    &-light {
+      background-color: #E7DBFF;
+      color: #7758B3;
+      textarea {
+        color: #7758B3;
+      }
+    }
+    &-text {
+      color: #E7DBFF;
+    }
+  }
 
     @media only screen and (min-width: $breakpoint-small) {
         margin: $spacing-unit-tiny;
@@ -268,90 +435,6 @@ $profile-label-clear-color: #30BFD3 !default;
 
 }
 
-.PalettePink {
-  background-color: #FF3D72;
-  &-light {
-    background-color: #FFE3EA;
-    color: #FF3D72;
-
-    textarea {
-      color: #FF3D72;
-    }
-  }
-  &-text {
-    color: #FFE3EA;
-  }
-}
-
-.PaletteBlue  {
-  background-color: #30BFD3;
-  &-light {
-    background-color: #C4F2F4;
-    color: #30BFD3;
-    textarea {
-      color: #30BFD3;
-    }
-  }
-  &-text {
-    color: #C4F2F4;
-  }
-}
-
-.PaletteGrey {
-  background-color: #666666;
-  &-light {
-    background-color: #EEEEEE;
-    color: #666666;
-    textarea {
-      color: #666666;
-    }
-  }
-  &-text {
-    color: #EEEEEE;
-  }
-}
-
-.PaletteGreen {
-  background-color:  #36C273;
-  &-light {
-    background-color: #B4FDD4;
-    color: #36C273;
-    textarea {
-      color: #36C273;
-    }
-  }
-  &-text {
-    color: #B4FDD4;
-  }
-}
-
-.PaletteOrange {
-  background-color:  #F5700A;
-  &-light {
-    background-color: #FFE1CA;
-    color: #F5700A;
-    textarea {
-      color: #F5700A;
-    }
-  }
-  &-text {
-    color: #FFE1CA;
-  }
-}
-
-.PalettePurple {
-  background-color:  #7758B3;
-  &-light {
-    background-color: #E7DBFF;
-    color: #7758B3;
-    textarea {
-      color: #7758B3;
-    }
-  }
-  &-text {
-    color: #E7DBFF;
-  }
-}
 .ConversationDetail {
     margin: 0 auto;
     max-width: $header-wrapper-max-width;
@@ -526,6 +609,75 @@ $profile-label-clear-color: #30BFD3 !default;
         }
     }
 
+          &--bluePalette  {
+            background-color: #30BFD3;
+            &-light {
+              background-color: #C4F2F4;
+              color: #30BFD3;
+              textarea {
+                color: #30BFD3;
+              }
+            }
+            &-text {
+              color: #C4F2F4;
+            }
+          }
+
+          &--greyPalette {
+            background-color: #666666;
+            &-light {
+              background-color: #EEEEEE;
+              color: #666666;
+              textarea {
+                color: #666666;
+              }
+            }
+            &-text {
+              color: #EEEEEE;
+            }
+          }
+
+          &--greenPalette {
+            background-color:  #36C273;
+            &-light {
+              background-color: #B4FDD4;
+              color: #36C273;
+              textarea {
+                color: #36C273;
+              }
+            }
+            &-text {
+              color: #B4FDD4;
+            }
+          }
+
+          &--orangePalette {
+            background-color:  #F5700A;
+            &-light {
+              background-color: #FFE1CA;
+              color: #F5700A;
+              textarea {
+                color: #F5700A;
+              }
+            }
+            &-text {
+              color: #FFE1CA;
+            }
+          }
+
+          &--purplePalette {
+            background-color:  #7758B3;
+            &-light {
+              background-color: #E7DBFF;
+              color: #7758B3;
+              textarea {
+                color: #7758B3;
+              }
+            }
+            &-text {
+              color: #E7DBFF;
+            }
+          }
 }
 
 .Comment-create{
@@ -664,6 +816,76 @@ $profile-label-clear-color: #30BFD3 !default;
                     }
                 }
             }
+
+          &--bluePalette  {
+            background-color: #30BFD3;
+            &-light {
+              background-color: #C4F2F4;
+              color: #30BFD3;
+              textarea {
+                color: #30BFD3;
+              }
+            }
+            &-text {
+              color: #C4F2F4;
+            }
+          }
+
+          &--greyPalette {
+            background-color: #666666;
+            &-light {
+              background-color: #EEEEEE;
+              color: #666666;
+              textarea {
+                color: #666666;
+              }
+            }
+            &-text {
+              color: #EEEEEE;
+            }
+          }
+
+          &--greenPalette {
+            background-color:  #36C273;
+            &-light {
+              background-color: #B4FDD4;
+              color: #36C273;
+              textarea {
+                color: #36C273;
+              }
+            }
+            &-text {
+              color: #B4FDD4;
+            }
+          }
+
+          &--orangePalette {
+            background-color:  #F5700A;
+            &-light {
+              background-color: #FFE1CA;
+              color: #F5700A;
+              textarea {
+                color: #F5700A;
+              }
+            }
+            &-text {
+              color: #FFE1CA;
+            }
+          }
+
+          &--purplePalette {
+            background-color:  #7758B3;
+            &-light {
+              background-color: #E7DBFF;
+              color: #7758B3;
+              textarea {
+                color: #7758B3;
+              }
+            }
+            &-text {
+              color: #E7DBFF;
+            }
+          }
         }
         &-user {
             font-size: $font-size-h5;
@@ -685,6 +907,7 @@ $profile-label-clear-color: #30BFD3 !default;
                 margin-right: $spacing-unit-small;
                 background: #fff;
             }
+
         }
     }
     #commentform {
@@ -848,8 +1071,6 @@ $profile-label-clear-color: #30BFD3 !default;
         100% {opacity: 0;}
 
     }
-
-
 }
 
 .CircleButton {
