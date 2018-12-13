@@ -37,3 +37,92 @@
     }
 }
 
+
+/**
+ * Mixin that changes the board palette.
+ */
+@mixin palette {
+    &--pinkPalette {
+      background-color: #FF3D72;
+      &-light {
+        background-color: #FFE3EA;
+        color: #FF3D72;
+        textarea {
+          color: #FF3D72;
+        }
+      }
+      &-text {
+        color: #FFE3EA;
+      }
+    }
+
+  &--bluePalette  {
+    background-color: #30BFD3;
+    &-light {
+      background-color: #C4F2F4;
+      color: #30BFD3;
+      textarea {
+        color: #30BFD3;
+      }
+    }
+    &-text {
+      color: #C4F2F4;
+    }
+  }
+
+  &--greyPalette {
+    background-color: #666666;
+    &-light {
+      background-color: #EEEEEE;
+      color: #666666;
+      textarea {
+        color: #666666;
+      }
+    }
+    &-text {
+      color: #EEEEEE;
+    }
+  }
+
+  &--greenPalette {
+    background-color:  #36C273;
+    &-light {
+      background-color: #B4FDD4;
+      color: #36C273;
+      textarea {
+        color: #36C273;
+      }
+    }
+    &-text {
+      color: #B4FDD4;
+    }
+  }
+
+  &--orangePalette {
+    background-color:  #F5700A;
+    &-light {
+      background-color: #FFE1CA;
+      color: #F5700A;
+      textarea {
+        color: #F5700A;
+      }
+    }
+    &-text {
+      color: #FFE1CA;
+    }
+  }
+
+  &--purplePalette {
+    background-color:  #7758B3;
+    &-light {
+      background-color: #E7DBFF;
+      color: #7758B3;
+      textarea {
+        color: #7758B3;
+      }
+    }
+    &-text {
+      color: #E7DBFF;
+    }
+  }
+} 
