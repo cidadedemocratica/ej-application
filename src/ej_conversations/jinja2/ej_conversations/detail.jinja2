@@ -10,6 +10,8 @@
 
 {% endblock meta_og %}
 
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
+
 {% block content %}
     <div class="ConversationDetail">
         {# Ballon with title #}
