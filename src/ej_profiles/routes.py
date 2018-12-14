@@ -75,7 +75,7 @@ def conversations_list(request):
     if len(boards) > 0:
         board = boards[0]
         conversations = board.conversations
-        board_palette = board.css_palette_class()
+        board_palette = board.css_palette
     return {
         'user': user,
         'conversations': conversations,

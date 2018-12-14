@@ -226,7 +226,6 @@ $profile-label-clear-color: #30BFD3 !default;
     &-cover + .ConversationCard-actions {
         padding: 0 $spacing-unit-small $spacing-unit-small $spacing-unit-small;
         background-size: 30px;
-        //background: $color-primary;
         margin-top: $spacing-unit;
         bottom: 0;
         position: absolute;
@@ -237,7 +236,7 @@ $profile-label-clear-color: #30BFD3 !default;
     &-actions {
         .Button[primary] {
             padding: $spacing-unit-small + $spacing-unit-tiny;
-            //background: $color-content;
+            background: $color-content;
             font-size: $font-size-small;
             padding-top: $font-size-small;
             padding-bottom: $font-size-small;
