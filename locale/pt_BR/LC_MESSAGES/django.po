@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-11 17:34-0200\n"
 "PO-Revision-Date: 2018-12-11 17:36-0200\n"
@@ -1182,11 +1182,11 @@ msgstr "Usuário administrativo"
 msgid "Regular user"
 msgstr "Usuário regular"
 
-#: src/ej_profiles/routes.py:85
+#: src/ej_profiles/routes.py:87
 msgid "My conversations"
 msgstr "Suas conversas"
 
-#: src/ej_profiles/routes.py:86
+#: src/ej_profiles/routes.py:88
 msgid "See all conversations created by you"
 msgstr "Ver todas as conversas criadas por você"
 
@@ -2159,8 +2159,8 @@ msgid "Edit profile"
 msgstr "Editar perfil"
 
 #: src/ej_profiles/jinja2/ej_profiles/edit.jinja2:3
-#, python-format
-msgid "Edit profile: <em>%(name)s</em>"
+#, fuzzy, python-format
+msgid "Edit profile: %(name)s"
 msgstr "Editar perfil: <em>%(name)s</em>"
 
 #: src/ej_profiles/jinja2/ej_profiles/edit.jinja2:14
