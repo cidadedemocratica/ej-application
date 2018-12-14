@@ -5,6 +5,7 @@ from ej_conversations import create_conversation
 from ej_conversations.models import Vote, Choice
 from ej_conversations.mommy_recipes import ConversationRecipes
 from ej_users.models import User
+from ej_boards.models import Board, BoardSubscription
 
 ConversationRecipes.update_globals(globals())
 
@@ -53,6 +54,30 @@ class TestConversation(ConversationRecipes):
 
         conversation.toggle_favorite(user)
         assert conversation.is_favorite(user)
+
+    def test_get_board_palette_from_conversation(self, mk_conversation, mk_user):
+        user = mk_user(email='someuser@mail.com')
+        conversation = create_conversation("foo", "conv1", user)
+        Board(slug="board1",
+              owner=user,
+              palette='Orange',
+              description="board").save()
+        board_subscription = BoardSubscription(conversation=conversation,
+                                               board=Board.objects.last()).save()
+        assert conversation.css_palette == 'orangePalette'
+        assert conversation.css_light_palette == 'orangePalette-light'
+        assert conversation.css_text_palette == 'orangePalette-text'
+
+    def test_get_board_default_palette_from_conversation(self, mk_conversation, mk_user):
+        user = mk_user(email='someuser@mail.com')
+        conversation = create_conversation("foo", "conv1", user)
+        Board(slug="board1",
+              owner=user,
+              description="board").save()
+        board_subscription = BoardSubscription(conversation=conversation,
+                                               board=Board.objects.last()).save()
+        assert conversation.css_palette == 'bluePalette'
+
 
 
 class TestVote:

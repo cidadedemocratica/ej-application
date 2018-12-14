@@ -167,7 +167,8 @@ class TestBoardViewRoutest:
     def test_post_create_valid_board(self, rf, user):
         data = {'slug': 'slug',
                 'title': 'new title',
-                'description': 'description'}
+                'description': 'description',
+                'palette': 'Blue'}
         request = rf.post('', data)
         request.user = user
         response = routes.board_create(request)
@@ -222,7 +223,8 @@ class TestBoardRoutes(TestCase):
         client = self.logged_client
         data = {'slug': 'slug',
                 'title': 'new title',
-                'description': 'description '}
+                'description': 'description',
+                'palette': 'Blue'}
         response = client.post('/profile/boards/add/', data=data)
         self.assertRedirects(response, '/slug/', 302, 200)
 
@@ -250,8 +252,11 @@ class TestBoardRoutes(TestCase):
 
     def test_edit_board_logged_user(self):
         client = self.logged_client
-        Board.objects.create(slug='slug1', title='title1', owner=self.user)
-        data = {'slug': 'slug1', 'title': 'new title'}
+        Board.objects.create(slug='slug1',
+                             title='title1',
+                             owner=self.user,
+                             palette='orange')
+        data = {'slug': 'slug1', 'title': 'new title', 'palette': 'pink'}
         response = client.post('/slug1/edit/', data=data)
         self.assertTrue(response.status_code, 200)
         # self.assertRedirects(response, '/slug1/', 302, 200)

@@ -21,6 +21,7 @@ class TestStereotypeForm:
             'slug': "slug",
             'title': 'title',
             'description': "description",
+            'palette': 'Grey'
         })
         assert form.is_valid()
         board = form.save(commit=False)
@@ -29,6 +30,7 @@ class TestStereotypeForm:
         assert board.title == "title"
         assert board.slug == "slug"
         assert board.description == "description"
+        assert board.palette == "Grey"
 
     def test_blank_data(self, db):
         form = BoardForm({})
@@ -36,4 +38,5 @@ class TestStereotypeForm:
         assert form.errors == {
             'title': ['This field is required.'],
             'slug': ['This field is required.'],
+            'palette': ['This field is required.'],
         }

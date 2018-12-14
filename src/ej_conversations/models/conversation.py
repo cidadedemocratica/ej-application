@@ -281,22 +281,29 @@ class Conversation(TimeStampedModel):
             self.make_favorite(user)
 
     @property
-    def light_palette(self):
-      return self.get_palette() + '-light'
+    def css_light_palette(self):
+        return self.css_palette + '-light'
 
     @property
-    def text_palette(self):
-      return self.get_palette() + '-text'
+    def css_text_palette(self):
+        return self.css_palette + '-text'
 
     @property
-    def palette(self):
-      return self.get_palette()
+    def css_palette(self):
+        return self._get_css_palette()
 
-    def get_palette(self):
+    def _get_css_palette(self):
         from ej_boards.models import BoardSubscription
-        board = BoardSubscription.objects.get(conversation_id=self.id).board
-        return board.palette.lower() + 'Palette'
+        try:
+            board = BoardSubscription.objects.get(conversation_id=self.id).board
+            return board.css_palette
+        except:
+            return Conversation.get_default_css_palette()
 
+    @staticmethod
+    def get_default_css_palette():
+        from ej_boards.models import Board
+        return Board.get_default_css_palette()
 
 class ConversationTag(TaggedItemBase):
     """

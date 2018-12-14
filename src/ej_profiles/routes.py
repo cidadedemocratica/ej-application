@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from ej_conversations.models import FavoriteConversation, Comment
+from ej_conversations.models import Conversation, FavoriteConversation, Comment
 from .forms import ProfileForm, UsernameForm
 
 app_name = 'ej_profiles'
@@ -71,9 +71,11 @@ def conversations_list(request):
     boards = user.boards.all()
     conversations = []
     board = None
+    board_palette = Conversation.get_default_css_palette()
     if len(boards) > 0:
         board = boards[0]
         conversations = board.conversations
+        board_palette = board.css_palette_class()
     return {
         'user': user,
         'conversations': conversations,
@@ -84,6 +86,7 @@ def conversations_list(request):
         'can_add_conversation': False,
         'title': _('My conversations'),
         'description': _('See all conversations created by you'),
+        'board_palette': board_palette
     }
 
 

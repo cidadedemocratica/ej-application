@@ -62,7 +62,7 @@ def conversation_list(request, board):
         'title': board.title,
         'description': board.description,
         'show_welcome_window': False,
-        'board_palette': board.palette.lower() + 'Palette'
+        'board_palette': board.css_palette
     }
 
 

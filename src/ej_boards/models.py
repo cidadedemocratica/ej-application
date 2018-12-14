@@ -97,8 +97,13 @@ class Board(TimeStampedModel):
         kwargs['board'] = self
         return SafeUrl(which, **kwargs)
 
-    def pallet_class(self):
-      return 'Pallet' + self.palette
+    @property
+    def css_palette(self):
+      return self.palette.lower() + 'Palette'
+
+    @staticmethod
+    def get_default_css_palette():
+      return 'bluePalette'
 
 class BoardSubscription(models.Model):
     """

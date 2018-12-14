@@ -29,11 +29,11 @@
 
 
     <div class="ConversationList">
-        {% if current_board is defined and current_board.image %}
-          <div class="ConversationList-title">
-            <img src="{{current_board.image.url}}">
-            <p>{{ description }}</p>
-          </div>
+        {% if current_board is defined and current_board is not none and current_board.image %}
+            <div class="ConversationList-title">
+              <img src="{{current_board.image.url}}">
+              <p>{{ description }}</p>
+            </div>
         {% else %}
           <div class="ConversationList-title">
               <h1> {{ title }}</h1>

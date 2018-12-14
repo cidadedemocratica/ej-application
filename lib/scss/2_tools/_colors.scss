@@ -39,34 +39,21 @@
 
 
 /**
- * Mixin that changes the board palette.
+ * Mixin that changes the user board, and conversations palette.
  */
 @mixin palette {
-    &--pinkPalette {
-      background-color: #FF3D72;
-      &-light {
-        background-color: #FFE3EA;
-        color: #FF3D72;
-        textarea {
-          color: #FF3D72;
-        }
-      }
-      &-text {
-        color: #FFE3EA;
-      }
-    }
 
   &--bluePalette  {
-    background-color: #30BFD3;
+    background-color: $color-primary;
     &-light {
-      background-color: #C4F2F4;
-      color: #30BFD3;
+      background-color: $color-hint;
+      color: $color-primary;
       textarea {
-        color: #30BFD3;
+        color: $color-primary;
       }
     }
     &-text {
-      color: #C4F2F4;
+      color: $color-hint;
     }
   }
 
@@ -125,4 +112,18 @@
       color: #E7DBFF;
     }
   }
-} 
+
+  &--pinkPalette {
+    background-color: $color-accent;
+    &-light {
+      background-color: #FFE3EA;
+      color: $color-accent;
+      textarea {
+        color: $color-accent;
+      }
+    }
+    &-text {
+      color: #FFE3EA;
+    }
+  }
+}
