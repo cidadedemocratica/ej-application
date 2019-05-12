@@ -22,7 +22,7 @@
             <h1>{{ _('Comments') }}</h1>
         </div>
         <div class="Comment">
-            <div class="CommentCard CommentCard--{{conversation.palette}}">
+            <div class="CommentCard CommentCard--{{conversation.css_palette}}">
                 {% if comment %}
                     {{ comment|role('card') }}
                 {% else %}

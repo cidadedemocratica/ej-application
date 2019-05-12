@@ -3,7 +3,7 @@ from django.forms.renderers import TemplatesSetting
 from django import forms
 
 from . import models
-from ej.utils.widgets import FileInput
+#from ej.utils.widgets import FileInput
 
 class PaletteWidget(forms.RadioSelect):
   template_name = 'forms/templates/radio.html'
@@ -16,4 +16,5 @@ class BoardForm(forms.ModelForm):
     class Meta:
         model = models.Board
         fields = ['slug', 'title', 'description', 'palette', 'image']
-        widgets = { 'palette': PaletteWidget, 'image': FileInput }
+        #widgets = { 'palette': PaletteWidget, 'image': FileInput }
+        widgets = { 'palette': PaletteWidget}

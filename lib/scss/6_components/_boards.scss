@@ -61,7 +61,6 @@ $board-top-menu-border: 1px #DDDDDD solid;
       &[class^="Purple-light"] {
         background-color: #E7DBFF;
       }
->>>>>>> 151365a7... Overwrite django default radio widget template.
     }
   }
 
@@ -94,27 +93,21 @@ $board-top-menu-border: 1px #DDDDDD solid;
     }
   }
 
-  &-Title {
-    color: $color-content;
-  }
-}
-
 .BoardList {
     text-align: center;
     &-title {
-        h1 {
-            font-size: $font-size-h2;
-            color: $color-magenta;
-        }
+      h1 {
+        font-size: $font-size-h2;
+        color: $color-magenta;
+      }
+    }
+
+    &-linkList {
+      margin: $board-ul-margin;
+    }
+
+    &-linkList li {
+      list-style-type: none;
+      margin: $board-link-margin;
     }
   }
-
-  &-linkList {
-    margin: $board-ul-margin;
-  }
-
-  &-linkList li {
-    list-style-type: none;
-    margin: $board-link-margin;
-  }
-}
