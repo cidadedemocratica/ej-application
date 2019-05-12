@@ -24,7 +24,7 @@ services:
       - DJANGO_ENVIRONMENT=local
     volumes:
       - ../:/app/
-    command: sass db -m run
+    entrypoint: tail -f /dev/null
 
   postgres:
     image: postgres:10-alpine
