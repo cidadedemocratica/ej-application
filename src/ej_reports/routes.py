@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from sklearn.decomposition import PCA
 
 from boogie.router import Router
-from ej_clusters.math import get_raw_votes, get_votes
+from ej_clusters.math import get_raw_votes, get_votes, get_raw_cluster_users
 from ej_conversations.models import Conversation
 
 urlpatterns = Router(
@@ -14,7 +14,7 @@ urlpatterns = Router(
     models={'conversation': Conversation},
     lookup_field='slug',
     lookup_type='slug',
-    login=True,
+    login=False,
 )
 app_name = 'ej_reports'
 reports_url = '<model:conversation>/reports/'
@@ -26,8 +26,8 @@ User = get_user_model()
 #
 @urlpatterns.route(reports_url)
 def index(request, conversation):
-    user = request.user
-    can_download_data = user.has_perm('ej.can_edit_conversation', conversation)
+    # user = request.user
+    # can_download_data = user.has_perm('ej.can_edit_conversation', conversation)
     clusterization = conversation.get_clusterization()
     clusterization.update()
     return {
@@ -95,6 +95,16 @@ def users_data(conversation, format):
     generate_data_file(participants, format, response)
     return response
 
+
+@urlpatterns.route(reports_url + 'data/cluster-<cluster_slug>.<format>')
+def cluster_data(conversation, cluster_slug, format):
+    data_cat = 'cluster-{}'.format(cluster_slug)
+    response = file_response(conversation, data_cat, format)
+    cluster_name = cluster_slug.replace('-', ' ')
+    cluster_users = get_raw_cluster_users(conversation, cluster_name)
+
+    generate_data_file(cluster_users, format, response)
+    return response
 
 def file_response(conversation, data_cat, format):
     response = HttpResponse(content_type=f'text/{format}')

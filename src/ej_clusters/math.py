@@ -33,6 +33,24 @@ def get_votes(conversation, comments=None, fillna=None):
     return build_dataframe(votes, fillna=fillna)
 
 
+def get_raw_cluster_users(conversation, cluster_name):
+    """
+    Return a data frame with the raw list of a cluster users.
+
+    The resulting data frame has 4 columns, id, firtname, lastname and email, that
+    specifies the user data necessary to load into any digital marketing platform.
+    """
+    # Fetch all votes in a single query
+    clusterization = conversation.get_clusterization()
+    clusterization.update()
+    cluster = clusterization.clusters.get(name=cluster_name)
+    users = cluster.users.all()
+    values = ['id', 'display_name', 'name', 'email']
+    items = users.values(*values)
+    tuples = list([(i['id'], i['name'].split(' ')[0], i['display_name'].split(' ')[-1], i['email']) for i in items])
+    return pd.DataFrame(tuples, columns=['id', 'firstname', 'lastname', 'email'])
+
+
 def get_raw_votes(conversation, comments=None):
     """
     Return a data frame with the raw list of votes.
