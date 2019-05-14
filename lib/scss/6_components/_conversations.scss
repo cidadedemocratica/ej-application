@@ -244,6 +244,7 @@ $profile-label-clear-color: #30BFD3 !default;
                 margin-left: $spacing-unit-tiny;
             }
         }
+        @include palette;
     }
 
     &-statistics {
@@ -269,6 +270,7 @@ $profile-label-clear-color: #30BFD3 !default;
 }
 
 .ConversationDetail {
+    @include palette;
     margin: 0 auto;
     max-width: $header-wrapper-max-width;
     padding: 0;
@@ -440,9 +442,9 @@ $profile-label-clear-color: #30BFD3 !default;
             margin-top: $spacing-unit-tiny;
             color: $conversation-info-content;
         }
+        @include palette;
     }
 
-    @include palette;
 }
 
 .Comment-create{
@@ -460,6 +462,7 @@ $profile-label-clear-color: #30BFD3 !default;
     p {
         text-align: center;
     }
+    @include palette;
 }
 
 .Comment {
@@ -606,7 +609,9 @@ $profile-label-clear-color: #30BFD3 !default;
             }
 
         }
+      @include palette;
     }
+
     #commentform {
         position: absolute;
         left: 0;
@@ -662,6 +667,7 @@ $profile-label-clear-color: #30BFD3 !default;
             font-weight: bold;
             margin-top: $spacing-unit-small;
         }
+        @include palette;
     }
     #commentform.show {
         visibility: visible;

@@ -100,17 +100,29 @@
   }
 
   &--purplePalette {
-    background-color:  #7758B3;
+    background-color:  #7758B3 !important;
+    color:  #E7DBFF !important;
+    .Button {
+      color:  #7758B3 !important;
+    }
     &-light {
-      background-color: #E7DBFF;
-      color: #7758B3;
-      textarea {
-        color: #7758B3;
+      background-color: #E7DBFF !important;
+      color: #7758B3 !important;
+      * {
+        background-color: #E7DBFF !important;
+        color: #7758B3 !important;
+        border-color: #7758B3 !important;
       }
     }
     &-text {
-      color: #E7DBFF;
+      color: #7758B3 !important;
+      * {
+        color: #7758B3 !important;
+      }
     }
+    &-arrow {
+      border-top: 28px solid #E7DBFF !important;
+   }
   }
 
   &--pinkPalette {

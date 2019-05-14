@@ -18,7 +18,7 @@
         {{ conversation|role('balloon') }}
 
         {# Current comment #}
-        <div class="ConversationDetail-header">
+        <div class="ConversationDetail-header ConversationDetail-header--{{conversation.css_text_palette}}">
             <h1>{{ _('Comments') }}</h1>
         </div>
         <div class="Comment">
@@ -42,7 +42,7 @@
             {# Post a new comment #}
             {{ conversation|role('comment-form', comment_content=comment_form) }}
         </div>
-        <div class="Comment-create">
+        <div class="Comment-create Comment-create--{{conversation.css_text_palette}}">
             <p>
                 <button onclick="showForm($(this))" id="button-create">
                     <i class="fas fa-plus"></i> {{ _("CREATE COMMENT") }}

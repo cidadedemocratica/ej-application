@@ -289,6 +289,11 @@ class Conversation(TimeStampedModel):
         return self.css_palette + '-text'
 
     @property
+    def css_arrow_palette(self):
+        return self.css_palette + '-arrow'
+
+
+    @property
     def css_palette(self):
         return self._get_css_palette()
 
