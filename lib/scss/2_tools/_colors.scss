@@ -13,6 +13,64 @@
     }
 }
 
+
+
+/**
+ * Mixin that changes the user board, and conversations palette.
+ */
+@mixin palette {
+
+  &--bluePalette  {
+    @include __palette-aux($color-primary,$color-hint);
+  }
+
+  &--greyPalette {
+    @include __palette-aux(#666666,#EEEEEE);
+  }
+
+  &--greenPalette {
+    @include __palette-aux(#36C273,#B4FDD4);
+  }
+
+  &--orangePalette {
+    @include __palette-aux(#F5700A,#FFE1CA);
+  }
+
+  &--purplePalette {
+    @include __palette-aux(#7758B3,#E7DBFF)
+  }
+
+  &--pinkPalette {
+    @include __palette-aux($color-accent,#FFE3EA)
+  }
+}
+
+@mixin __palette-aux($dark-color, $light-color) {
+    background-color:  $dark-color !important;
+    color:  $light-color !important;
+    .Button {
+      color:  $dark-color !important;
+    }
+    &-light {
+      background-color: $light-color !important;
+      color: $dark-color !important;
+      * {
+        background-color: $light-color !important;
+        color: $dark-color !important;
+        border-color: $dark-color !important;
+      }
+    }
+    &-text {
+      color: $dark-color !important;
+      * {
+        color: $dark-color !important;
+      }
+    }
+    &-arrow {
+      border-top: 28px solid $light-color !important;
+   }
+}
+
 /**
  * Mixin that sets text and background colors. If $force, also sets the
  * text color for child anchor elements.
@@ -37,105 +95,3 @@
     }
 }
 
-
-/**
- * Mixin that changes the user board, and conversations palette.
- */
-@mixin palette {
-
-  &--bluePalette  {
-    background-color: $color-primary;
-    &-light {
-      background-color: $color-hint;
-      color: $color-primary;
-      textarea {
-        color: $color-primary;
-      }
-    }
-    &-text {
-      color: $color-hint;
-    }
-  }
-
-  &--greyPalette {
-    background-color: #666666;
-    &-light {
-      background-color: #EEEEEE;
-      color: #666666;
-      textarea {
-        color: #666666;
-      }
-    }
-    &-text {
-      color: #EEEEEE;
-    }
-  }
-
-  &--greenPalette {
-    background-color:  #36C273;
-    &-light {
-      background-color: #B4FDD4;
-      color: #36C273;
-      textarea {
-        color: #36C273;
-      }
-    }
-    &-text {
-      color: #B4FDD4;
-    }
-  }
-
-  &--orangePalette {
-    background-color:  #F5700A;
-    &-light {
-      background-color: #FFE1CA;
-      color: #F5700A;
-      textarea {
-        color: #F5700A;
-      }
-    }
-    &-text {
-      color: #FFE1CA;
-    }
-  }
-
-  &--purplePalette {
-    background-color:  #7758B3 !important;
-    color:  #E7DBFF !important;
-    .Button {
-      color:  #7758B3 !important;
-    }
-    &-light {
-      background-color: #E7DBFF !important;
-      color: #7758B3 !important;
-      * {
-        background-color: #E7DBFF !important;
-        color: #7758B3 !important;
-        border-color: #7758B3 !important;
-      }
-    }
-    &-text {
-      color: #7758B3 !important;
-      * {
-        color: #7758B3 !important;
-      }
-    }
-    &-arrow {
-      border-top: 28px solid #E7DBFF !important;
-   }
-  }
-
-  &--pinkPalette {
-    background-color: $color-accent;
-    &-light {
-      background-color: #FFE3EA;
-      color: $color-accent;
-      textarea {
-        color: $color-accent;
-      }
-    }
-    &-text {
-      color: #FFE3EA;
-    }
-  }
-}
