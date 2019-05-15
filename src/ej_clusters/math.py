@@ -43,7 +43,7 @@ def get_raw_cluster_users(conversation, cluster_name):
     # Fetch all votes in a single query
     clusterization = conversation.get_clusterization()
     clusterization.update()
-    cluster = clusterization.clusters.get(name=cluster_name)
+    cluster = clusterization.clusters.get(name__iexact=cluster_name)
     users = cluster.users.all()
     values = ['id', 'display_name', 'name', 'email']
     items = users.values(*values)

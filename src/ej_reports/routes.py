@@ -28,6 +28,7 @@ User = get_user_model()
 def index(request, conversation):
     # user = request.user
     # can_download_data = user.has_perm('ej.can_edit_conversation', conversation)
+    can_download_data = True
     clusterization = conversation.get_clusterization()
     clusterization.update()
     return {
@@ -96,15 +97,23 @@ def users_data(conversation, format):
     return response
 
 
-@urlpatterns.route(reports_url + 'data/cluster-<cluster_slug>.<format>')
+@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>')
 def cluster_data(conversation, cluster_slug, format):
-    data_cat = 'cluster-{}'.format(cluster_slug)
+    from ej_boards.models import BoardSubscription
+    is_conversation_in_board = BoardSubscription.objects.filter(conversation=conversation).exists()
+    data_cat = ''
+    if not is_conversation_in_board:
+        data_cat = f'_{cluster_slug}'
+    else:
+        board = BoardSubscription.objects.get(conversation=conversation).board
+        data_cat = f'{board.slug}_{cluster_slug.lower()}'
     response = file_response(conversation, data_cat, format)
     cluster_name = cluster_slug.replace('-', ' ')
     cluster_users = get_raw_cluster_users(conversation, cluster_name)
 
     generate_data_file(cluster_users, format, response)
     return response
+
 
 def file_response(conversation, data_cat, format):
     response = HttpResponse(content_type=f'text/{format}')
