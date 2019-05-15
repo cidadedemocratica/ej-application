@@ -2,7 +2,7 @@
 setuptools == 40.0
 
 # Generic dependencies
-sidekick ~= 0.4
+sidekick == 0.4.2
 toolz ~= 0.9
 
 # Scientific stack
