@@ -226,6 +226,7 @@ $profile-label-clear-color: #30BFD3 !default;
     &-cover + .ConversationCard-actions {
         padding: 0 $spacing-unit-small $spacing-unit-small $spacing-unit-small;
         background-size: 30px;
+        background: url(/static/img/icons/bg.png) space;
         margin-top: $spacing-unit;
         bottom: 0;
         position: absolute;
