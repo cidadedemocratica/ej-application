@@ -48,22 +48,24 @@
 @mixin __palette-aux($dark-color, $light-color) {
     background-color:  $dark-color !important;
     color:  $light-color !important;
-    .Button {
+    .Button:not(Button[primary]) {
       color:  $dark-color !important;
     }
     &-light {
       background-color: $light-color !important;
       color: $dark-color !important;
-      * {
+      *:not(h1) {
         background-color: $light-color !important;
         color: $dark-color !important;
         border-color: $dark-color !important;
       }
     }
     &-text {
-      color: $dark-color !important;
-      * {
+      *:not(h1,form) {
         color: $dark-color !important;
+      }
+      #button-create {
+        color: $dark-color;
       }
     }
     &-arrow {

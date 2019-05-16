@@ -236,7 +236,7 @@ $profile-label-clear-color: #30BFD3 !default;
     &-actions {
         .Button[primary] {
             padding: $spacing-unit-small + $spacing-unit-tiny;
-            background: $color-content;
+            background: $color-content-text;
             font-size: $font-size-small;
             padding-top: $font-size-small;
             padding-bottom: $font-size-small;
