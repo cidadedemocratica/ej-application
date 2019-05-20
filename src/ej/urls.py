@@ -45,6 +45,7 @@ urlpatterns = [
 
     # Configurations
     path('config/', include(('ej_configurations.routes', 'ej_configurations'), namespace='configurations')),
+    path('', include('ej_campaigns.routes', namespace='campaign')),
 
     # Rocket
     *rocket_urls,
