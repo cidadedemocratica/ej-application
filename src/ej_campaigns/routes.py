@@ -27,11 +27,20 @@ urlpatterns = Router(
 )
 
 
-#
-# Campaign URLs
-#
 @urlpatterns.route('<model:board>/conversations/<model:conversation>/template/', template=None)
 def campaign_template(request, board, conversation):
+    root = os.path.dirname(os.path.abspath(__file__))
+    templates_dir = os.path.join(root, 'templates')
+    env = Environment(loader = FileSystemLoader(templates_dir))
+    template = env.get_template('mautic.html')
+    data = template.render(
+        conversation_title=conversation.title)
+    response = HttpResponse(data, content_type="text/html")
+    response['Content-Disposition'] = 'attachment; filename=mautic.html'
+    return response
+
+@urlpatterns.route('conversations/<model:conversation>/template/', template=None)
+def campaign_template(request, conversation):
     root = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(root, 'templates')
     env = Environment(loader = FileSystemLoader(templates_dir))
