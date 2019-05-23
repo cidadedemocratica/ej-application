@@ -1,3 +1,58 @@
+<script>
+var url_params = location.search.split('&');
+var vote_value = '';
+var comment_id = '';
+for (index in url_params) {
+  var param = url_params[index];
+  _param = param.split('=');
+  if (_param[0] == 'vote') {
+    vote_value = _param[1];
+  }
+
+  if (_param[0] == 'comment_id') {
+    comment_id = _param[1];
+  }
+}
+
+var csrf = '';
+var cookies = document.cookie.split(";")
+for (index in cookies) {
+  var _cookies = cookies[index];
+  _cookie = _cookies.split('=');
+  if (_cookie[0] == 'csrftoken') {
+    csrf = _cookie[1];
+  }
+}
+
+var current_url = window.location.href;
+var is_unlogged = document.querySelector(".Header-lowerNotLogged");
+if (!is_unlogged ) {
+  if (!vote_value && !comment_id) {
+    vote_value = localStorage.getItem("vote");
+    comment_id = localStorage.getItem("comment_id");
+  }
+  if (vote_value && comment_id) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", current_url);
+    xhttp.setRequestHeader("X-CSRFToken", `${csrf}`);
+    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhttp.send(`action=vote&vote=${vote_value}&comment_id=${comment_id}`);
+    localStorage.clear();
+   setTimeout(function() {
+     location.search = '';
+   }, 100);
+  }
+}
+else {
+  if (vote_value) {
+    localStorage.setItem('vote', vote_value);
+  }
+  if (comment_id) {
+    localStorage.setItem('comment_id', comment_id);
+  }
+}
+</script>
+
 {% extends 'base.jinja2' %}
 
 {% block meta_og %}

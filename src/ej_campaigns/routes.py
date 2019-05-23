@@ -35,7 +35,7 @@ def generate_template_with_jinja(conversation):
         board_slug=board_slug,
         conversation_slug=conversation.slug,
         conversation_title=conversation.title,
-        comment_id=conversation.comments.first().id
+        comment_id=conversation.comments.all()[0].id
     )
     return data
 
