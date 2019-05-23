@@ -4,7 +4,6 @@
   <head>
     <meta charset="utf-8">
     <title>EJ Platform</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS -->
     <link rel="stylesheet"
@@ -31,26 +30,6 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="image" content="/static/img/logo/logo.svg">
 
-    <!-- PWA -->
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#fff">
-
-    <!-- Cache busting metas -->
-    <meta http-equiv="cache-control" content="no-cache">
-    <meta http-equiv="expires" content="120">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
-
-    <!-- Open Graph general (Facebook, Pinterest & Google+) -->
-    <meta itemprop="image" property="og:image" content="/static/img/logo/logo.svg">
-    <meta property="og:image:type" content="image/svg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta itemprop="name" property="og:site_name" content="EJ - Empurrando Juntos!">
-    <meta property="og:url" content="https://ejplatform.org/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="pt_BR">
   </head>
 
   <body class="Page semanadeinovacaoconversationsservicos-publicos-futuro">
@@ -115,7 +94,7 @@
                 <form method="post" class="CommentCard-voteArea" id="Comment-form" up-target=".CommentCard" up-transition="move-left">
                   <input type="hidden" name="csrfmiddlewaretoken" value="LTKUjirmfqFpFoaZOunmjELIGousEXlCs47ZlIFxLnDfQALd5feRHIVIatSUCRRA"></input>
                   <input type="hidden" name="action" value="vote">
-                  <input type="hidden" name="comment_id" value="260">
+                  <input type="hidden" name="comment_id" value={{comment_id}}>
                   <ul class="ConversationComment-actions">
                     <li class="voteAgree" up-expand>
                       <button type="submit" form="Comment-form" name="vote" value="agree">
@@ -124,7 +103,7 @@
                       <span>Concorda</span>
                     </li>
                     <li class="voteSkip" up-expand>
-                      <button type="submit" form="Comment-form" name="vote" value="skip">
+                      <button type="submit" formaction="http://localhost:8000/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="skip">
                         <i class="fa fa-arrow-right"></i>
                       </button>
                       <span>Pular</span>
@@ -139,105 +118,9 @@
                 </form>
 
               </div>
-
-
-
-
-
-              <div id="commentform">
-                <h1>Deixe o seu comentário</h1>
-                <p>Você ainda tem 1 comentários disponíveis</p>
-                <form method="post" up-target=".ConversationDetail" up-restore-scroll="true">
-                  <input type="hidden" name="csrfmiddlewaretoken" value="OnFUNABNizgtHyt78Weh3lhsbBeuIjMTvy2ZP0PYOwejSK4lpH5MrprsFGCWGdiR"></input>
-                  <input type="hidden" name="action" value="comment">
-                  <textarea name="content" cols="40" rows="10" maxlength="252" placeholder="Dê a sua opinião aqui" required id="id_content">
-                  </textarea>
-                  <span id="characters-count">0 / 252</span>
-                  <input type="submit" name="submit" value="Comentar" primary>
-                  <div id="toast">
-                    <div>
-                      <img style="float: left; " src="/static/img/icons/attention.svg" width="100"/>
-                      <h3>OPS!</h3>
-                      <p></p>
-                    </div>
-                  </div>
-                  <script>
-                    function showToaster() {
-                      var x = document.getElementById("toast");
-                      if (x && x.querySelector('p').innerHTML) {
-                        x.className = "show";
-                        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 8000);
-                      }
-                    }
-                  </script>
-
-                </form>
-                <script>
-                  document.body.addEventListener('DOMSubtreeModified', function () {
-                    showToaster()
-                  }, false);
-                </script>
-
-              </div>
             </div>
           </div>
         </main>
       </div>
-
-
-
-
-      <!-- Google Analytics -->
-      <script defer>
-        (function (i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-                a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-            ga('create', 'UA-104880284-1', 'auto');
-      </script>
-
-
-      <!-- Run AJAX-loaded scripts -->
-      <script>
-        function runRemoteScripts() {
-          var scripts = document.getElementsByClassName('remoteScript');
-          for (var i = 0; i < scripts.length; i++) {
-            var id = 'script-' + scripts[i].getAttribute('id');
-            if (document.getElementById(id)) {
-              document.getElementById(id).outerHTML = '';
-            }
-            var script = document.createElement('script');
-            script.id = id;
-            script.type = 'text/javascript';
-            var src = scripts[i].getAttribute('data-script-src');
-            if (!!src) {
-              script.src = src;
-            }
-            else {
-              script.text = scripts[i].innerHTML;
-            }
-            document.getElementsByTagName('body')[0].appendChild(script);
-          }
-        }
-
-        window.onload = function () {
-          checkHicontrast();
-          runRemoteScripts();
-          checkFontSize();
-          up.on('up:fragment:inserted', function (event, fragment) {
-            runRemoteScripts();
-            checkHicontrast();
-            checkSpecificPages(fragment);
-            enableFadeBottomDiv();
-          });
-        };
-      </script>
-
   </body>
 </html>

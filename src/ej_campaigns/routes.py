@@ -7,14 +7,11 @@ from jinja2 import Environment, FileSystemLoader
 import os
 
 from boogie.router import Router
-from ej_boards.models import Board
+from ej_boards.models import Board, BoardSubscription
 from ej_conversations.models import Conversation
 
 app_name = 'ej_campaigns'
 
-#
-# Board management
-#
 urlpatterns = Router(
     template=['generic.jinja2'],
     object='',
@@ -26,27 +23,32 @@ urlpatterns = Router(
     lookup_type={'conversation': 'slug', 'board': 'slug'},
 )
 
-
-@urlpatterns.route('<model:board>/conversations/<model:conversation>/template/', template=None)
-def campaign_template(request, board, conversation):
+def generate_template_with_jinja(conversation):
     root = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(root, 'templates')
     env = Environment(loader = FileSystemLoader(templates_dir))
     template = env.get_template('mautic.html')
+    board_slug = BoardSubscription.objects.get(
+        conversation=conversation.id
+    ).board.slug
     data = template.render(
-        conversation_title=conversation.title)
-    response = HttpResponse(data, content_type="text/html")
+        board_slug=board_slug,
+        conversation_slug=conversation.slug,
+        conversation_title=conversation.title,
+        comment_id=conversation.comments.first().id
+    )
+    return data
+
+@urlpatterns.route('<model:board>/conversations/<model:conversation>/template/', template=None)
+def campaign_template(request, board, conversation):
+    template = generate_template_with_jinja(conversation)
+    response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=mautic.html'
     return response
 
 @urlpatterns.route('conversations/<model:conversation>/template/', template=None)
 def campaign_template(request, conversation):
-    root = os.path.dirname(os.path.abspath(__file__))
-    templates_dir = os.path.join(root, 'templates')
-    env = Environment(loader = FileSystemLoader(templates_dir))
-    template = env.get_template('mautic.html')
-    data = template.render(
-        conversation_title=conversation.title)
-    response = HttpResponse(data, content_type="text/html")
+    template = generate_template_with_jinja(conversation)
+    response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=mautic.html'
     return response
