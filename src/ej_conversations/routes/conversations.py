@@ -79,6 +79,17 @@ def get_conversation_detail_context(request, conversation):
         comments_made = user.comments.filter(conversation=conversation).count()
     else:
         comments_made = 0
+
+    if request.GET.get('comment_id') and request.GET.get('vote'):
+        from ej_conversations.models import Vote
+        from ej_conversations.models.vote import normalize_choice
+        vote = normalize_choice(request.GET.get('vote'))
+        comment_id = request.GET.get('comment_id')
+        try:
+            Vote.objects.get(author=user,comment=comment_id)
+        except:
+            comment = Comment.objects.get(id=comment_id)
+
     return {
         # Objects
         'conversation': conversation,

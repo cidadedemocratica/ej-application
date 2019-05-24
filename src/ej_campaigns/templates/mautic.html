@@ -67,8 +67,6 @@
               <div class="ConversationDetail-arrow"></div>
               <div class="ConversationDetail-social">
                 <form method="post" class="Favorite-conversation" id="Favorite-form">
-                  <input type="hidden" name="csrfmiddlewaretoken" value="RlEX93hF7NddpjRaAmirT3RWK3TpZmCvyw12btvQDKb3AvsoR79Wh71We8hRXg8t"></input>
-                  <input type="hidden" name="action" value="favorite">
                   <button type="submit" form="Favorite-form">
                     <i class="far fa-star"></i> Favorito
                   </button>
@@ -92,24 +90,23 @@
                 </div>
                 <p>Também precisa modernizar os servidores. Muitos não querem aprender novpspdos de realizar as meninas tarefas, então precisamos encontrar uma forma de motiva-los a isso.</p>
                 <form method="post" class="CommentCard-voteArea" id="Comment-form" up-target=".CommentCard" up-transition="move-left">
-                  <input type="hidden" name="csrfmiddlewaretoken" value="LTKUjirmfqFpFoaZOunmjELIGousEXlCs47ZlIFxLnDfQALd5feRHIVIatSUCRRA"></input>
                   <input type="hidden" name="action" value="vote">
                   <input type="hidden" name="comment_id" value={{comment_id}}>
                   <ul class="ConversationComment-actions">
                     <li class="voteAgree" up-expand>
-                      <button type="submit" formaction="http://localhost:8000/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="agree">
+                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="agree">
                         <i class="fa fa-check"></i>
                       </button>
                       <span>Concorda</span>
                     </li>
                     <li class="voteSkip" up-expand>
-                      <button type="submit" formaction="http://localhost:8000/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="skip">
+                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="skip">
                         <i class="fa fa-arrow-right"></i>
                       </button>
                       <span>Pular</span>
                     </li>
                     <li class="voteDisagree" up-expand>
-                      <button type="submit" formaction="http://localhost:8000/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="disagree">
+                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="disagree">
                         <i class="fa fa-times"></i>
                       </button>
                       <span>Discorda</span>

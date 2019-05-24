@@ -23,7 +23,10 @@ urlpatterns = Router(
     lookup_type={'conversation': 'slug', 'board': 'slug'},
 )
 
-def generate_template_with_jinja(conversation):
+def generate_template_with_jinja(request, conversation):
+    scheme = request.META['wsgi.url_scheme']
+    host = request.META['HTTP_HOST']
+    site_url = '{}://{}'.format(scheme,host)
     root = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(root, 'templates')
     env = Environment(loader = FileSystemLoader(templates_dir))
@@ -35,20 +38,21 @@ def generate_template_with_jinja(conversation):
         board_slug=board_slug,
         conversation_slug=conversation.slug,
         conversation_title=conversation.title,
-        comment_id=conversation.comments.all()[0].id
+        comment_id=conversation.comments.all()[0].id,
+        site_url=site_url
     )
     return data
 
 @urlpatterns.route('<model:board>/conversations/<model:conversation>/template/', template=None)
 def campaign_template(request, board, conversation):
-    template = generate_template_with_jinja(conversation)
+    template = generate_template_with_jinja(request, conversation)
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=mautic.html'
     return response
 
 @urlpatterns.route('conversations/<model:conversation>/template/', template=None)
 def campaign_template(request, conversation):
-    template = generate_template_with_jinja(conversation)
+    template = generate_template_with_jinja(request, conversation)
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=mautic.html'
     return response
