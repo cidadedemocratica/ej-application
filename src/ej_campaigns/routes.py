@@ -39,6 +39,8 @@ def generate_template_with_jinja(request, conversation):
         conversation_slug=conversation.slug,
         conversation_title=conversation.title,
         comment_id=conversation.comments.all()[0].id,
+        comment_content=conversation.comments.all()[0].content,
+        comment_author=conversation.comments.all()[0].author,
         site_url=site_url
     )
     return data

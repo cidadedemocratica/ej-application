@@ -57,24 +57,9 @@
                   futuro, serviços públicos
                 </div>
                 <h1>{{conversation_title}}</h1>
-                <ul class="ConversationDetail-statistics">
-                  <li><i class="fa fa-comment"></i>111 comentários</li>
-                  <li><i class="fa fa-sliders-h"></i> 5399 votos</li>
-                  <li><i class="fa fa-star"></i>15 favoritos</li>
-                </ul>
               </div>
 
               <div class="ConversationDetail-arrow"></div>
-              <div class="ConversationDetail-social">
-                <form method="post" class="Favorite-conversation" id="Favorite-form">
-                  <button type="submit" form="Favorite-form">
-                    <i class="far fa-star"></i> Favorito
-                  </button>
-                </form>
-                <button onclick="webShare()" class="share-button">
-                  <i class="fas fa-share-alt"></i> Compartilhar
-                </button>
-              </div>
             </div>
 
             <div class="ConversationDetail-header">
@@ -83,12 +68,12 @@
             <div class="Comment">
               <div class="CommentCard">
                 <div class="CommentCard-counter">
-                  <p>18 / 111</p>
+                  <p>1/1</p>
                 </div>
                 <div class="CommentCard-user">
-                  <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg" ><span>Fernanda</span>
+                  <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg"><span>{{comment_author}}</span>
                 </div>
-                <p>Também precisa modernizar os servidores. Muitos não querem aprender novpspdos de realizar as meninas tarefas, então precisamos encontrar uma forma de motiva-los a isso.</p>
+                <p>{{comment_content}}</p>
                 <form method="post" class="CommentCard-voteArea" id="Comment-form" up-target=".CommentCard" up-transition="move-left">
                   <input type="hidden" name="action" value="vote">
                   <input type="hidden" name="comment_id" value={{comment_id}}>
