@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+  <head>
+    <meta charset="utf-8">
+    <title>EJ Platform</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Patua+One|Raleway:400,600,700&subset=latin-ext">
+    <link rel="stylesheet" href="https://unpkg.com/unpoly@0.54.0/dist/unpoly.min.css"
+                           integrity="sha384-zsXMcPyhYSZEF/yA0Rprx9nn7gnz84QyiSrxSH5xuo0DalUAlfSmfsxILtkg5fJ/"
+                           crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ejplatform.pencillabs.com.br/static/css/fontawesome-all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ejplatform.pencillabs.com.br/static/js/jquery-ui/jquery-ui.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ejplatform.pencillabs.com.br/static/js/jquery-ui/jquery-ui.structure.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.ejplatform.org/static/css/main.css">
+
+    <!-- Favicons -->
+    <link rel="icon" href="/static/img/logo/logo.svg"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/img/logo/icon-57.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/logo/icon-72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/logo/icon-114.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/img/logo/icon-192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/logo/icon-32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/logo/icon-96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/logo/icon-16.png">
+    <link rel="shortcut icon" href="/static/img/logo/favicon.ico"/>
+    <meta name="msapplication-TileImage" content="/static/img/logo/icon-144.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="image" content="/static/img/logo/logo.svg">
+
+  </head>
+
+  <body class="Page semanadeinovacaoconversationsservicos-publicos-futuro">
+
+    <header class="TopHeader">
+      <div class="TopHeader-wrapper">
+        <ul class="TopHeader-links">
+          <li><a href="/about-us/" up-instant up-preload title="Sobre nós" up-target=".Page-mainContainer .Header-topIcon" up-transition="cross-fade">sobre</a></li>
+          <li><a href="/faq/" up-instant up-preload title="Perguntas frequentes" up-target=".Page-mainContainer .Header-topIcon" up-transition="cross-fade">perguntas frequentes</a></li>
+          <li><a href="/usage/" up-instant up-preload title="Termos de uso" up-target=".Page-mainContainer .Header-topIcon" up-transition="cross-fade">termos de uso</a></li>
+        </ul>
+      </div>
+    </header>
+
+
+    <div class="Page-mainContainer">
+
+      <div class="Page-content-container">
+
+        <main class="Page-content logged-in" data-salt="LwHBIdlyM" style="padding: 0 !important">
+          <div class="ConversationDetail">
+            <div class="ConversationDetail">
+              <div class="ConversationDetail-banner">
+                <div class="ConversationTags"><i class="fa fa-tags"></i>
+                  futuro, serviços públicos
+                </div>
+                <h1>{{conversation_title}}</h1>
+              </div>
+
+              <div class="ConversationDetail-arrow"></div>
+            </div>
+
+            <div class="ConversationDetail-header">
+              <h1>Comentários</h1>
+            </div>
+            <div class="Comment">
+              <div class="CommentCard">
+                <div class="CommentCard-counter">
+                  <p>1/1</p>
+                </div>
+                <div class="CommentCard-user">
+                  <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg"><span>{{comment_author}}</span>
+                </div>
+                <p>{{comment_content}}</p>
+                <form method="post" class="CommentCard-voteArea" id="Comment-form" up-target=".CommentCard" up-transition="move-left">
+                  <input type="hidden" name="action" value="vote">
+                  <input type="hidden" name="comment_id" value={{comment_id}}>
+                  <ul class="ConversationComment-actions">
+                    <li class="voteAgree" up-expand>
+                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="agree">
+                        <i class="fa fa-check"></i>
+                      </button>
+                      <span>Concorda</span>
+                    </li>
+                    <li class="voteSkip" up-expand>
+                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="skip">
+                        <i class="fa fa-arrow-right"></i>
+                      </button>
+                      <span>Pular</span>
+                    </li>
+                    <li class="voteDisagree" up-expand>
+                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="disagree">
+                        <i class="fa fa-times"></i>
+                      </button>
+                      <span>Discorda</span>
+                    </li>
+                  </ul>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+  </body>
+</html>
