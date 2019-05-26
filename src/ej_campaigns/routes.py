@@ -37,7 +37,7 @@ def generate_template_with_jinja(request, conversation):
     data = template.render(
         board_slug=board_slug,
         conversation_slug=conversation.slug,
-        conversation_title=conversation.title,
+        conversation_title=conversation.text,
         comment_id=conversation.comments.all()[0].id,
         comment_content=conversation.comments.all()[0].content,
         comment_author=conversation.comments.all()[0].author,
