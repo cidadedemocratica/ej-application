@@ -57,17 +57,17 @@
 <script>
   $(document).ready(function() {
     var url_params = location.search.split('&');
-    if (url_params.length > 0) {
+    if (url_params.length > 1) {
       var vote_value = '';
       var comment_id = '';
       for (index in url_params) {
         var param = url_params[index];
         _param = param.split('=');
-        if (_param[0] == 'vote') {
+        if (/^.*vote.*$/.test(_param[0])) {
           vote_value = _param[1];
         }
 
-        if (_param[0] == 'comment_id') {
+        if (/^.*comment_id.*$/.test(_param[0])) {
           comment_id = _param[1];
         }
       }
