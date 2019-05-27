@@ -120,6 +120,10 @@ class Comment(StatusModel, TimeStampedModel):
         """
         choice = normalize_choice(choice)
         log.debug(f'Vote: {author} - {choice}')
+        print('comment')
+        print(self)
+        print(choice)
+        print(author.name)
         vote = Vote(author=author, comment=self, choice=choice)
         vote.full_clean()
         if commit:

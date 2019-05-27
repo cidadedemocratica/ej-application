@@ -71,14 +71,21 @@
           comment_id = _param[1];
         }
       }
+
       var is_unlogged = document.querySelector(".Header-lowerNotLogged");
       var is_logged = !is_unlogged;
       if (is_logged) {
-        var voteClass = vote_value[0].toUpperCase() + vote_value.substring(1,vote_value.length);
-        var element = document.querySelector(`.vote${voteClass} button`);
-        setTimeout(function() {
-          element.click();
-        }, 1000);
+        const currentCommentCard = document.querySelector('input[name="comment_id"]');
+        if (currentCommentCard.value == comment_id) {
+          var voteClass = vote_value[0].toUpperCase() + vote_value.substring(1,vote_value.length);
+          var element = document.querySelector(`.vote${voteClass} button`);
+          setTimeout(function() {
+            element.click();
+          }, 1000);
+        }
+        else {
+          location.search = '';
+        }
       }
       else {
         if (vote_value && comment_id) {
