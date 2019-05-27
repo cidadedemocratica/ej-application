@@ -37,14 +37,14 @@ def vote_url(request, conversation):
     conversation_slug=conversation.slug
     comment_id=conversation.comments.all()[0].id
     if board_slug:
-        _vote_url = '{}/{}/conversation/{}?comment_id={}&action=vote'.format(
+        _vote_url = '{}/{}/conversations/{}?comment_id={}&action=vote'.format(
             site_url,
             board_slug,
             conversation_slug,
             comment_id
         )
     else:
-        _vote_url = '{}/conversation/{}?comment_id={}&action=vote'.format(
+        _vote_url = '{}/conversations/{}?comment_id={}&action=vote'.format(
             site_url,
             conversation_slug,
             comment_id
