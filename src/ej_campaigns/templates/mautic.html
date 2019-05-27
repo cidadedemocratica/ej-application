@@ -66,13 +66,13 @@
                 <form method="post" class="CommentCard-voteArea" id="Comment-form" up-target=".CommentCard" up-transition="move-left">
                   <div class="ConversationComment-actions" style="display: flex; font-weight: bold; text-transform: uppercase; width: 100%; margin: 0; padding: 0;">
                     <div class="voteAgree" up-expand style="align-items: center; align-content: stretch; display: flex; flex-flow: column; list-style-type: none; flex-grow: 2; margin-right:15px;">
-                      <a href="{{site_url}}/mautic/conversations/{{conversation_slug}}/?action=vote&comment_id={{comment_id}}&vote=agree">Concorda</a>
+                      <a href="{{vote_url}}&vote=agree">Concorda</a>
                     </div>
                     <div class="voteSkip" up-expand style="align-items: center; align-content: stretch; display: flex; flex-flow: column; list-style-type: none; flex-grow: 2; margin-right:15px;">
-                      <a href="{{site_url}}/mautic/conversations/{{conversation_slug}}/?action=vote&comment_id={{comment_id}}&vote=skip">Pular</a>
+                      <a href="{{vote_url}}&vote=skip">Pular</a>
                     </div>
                     <div class="voteDisagree" up-expand style=" align-items: center; align-content: stretch; display: flex; flex-flow: column; list-style-type: none; flex-grow: 1;  margin-right:15px;">
-                      <a href="{{site_url}}/mautic/conversations/{{conversation_slug}}/?action=vote&comment_id={{comment_id}}&vote=disagree">Discorda</a>
+                      <a href="{{vote_url}}&vote=disagree">Discorda</a>
                     </div>
                   </div>
                 </form>

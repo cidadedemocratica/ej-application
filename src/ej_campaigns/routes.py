@@ -23,25 +23,44 @@ urlpatterns = Router(
     lookup_type={'conversation': 'slug', 'board': 'slug'},
 )
 
-def generate_template_with_jinja(request, conversation):
+def vote_url(request, conversation):
     scheme = request.META['wsgi.url_scheme']
     host = request.META['HTTP_HOST']
     site_url = '{}://{}'.format(scheme,host)
+    board_slug = None
+    try:
+        board_slug = BoardSubscription.objects.get(
+            conversation=conversation.id
+        ).board.slug
+    except:
+        pass
+    conversation_slug=conversation.slug
+    comment_id=conversation.comments.all()[0].id
+    if board_slug:
+        _vote_url = '{}/{}/conversation/{}?comment_id={}&action=vote'.format(
+            site_url,
+            board_slug,
+            conversation_slug,
+            comment_id
+        )
+    else:
+        _vote_url = '{}/conversation/{}?comment_id={}&action=vote'.format(
+            site_url,
+            conversation_slug,
+            comment_id
+        )
+    return _vote_url
+
+def generate_template_with_jinja(request, conversation):
     root = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(root, 'templates')
     env = Environment(loader = FileSystemLoader(templates_dir))
     template = env.get_template('mautic.html')
-    board_slug = BoardSubscription.objects.get(
-        conversation=conversation.id
-    ).board.slug
     data = template.render(
-        board_slug=board_slug,
-        conversation_slug=conversation.slug,
         conversation_title=conversation.text,
-        comment_id=conversation.comments.all()[0].id,
         comment_content=conversation.comments.all()[0].content,
         comment_author=conversation.comments.all()[0].author,
-        site_url=site_url
+        vote_url=vote_url(request,conversation)
     )
     return data
 
