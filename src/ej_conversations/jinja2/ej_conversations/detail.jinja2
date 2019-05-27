@@ -81,10 +81,8 @@
         }, 1000);
       }
       else {
-        if (vote_value) {
+        if (vote_value && comment_id) {
           localStorage.setItem('vote', vote_value);
-        }
-        if (comment_id) {
           localStorage.setItem('comment_id', comment_id);
         }
       }
@@ -94,9 +92,10 @@
       comment_id = localStorage.getItem("comment_id");
       if (vote_value && comment_id) {
         location.search = `?vote=${vote_value}&&comment_id=${comment_id}`;
+        localStorage.clear();
       }
     }
-  })
+  });
 </script>
 {% endblock %}
 
