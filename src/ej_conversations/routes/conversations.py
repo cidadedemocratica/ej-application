@@ -90,7 +90,6 @@ def get_conversation_detail_context(request, conversation):
         except:
             comment = Comment.objects.get(id=comment_id)
 
-    print(conversation.next_comment(user, None).id)
     return {
         # Objects
         'conversation': conversation,
