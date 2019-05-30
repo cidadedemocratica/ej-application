@@ -60,7 +60,8 @@ def generate_template_with_jinja(request, conversation):
         conversation_title=conversation.text,
         comment_content=conversation.comments.all()[0].content,
         comment_author=conversation.comments.all()[0].author,
-        vote_url=vote_url(request,conversation)
+        vote_url=vote_url(request,conversation),
+        tags=conversation.tags.all()
     )
     return data
 

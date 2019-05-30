@@ -32,7 +32,13 @@
               <div class="ConversationDetail-banner" style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: 0; padding: 7px 7px 28px;">
                 <div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px;" align="center">
                   <i class="fa fa-tags" style='-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font-style: normal; font-variant: normal; text-rendering: auto; line-height: 1; font-family: "Font Awesome 5 Free"; font-weight: 900;'></i>
-                  futuro, serviços públicos
+              {% if tags %}
+                {% for tag in tags %}
+                  {{ tag }}
+                {% endfor %}
+              {% else %}
+                {{ _('Conversation') }}
+              {% endif %}
                 </div>
                 <h1 style='font-size: 28px !important; font-family: "Raleway", sans-serif; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049; margin: 0 auto; padding: 7px 0 28px;' align="center">{{conversation_title}}</h1>
                 <div style="width: 80%; margin: auto; font-size: 0.8rem; text-align: center;">
@@ -51,15 +57,23 @@
                 <div class="CommentCard-counter" style="" align="center">
                   <p style="margin: 0;">1/1</p>
                 </div>
-                <div class="CommentCard-user" style="display:none; font-size: 15.75px;">
-                  <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg" style="font-style: italic; vertical-align: middle; background-color: #fff; border-radius: 56px; color: #FF3D72; margin-right: 14px; padding: 4px 7px; border: 1px solid #fff;"><span>{{comment_author}}</span>
-                </div>
+                <div class="CommentCard-user" style="font-size: 15.75px;">
+                  <table>
+                    <tr>
+                      <td>
+                        <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg" style="font-style: italic; vertical-align: middle; background-color: #fff; border-radius: 56px; color: #FF3D72; margin-right: 14px; padding: 4px 7px; border: 1px solid #fff; width: 60%; ">
+                      </td>
+                      <td>
+                        <span style="margin-left: 15px">{{comment_author}}</span>
+                      </td>
+                    </tr>
+                  </table>
                 <p>{{comment_content}}</p>
                 <table style="font-weight: bold; text-transform: uppercase; width: 100%; margin: 0; padding: 0;">
                   <tr>
-                    <td style="width: 33%; text-align: center;"><a href="{{vote_url}}&vote=agree">Concorda</a></td>
-                    <td style="width: 33%; text-align: center;"><a href="{{vote_url}}&vote=skip">Pular</a></td>
-                    <td style="width: 33%; text-align: center;"><a href="{{vote_url}}&vote=disagree">Discorda</a></td>
+                    <td style="width: 33%; text-align: center;"><a  style="text-decoration:none; color: white; font-size: 0.9rem;" href="{{vote_url}}&vote=agree">Concorda</a></td>
+                    <td style="width: 33%; text-align: center;"><a style="text-decoration:none; color: white; font-size: 0.9rem;" href="{{vote_url}}&vote=skip">Pular</a></td>
+                    <td style="width: 33%; text-align: center;"><a style="text-decoration:none; color: white; font-size: 0.9rem;" href="{{vote_url}}&vote=disagree">Discorda</a></td>
                   </tr>
                 </table>
               </div>
