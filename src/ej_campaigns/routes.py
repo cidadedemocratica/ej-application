@@ -23,6 +23,35 @@ urlpatterns = Router(
     lookup_type={'conversation': 'slug', 'board': 'slug'},
 )
 
+
+inlinePalettes = {
+    'green': ['#36C273', '#B4FDD4'],
+    'grey': ['#666666', '#EEEEEE'],
+    'blue': ['#30BFD3', '#C4F2F4'],
+    'orange': ['#F5700A', '#FFE1CA'],
+    'purple': ['#7758B3', '#E7DBFF'],
+    'pink': ['#C6027B', '#FFE3EA']
+}
+
+def paletteMixin(palette):
+    colors = inlinePalettes[palette]
+    templatePalette = {}
+    templatePalette['light'] = 'color: {}; background-color: {};'.format(colors[0], colors[1])
+    templatePalette['dark'] = 'color: {} !important; background-color: {};'.format(colors[1], colors[0])
+    templatePalette['arrow'] = 'border-top: 28px solid {} !important'.format(colors[1])
+    return templatePalette
+
+
+def templatePalette(conversation):
+    try:
+        currentPalette = BoardSubscription.objects.get(
+            conversation=conversation.id
+        ).board.palette.lower()
+    except:
+        currentPalette = 'blue'
+    paletteStyle = paletteMixin(currentPalette)
+    return paletteStyle
+
 def vote_url(request, conversation):
     scheme = request.META['wsgi.url_scheme']
     host = request.META['HTTP_HOST']
@@ -61,7 +90,8 @@ def generate_template_with_jinja(request, conversation):
         comment_content=conversation.comments.all()[0].content,
         comment_author=conversation.comments.all()[0].author,
         vote_url=vote_url(request,conversation),
-        tags=conversation.tags.all()
+        tags=conversation.tags.all(),
+        paletteStyle=templatePalette(conversation)
     )
     return data
 

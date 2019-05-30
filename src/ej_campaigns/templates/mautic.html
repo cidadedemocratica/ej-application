@@ -29,8 +29,8 @@
         <main class="Page-content logged-in" data-salt="LwHBIdlyM" style="display: block; box-sizing: border-box; width: 100%; flex-grow: 1; margin: 0 auto 65px; padding: 0;">
           <div class="ConversationDetail" style="max-width: 812px; margin: 0 auto; padding: 0; width: 100%;">
             <div class="ConversationDetail" style="max-width: 812px; margin: 0 auto; padding: 0;">
-              <div class="ConversationDetail-banner" style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: 0; padding: 7px 7px 28px;">
-                <div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px;" align="center">
+              <div class="ConversationDetail-banner" style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: 0; padding: 7px 7px 28px; {{paletteStyle['light']}}">
+                <div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px; {{paletteStyle['light']}}" align="center">
                   <i class="fa fa-tags" style='-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font-style: normal; font-variant: normal; text-rendering: auto; line-height: 1; font-family: "Font Awesome 5 Free"; font-weight: 900;'></i>
               {% if tags %}
                 {% for tag in tags %}
@@ -42,18 +42,18 @@
                 </div>
                 <h1 style='font-size: 28px !important; font-family: "Raleway", sans-serif; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049; margin: 0 auto; padding: 7px 0 28px;' align="center">{{conversation_title}}</h1>
                 <div style="width: 80%; margin: auto; font-size: 0.8rem; text-align: center;">
-                  <span>Este é um questionário de pesquisa e sua participação é importante. Responda abaixo. Agradecemos sua participação!</span>
+                  <span style="{{paletteStyle['light']}}">Este é um questionário de pesquisa e sua participação é importante. Responda abaixo. Agradecemos sua participação!</span>
                 </div>
               </div>
 
-              <div class="ConversationDetail-arrow" style="border-left-width: 28px; border-left-color: transparent; border-left-style: solid; border-right-width: 28px; border-right-color: transparent; border-right-style: solid; border-top-width: 28px; border-top-color: #C4F2F4; border-top-style: solid; height: 0; position: relative; width: 0; margin: 0 auto; padding: 0;"></div>
+              <div class="ConversationDetail-arrow" style="border-left-width: 28px; border-left-color: transparent; border-left-style: solid; border-right-width: 28px; border-right-color: transparent; border-right-style: solid; border-top-width: 28px; border-top-color: #C4F2F4; border-top-style: solid; height: 0; position: relative; width: 0; margin: 0 auto; padding: 0; {{paletteStyle['arrow']}}"></div>
             </div>
 
             <div class="ConversationDetail-header" align="center">
               <h1 style="font-size: 28px !important; font-family: 'Patua One', sans-serif !important; font-weight: 300 !important; text-transform: none; letter-spacing: 1px; color: #FF3D72; margin: 0.67em 0;">Comentários</h1>
             </div>
             <div class="Comment" style="position: relative; min-height: 300px !important; width: 100% !important; max-width: 812px; margin: 0 auto;">
-              <div class="CommentCard" style="left: 0; right: 0; position: absolute; box-sizing: border-box; border-radius: 56px; font-size: 18px; max-width: 700px; width: 100% !important; z-index: 3; background-color: #30BFD3; color: white; margin: auto; padding: 40px 42px;">
+              <div class="CommentCard" style="left: 0; right: 0; position: absolute; box-sizing: border-box; border-radius: 56px; font-size: 18px; max-width: 700px; width: 100% !important; z-index: 3; background-color: #30BFD3; color: white; margin: auto; padding: 40px 42px; {{paletteStyle['dark']}}">
                 <div class="CommentCard-counter" style="" align="center">
                   <p style="margin: 0;">1/1</p>
                 </div>
@@ -64,11 +64,11 @@
                         <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg" style="font-style: italic; vertical-align: middle; background-color: #fff; border-radius: 56px; color: #FF3D72; margin-right: 14px; padding: 4px 7px; border: 1px solid #fff; width: 60%; ">
                       </td>
                       <td>
-                        <span style="margin-left: 15px">{{comment_author}}</span>
+                        <span style="color: white; margin-left: 15px">{{comment_author}}</span>
                       </td>
                     </tr>
                   </table>
-                <p>{{comment_content}}</p>
+                <p style="color: white">{{comment_content}}</p>
                 <table style="font-weight: bold; text-transform: uppercase; width: 100%; margin: 0; padding: 0;">
                   <tr>
                     <td style="width: 33%; text-align: center;"><a  style="text-decoration:none; color: white; font-size: 0.9rem;" href="{{vote_url}}&vote=agree">Concorda</a></td>
