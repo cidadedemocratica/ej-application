@@ -221,19 +221,25 @@ def report_scatter(board, conversation):
 @urlpatterns.route(reports_url + 'votes.<format>', **reports_kwargs)
 def report_votes_data(board, conversation, format):
     assure_correct_board(conversation, board)
-    return report_routes.generate_votes(conversation, format)
+    return report_routes.votes_data(conversation, format)
 
 
 @urlpatterns.route(reports_url + 'users.<format>', **reports_kwargs)
 def report_users_data(board, conversation, format):
     assure_correct_board(conversation, board)
-    return report_routes.generate_users(conversation, format)
+    return report_routes.users_data(conversation, format)
 
 
 @urlpatterns.route(reports_url + 'comments.<format>', **reports_kwargs)
 def report_comments_data(board, conversation, format):
     assure_correct_board(conversation, board)
-    return report_routes.generate_comments(conversation, format)
+    return report_routes.comments_data(conversation, format)
+
+
+@urlpatterns.route(reports_url + 'clusters/<cluster_slug>.<format>', **reports_kwargs)
+def report_cluster_data(board, conversation, cluster_slug, format):
+    assure_correct_board(conversation, board)
+    return report_routes.cluster_data(conversation, cluster_slug, format)
 
 
 #
