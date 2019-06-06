@@ -92,12 +92,12 @@ def comments_data(conversation, format):
 def users_data(conversation, format):
     response = file_response(conversation, 'users', format)
     votes = get_raw_votes(conversation)
-    participants = participants_table(conversation, votes)
+    participants = participants_table(conversation)
     generate_data_file(participants, format, response)
     return response
 
 
-@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>')
+@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>', staff=True)
 def cluster_data(conversation, cluster_slug, format):
     from ej_boards.models import BoardSubscription
     is_conversation_in_board = BoardSubscription.objects.filter(conversation=conversation).exists()
@@ -109,7 +109,11 @@ def cluster_data(conversation, cluster_slug, format):
         data_cat = f'{board.slug}_{cluster_slug.lower()}'
     response = file_response(conversation, data_cat, format)
     cluster_name = cluster_slug.replace('-', ' ')
-    cluster_users = get_raw_cluster_users(conversation, cluster_name)
+    try:
+        cluster_users = get_raw_cluster_users(conversation, cluster_name)
+    except:
+        response.status_code = 404
+        return response
 
     generate_data_file(cluster_users, format, response)
     return response

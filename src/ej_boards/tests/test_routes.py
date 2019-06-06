@@ -35,6 +35,8 @@ class TestRoutes(UrlTester, BoardRecipes, ConversationRecipes):
     user_urls = [
         '/board-slug/conversations/conversation/reports/',
         '/board-slug/conversations/conversation/reports/scatter/',
+        '/board-slug/conversations/conversation/reports/votes.csv',
+        '/board-slug/conversations/conversation/reports/comments.csv',
         '/profile/boards/add/',
         '/profile/boards/',
     ]
@@ -43,7 +45,7 @@ class TestRoutes(UrlTester, BoardRecipes, ConversationRecipes):
         '/board-slug/conversations/conversation/edit/',
         '/board-slug/conversations/conversation/moderate/',
         '/board-slug/conversations/conversation/stereotypes/',
-        '/board-slug/conversations/conversation/stereotypes/add/'
+        '/board-slug/conversations/conversation/stereotypes/add/',
     ]
 
     @pytest.fixture

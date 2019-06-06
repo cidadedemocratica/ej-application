@@ -236,7 +236,7 @@ def report_comments_data(board, conversation, format):
     return report_routes.comments_data(conversation, format)
 
 
-@urlpatterns.route(reports_url + 'clusters/<cluster_slug>.<format>', **reports_kwargs)
+@urlpatterns.route(reports_url + 'clusters/<cluster_slug>.<format>', staff=True, **reports_kwargs)
 def report_cluster_data(board, conversation, cluster_slug, format):
     assure_correct_board(conversation, board)
     return report_routes.cluster_data(conversation, cluster_slug, format)
