@@ -54,7 +54,13 @@
             <div class="ConversationDetail">
               <div class="ConversationDetail-banner">
                 <div class="ConversationTags"><i class="fa fa-tags"></i>
-                  futuro, serviços públicos
+			{% if tags %}
+			{% for tag in tags %}
+				{{ tag }}
+			{% endfor %}
+			{% else %}
+			{{ _('Conversation') }}
+				{% endif %}
                 </div>
                 <h1>{{conversation_title}}</h1>
               </div>
@@ -71,7 +77,7 @@
                   <p>1/1</p>
                 </div>
                 <div class="CommentCard-user">
-                  <img src="https://ejplatform.pencillabs.com.br/static/img/icons/catlogo.svg"><span>{{comment_author}}</span>
+			<img src="{{site_url}}/static/img/icons/catlogo.svg"><span>{{comment_author}}</span>
                 </div>
                 <p>{{comment_content}}</p>
                 <form method="post" class="CommentCard-voteArea" id="Comment-form" up-target=".CommentCard" up-transition="move-left">
@@ -79,19 +85,19 @@
                   <input type="hidden" name="comment_id" value={{comment_id}}>
                   <ul class="ConversationComment-actions">
                     <li class="voteAgree" up-expand>
-                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="agree">
+			    <button type="submit" formaction="{{vote_url}}" formmethod="get" name="vote" value="agree">
                         <i class="fa fa-check"></i>
                       </button>
                       <span>Concorda</span>
                     </li>
                     <li class="voteSkip" up-expand>
-                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="skip">
+                      <button type="submit" formaction="{{vote_url}}" formmethod="get" name="vote" value="skip">
                         <i class="fa fa-arrow-right"></i>
                       </button>
                       <span>Pular</span>
                     </li>
                     <li class="voteDisagree" up-expand>
-                      <button type="submit" formaction="{{site_url}}/{{board_slug}}/conversations/{{conversation_slug}}" formmethod="get" name="vote" value="disagree">
+                      <button type="submit" formaction="{{vote_url}}" formmethod="get" name="vote" value="disagree">
                         <i class="fa fa-times"></i>
                       </button>
                       <span>Discorda</span>
