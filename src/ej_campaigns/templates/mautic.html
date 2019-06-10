@@ -9,32 +9,34 @@
 
   <body class="Page semanadeinovacaoconversationsservicos-publicos-futuro" style='box-sizing: border-box; color: #042049; font-size: 13px; font-family: "Raleway", sans-serif; width: 100vw; display: flex; flex-flow: column; height: 100vh; overflow: hidden; margin: 0; padding: 45px 0;' bgcolor="#fff">
 
-    <div class="Page-mainContainer" style="box-sizing: border-box; height: 100vh; display: flex; flex-flow: column; overflow: hidden; background: none 0% 0% / contain;">
-
-      <div class="Page-content-container" style="display: flex; width: 100%;">
-
-        <main class="Page-content logged-in" data-salt="LwHBIdlyM" style="display: block; box-sizing: border-box; width: 100%; flex-grow: 1; margin: 0 auto 65px; padding: 0;">
-          <div class="ConversationDetail" style="max-width: 812px; margin: 0 auto; padding: 0; width: 80%;">
-            <div class="ConversationDetail" style="max-width: 812px; margin: 0 auto; padding: 0;">
-              <div class="ConversationDetail-banner" style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: 0; padding: 7px 7px 28px; {{paletteStyle['light']}}">
-                <div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px; {{paletteStyle['light']}}" align="center">
-                  <i class="fa fa-tags" style='-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font-style: normal; font-variant: normal; text-rendering: auto; line-height: 1; font-family: "Font Awesome 5 Free"; font-weight: 900;'></i>
-              {% if tags %}
-                {% for tag in tags %}
-                  {{ tag }}
-                {% endfor %}
-              {% else %}
-                {{ _('Conversation') }}
-              {% endif %}
-                </div>
-                <h1 style='font-size: 28px !important; font-family: "Raleway", sans-serif; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049; margin: 0 auto; padding: 7px 0 28px;' align="center">{{conversation_title}}</h1>
-                <div style="width: 80%; margin: auto; font-size: 0.8rem; text-align: center;">
-                  <span style="{{paletteStyle['light']}}">Este é um questionário de pesquisa e sua participação é importante. Responda abaixo. Agradecemos sua participação!</span>
-                </div>
-              </div>
+                <table style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: auto; padding: 7px 7px 28px; {{paletteStyle['light']}}">
+                <tr>
+                	<td>
+                		<div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px; {{paletteStyle['light']}}" align="center">
+                		  <i class="fa fa-tags" style='-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font-style: normal; font-variant: normal; text-rendering: auto; line-height: 1; font-family: "Font Awesome 5 Free"; font-weight: 900;'></i>
+                		{% if tags %}
+                		{% for tag in tags %}
+                		  {{ tag }}
+                		{% endfor %}
+              			{% else %}
+                		{{ _('Conversation') }}
+                		 {% endif %}
+                		</div>
+                	</td>
+                </tr>
+                	<tr>
+                		<td style="text-align: center;">
+                			<h1 style='font-size: 28px !important; font-family: "Raleway", sans-serif; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049; margin: 0 auto; padding: 7px 0 28px;' align="center">{{conversation_title}}</h1>
+                		</td>
+                	</tr>
+                	<td style="text-align: center;">
+                		<div style="width: 80%; margin: auto; font-size: 0.8rem; text-align: center;">
+                		  <span style="{{paletteStyle['light']}}">Este é um questionário de pesquisa e sua participação é importante. Responda abaixo. Agradecemos sua participação!</span>
+                		</div>
+                	</td>
+                </table>
 
               <div class="ConversationDetail-arrow" style="border-left-width: 28px; border-left-color: transparent; border-left-style: solid; border-right-width: 28px; border-right-color: transparent; border-right-style: solid; border-top-width: 28px; border-top-color: #C4F2F4; border-top-style: solid; height: 0; position: relative; width: 0; margin: 0 auto; padding: 0; {{paletteStyle['arrow']}}"></div>
-            </div>
 
             <div class="ConversationDetail-header" align="center">
               <h1 style="font-size: 28px !important; font-family: 'Patua One', sans-serif !important; font-weight: 300 !important; text-transform: none; letter-spacing: 1px; color: #FF3D72; margin: 0.67em 0;">Comentários</h1>
@@ -89,10 +91,5 @@
               </div>
             </div>
           </div>
-      </div>
-    </div>
-        </main>
-      </div>
-    </div>
   </body>
 </html>
