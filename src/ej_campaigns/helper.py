@@ -79,7 +79,7 @@ def generate_template_with_jinja(request, conversation, template_type):
     data = template.render(
         conversation_title=conversation.text,
         comment_content=conversation.comments.all()[0].content,
-        comment_author=conversation.comments.all()[0].author,
+        comment_author=conversation.comments.all()[0].author.name,
         vote_url=vote_url(request,conversation),
         site_url=site_url(request),
         tags=conversation.tags.all(),
