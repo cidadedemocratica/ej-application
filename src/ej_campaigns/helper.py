@@ -40,12 +40,17 @@ def templatePalette(conversation):
     paletteStyle = paletteMixin(currentPalette)
     return paletteStyle
 
-def vote_url(request, conversation):
+def site_url(request):
     scheme = request.META['wsgi.url_scheme']
     host = request.META['HTTP_HOST']
-    site_url = '{}://{}'.format(scheme,host)
+    _site_url = '{}://{}'.format(scheme,host)
+    return _site_url
+
+
+def vote_url(request, conversation):
     board_slug = None
     _vote_url = None
+    _site_url = site_url(request)
     conversation_slug=conversation.slug
     comment_id=conversation.comments.all()[0].id
     try:
@@ -53,14 +58,14 @@ def vote_url(request, conversation):
             conversation=conversation.id
         ).board.slug
         _vote_url = '{}/{}/conversations/{}?comment_id={}&action=vote'.format(
-            site_url,
+            _site_url,
             board_slug,
             conversation_slug,
             comment_id
         )
     except:
         _vote_url = '{}/conversations/{}?comment_id={}&action=vote'.format(
-            site_url,
+            _site_url,
             conversation_slug,
             comment_id
         )
@@ -76,6 +81,7 @@ def generate_template_with_jinja(request, conversation, template_type):
         comment_content=conversation.comments.all()[0].content,
         comment_author=conversation.comments.all()[0].author,
         vote_url=vote_url(request,conversation),
+        site_url=site_url(request),
         tags=conversation.tags.all(),
         paletteStyle=templatePalette(conversation)
     )
