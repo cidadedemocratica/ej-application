@@ -44,9 +44,13 @@ class CommentQuerySet(QuerySet):
     def statistics(self):
         return [x.statistics() for x in self]
 
-    def display_dataframe(self, columns=DEFAULT_COLUMNS):
+    def export_dataframe(self, columns=DEFAULT_COLUMNS):
         qs = self.values_list('id', *columns.keys())
         df = pd.DataFrame(list(qs), columns=['id', *columns.values()])
+        return df
+
+    def display_dataframe(self, columns=DEFAULT_COLUMNS):
+        df = self.export_dataframe(columns)
         df.index = df.pop('id')
         return df
 
