@@ -57,19 +57,11 @@ def vote_url(request, conversation):
         board_slug = BoardSubscription.objects.get(
             conversation=conversation.id
         ).board.slug
-        _vote_url = '{}/{}/conversations/{}?comment_id={}&action=vote'.format(
-            _site_url,
-            board_slug,
-            conversation_slug,
-            comment_id
-        )
+        url = '{}/{}/conversations/{}?comment_id={}&action=vote&origin=mail'
+        return url.format(_site_url, board_slug, conversation_slug, comment_id)
     except:
-        _vote_url = '{}/conversations/{}?comment_id={}&action=vote'.format(
-            _site_url,
-            conversation_slug,
-            comment_id
-        )
-    return _vote_url
+        url = '{}/conversations/{}?comment_id={}&action=vote&origin=mail'
+        return url.format(_site_url, conversation_slug, comment_id)
 
 def generate_template_with_jinja(request, conversation, template_type):
     root = os.path.dirname(os.path.abspath(__file__))

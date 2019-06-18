@@ -9,7 +9,7 @@ class MiddlewareConf(Base):
             'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
             'ej_boards.middleware.BoardFallbackMiddleware',
             'ej_conversations.middleware.ConversationFallbackMiddleware',
-            *middleware,
+            *middleware
         ]
         if self.DEBUG:
             middleware = [
@@ -20,4 +20,5 @@ class MiddlewareConf(Base):
             middleware.remove('django.middleware.locale.LocaleMiddleware')
         if self.EJ_ROCKETCHAT_INTEGRATION:
             middleware.append('ej_rocketchat.middleware.ContentSecurityPolicyMiddleware')
+        middleware.append('ej_campaigns.middleware.redirect_to_login_page')
         return middleware
