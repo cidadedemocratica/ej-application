@@ -14,7 +14,7 @@ urlpatterns = Router(
     models={'conversation': Conversation},
     lookup_field='slug',
     lookup_type='slug',
-    login=False,
+    login=True,
 )
 app_name = 'ej_reports'
 reports_url = '<model:conversation>/reports/'
@@ -26,9 +26,8 @@ User = get_user_model()
 #
 @urlpatterns.route(reports_url)
 def index(request, conversation):
-    # user = request.user
-    # can_download_data = user.has_perm('ej.can_edit_conversation', conversation)
-    can_download_data = True
+    user = request.user
+    can_download_data = user.has_perm('ej.can_edit_conversation', conversation)
     clusterization = conversation.get_clusterization()
     clusterization.update()
     return {

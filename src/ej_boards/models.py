@@ -103,7 +103,7 @@ class Board(TimeStampedModel):
         Returns the palette color used by the board instance.
         This class will be used on jinja to change board appearence.
         """
-      return self.palette.lower() + 'Palette'
+        return self.palette.lower() + 'Palette'
 
     @staticmethod
     def get_default_css_palette():
@@ -111,7 +111,7 @@ class Board(TimeStampedModel):
         Returns the default palette color used by ej_boards.
         This class will be used when no other palette is defined.
         """
-      return 'bluePalette'
+        return 'bluePalette'
 
 class BoardSubscription(models.Model):
     """
