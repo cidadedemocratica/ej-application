@@ -37,39 +37,24 @@ def stereotype(conversation, admin_user, comment):
     StereotypeVote.objects.create(author=stereotype, choice=Choice.SKIP, comment=comment)
     return stereotype
 
+@pytest.fixture
+def cluster(conversation, admin_user):
+    cluster = Cluster.objects.create(clusterization=conversation.clusterization, name='cluster')
+    return cluster
+
 
 class TestRoutes(UrlTester):
     user_urls = [
         '/conversations/title/reports/',
         '/conversations/title/reports/scatter/',
+        '/conversations/title/reports/data/clusters/cluster.csv',
     ]
     admin_urls = [
         '/conversations/title/reports/participants/',
     ]
 
     @pytest.fixture
-    def data(self, conversation, author_db, stereotype):
-        conversation.author = author_db
-        conversation.save()
-        stereotype.owner = author_db
-        stereotype.conversation = conversation
-        stereotype.save()
-        return {
-            'conversation': conversation.__dict__,
-            'author': author_db.__dict__,
-            'stereotype': stereotype.__dict__,
-        }
-
-
-class TestReportRoutes:
-
-    @pytest.fixture
-    def cluster(self, conversation, admin_user):
-        cluster = Cluster.objects.create(clusterization=conversation.clusterization, name='cluster')
-        return cluster
-
-    @pytest.fixture
-    def data(self, conversation, author_db, stereotype):
+    def data(self, conversation, author_db, stereotype, cluster):
         conversation.author = author_db
         conversation.save()
         stereotype.owner = author_db
@@ -81,6 +66,7 @@ class TestReportRoutes:
             'author': author_db.__dict__,
             'stereotype': stereotype.__dict__,
         }
+
     def test_report_empty_cluster_csv_route(self, request_as_admin, conversation, cluster):
         path = BASE_URL + f'/conversations/{conversation.slug}/reports/data/clusters/{cluster.name}.csv'
         request = request_as_admin

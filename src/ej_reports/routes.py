@@ -96,7 +96,7 @@ def users_data(conversation, format):
     return response
 
 
-@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>', staff=True)
+@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>')
 def cluster_data(conversation, cluster_slug, format):
     from ej_boards.models import BoardSubscription
     is_conversation_in_board = BoardSubscription.objects.filter(conversation=conversation).exists()
