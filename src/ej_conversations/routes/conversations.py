@@ -80,16 +80,11 @@ def get_conversation_detail_context(request, conversation):
     else:
         comments_made = 0
 
-    if request.GET.get('comment_id') and request.GET.get('vote'):
-        from ej_conversations.models import Vote
-        from ej_conversations.models.vote import normalize_choice
-        vote = normalize_choice(request.GET.get('vote'))
-        comment_id = request.GET.get('comment_id')
-        try:
-            Vote.objects.get(author=user,comment=comment_id)
-        except:
-            comment = Comment.objects.get(id=comment_id)
-
+    if request.GET.get('origin') and request.GET.get('origin') == 'mail':
+        campaign_comment_id = request.GET.get('comment_id')
+        comment = Comment.campaign_comment(comment,
+                                           campaign_comment_id,
+                                           user)
     return {
         # Objects
         'conversation': conversation,

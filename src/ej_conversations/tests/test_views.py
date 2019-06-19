@@ -37,10 +37,11 @@ class TestConversationBase:
 
     def test_user_can_comment(self, rf, conversation):
         request = rf.post('', {'action': 'comment', 'content': 'test comment'})
+        print(request)
         user = User.objects.create_user('user@server.com', 'password')
         request.user = user
         conversations.detail(request, conversation)
-        assert Comment.objects.filter(author=user)[0].content == 'test comment'
+        assert Comment.objects.filter(author=user)[1].content == 'test comment'
 
     def test_user_post_invalid_comment(self, rf, conversation):
         request = rf.post('', {'action': 'comment', 'content': ''})
@@ -84,6 +85,35 @@ class TestConversationComments:
         conversation.is_promoted = False
         with raises(Http404):
             comments.comment_detail(conversation, comment)
+
+    def test_return_comment_passing_comment_id(self, rf, user, conversation, comment):
+        comment_1 = conversation.create_comment(user, 'comment 1', 'approved')
+        comment_2 = conversation.create_comment(user, 'comment 2', 'approved')
+        request = rf.get('', {'action': 'vote',
+                               'comment_id': comment_1.id,
+                               'vote': 'agree',
+                               'origin': 'mail'})
+        request.user = user
+        ctx = conversations.detail(request, conversation)
+        assert ctx['comment'] == comment_1
+
+    def test_return_not_voted_comment_passing_comment_id(self, rf, user, conversation, comment):
+        comment_1 = conversation.create_comment(user, 'comment 1', 'approved')
+        comment_2 = conversation.create_comment(user, 'comment 2', 'approved')
+        request = rf.post('', {'action': 'vote',
+                               'vote': 'agree',
+                               'comment_id': comment_1.id})
+        request.user = user
+        conversations.detail(request, conversation)
+        request = rf.get('', {'action': 'vote',
+                               'comment_id': comment_1.id,
+                               'vote': 'agree',
+                               'origin': 'mail'})
+        request.user = user
+        ctx = conversations.detail(request, conversation)
+        assert ctx['comment'] != comment_1
+
+
 
 
 class TestAdminViews:

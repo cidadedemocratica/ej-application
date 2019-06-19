@@ -167,3 +167,25 @@ class Comment(StatusModel, TimeStampedModel):
                 missing_ratio=self.missing_votes / (self.missing_votes + self.total_votes + e),
             )
         return stats
+
+    @classmethod
+    def campaign_comment(cls, rand_comment, campaign_comment_id, user):
+        """
+        Return campaign_comment_id comment if user not voted on it already.
+        Otherwhise return rand_comment, that is the comment previusly selected
+        by the view. This method will be used when the
+        request come from a mail campaign.
+
+        Args:
+            rand_comment (Comment):
+                comment previusly selected by the view.
+            campaign_comment_id (string):
+                comment id that was used on the mail campaign.
+            user (User):
+                logged user.
+        """
+        try:
+            Vote.objects.get(author=user,comment=campaign_comment_id)
+            return rand_comment
+        except:
+            return Comment.objects.get(id=campaign_comment_id)
