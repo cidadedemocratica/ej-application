@@ -15,18 +15,16 @@
                 		<div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px; {{paletteStyle['light']}}" align="center">
                 		  <i class="fa fa-tags" style='-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font-style: normal; font-variant: normal; text-rendering: auto; line-height: 1; font-family: "Font Awesome 5 Free"; font-weight: 900;'></i>
                 		{% if tags %}
-                		{% for tag in tags %}
-                		  {{ tag }}
-                		{% endfor %}
-              			{% else %}
-                		{{ _('Conversation') }}
+					{% for tag in tags %}
+					{{ tag }}
+					{% endfor %}
                 		 {% endif %}
                 		</div>
                 	</td>
                 </tr>
                 	<tr>
                 		<td style="text-align: center;">
-                			<h1 style='font-size: 28px !important; font-family: "Raleway", sans-serif; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049; margin: 0 auto; padding: 7px 0 28px;' align="center">{{conversation_title}}</h1>
+                			<h1 style='font-size: 28px !important; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049 !important; margin: 0 auto; padding: 7px 0 28px;' align="center">{{conversation_title}}</h1>
                 		</td>
                 	</tr>
                 	<td style="text-align: center;">

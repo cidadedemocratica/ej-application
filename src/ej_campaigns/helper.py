@@ -12,7 +12,7 @@ from ej_conversations.models import Conversation
 
 existent_templates = ['mautic', 'hotsite']
 
-inlinePalettes = {
+inline_palettes = {
     'green': ['#36C273', '#B4FDD4'],
     'grey': ['#666666', '#EEEEEE'],
     'blue': ['#30BFD3', '#C4F2F4'],
@@ -21,24 +21,24 @@ inlinePalettes = {
     'pink': ['#C6027B', '#FFE3EA']
 }
 
-def paletteMixin(palette):
-    colors = inlinePalettes[palette]
-    templatePalette = {}
-    templatePalette['light'] = 'color: {}; background-color: {};'.format(colors[0], colors[1])
-    templatePalette['dark'] = 'color: {} !important; background-color: {};'.format(colors[1], colors[0])
-    templatePalette['arrow'] = 'border-top: 28px solid {} !important'.format(colors[1])
-    return templatePalette
+def palette_mixin(palette):
+    colors = inline_palettes[palette]
+    palette_style = {}
+    palette_style['light'] = 'color: {}; background-color: {};'.format(colors[0], colors[1])
+    palette_style['dark'] = 'color: {} !important; background-color: {};'.format(colors[1], colors[0])
+    palette_style['arrow'] = 'border-top: 28px solid {} !important'.format(colors[1])
+    return palette_style
 
 
-def templatePalette(conversation):
+def template_conversation_palette(conversation):
     try:
         currentPalette = BoardSubscription.objects.get(
             conversation=conversation.id
         ).board.palette.lower()
     except:
         currentPalette = 'blue'
-    paletteStyle = paletteMixin(currentPalette)
-    return paletteStyle
+    palette_style = palette_mixin(currentPalette)
+    return palette_style
 
 def site_url(request):
     scheme = request.META['wsgi.url_scheme']
@@ -75,7 +75,7 @@ def generate_template_with_jinja(request, conversation, template_type):
         vote_url=vote_url(request,conversation),
         site_url=site_url(request),
         tags=conversation.tags.all(),
-        paletteStyle=templatePalette(conversation)
+        palette_style=template_conversation_palette(conversation)
     )
     return data
 

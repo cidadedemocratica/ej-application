@@ -27,7 +27,7 @@ urlpatterns = Router(
 )
 
 @urlpatterns.route(board_template_url, template=None)
-def campaign_template(request, conversation, board):
+def board_campaign_template(request, conversation, board):
     template = template_generator(request, conversation)
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=template.html'
