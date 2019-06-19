@@ -282,19 +282,35 @@ class Conversation(TimeStampedModel):
 
     @property
     def css_light_palette(self):
+        """
+        Returns the light palette color used by the conversation board.
+        This class will be used on jinja to change board appearence.
+        """
         return self.css_palette + '-light'
 
     @property
     def css_text_palette(self):
+        """
+        Returns the text palette color used by the conversation board.
+        This class will be used on jinja to change board appearence.
+        """
         return self.css_palette + '-text'
 
     @property
     def css_arrow_palette(self):
+        """
+        Returns the palette color for conversation arrow element.
+        This class will be used on jinja to change conversation balloon appearence.
+        """
         return self.css_palette + '-arrow'
 
 
     @property
     def css_palette(self):
+        """
+        Returns the palette color used by the conversation board instance.
+        This css class will be used on jinja to change board appearence.
+        """
         return self._get_css_palette()
 
     def _get_css_palette(self):
@@ -307,6 +323,10 @@ class Conversation(TimeStampedModel):
 
     @staticmethod
     def get_default_css_palette():
+        """
+        Returns the default palette color used by ej_boards.
+        This class will be used on jinja to change board appearence.
+        """
         from ej_boards.models import Board
         return Board.get_default_css_palette()
 
