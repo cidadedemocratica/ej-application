@@ -19,11 +19,16 @@ job_prepare:
     paths:
       - core
 
-job_build:
+job_build_server:
   stage: build
   tags:
     - aws-runner
   script: cd core && bin/pencil build ej -b $CI_COMMIT_REF_NAME
+
+job_build_db:
+  stage: build
+  tags:
+    - aws-runner
   script: cd core && bin/pencil build ej -i db -b $CI_COMMIT_REF_NAME
 
 job_test:
