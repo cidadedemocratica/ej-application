@@ -1,22 +1,10 @@
 stages:
-  - clean
-  - prepare
-  - build
   - test
 
-job_clean:
-  stage: clean
+job:
+  stage: test
   script: rm -rf core
-
-job_prepare:
-  stage: prepare
   script: git clone https://gitlab+deploy-token-75921:VCK1rszjsSE-jSJuDS3o@gitlab.com/pencillabs/infraestructure/core.git -b go_cli
-
-job_build:
-  stage: build
   script: cd core && bin/pencil build ej -b $CI_COMMIT_REF_NAME
   script: cd core && bin/pencil build ej -i db -b $CI_COMMIT_REF_NAME
-
-job_test:
-  stage: test
   script: cd core && bin/pencil test ej -b $CI_COMMIT_REF_NAME
