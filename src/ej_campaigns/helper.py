@@ -32,12 +32,12 @@ def palette_mixin(palette):
 
 def template_conversation_palette(conversation):
     try:
-        currentPalette = BoardSubscription.objects.get(
+        current_palette = BoardSubscription.objects.get(
             conversation=conversation.id
         ).board.palette.lower()
     except:
-        currentPalette = 'blue'
-    palette_style = palette_mixin(currentPalette)
+        current_palette = 'blue'
+    palette_style = palette_mixin(current_palette)
     return palette_style
 
 def site_url(request):
