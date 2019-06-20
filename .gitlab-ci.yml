@@ -15,8 +15,8 @@ job_prepare:
 job_build:
   stage: build
   script: cd core && bin/pencil build ej -b $CI_COMMIT_REF_NAME
-	script: cd core && bin/pencil build ej -i db -b $CI_COMMIT_REF_NAME
+  script: cd core && bin/pencil build ej -i db -b $CI_COMMIT_REF_NAME
 
 job_test:
-	stage: test
-	script: cd core && bin/pencil test ej -b $CI_COMMIT_REF_NAME
+  stage: test
+  script: cd core && bin/pencil test ej -b $CI_COMMIT_REF_NAME
