@@ -6,10 +6,14 @@ stages:
 
 job_clean:
   stage: clean
+  tags:
+    - aws-runner
   script: rm -rf core
 
 job_prepare:
   stage: prepare
+  tags:
+    - aws-runner
   script: git clone https://gitlab+deploy-token-75921:VCK1rszjsSE-jSJuDS3o@gitlab.com/pencillabs/infraestructure/core.git -b go_cli
   artifacts:
     paths:
@@ -17,9 +21,13 @@ job_prepare:
 
 job_build:
   stage: build
+  tags:
+    - aws-runner
   script: cd core && bin/pencil build ej -b $CI_COMMIT_REF_NAME
   script: cd core && bin/pencil build ej -i db -b $CI_COMMIT_REF_NAME
 
 job_test:
   stage: test
+  tags:
+    - aws-runner
   script: cd core && bin/pencil test ej -b $CI_COMMIT_REF_NAME
