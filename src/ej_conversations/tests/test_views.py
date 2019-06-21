@@ -36,12 +36,11 @@ class TestConversationBase:
         assert isinstance(response, HttpResponseServerError)
 
     def test_user_can_comment(self, rf, conversation):
-        request = rf.post('', {'action': 'comment', 'content': 'test comment'})
-        print(request)
+        request = rf.post('', {'action': 'comment', 'content': 'test new comment'})
         user = User.objects.create_user('user@server.com', 'password')
         request.user = user
         conversations.detail(request, conversation)
-        assert Comment.objects.filter(author=user)[1].content == 'test comment'
+        assert Comment.objects.filter(author=user)[0].content == 'test new comment'
 
     def test_user_post_invalid_comment(self, rf, conversation):
         request = rf.post('', {'action': 'comment', 'content': ''})
