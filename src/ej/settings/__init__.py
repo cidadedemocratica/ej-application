@@ -94,14 +94,22 @@ class Conf(ThemesConf,
 
     # Use this variable to change the ej environment during the docker build step.
     ENVIRONMENT = 'local'
-    DEFAULT_FROM_EMAIL = "Empurrando Juntos <noreply@mail.ejplatform.org>"
-
-    def get_email_backend(self):
-        if self.ENVIRONMENT == 'production':
-            self.ANYMAIL = {'MAILGUN_API_KEY': ''}
-            return 'anymail.backends.mailgun.EmailBackend'
-        else:
-            return 'django.core.mail.backends.console.EmailBackend'
+    if (ENVIRONMENT == 'production'):
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'ej',
+                'USER': 'ej',
+                'PASSWORD': '',
+                'HOST': 'ej_prod_db',
+                'PORT': '5432'
+            }
+        }
+        EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+        # the api key will be informed during the docker build step.
+        ANYMAIL = {'MAILGUN_API_KEY': ''}
+        DEFAULT_FROM_EMAIL = "Empurrando Juntos <noreply@mail.ejplatform.org>"
+        HOSTNAME = 'https://ejplatform.org'
 
 
 Conf.save_settings(globals())
