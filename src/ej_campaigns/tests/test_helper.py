@@ -4,7 +4,7 @@ from ej_campaigns.helper import vote_url, template_conversation_palette, inline_
 from ej_boards.models import Board
 from ej_conversations import create_conversation
 
-class TestHelper:
+class TestCampaignHelper:
 
     def test_generate_vote_url(self, rf, conversation, comment, user):
         comment_1 = conversation.create_comment(user, 'comment 1', 'approved')
@@ -12,9 +12,10 @@ class TestHelper:
         request = rf.get('', {'type': 'mautic'})
         request.META['HTTP_HOST'] = 'ejplatform.local'
         _vote_url = vote_url(request, conversation)
+        campaign_comment = conversation.comments.all()[0]
         expected_url = 'http://ejplatform.local/conversations/{}?'\
                        'comment_id={}&action=vote&origin=mail'\
-                       .format(conversation.slug, comment_2.id)
+                       .format(conversation.slug, campaign_comment.id)
         assert _vote_url == expected_url
 
     def test_generate_vote_url_with_board(self, board, conversation, user, rf):
@@ -24,10 +25,11 @@ class TestHelper:
         request = rf.get('', {'type': 'mautic'})
         request.META['HTTP_HOST'] = 'ejplatform.local'
         _vote_url = vote_url(request, conversation)
+        campaign_comment = conversation.comments.all()[0]
         expected_url = 'http://ejplatform.local/{}/conversations/{}?'\
             'comment_id={}&action=vote&origin=mail'.format(board.slug,
                                                            conversation.slug,
-                                                           comment_2.id)
+                                                           campaign_comment.id)
         assert _vote_url == expected_url
 
     def test_apply_board_pallete_on_mail_template(self, board, conversation):
