@@ -102,7 +102,7 @@ def cluster_data(conversation, cluster_slug, format):
     is_conversation_in_board = BoardSubscription.objects.filter(conversation=conversation).exists()
     data_cat = ''
     if not is_conversation_in_board:
-        data_cat = f'_{cluster_slug}'
+        data_cat = f'_{cluster_slug.lower()}'
     else:
         board = BoardSubscription.objects.get(conversation=conversation).board
         data_cat = f'{board.slug}_{cluster_slug.lower()}'
