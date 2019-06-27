@@ -33,7 +33,7 @@ def get_votes(conversation, comments=None, fillna=None):
     return build_dataframe(votes, fillna=fillna)
 
 
-def get_raw_cluster_users(conversation, cluster_name):
+def get_raw_cluster_users(conversation, cluster_slug):
     """
     Return a data frame with the raw list of a cluster users.
 
@@ -43,7 +43,7 @@ def get_raw_cluster_users(conversation, cluster_name):
     # Fetch all votes in a single query
     clusterization = conversation.get_clusterization()
     clusterization.update()
-    cluster = clusterization.clusters.get(name__iexact=cluster_name)
+    cluster = clusterization.clusters.get(slug__iexact=cluster_slug)
     users = cluster.users.all()
     values = ['id', 'display_name', 'name', 'email']
     items = users.values(*values)

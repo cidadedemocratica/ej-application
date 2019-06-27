@@ -3,6 +3,7 @@ from random import randrange
 
 import pandas as pd
 import sidekick as sk
+from autoslug import AutoSlugField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -126,6 +127,11 @@ class Cluster(TimeStampedModel):
         help_text=_(
             'How was this cluster conceived?'
         ),
+    )
+    slug = AutoSlugField(
+        null=True,
+        unique=True,
+        populate_from='name',
     )
     users = models.ManyToManyField(
         get_user_model(),
