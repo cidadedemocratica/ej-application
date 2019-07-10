@@ -39,6 +39,7 @@ class Board(TimeStampedModel):
       ('Green', 'Green'),
       ('Orange', 'Orange'),
       ('Purple', 'Purple'),
+      ('Campaign', 'Campaign'),
     )
 
     palette = models.CharField(_('Palette'),

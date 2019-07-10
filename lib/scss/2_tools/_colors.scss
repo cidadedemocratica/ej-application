@@ -41,16 +41,23 @@
   }
 
   &--pinkPalette {
-    @include __palette-aux($color-accent,#FFE3EA)
+    @include __palette-aux($color-accent,#FFE3EA);
+  }
+
+  &--campaignPalette {
+    @include __palette-aux(#1c9dd9,#332f82,#ffffff,#1c9dd9, true);
   }
 }
 
-@mixin __palette-aux($dark-color, $light-color) {
+@mixin __palette-aux($dark-color, $light-color, $h1-detail-banner-color: 'none', $h1-detail-header-color: 'none', $round-borders: false) {
     background-color:  $dark-color !important;
     color:  $light-color !important;
     .Button:not(Button[primary]) {
       color:  $dark-color !important;
     }
+		@if $round-borders {
+			border-radius: unset;
+		}
     &-light {
       background-color: $light-color !important;
       color: $dark-color !important;
@@ -59,6 +66,14 @@
         color: $dark-color !important;
         border-color: $dark-color !important;
       }
+			h1 {
+				@if $h1-detail-banner-color != 'none' {
+					color: $h1-detail-banner-color !important;
+				}
+			}
+			@if $round-borders {
+				border-radius: unset !important;
+			}
     }
     &-text {
       *:not(h1,form) {
@@ -67,6 +82,12 @@
       #button-create {
         color: $dark-color;
       }
+
+			h1 {
+				@if $h1-detail-header-color != 'none' {
+					color: $h1-detail-header-color !important;
+				}
+			}
     }
     &-arrow {
       border-top: 28px solid $light-color !important;

@@ -27,6 +27,7 @@ $board-top-menu-border: 1px #DDDDDD solid;
       &[class^="Blue-dark"] {
         background-color: #30BFD3;
       }
+
       &[class^="Blue-light"] {
         background-color: #C4F2F4;
       }
@@ -58,9 +59,18 @@ $board-top-menu-border: 1px #DDDDDD solid;
       &[class^="Purple-dark"] {
         background-color: #7758B3;
       }
+
       &[class^="Purple-light"] {
         background-color: #E7DBFF;
       }
+
+			&[class^="Campaign-dark"] {
+        background-color: #332f82;
+			}
+
+			&[class^="Campaign-light"] {
+        background-color: #1c9dd9;
+			}
     }
   }
 

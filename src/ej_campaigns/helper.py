@@ -18,7 +18,8 @@ inline_palettes = {
     'blue': ['#30BFD3', '#C4F2F4'],
     'orange': ['#F5700A', '#FFE1CA'],
     'purple': ['#7758B3', '#E7DBFF'],
-    'pink': ['#C6027B', '#FFE3EA']
+    'pink': ['#C6027B', '#FFE3EA'],
+    'campaign': ['#1c9dd9', '#332f82']
 }
 
 def palette_mixin(palette):
