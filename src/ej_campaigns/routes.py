@@ -28,14 +28,14 @@ urlpatterns = Router(
 
 @urlpatterns.route(board_template_url, template=None)
 def board_campaign_template(request, conversation, board):
-    template = template_generator(request, conversation)
+    template = build_template(request, conversation)
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=template.html'
     return response
 
 @urlpatterns.route(conversation_template_url, template=None)
 def campaign_template(request, conversation):
-    template = template_generator(request, conversation)
+    template = build_template(request, conversation)
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=template.html'
     return response

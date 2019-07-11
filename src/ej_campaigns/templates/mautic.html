@@ -9,10 +9,10 @@
 
   <body class="Page semanadeinovacaoconversationsservicos-publicos-futuro" style='box-sizing: border-box; color: #042049; font-size: 13px; font-family: "Raleway", sans-serif; width: 100vw; display: flex; flex-flow: column; height: 100vh; overflow: hidden; margin: 0; padding: 45px 0;' bgcolor="#fff">
 
-                <table style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: auto; padding: 7px 7px 28px; max-width: 800px; {{palette_style['light']}}">
+                <table style="background-color: #C4F2F4; border-radius: 0 0 56px 56px; color: #052B47; margin: auto; padding: 7px 7px 28px; max-width: 800px; {{palette_css['light']}}">
                 <tr>
                 	<td>
-                		<div class="ConversationTags" style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px; {{palette_style['light']}}" align="center">
+                		<div  style="color: #30BFD3; font-weight: bold; background-color: #C4F2F4; padding: 21px 14px 14px; {{palette_css['light']}}" align="center">
                 		  <i class="fa fa-tags" style='-moz-osx-font-smoothing: grayscale; -webkit-font-smoothing: antialiased; display: inline-block; font-style: normal; font-variant: normal; text-rendering: auto; line-height: 1; font-family: "Font Awesome 5 Free"; font-weight: 900;'></i>
                 		{% if tags %}
 					{% for tag in tags %}
@@ -24,24 +24,24 @@
                 </tr>
                 	<tr>
                 		<td style="text-align: center;">
-                			<h1 style="font-size: 28px !important; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049 !important; margin: 0 auto; padding: 7px 0 28px;">{{conversation_title}}</h1>
+											<h1 style="font-size: 28px !important; font-weight: 200 !important; text-transform: none; box-sizing: border-box; max-width: 700px; color: #042049 !important; margin: 0 auto; padding: 7px 0 28px; {{palette_css['light-h1']}}">{{conversation_title}}</h1>
                 		</td>
                 	</tr>
                 	<td style="text-align: center;">
                 		<div style="width: 80%; margin: auto; font-size: 0.8rem; text-align: center;">
-                		  <span style="{{palette_style['light']}}">Sua participação é importante. Responda abaixo votando no comentário exibido. Você será levado à página da pesquisa para votar nos outros comentários também.</span>
+                		  <span style="{{palette_css['light']}}">Sua participação é importante. Responda abaixo votando no comentário exibido. Você será levado à página da pesquisa para votar nos outros comentários também.</span>
                 		</div>
                 	</td>
                 </table>
 
-              <div class="ConversationDetail-arrow" style="border-left-width: 28px; border-left-color: transparent; border-left-style: solid; border-right-width: 28px; border-right-color: transparent; border-right-style: solid; border-top-width: 28px; border-top-color: #C4F2F4; border-top-style: solid; height: 0; position: relative; width: 0; margin: 0 auto; padding: 0; {{palette_style['arrow']}}"></div>
+              <div  style="border-left-width: 28px; border-left-color: transparent; border-left-style: solid; border-right-width: 28px; border-right-color: transparent; border-right-style: solid; border-top-width: 28px; border-top-color: #C4F2F4; border-top-style: solid; height: 0; position: relative; width: 0; margin: 0 auto; padding: 0; {{palette_css['arrow']}}"></div>
 
-            <div class="ConversationDetail-header" align="center">
-              <h1 style="font-size: 28px !important; letter-spacing: 1px; color: #FF3D72; margin: 0.67em 0;">Comentários</h1>
+            <div  align="center">
+							<h1 style="font-size: 28px !important; letter-spacing: 1px; color: #FF3D72; margin: 0.67em 0; {{palette_css['dark-h1']}}">Comentários</h1>
             </div>
-            <div class="Comment" style="position: relative; min-height: 300px !important; width: 100% !important; max-width: 812px; margin: 0 auto;">
-              <div class="CommentCard" style="left: 0; right: 0; position: absolute; box-sizing: border-box; border-radius: 56px; font-size: 18px; max-width: 700px; width: 100% !important; z-index: 3; background-color: #30BFD3; color: white; margin: auto; padding: 40px 42px; {{palette_style['dark']}}">
-                <div class="CommentCard-user" style="font-size: 15.75px;">
+            <div  style="position: relative; min-height: 300px !important; width: 100% !important; max-width: 812px; margin: 0 auto;">
+              <div  style="left: 0; right: 0; position: absolute; box-sizing: border-box; border-radius: 56px; font-size: 18px; max-width: 700px; width: 100% !important; z-index: 3; background-color: #30BFD3; color: white; margin: auto; padding: 40px 42px; {{palette_css['dark']}}">
+                <div  style="font-size: 15.75px;">
                   <table>
                     <tr>
                       <td>

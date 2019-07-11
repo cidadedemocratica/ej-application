@@ -22,24 +22,33 @@ inline_palettes = {
     'campaign': ['#1c9dd9', '#332f82']
 }
 
-def palette_mixin(palette):
+def palette_css(palette):
     colors = inline_palettes[palette]
     palette_style = {}
     palette_style['light'] = 'color: {}; background-color: {};'.format(colors[0], colors[1])
     palette_style['dark'] = 'color: {} !important; background-color: {};'.format(colors[1], colors[0])
     palette_style['arrow'] = 'border-top: 28px solid {} !important'.format(colors[1])
+    palette_style['light-h1'] = ''
+    palette_style['dark-h1'] = ''
+    if palette == 'campaign':
+        border_style = ' border-radius: unset;'
+        light_h1_style = 'color: #ffffff !important;'
+        dark_h1_style = 'color: #1c9dd9 !important;'
+        palette_style['light-h1'] += light_h1_style
+        palette_style['dark'] += border_style
+        palette_style['light'] += border_style
+        palette_style['dark-h1'] += dark_h1_style
     return palette_style
 
 
-def template_conversation_palette(conversation):
+def palette_from_conversation(conversation):
     try:
         current_palette = BoardSubscription.objects.get(
             conversation=conversation.id
         ).board.palette.lower()
     except:
         current_palette = 'blue'
-    palette_style = palette_mixin(current_palette)
-    return palette_style
+    return palette_css(current_palette)
 
 def site_url(request):
     scheme = request.META['wsgi.url_scheme']
@@ -64,7 +73,7 @@ def vote_url(request, conversation):
         url = '{}/conversations/{}?comment_id={}&action=vote&origin=mail'
         return url.format(_site_url, conversation_slug, comment_id)
 
-def generate_template_with_jinja(request, conversation, template_type):
+def render_jinja_template(request, conversation, template_type):
     root = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(root, 'templates')
     env = Environment(loader = FileSystemLoader(templates_dir))
@@ -76,18 +85,14 @@ def generate_template_with_jinja(request, conversation, template_type):
         vote_url=vote_url(request,conversation),
         site_url=site_url(request),
         tags=conversation.tags.all(),
-        palette_style=template_conversation_palette(conversation)
+        palette_css=palette_from_conversation(conversation)
     )
     return data
 
-def template_generator(request, conversation):
+def build_template(request, conversation):
     template_type = request.GET.get('type')
     if (template_type and template_type in existent_templates):
-        template = generate_template_with_jinja(
-            request, conversation, template_type
-        )
+        template = render_jinja_template(request, conversation, template_type)
     else:
-        template = generate_template_with_jinja(
-            request, conversation, 'mautic'
-        )
+        template = render_jinja_template(request, conversation, 'mautic')
     return template
