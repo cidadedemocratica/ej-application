@@ -21,35 +21,35 @@
 @mixin palette {
 
   &--bluePalette  {
-    @include __palette-aux($color-primary,$color-hint);
+    @include __palette-aux('bluePalette', $color-primary,$color-hint);
   }
 
   &--greyPalette {
-    @include __palette-aux(#666666,#EEEEEE);
+    @include __palette-aux('greyPalette', #666666,#EEEEEE);
   }
 
   &--greenPalette {
-    @include __palette-aux(#36C273,#B4FDD4);
+    @include __palette-aux('greenPalette', #36C273,#B4FDD4);
   }
 
   &--orangePalette {
-    @include __palette-aux(#F5700A,#FFE1CA);
+    @include __palette-aux('orangePalette', #F5700A,#FFE1CA);
   }
 
   &--purplePalette {
-    @include __palette-aux(#7758B3,#E7DBFF)
+    @include __palette-aux('purplePalette', #7758B3,#E7DBFF)
   }
 
   &--pinkPalette {
-    @include __palette-aux($color-accent,#FFE3EA);
+    @include __palette-aux('pinkPalette', $color-accent,#FFE3EA);
   }
 
   &--campaignPalette {
-    @include __palette-aux(#1c9dd9,#332f82,#ffffff,#1c9dd9, true);
+    @include __palette-aux('campaignPalette', #1c9dd9,#332f82,#ffffff,#1c9dd9, true, url(/static/img/icons/bg.png));
   }
 }
 
-@mixin __palette-aux($dark-color, $light-color, $h1-detail-banner-color: 'none', $h1-detail-header-color: 'none', $round-borders: false) {
+@mixin __palette-aux($selector, $dark-color, $light-color, $h1-detail-banner-color: 'none', $h1-detail-header-color: 'none', $round-borders: false, $card-background-image: 'none') {
     background-color:  $dark-color !important;
     color:  $light-color !important;
     .Button:not(Button[primary]) {
@@ -58,6 +58,13 @@
 		@if $round-borders {
 			border-radius: unset;
 		}
+
+		.ConversationCard-actions--#{$selector} {
+			@if $card-background-image != 'none' {
+				background: $card-background-image !important;
+			}
+		}
+
     &-light {
       background-color: $light-color !important;
       color: $dark-color !important;
