@@ -5,15 +5,15 @@ from ej_conversations import create_conversation
 
 class TestRoutes:
 
-    def test_generate_mautic_template(self, rf, conversation, comment):
-        request = rf.get('', {'type': 'mautic'})
-        request.META['HTTP_HOST'] = 'ejplatform.local'
-        response = campaign_template(request, conversation)
-        assert response['Content-Disposition'] == 'attachment; filename=template.html'
+   def test_generate_mautic_template(self, rf, conversation, comment):
+       request = rf.get('', {'type': 'mautic'})
+       request.META['HTTP_HOST'] = 'ejplatform.local'
+       response = campaign_template(request, conversation)
+       assert response['Content-Disposition'] == 'attachment; filename=template.html'
 
-    def test_generate_mautic_template_with_macros(self, rf, conversation, comment):
-        request = rf.get('', {'type': 'mautic'})
-        request.META['HTTP_HOST'] = 'ejplatform.local'
-        response = campaign_template(request, conversation)
-        assert str(response.content).find(conversation.title)
-        assert str(response.content).find(comment.author.name)
+   def test_generate_mautic_template_with_macros(self, rf, conversation, comment):
+       request = rf.get('', {'type': 'mautic'})
+       request.META['HTTP_HOST'] = 'ejplatform.local'
+       response = campaign_template(request, conversation)
+       assert str(response.content).find(conversation.title)
+       assert str(response.content).find(comment.author.name)

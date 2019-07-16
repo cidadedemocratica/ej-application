@@ -9,7 +9,7 @@ import os
 from boogie.router import Router
 from ej_boards.models import Board, BoardSubscription
 from ej_conversations.models import Conversation
-from .helper import *
+from .models import Campaign
 
 app_name = 'ej_campaigns'
 conversation_template_url = 'conversations/<model:conversation>/template/'
@@ -28,14 +28,26 @@ urlpatterns = Router(
 
 @urlpatterns.route(board_template_url, template=None)
 def board_campaign_template(request, conversation, board):
-    template = build_template(request, conversation)
+    host_url = host_url_with_schema(request)
+    campaign = Campaign(conversation, host_url)
+    template = campaign.get_template()
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=template.html'
     return response
 
 @urlpatterns.route(conversation_template_url, template=None)
 def campaign_template(request, conversation):
-    template = build_template(request, conversation)
+    template_type = request.GET.get('type')
+    host_url = host_url_with_schema(request)
+    campaign = Campaign(conversation, host_url, template_type)
+    template = campaign.get_template()
     response = HttpResponse(template, content_type="text/html")
     response['Content-Disposition'] = 'attachment; filename=template.html'
     return response
+
+def host_url_with_schema(request):
+    scheme = request.META['wsgi.url_scheme']
+    host = request.META['HTTP_HOST']
+    _site_url = '{}://{}'.format(scheme,host)
+    return _site_url
+
