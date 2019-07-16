@@ -7,13 +7,13 @@ from ej_conversations.models import Conversation
 class Campaign():
 
     def __init__(self, conversation, host_url, template_type='mautic'):
-        self.PALLETE_CLASS = {
-            'green': CommonPallete,
-            'grey': CommonPallete,
-            'blue': CommonPallete,
-            'orange': CommonPallete,
-            'purple': CommonPallete,
-            'pink': CommonPallete,
+        self.PALETTE_CLASS = {
+            'green': CommonPalette,
+            'grey': CommonPalette,
+            'blue': CommonPalette,
+            'orange': CommonPalette,
+            'purple': CommonPalette,
+            'pink': CommonPalette,
             'campaign': CampaignPalette
         }
         self.template_type = template_type
@@ -50,7 +50,7 @@ class Campaign():
             ).board.palette.lower()
         except:
             conversation_palette = 'blue'
-        return self.palette_css(conversation_palette)
+        return self.get_css_from_palette(conversation_palette)
 
     def url_to_compute_vote(self):
         conversation_slug=self.conversation.slug
@@ -66,11 +66,11 @@ class Campaign():
             url = '{}/conversations/{}?comment_id={}&action=vote&origin=mail'
             return url.format(self.host_url, conversation_slug, comment_id)
 
-    def palette_css(self, conversation_palette='blue'):
-         palleteClass = self.PALLETE_CLASS[conversation_palette]
-         return palleteClass(conversation_palette).css()
+    def get_css_from_palette(self, conversation_palette='blue'):
+         paletteClass = self.PALETTE_CLASS[conversation_palette]
+         return paletteClass(conversation_palette).css()
 
-class CommonPallete():
+class CommonPalette():
 
     def __init__(self, palette='blue'):
         self.INLINE_PALETTES = {

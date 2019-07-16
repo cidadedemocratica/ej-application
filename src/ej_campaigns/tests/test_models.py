@@ -32,7 +32,7 @@ class TestModels:
                                                            campaign_comment.id)
         assert vote_url == expected_url
 
-    def test_apply_board_pallete_on_mail_template(self, board, conversation):
+    def test_apply_board_palette_on_mail_template(self, board, conversation):
         board.add_conversation(conversation)
         arrow = 'border-top: 28px solid {} !important;'.format('#FFE1CA')
         dark = 'color: {} !important; background-color: {};'.format('#FFE1CA', '#F5700A')
@@ -46,10 +46,10 @@ class TestModels:
         }
         host_url = 'http://ejplatform.local'
         campaign = Campaign(conversation, host_url, 'mautic')
-        palette = campaign.palette_css('orange')
+        palette = campaign.get_css_from_palette('orange')
         assert palette == expected_palette
 
-    def test_apply_campaign_pallete_on_mail_template(self, board, conversation):
+    def test_apply_campaign_palette_on_mail_template(self, board, conversation):
         board.add_conversation(conversation)
         arrow = 'border-top: 28px solid {} !important;'.format('#332f82')
         dark = 'color: {} !important; background-color: {}; border-radius: unset;'.format('#332f82', '#1c9dd9')
@@ -63,11 +63,11 @@ class TestModels:
         }
         host_url = 'http://ejplatform.local'
         campaign = Campaign(conversation, host_url, 'mautic')
-        palette = campaign.palette_css('campaign')
+        palette = campaign.get_css_from_palette('campaign')
         assert palette == expected_palette
 
 
-    def test_apply_default_pallete_on_mail_template(self, board, conversation):
+    def test_apply_default_palette_on_mail_template(self, board, conversation):
         arrow = 'border-top: 28px solid {} !important;'.format('#C4F2F4')
         dark = 'color: {} !important; background-color: {};'.format('#C4F2F4', '#30BFD3')
         light = 'color: {}; background-color: {};'.format('#30BFD3', '#C4F2F4')
@@ -80,5 +80,5 @@ class TestModels:
         }
         host_url = 'http://ejplatform.local'
         campaign = Campaign(conversation, host_url, 'mautic')
-        palette = campaign.palette_css()
+        palette = campaign.get_css_from_palette()
         assert palette == expected_palette
