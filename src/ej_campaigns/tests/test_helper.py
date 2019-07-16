@@ -1,6 +1,6 @@
 from pytest import raises
 from ej_campaigns.routes import campaign_template, board_campaign_template
-from ej_campaigns.helper import vote_url, template_conversation_palette, inline_palettes
+from ej_campaigns.helper import url_to_compute_vote, palette_from_conversation, inline_palettes
 from ej_boards.models import Board
 from ej_conversations import create_conversation
 
@@ -11,7 +11,7 @@ class TestCampaignHelper:
         comment_2 = conversation.create_comment(user, 'comment 2', 'approved')
         request = rf.get('', {'type': 'mautic'})
         request.META['HTTP_HOST'] = 'ejplatform.local'
-        _vote_url = vote_url(request, conversation)
+        _vote_url = url_to_compute_vote(request, conversation)
         campaign_comment = conversation.comments.all()[0]
         expected_url = 'http://ejplatform.local/conversations/{}?'\
                        'comment_id={}&action=vote&origin=mail'\
@@ -24,7 +24,7 @@ class TestCampaignHelper:
         comment_2 = conversation.create_comment(user, 'comment 2', 'approved')
         request = rf.get('', {'type': 'mautic'})
         request.META['HTTP_HOST'] = 'ejplatform.local'
-        _vote_url = vote_url(request, conversation)
+        _vote_url = url_to_compute_vote(request, conversation)
         campaign_comment = conversation.comments.all()[0]
         expected_url = 'http://ejplatform.local/{}/conversations/{}?'\
             'comment_id={}&action=vote&origin=mail'.format(board.slug,
@@ -41,9 +41,11 @@ class TestCampaignHelper:
         expected_palette = {
             'arrow': arrow,
             'dark': dark,
-            'light': light
+            'light': light,
+            'light-h1':'',
+            'dark-h1': ''
         }
-        palette = template_conversation_palette(conversation)
+        palette = palette_from_conversation(conversation)
         assert palette == expected_palette
 
     def test_apply_default_pallete_on_mail_template(self, board, conversation):
@@ -54,7 +56,9 @@ class TestCampaignHelper:
         expected_palette = {
             'arrow': arrow,
             'dark': dark,
-            'light': light
+            'light': light,
+            'light-h1':'',
+            'dark-h1': ''
         }
-        palette = template_conversation_palette(conversation)
+        palette = palette_from_conversation(conversation)
         assert palette == expected_palette

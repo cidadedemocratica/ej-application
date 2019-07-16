@@ -1,6 +1,5 @@
 from pytest import raises
 from ej_campaigns.routes import campaign_template, board_campaign_template
-from ej_campaigns.helper import vote_url
 from ej_boards.models import Board
 from ej_conversations import create_conversation
 

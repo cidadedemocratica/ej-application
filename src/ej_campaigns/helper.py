@@ -40,15 +40,14 @@ def palette_css(palette):
         palette_style['dark-h1'] += dark_h1_style
     return palette_style
 
-
 def palette_from_conversation(conversation):
     try:
-        current_palette = BoardSubscription.objects.get(
+        conversation_palette = BoardSubscription.objects.get(
             conversation=conversation.id
         ).board.palette.lower()
     except:
-        current_palette = 'blue'
-    return palette_css(current_palette)
+        conversation_palette = 'blue'
+    return palette_css(conversation_palette)
 
 def site_url(request):
     scheme = request.META['wsgi.url_scheme']
@@ -56,8 +55,7 @@ def site_url(request):
     _site_url = '{}://{}'.format(scheme,host)
     return _site_url
 
-
-def vote_url(request, conversation):
+def url_to_compute_vote(request, conversation):
     board_slug = None
     _vote_url = None
     _site_url = site_url(request)
@@ -82,7 +80,7 @@ def render_jinja_template(request, conversation, template_type):
         conversation_title=conversation.text,
         comment_content=conversation.comments.all()[0].content,
         comment_author=conversation.comments.all()[0].author.name,
-        vote_url=vote_url(request,conversation),
+        vote_url=url_to_compute_vote(request,conversation),
         site_url=site_url(request),
         tags=conversation.tags.all(),
         palette_css=palette_from_conversation(conversation)
@@ -91,8 +89,9 @@ def render_jinja_template(request, conversation, template_type):
 
 def build_template(request, conversation):
     template_type = request.GET.get('type')
-    if (template_type and template_type in existent_templates):
-        template = render_jinja_template(request, conversation, template_type)
-    else:
-        template = render_jinja_template(request, conversation, 'mautic')
-    return template
+    if (use_default_template(template_type)):
+        return render_jinja_template(request, conversation, 'mautic')
+    return render_jinja_template(request, conversation, template_type)
+
+def use_default_template(template_type):
+    return not template_type and not (template_type in existent_templates)
