@@ -200,7 +200,7 @@ reports_url = '<model:board>/conversations/<model:conversation>/reports/'
 reports_kwargs = {'login': True}
 
 
-@urlpatterns.route(reports_url, **reports_kwargs)
+@urlpatterns.route(reports_url, staff=True, **reports_kwargs)
 def report(request, board, conversation):
     assure_correct_board(conversation, board)
     return report_routes.index(request, conversation)
@@ -212,31 +212,31 @@ def report_participants(request, board, conversation):
     return report_routes.participants_table(conversation)
 
 
-@urlpatterns.route(reports_url + 'scatter/', **reports_kwargs)
+@urlpatterns.route(reports_url + 'scatter/', staff=True, **reports_kwargs)
 def report_scatter(board, conversation):
     assure_correct_board(conversation, board)
     return report_routes.scatter(conversation)
 
 
-@urlpatterns.route(reports_url + 'votes.<format>', **reports_kwargs)
+@urlpatterns.route(reports_url + 'votes.<format>', staff=True, **reports_kwargs)
 def report_votes_data(board, conversation, format):
     assure_correct_board(conversation, board)
     return report_routes.votes_data(conversation, format)
 
 
-@urlpatterns.route(reports_url + 'users.<format>', **reports_kwargs)
+@urlpatterns.route(reports_url + 'users.<format>', staff=True, **reports_kwargs)
 def report_users_data(board, conversation, format):
     assure_correct_board(conversation, board)
     return report_routes.users_data(conversation, format)
 
 
-@urlpatterns.route(reports_url + 'comments.<format>', **reports_kwargs)
+@urlpatterns.route(reports_url + 'comments.<format>', staff=True, **reports_kwargs)
 def report_comments_data(board, conversation, format):
     assure_correct_board(conversation, board)
     return report_routes.comments_data(conversation, format)
 
 
-@urlpatterns.route(reports_url + 'clusters/<cluster_slug>.<format>', **reports_kwargs)
+@urlpatterns.route(reports_url + 'clusters/<cluster_slug>.<format>', staff=True, **reports_kwargs)
 def report_cluster_data(board, conversation, cluster_slug, format):
     assure_correct_board(conversation, board)
     return report_routes.cluster_data(conversation, cluster_slug, format)

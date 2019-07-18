@@ -24,7 +24,7 @@ User = get_user_model()
 #
 # Base report URLs
 #
-@urlpatterns.route(reports_url)
+@urlpatterns.route(reports_url, staff=True)
 def index(request, conversation):
     user = request.user
     can_download_data = user.has_perm('ej.can_edit_conversation', conversation)
@@ -44,7 +44,7 @@ def participants_table(conversation):
     return {'conversation': conversation}
 
 
-@urlpatterns.route(reports_url + 'scatter/')
+@urlpatterns.route(reports_url + 'scatter/', staff=True)
 def scatter(conversation):
     # TODO: make it use the pca-data.json endpoint
     votes = get_votes(conversation).fillna(0).values
@@ -60,7 +60,7 @@ def scatter(conversation):
 #
 # Raw data
 #
-@urlpatterns.route(reports_url + 'data/scatter-plot.json', template=None)
+@urlpatterns.route(reports_url + 'data/scatter-plot.json', template=None, staff=True)
 def scatter_plot_data(conversation):
     votes = get_votes(conversation).fillna(0).values
     if votes.shape[0] <= 1 or votes.shape[1] <= 1:
@@ -71,7 +71,7 @@ def scatter_plot_data(conversation):
     return {'votes': data.tolist()}
 
 
-@urlpatterns.route(reports_url + 'data/votes.<format>')
+@urlpatterns.route(reports_url + 'data/votes.<format>', staff=True)
 def votes_data(conversation, format):
     response = file_response(conversation, 'votes', format)
     votes = get_raw_votes(conversation)
@@ -79,7 +79,7 @@ def votes_data(conversation, format):
     return response
 
 
-@urlpatterns.route(reports_url + 'data/comments.<format>')
+@urlpatterns.route(reports_url + 'data/comments.<format>', staff=True)
 def comments_data(conversation, format):
     response = file_response(conversation, 'comments', format)
     comments = conversation.comments_dataframe()
@@ -87,7 +87,7 @@ def comments_data(conversation, format):
     return response
 
 
-@urlpatterns.route(reports_url + 'data/users.<format>')
+@urlpatterns.route(reports_url + 'data/users.<format>', staff=True)
 def users_data(conversation, format):
     response = file_response(conversation, 'users', format)
     votes = get_raw_votes(conversation)
@@ -96,7 +96,7 @@ def users_data(conversation, format):
     return response
 
 
-@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>')
+@urlpatterns.route(reports_url + 'data/clusters/<cluster_slug>.<format>', staff=True)
 def cluster_data(conversation, cluster_slug, format):
     from ej_boards.models import BoardSubscription
     is_conversation_in_board = BoardSubscription.objects.filter(conversation=conversation).exists()
