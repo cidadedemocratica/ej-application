@@ -21,54 +21,73 @@
 @mixin palette {
 
   &--bluePalette  {
-    @include __palette-aux('bluePalette', $color-primary,$color-hint);
+    @include __palette-generator('bluePalette',$color-primary,$color-hint);
   }
 
   &--greyPalette {
-    @include __palette-aux('greyPalette', #666666,#EEEEEE);
+    @include __palette-generator('greyPalette',#666666,#EEEEEE,#052B47);
   }
 
   &--greenPalette {
-    @include __palette-aux('greenPalette', #36C273,#B4FDD4);
+    @include __palette-generator('greenPalette', #36C273,#B4FDD4,#052B47);
   }
 
   &--orangePalette {
-    @include __palette-aux('orangePalette', #F5700A,#FFE1CA);
+    @include __palette-generator('orangePalette',#F5700A,#FFE1CA,#052B47);
   }
 
   &--purplePalette {
-    @include __palette-aux('purplePalette', #7758B3,#E7DBFF)
+    @include __palette-generator('purplePalette',#7758B3,#E7DBFF,#052B47)
   }
 
   &--pinkPalette {
-    @include __palette-aux('pinkPalette', $color-accent,#FFE3EA);
+    @include __palette-generator('pinkPalette',$color-accent,#FFE3EA,#052B47);
   }
 
   &--campaignPalette {
-    @include __palette-aux('campaignPalette', #1c9dd9,#332f82,#ffffff,#1c9dd9, true, url(/static/img/icons/bg.png));
+    @include __palette-generator('campaignPalette', #1c9dd9,#332f82,#ffffff,#1c9dd9, true, url(/static/img/icons/bg.png));
   }
 }
 
-@mixin __palette-aux($selector, $dark-color, $light-color, $h1-detail-banner-color: 'none', $h1-detail-header-color: 'none', $round-borders: false, $card-background-image: 'none') {
+@mixin __palette-generator(
+	$selector,
+	$dark-color,
+	$light-color,
+	$h1-detail-banner-color: 'unset',
+	$h1-detail-header-color: 'unset',
+	$round-borders: false,
+	$card-background-image: 'unset') {
     background-color:  $dark-color !important;
     color:  $light-color !important;
+		.CommentCard-counter,.CommentCard-user, p, span, text-area {
+			font-weight: 600 !important;
+			color:  white !important;
+		}
     .Button:not(Button[primary]) {
       color:  $dark-color !important;
     }
 		@if $round-borders {
 			border-radius: unset;
 		}
-
 		.ConversationCard-actions--#{$selector} {
 			@if $card-background-image != 'none' {
 				background: $card-background-image !important;
 			}
 		}
-
+		&-light.show {
+			@if $selector == 'campaignPalette' {
+				background-color: $dark-color !important;
+				color: $light-color !important;
+				input[value="Comment"] {
+					color: $dark-color !important;
+					background-color: white !important;
+				}
+			}
+		}
     &-light {
-      background-color: $light-color !important;
-      color: $dark-color !important;
-      *:not(h1) {
+			background-color: $light-color !important;
+			color: $dark-color !important;
+      li > *, li {
         background-color: $light-color !important;
         color: $dark-color !important;
         border-color: $dark-color !important;
@@ -83,7 +102,13 @@
 			}
 			input[value="Comment"] {
 				background-color: $dark-color !important;
-				color: $light-color !important;
+				color: white !important;
+			}
+			textarea {
+				border-color: $dark-color !important;
+			}
+			#characters-count {
+				color: #042049 !important;
 			}
     }
     &-text {
@@ -93,7 +118,6 @@
       #button-create {
         color: $dark-color;
       }
-
 			h1 {
 				@if $h1-detail-header-color != 'none' {
 					color: $h1-detail-header-color !important;
