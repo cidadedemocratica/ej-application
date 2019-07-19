@@ -81,6 +81,10 @@
 			@if $round-borders {
 				border-radius: unset !important;
 			}
+			input[value="Comment"] {
+				background-color: $dark-color !important;
+				color: $light-color !important;
+			}
     }
     &-text {
       *:not(h1,form) {
