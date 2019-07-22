@@ -45,12 +45,12 @@ def cluster(conversation, admin_user):
 
 class TestRoutes(UrlTester):
     user_urls = [
-        '/conversations/title/reports/',
-        '/conversations/title/reports/scatter/',
-        '/conversations/title/reports/data/clusters/cluster.csv',
     ]
     admin_urls = [
         '/conversations/title/reports/participants/',
+        '/conversations/title/reports/',
+        '/conversations/title/reports/scatter/',
+        '/conversations/title/reports/data/clusters/cluster.csv',
     ]
 
     @pytest.fixture

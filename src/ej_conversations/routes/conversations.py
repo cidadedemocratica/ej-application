@@ -80,7 +80,7 @@ def get_conversation_detail_context(request, conversation):
     else:
         comments_made = 0
 
-    if request.GET.get('origin') and request.GET.get('origin') == 'mail':
+    if request.GET.get('vote') and request.GET.get('comment_id'):
         campaign_comment_id = request.GET.get('comment_id')
         comment = Comment.campaign_comment(comment,
                                            campaign_comment_id,

@@ -60,7 +60,7 @@
             }
         </script>
     {% endblock %}
-    <nav class="Header-topNav">
+    <nav class="Header-topNav" up-cache="false">
         {% if request.path not in ['/start/', '/conversations/', '/home/'] %}
             {% if not '/conversations/' in request.path %}
                 <a title="{{ _('Back') }}" class="Header-topIcon" onclick="history.back()">
@@ -75,15 +75,15 @@
                 <img src="/static/img/logo/logo.svg" alt="{{_('Site logo')}}">
             {% endcall %}
 
-            <a href="/menu/" title="{{ _("Navigation menu") }}" up-drawer=".NavMenu" up-history="false"
-               class="Header-topIcon">
+            <a href="/menu/?palette=bluePalette" title="{{ _("Navigation menu") }}" up-drawer=".NavMenu" up-history="false"
+               class="Header-topIcon" onclick="changeMenuPaletteOnClick()">
                 <i class="fa fa-bars"></i>
             </a>
 
         {% else %}
 
-            <a href="/menu/" title="{{ _("Navigation menu") }}" up-drawer=".NavMenu" up-history="false"
-               class="Header-topIcon">
+            <a href="/menu/" title="{{ _("Navigation menu") }}" up-drawer=".NavMenu" up-history="false" 
+               class="Header-topIcon" onclick="changeMenuPaletteOnClick()">
                 <i class="fa fa-bars"></i>
             </a>
 

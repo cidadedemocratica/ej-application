@@ -63,6 +63,9 @@
 			font-weight: 600 !important;
 			color:  white !important;
 		}
+		.CommentCard-loginWarn a {
+			color: #042049 !important;
+		}
     .Button:not(Button[primary]) {
       color:  $dark-color !important;
     }
@@ -100,7 +103,7 @@
 			@if $round-borders {
 				border-radius: unset !important;
 			}
-			input[value="Comment"] {
+			input[type=submit] {
 				background-color: $dark-color !important;
 				color: white !important;
 			}

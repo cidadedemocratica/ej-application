@@ -60,10 +60,10 @@ class Campaign():
             board_slug = BoardSubscription.objects.get(
                 conversation=conversation_id
             ).board.slug
-            url = '{}/{}/conversations/{}?comment_id={}&action=vote&origin=mail'
+            url = '{}/{}/conversations/{}?comment_id={}&action=vote&origin=campaign'
             return url.format(self.host_url, board_slug, conversation_slug, comment_id)
         except:
-            url = '{}/conversations/{}?comment_id={}&action=vote&origin=mail'
+            url = '{}/conversations/{}?comment_id={}&action=vote&origin=campaign'
             return url.format(self.host_url, conversation_slug, comment_id)
 
     def get_css_from_palette(self, conversation_palette='blue'):

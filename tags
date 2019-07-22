@@ -1,0 +1,208 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BASE_URL	src/ej_reports/tests/test_routes.py	/^BASE_URL = '\/api\/v1'$/;"	v
+Campaign	src/ej_campaigns/models.py	/^class Campaign():$/;"	c
+CampaignPalette	src/ej_campaigns/models.py	/^class CampaignPalette():$/;"	c
+CommonPalette	src/ej_campaigns/models.py	/^class CommonPalette():$/;"	c
+Conversation	src/ej_conversations/models/conversation.py	/^class Conversation(TimeStampedModel):$/;"	c
+ConversationTag	src/ej_conversations/models/conversation.py	/^class ConversationTag(TaggedItemBase):$/;"	c
+EjRecipes	src/ej/testing/fixture_class.py	/^class EjRecipes(metaclass=FixtureMeta):$/;"	c
+FavoriteConversation	src/ej_conversations/models/conversation.py	/^class FavoriteConversation(models.Model):$/;"	c
+FixtureMeta	src/ej/testing/fixture_class.py	/^class FixtureMeta(type):$/;"	c
+Meta	src/ej_conversations/models/conversation.py	/^    class Meta:$/;"	c	class:Conversation
+NOT_GIVEN	src/ej_conversations/models/conversation.py	/^NOT_GIVEN = object()$/;"	v
+TestBoardConversationRoutes	src/ej_boards/tests/test_routes.py	/^class TestBoardConversationRoutes(ConversationRecipes):$/;"	c
+TestBoardRoutes	src/ej_boards/tests/test_routes.py	/^class TestBoardRoutes(TestCase):$/;"	c
+TestBoardViewRoutest	src/ej_boards/tests/test_routes.py	/^class TestBoardViewRoutest:$/;"	c
+TestMiddleware	src/ej_campaigns/tests/test_middleware.py	/^class TestMiddleware:$/;"	c
+TestModels	src/ej_campaigns/tests/test_models.py	/^class TestModels:$/;"	c
+TestRoutes	src/ej_boards/tests/test_routes.py	/^class TestRoutes(UrlTester, BoardRecipes, ConversationRecipes):$/;"	c
+TestRoutes	src/ej_reports/tests/test_routes.py	/^class TestRoutes(UrlTester):$/;"	c
+UrlTester	src/ej/testing/url_tester.py	/^class UrlTester(EjRecipes):$/;"	c
+Urls	src/ej/testing/url_tester.py	/^Urls = typing.Union[int, set]$/;"	v
+User	src/ej/testing/fixture_class.py	/^User = get_user_model()$/;"	v
+__init__	src/ej/testing/fixture_class.py	/^    def __init__(cls, clsname, bases, ns):  # noqa: N805$/;"	m	class:FixtureMeta
+__init__	src/ej_campaigns/models.py	/^    def __init__(self, conversation, host_url, template_type='mautic'):$/;"	m	class:Campaign
+__init__	src/ej_campaigns/models.py	/^    def __init__(self, palette='blue'):$/;"	m	class:CommonPalette
+__init__	src/ej_campaigns/models.py	/^    def __init__(self, palette='campaign'):$/;"	m	class:CampaignPalette
+__str__	src/ej_conversations/models/conversation.py	/^    def __str__(self):$/;"	m	class:Conversation	file:
+_get_css_palette	src/ej_conversations/models/conversation.py	/^    def _get_css_palette(self):$/;"	m	class:Conversation
+admin_urls	src/ej/testing/url_tester.py	/^    admin_urls = []$/;"	v	class:UrlTester
+admin_urls	src/ej_boards/tests/test_routes.py	/^    admin_urls = [$/;"	v	class:TestRoutes
+admin_urls	src/ej_reports/tests/test_routes.py	/^    admin_urls = [$/;"	v	class:TestRoutes
+admin_user	src/ej_reports/tests/test_routes.py	/^def admin_user(db):$/;"	f
+app_name	src/ej_boards/routes.py	/^app_name = 'ej_boards'$/;"	v
+approved_comments	src/ej_conversations/models/conversation.py	/^    def approved_comments(self):$/;"	m	class:Conversation
+as_code_set	src/ej/testing/url_tester.py	/^def as_code_set(code):$/;"	f
+assure_correct_board	src/ej_boards/routes.py	/^def assure_correct_board(conversation, board):$/;"	f
+author	src/ej/testing/fixture_class.py	/^    author = Recipe(User, is_superuser=False, email='author@domain.com', name='author')$/;"	v	class:EjRecipes
+author	src/ej_conversations/models/conversation.py	/^    author = models.ForeignKey($/;"	v	class:Conversation
+board	src/ej_boards/tests/test_routes.py	/^def board(db, user):$/;"	f
+board_create	src/ej_boards/routes.py	/^def board_create(request):$/;"	f
+board_edit	src/ej_boards/routes.py	/^def board_edit(request, board):$/;"	f
+board_list	src/ej_boards/routes.py	/^def board_list(request):$/;"	f
+check_url	src/ej/testing/url_tester.py	/^def check_url(client, url, code, user):$/;"	f
+check_urls	src/ej/testing/url_tester.py	/^def check_urls(client, urls, code: Urls, user):$/;"	f
+clean	src/ej_conversations/models/conversation.py	/^    def clean(self):$/;"	m	class:Conversation
+cluster	src/ej_reports/tests/test_routes.py	/^def cluster(conversation, admin_user):$/;"	f
+comment	src/ej_reports/tests/test_routes.py	/^def comment(conversation, admin_user):$/;"	f
+comment_count	src/ej_conversations/models/conversation.py	/^def comment_count(conversation, type=None):$/;"	f
+content_object	src/ej_conversations/models/conversation.py	/^    content_object = models.ForeignKey($/;"	v	class:ConversationTag
+conversation	src/ej_conversations/models/conversation.py	/^    conversation = models.ForeignKey($/;"	v	class:FavoriteConversation
+conversation	src/ej_reports/tests/test_routes.py	/^def conversation(admin_user):$/;"	f
+conversation_create	src/ej_boards/routes.py	/^def conversation_create(request, board):$/;"	f
+conversation_detail	src/ej_boards/routes.py	/^def conversation_detail(request, board, conversation):$/;"	f
+conversation_edit	src/ej_boards/routes.py	/^def conversation_edit(request, board, conversation):$/;"	f
+conversation_list	src/ej_boards/routes.py	/^def conversation_list(request, board):$/;"	f
+conversation_list	src/ej_conversations/routes/conversations.py	/^def conversation_list(request):$/;"	f
+conversation_moderate	src/ej_boards/routes.py	/^def conversation_moderate(request, board, conversation):$/;"	f
+conversation_stereotype_create	src/ej_boards/routes.py	/^def conversation_stereotype_create(request, board, conversation):$/;"	f
+conversation_stereotype_edit	src/ej_boards/routes.py	/^def conversation_stereotype_edit(request, board, conversation, stereotype):$/;"	f
+conversation_stereotype_list	src/ej_boards/routes.py	/^def conversation_stereotype_list(board, conversation):$/;"	f
+create_comment	src/ej_conversations/models/conversation.py	/^    def create_comment(self, author, content, commit=True, *, status=None,$/;"	m	class:Conversation
+css	src/ej_campaigns/models.py	/^    def css(self):$/;"	m	class:CampaignPalette
+css	src/ej_campaigns/models.py	/^    def css(self):$/;"	m	class:CommonPalette
+css_arrow_palette	src/ej_conversations/models/conversation.py	/^    def css_arrow_palette(self):$/;"	m	class:Conversation
+css_light_palette	src/ej_conversations/models/conversation.py	/^    def css_light_palette(self):$/;"	m	class:Conversation
+css_palette	src/ej_conversations/models/conversation.py	/^    def css_palette(self):$/;"	m	class:Conversation
+css_text_palette	src/ej_conversations/models/conversation.py	/^    def css_text_palette(self):$/;"	m	class:Conversation
+data	src/ej/testing/url_tester.py	/^    def data(self):$/;"	m	class:UrlTester
+data	src/ej_boards/tests/test_routes.py	/^    def data(self, conversation, author_db, board):$/;"	m	class:TestRoutes
+data	src/ej_reports/tests/test_routes.py	/^    def data(self, conversation, author_db, stereotype, cluster):$/;"	m	class:TestRoutes
+decorator	src/ej/testing/fixture_class.py	/^    def decorator(func):$/;"	f	function:named_fixture
+default	src/ej_conversations/models/conversation.py	/^        default=False,$/;"	v	class:Conversation
+detail	src/ej_conversations/routes/conversations.py	/^def detail(request, conversation):$/;"	f
+failure_codes	src/ej/testing/url_tester.py	/^    failure_codes = {404, 403}$/;"	v	class:UrlTester
+fixture_function	src/ej/testing/fixture_class.py	/^    def fixture_function():$/;"	f	function:make_recipe
+fixture_function_db	src/ej/testing/fixture_class.py	/^    def fixture_function_db(db):$/;"	f	function:make_recipe
+fixture_function_mk	src/ej/testing/fixture_class.py	/^    def fixture_function_mk(db):$/;"	f	function:make_recipe
+fixture_function_prep	src/ej/testing/fixture_class.py	/^    def fixture_function_prep():$/;"	f	function:make_recipe
+fixture_function_rec	src/ej/testing/fixture_class.py	/^    def fixture_function_rec():$/;"	f	function:make_recipe
+fixture_method	src/ej/testing/fixture_class.py	/^def fixture_method(fixture):$/;"	f
+get_absolute_url	src/ej_conversations/models/conversation.py	/^    def get_absolute_url(self):$/;"	m	class:Conversation
+get_anchor	src/ej_conversations/models/conversation.py	/^    def get_anchor(self, name, which, **kwargs):$/;"	m	class:Conversation
+get_conversation_detail_context	src/ej_conversations/routes/conversations.py	/^def get_conversation_detail_context(request, conversation):$/;"	f
+get_css_from_palette	src/ej_campaigns/models.py	/^    def get_css_from_palette(self, conversation_palette='blue'):$/;"	m	class:Campaign
+get_default_css_palette	src/ej_conversations/models/conversation.py	/^    def get_default_css_palette():$/;"	m	class:Conversation
+get_template	src/ej_campaigns/models.py	/^    def get_template(self):$/;"	m	class:Campaign
+get_url	src/ej_conversations/models/conversation.py	/^    def get_url(self, which, **kwargs):$/;"	m	class:Conversation
+help_text	src/ej_conversations/models/conversation.py	/^        help_text=_($/;"	v	class:Conversation
+is_favorite	src/ej_conversations/models/conversation.py	/^    def is_favorite(self, user):$/;"	m	class:Conversation
+is_hidden	src/ej_conversations/models/conversation.py	/^    is_hidden = models.BooleanField($/;"	v	class:Conversation
+is_promoted	src/ej_conversations/models/conversation.py	/^    is_promoted = models.BooleanField($/;"	v	class:Conversation
+log	src/ej_conversations/models/conversation.py	/^log = logging.getLogger('ej_conversations')$/;"	v
+log	src/ej_conversations/routes/conversations.py	/^log = getLogger('ej')$/;"	v
+login_link	src/ej_conversations/routes/conversations.py	/^def login_link(content, obj):$/;"	f
+lookup_field	src/ej_boards/routes.py	/^    lookup_field={'conversation': 'slug', 'board': 'slug'},$/;"	v
+lookup_field	src/ej_conversations/models/conversation.py	/^    lookup_field='slug',$/;"	v
+lookup_type	src/ej_boards/routes.py	/^    lookup_type={'conversation': 'slug', 'board': 'slug'},$/;"	v
+make_clean	src/ej_conversations/models/conversation.py	/^def make_clean(cls, commit=True, **kwargs):$/;"	f
+make_favorite	src/ej_conversations/models/conversation.py	/^    def make_favorite(self, user):$/;"	m	class:Conversation
+make_recipe	src/ej/testing/fixture_class.py	/^def make_recipe(name, recipe):$/;"	f
+max_length	src/ej_conversations/models/conversation.py	/^        max_length=255,$/;"	v	class:Conversation
+method	src/ej/testing/fixture_class.py	/^        def method(self):$/;"	f	function:fixture_method
+method	src/ej/testing/fixture_class.py	/^        def method(self, db):$/;"	f	function:fixture_method
+middleware	src/ej_campaigns/middleware.py	/^    def middleware(request):$/;"	f	function:redirect_to_login_page
+models	src/ej_boards/routes.py	/^    models={$/;"	v
+named_fixture	src/ej/testing/fixture_class.py	/^def named_fixture(name):$/;"	f
+next_comment	src/ej_conversations/models/conversation.py	/^    def next_comment(self, user, default=NOT_GIVEN):$/;"	m	class:Conversation
+object	src/ej_boards/routes.py	/^    object='conversation',$/;"	v
+objects	src/ej_conversations/models/conversation.py	/^    objects = ConversationManager()$/;"	v	class:Conversation
+on_delete	src/ej_conversations/models/conversation.py	/^        on_delete=models.CASCADE,$/;"	v	class:Conversation
+on_delete	src/ej_conversations/models/conversation.py	/^        on_delete=models.CASCADE,$/;"	v	class:ConversationTag
+on_delete	src/ej_conversations/models/conversation.py	/^        on_delete=models.CASCADE,$/;"	v	class:FavoriteConversation
+ordering	src/ej_conversations/models/conversation.py	/^        ordering = ['created']$/;"	v	class:Conversation.Meta
+owner_urls	src/ej/testing/url_tester.py	/^    owner_urls = []$/;"	v	class:UrlTester
+owner_urls	src/ej_boards/tests/test_routes.py	/^    owner_urls = [$/;"	v	class:TestRoutes
+palette_from_conversation	src/ej_campaigns/models.py	/^    def palette_from_conversation(self):$/;"	m	class:Campaign
+participateFromCampaign	lib/assets/js/mail-campaign.js	/^function participateFromCampaign() {$/;"	f
+permissions	src/ej_conversations/models/conversation.py	/^        permissions = ($/;"	v	class:Conversation.Meta
+perms	src/ej_boards/routes.py	/^                   perms=['ej.can_edit_conversation'])$/;"	v
+populate_from	src/ej_conversations/models/conversation.py	/^        populate_from='title',$/;"	v	class:Conversation
+public_urls	src/ej/testing/url_tester.py	/^    public_urls = []$/;"	v	class:UrlTester
+public_urls	src/ej_boards/tests/test_routes.py	/^    public_urls = [$/;"	v	class:TestRoutes
+redirect_codes	src/ej/testing/url_tester.py	/^    redirect_codes = {302}$/;"	v	class:UrlTester
+redirect_to_login_page	src/ej_campaigns/middleware.py	/^def redirect_to_login_page(get_response):$/;"	f
+related_name	src/ej_conversations/models/conversation.py	/^        related_name='conversations',$/;"	v	class:Conversation
+related_name	src/ej_conversations/models/conversation.py	/^        related_name='favorite_conversations',$/;"	v	class:FavoriteConversation
+related_name	src/ej_conversations/models/conversation.py	/^        related_name='followers',$/;"	v	class:FavoriteConversation
+remove_favorite	src/ej_conversations/models/conversation.py	/^    def remove_favorite(self, user):$/;"	m	class:Conversation
+render_jinja_template	src/ej_campaigns/models.py	/^    def render_jinja_template(self):$/;"	m	class:Campaign
+report	src/ej_boards/routes.py	/^def report(request, board, conversation):$/;"	f
+report_cluster_data	src/ej_boards/routes.py	/^def report_cluster_data(board, conversation, cluster_slug, format):$/;"	f
+report_comments_data	src/ej_boards/routes.py	/^def report_comments_data(board, conversation, format):$/;"	f
+report_participants	src/ej_boards/routes.py	/^def report_participants(request, board, conversation):$/;"	f
+report_scatter	src/ej_boards/routes.py	/^def report_scatter(board, conversation):$/;"	f
+report_users_data	src/ej_boards/routes.py	/^def report_users_data(board, conversation, format):$/;"	f
+report_votes_data	src/ej_boards/routes.py	/^def report_votes_data(board, conversation, format):$/;"	f
+reports_kwargs	src/ej_boards/routes.py	/^reports_kwargs = {'staff': True, 'login': True}$/;"	v
+reports_url	src/ej_boards/routes.py	/^reports_url = '<model:board>\/conversations\/<model:conversation>\/reports\/'$/;"	v
+request_as_admin	src/ej_reports/tests/test_routes.py	/^def request_as_admin(request_factory, admin_user):$/;"	f
+request_factory	src/ej_reports/tests/test_routes.py	/^def request_factory():$/;"	f
+require_login_codes	src/ej/testing/url_tester.py	/^    def require_login_codes(self):$/;"	m	class:UrlTester
+retrieveQueryParams	lib/assets/js/mail-campaign.js	/^function retrieveQueryParams(urlParams) {$/;"	f
+root	src/ej/testing/fixture_class.py	/^    root = Recipe(User, is_superuser=True, email='root@domain.com', is_staff=True, name='root')$/;"	v	class:EjRecipes
+save	src/ej_conversations/models/conversation.py	/^    def save(self, *args, **kwargs):$/;"	m	class:Conversation
+setUp	src/ej_boards/tests/test_routes.py	/^    def setUp(self):$/;"	m	class:TestBoardRoutes
+slug	src/ej_conversations/models/conversation.py	/^    slug = AutoSlugField($/;"	v	class:Conversation
+statistics	src/ej_conversations/models/conversation.py	/^    def statistics(self, cache=True):$/;"	m	class:Conversation
+stereotype	src/ej_reports/tests/test_routes.py	/^def stereotype(conversation, admin_user, comment):$/;"	f
+success_codes	src/ej/testing/url_tester.py	/^    success_codes = {200}$/;"	v	class:UrlTester
+tags	src/ej_conversations/models/conversation.py	/^    tags = TaggableManager(through='ConversationTag')$/;"	v	class:Conversation
+template	src/ej_boards/routes.py	/^    template=['ej_boards\/{name}.jinja2', 'generic.jinja2'],$/;"	v
+test_anonymous_user_can_access_urls	src/ej/testing/url_tester.py	/^    def test_anonymous_user_can_access_urls(self, client, caplog, data):$/;"	m	class:UrlTester
+test_apply_board_palette_on_campaign_template	src/ej_campaigns/tests/test_models.py	/^    def test_apply_board_palette_on_campaign_template(self, board, conversation):$/;"	m	class:TestModels
+test_apply_campaign_palette_on_mail_template	src/ej_campaigns/tests/test_models.py	/^    def test_apply_campaign_palette_on_mail_template(self, board, conversation):$/;"	m	class:TestModels
+test_apply_default_palette_on_mail_template	src/ej_campaigns/tests/test_models.py	/^    def test_apply_default_palette_on_mail_template(self, board, conversation):$/;"	m	class:TestModels
+test_conversation_detail	src/ej_boards/tests/test_routes.py	/^    def test_conversation_detail(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_conversation_detail_not_in_board	src/ej_boards/tests/test_routes.py	/^    def test_conversation_detail_not_in_board(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_conversation_detail_post_comment	src/ej_boards/tests/test_routes.py	/^    def test_conversation_detail_post_comment(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_conversation_detail_vote_comment	src/ej_boards/tests/test_routes.py	/^    def test_conversation_detail_vote_comment(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_create_board	src/ej_boards/tests/test_routes.py	/^    def test_create_board(self):$/;"	m	class:TestBoardRoutes
+test_create_board_anonymous_user	src/ej_boards/tests/test_routes.py	/^    def test_create_board_anonymous_user(self):$/;"	m	class:TestBoardRoutes
+test_create_conversation	src/ej_boards/tests/test_routes.py	/^    def test_create_conversation(self, rf, board):$/;"	m	class:TestBoardConversationRoutes
+test_create_invalid_board	src/ej_boards/tests/test_routes.py	/^    def test_create_invalid_board(self):$/;"	m	class:TestBoardRoutes
+test_create_invalid_conversation	src/ej_boards/tests/test_routes.py	/^    def test_create_invalid_conversation(self, rf, board):$/;"	m	class:TestBoardConversationRoutes
+test_edit_board_anonymous_user	src/ej_boards/tests/test_routes.py	/^    def test_edit_board_anonymous_user(self):$/;"	m	class:TestBoardRoutes
+test_edit_board_logged_user	src/ej_boards/tests/test_routes.py	/^    def test_edit_board_logged_user(self):$/;"	m	class:TestBoardRoutes
+test_edit_conversation	src/ej_boards/tests/test_routes.py	/^    def test_edit_conversation(self, rf, board, db, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_edit_conversation_not_in_board	src/ej_boards/tests/test_routes.py	/^    def test_edit_conversation_not_in_board(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_edit_invalid_board_logged_user	src/ej_boards/tests/test_routes.py	/^    def test_edit_invalid_board_logged_user(self):$/;"	m	class:TestBoardRoutes
+test_edit_invalid_conversation	src/ej_boards/tests/test_routes.py	/^    def test_edit_invalid_conversation(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_generate_vote_url	src/ej_campaigns/tests/test_models.py	/^    def test_generate_vote_url(self, rf, conversation, comment, user):$/;"	m	class:TestModels
+test_generate_vote_url_with_board	src/ej_campaigns/tests/test_models.py	/^    def test_generate_vote_url_with_board(self, board, conversation, user, rf):$/;"	m	class:TestModels
+test_get_create_board	src/ej_boards/tests/test_routes.py	/^    def test_get_create_board(self):$/;"	m	class:TestBoardRoutes
+test_get_create_board	src/ej_boards/tests/test_routes.py	/^    def test_get_create_board(self, rf, user):$/;"	m	class:TestBoardViewRoutest
+test_get_moderate_conversation_not_in_board	src/ej_boards/tests/test_routes.py	/^    def test_get_moderate_conversation_not_in_board(self, rf, db, board, conversation):$/;"	m	class:TestBoardConversationRoutes
+test_list_board_only_one_board	src/ej_boards/tests/test_routes.py	/^    def test_list_board_only_one_board(self, rf, user, board):$/;"	m	class:TestBoardViewRoutest
+test_list_profile_board_anonymous_user	src/ej_boards/tests/test_routes.py	/^    def test_list_profile_board_anonymous_user(self):$/;"	m	class:TestBoardRoutes
+test_list_profile_boards	src/ej_boards/tests/test_routes.py	/^    def test_list_profile_boards(self):$/;"	m	class:TestBoardRoutes
+test_post_create_invalid_board	src/ej_boards/tests/test_routes.py	/^    def test_post_create_invalid_board(self, rf, user):$/;"	m	class:TestBoardViewRoutest
+test_post_create_valid_board	src/ej_boards/tests/test_routes.py	/^    def test_post_create_valid_board(self, rf, user):$/;"	m	class:TestBoardViewRoutest
+test_redirect_to_login_when_user_answer_campaign	src/ej_campaigns/tests/test_middleware.py	/^    def test_redirect_to_login_when_user_answer_campaign(self, board, conversation, comment):$/;"	m	class:TestMiddleware
+test_report_empty_cluster_csv_route	src/ej_reports/tests/test_routes.py	/^    def test_report_empty_cluster_csv_route(self, request_as_admin, conversation, cluster):$/;"	m	class:TestRoutes
+test_urls_accessible_only_by_admin	src/ej/testing/url_tester.py	/^    def test_urls_accessible_only_by_admin(self, client, user_db, root_db, data, caplog):$/;"	m	class:UrlTester
+test_urls_accessible_only_by_author_or_admin	src/ej/testing/url_tester.py	/^    def test_urls_accessible_only_by_author_or_admin(self, client, user_db,$/;"	m	class:UrlTester
+test_urls_that_requires_user_login	src/ej/testing/url_tester.py	/^    def test_urls_that_requires_user_login(self, client, user_db, caplog, data):$/;"	m	class:UrlTester
+text	src/ej_conversations/models/conversation.py	/^    text = models.TextField($/;"	v	class:Conversation
+title	src/ej_conversations/models/conversation.py	/^    title = models.CharField($/;"	v	class:Conversation
+toggle_favorite	src/ej_conversations/models/conversation.py	/^    def toggle_favorite(self, user):$/;"	m	class:Conversation
+unique	src/ej_conversations/models/conversation.py	/^        unique=True,$/;"	v	class:Conversation
+update_globals	src/ej/testing/fixture_class.py	/^    def update_globals(cls, globals):  # noqa: N805$/;"	m	class:FixtureMeta
+url_to_compute_vote	src/ej_campaigns/models.py	/^    def url_to_compute_vote(self):$/;"	m	class:Campaign
+urlpatterns	src/ej_boards/routes.py	/^urlpatterns = Router($/;"	v
+user	src/ej/testing/fixture_class.py	/^    user = Recipe(User, is_superuser=False, email='user@domain.com', name='user')$/;"	v	class:EjRecipes
+user	src/ej_boards/tests/test_routes.py	/^def user(db):$/;"	f
+user	src/ej_conversations/models/conversation.py	/^    user = models.ForeignKey($/;"	v	class:FavoriteConversation
+user_statistics	src/ej_conversations/models/conversation.py	/^    def user_statistics(self, user):$/;"	m	class:Conversation
+user_urls	src/ej/testing/url_tester.py	/^    user_urls = []$/;"	v	class:UrlTester
+user_urls	src/ej_boards/tests/test_routes.py	/^    user_urls = [$/;"	v	class:TestRoutes
+user_urls	src/ej_reports/tests/test_routes.py	/^    user_urls = [$/;"	v	class:TestRoutes
+user_votes	src/ej_conversations/models/conversation.py	/^    def user_votes(self, user):$/;"	m	class:Conversation
+voteOnCampaignComment	lib/assets/js/mail-campaign.js	/^function voteOnCampaignComment(voteValue, commentId) {$/;"	f
+vote_count	src/ej_conversations/models/conversation.py	/^    def vote_count(self, which=None):$/;"	m	class:Conversation
+votes	src/ej_conversations/models/conversation.py	/^    votes = property(lambda self: Vote.objects.filter(comment__conversation=self))$/;"	v	class:Conversation

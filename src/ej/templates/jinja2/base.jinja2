@@ -122,7 +122,7 @@
     <div class="Page-content-container">
         <div class="NavMenu-fixed">
             {% if logged_in and request.path != '/home/' %}
-                {% block _menu %}{{ menu(request.user) }}{% endblock %}
+                {% block _menu %}{{ menu(request.user, request.GET.get('palette')) }}{% endblock %}
             {% endif %}
         </div>
 

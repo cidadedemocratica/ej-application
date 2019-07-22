@@ -44,6 +44,7 @@ def start(request):
 def menu(request):
     return {
         'user': request.user,
+        'palette': request.GET.get('palette')
     }
 
 

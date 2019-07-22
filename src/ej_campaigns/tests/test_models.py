@@ -14,7 +14,7 @@ class TestModels:
         vote_url = campaign.url_to_compute_vote()
         campaign_comment = conversation.comments.all()[0]
         expected_url = 'http://ejplatform.local/conversations/{}?'\
-                       'comment_id={}&action=vote&origin=mail'\
+                       'comment_id={}&action=vote&origin=campaign'\
                        .format(conversation.slug, campaign_comment.id)
         assert vote_url == expected_url
 
@@ -27,12 +27,12 @@ class TestModels:
         vote_url = campaign.url_to_compute_vote()
         campaign_comment = conversation.comments.all()[0]
         expected_url = 'http://ejplatform.local/{}/conversations/{}?'\
-            'comment_id={}&action=vote&origin=mail'.format(board.slug,
+            'comment_id={}&action=vote&origin=campaign'.format(board.slug,
                                                            conversation.slug,
                                                            campaign_comment.id)
         assert vote_url == expected_url
 
-    def test_apply_board_palette_on_mail_template(self, board, conversation):
+    def test_apply_board_palette_on_campaign_template(self, board, conversation):
         board.add_conversation(conversation)
         arrow = 'border-top: 28px solid {} !important;'.format('#FFE1CA')
         dark = 'color: {} !important; background-color: {};'.format('#FFE1CA', '#F5700A')
