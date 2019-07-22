@@ -51,6 +51,11 @@ def facebook_button(request):
     query = {
         'next': request.GET.get('next', '/conversations/'),
         'method': 'oauth2',
+        'fields': [
+            'name',
+            'first_name',
+            'last_name',
+        ]
     }
     url = provider.get_login_url(request, **query)
     return fa_icon('facebook', href=url, id='facebook-button', aria_label="Facebook Icon",
