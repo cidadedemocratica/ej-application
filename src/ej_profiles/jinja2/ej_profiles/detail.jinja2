@@ -8,7 +8,7 @@
     <div class="Profile">
         <img class="Profile-image" src="{{ profile.image_url }}" alt="{{_('Profile picture')}}">
 
-        <h1>{{ profile.name }}</h1>
+        <h1>{{ profile.user }}</h1>
         {{ comments|role('collapsible-list', title=_('Comments'), item_role='list-item') }}
         {{ conversations|role('collapsible-list', title=_('Favorite Conversations'), item_role='card') }}
 
