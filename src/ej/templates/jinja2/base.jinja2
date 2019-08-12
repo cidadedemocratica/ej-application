@@ -60,6 +60,26 @@
             <script src="/static/js/fontScale.js" defer></script>
             <script src="/static/js/comment-form-animation.js" defer></script>
             <script src="/static/js/bundle.js" defer></script>
+	    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145407037-1"></script>
+	    <script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-145407037-1');
+	    </script>
+	    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+	    <script>
+		var OneSignal = window.OneSignal || [];
+		OneSignal.push(function() {
+			OneSignal.init({
+				appId: "140a1b9e-ecbf-4913-80f1-5ee6054014a1",
+				notifyButton: {
+					enable: true,
+				},
+			});
+		});
+	   </script>
         {% endblock javascript %}
 
         <!-- Favicons -->
