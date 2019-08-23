@@ -43,8 +43,7 @@ class ConversationMixin:
 
         stats = VoteStats(votes)
         df = stats.comments(pc=True)
-        comments = self.comments.approved().export_dataframe()
-        comments = comments[['id', 'author', 'text']]
+        comments = self.comments.approved().display_dataframe()
         for col in ['agree', 'disagree', 'skipped', 'divergence']:
             comments[col] = df[col]
 
