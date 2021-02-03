@@ -1,3 +1,15 @@
+{% extends 'base.jinja2' %}
+
+{% block metaOG2 %}
+
+    <meta name="description" property="og:title" content="Area de integração da EJ com outras ferramentas.">
+    <meta property="og:description" content="Area de integração da EJ com outras ferramentas.">
+
+{% endblock metaOG2 %}
+
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
+
+{% block content %}
 <div>
 	<div  class="integration-section">
 		<div class="scrow" onclick="showContent()">
@@ -12,7 +24,7 @@
 		</p>
 
 		<span>Select a marketing tool to generate a compatible template</span>
-		<form action="{{conversation.url("conversation:integrations")}}" method="post">
+		<form action="{{conversation.url("conversation:tools")}}" method="post">
 			<select id="" name="">
 				<option value="mautic">Mautic</option>
 			</select>
@@ -52,3 +64,4 @@
 		   }
 	   }
    </script>
+{% endblock %}

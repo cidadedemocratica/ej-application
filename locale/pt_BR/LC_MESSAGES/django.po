@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-03 18:51-0300\n"
+"POT-Creation-Date: 2021-02-04 18:42-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -615,7 +615,7 @@ msgstr "{n} aguardando moderação"
 msgid "{n} of {m} comments"
 msgstr "{n} de {m} comentários"
 
-#: src/ej_conversations/routes.py:54
+#: src/ej_conversations/routes.py:55
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -631,6 +631,33 @@ msgstr ""
 #: src/ej_conversations/routes_comments.py:45
 msgid "Your vote has been computed :-)"
 msgstr "Seu voto foi computado :-)"
+
+#: src/ej_conversations/tools/table.py:11
+msgid "Mailing campaign"
+msgstr "Campanha de email"
+
+#: src/ej_conversations/tools/table.py:12
+msgid ""
+"Generates a html template of this conversation, for mailing marketing "
+"campaigns."
+msgstr ""
+"Gere um template html desta conversa, e faça coletas de opinião via disparo "
+"de email. Útil para campanhas de marketing com ferramentas como mautic e "
+"mailchimp."
+
+#: src/ej_conversations/tools/table.py:16
+#, fuzzy
+msgid "Conversation component"
+msgstr "Componente de coleta"
+
+#: src/ej_conversations/tools/table.py:17
+#, fuzzy
+msgid ""
+"Adds EJ directly to your site. Enables voting, commenting, and clusters "
+"visualization directly on a html page."
+msgstr ""
+"Adicione a EJ em sites e blogs. Permite votar, comentar e visualizar os "
+"grupos diretamente em páginas html."
 
 #: src/ej_conversations/tour.py:4
 msgid "Next"
@@ -837,65 +864,65 @@ msgstr "Você!"
 msgid "State"
 msgstr "Estado"
 
-#: src/ej_dataviz/routes_report.py:294
+#: src/ej_dataviz/routes_report.py:249
 msgid "agree"
 msgstr "concorda"
 
-#: src/ej_dataviz/routes_report.py:295
+#: src/ej_dataviz/routes_report.py:250
 msgid "author"
 msgstr "autor"
 
-#: src/ej_dataviz/routes_report.py:296
+#: src/ej_dataviz/routes_report.py:251
 msgid "author_id"
 msgstr "autor_id"
 
-#: src/ej_dataviz/routes_report.py:297
+#: src/ej_dataviz/routes_report.py:252
 msgid "choice"
 msgstr "escolha"
 
-#: src/ej_dataviz/routes_report.py:298
+#: src/ej_dataviz/routes_report.py:253
 #, fuzzy
 msgid "cluster"
 msgstr "Grupos"
 
-#: src/ej_dataviz/routes_report.py:299
+#: src/ej_dataviz/routes_report.py:254
 #, fuzzy
 msgid "cluster_id"
 msgstr "Grupos"
 
-#: src/ej_dataviz/routes_report.py:300
+#: src/ej_dataviz/routes_report.py:255
 msgid "comment"
 msgstr "comentário"
 
-#: src/ej_dataviz/routes_report.py:301
+#: src/ej_dataviz/routes_report.py:256
 msgid "comment_id"
 msgstr "comentário_id"
 
-#: src/ej_dataviz/routes_report.py:302
+#: src/ej_dataviz/routes_report.py:257
 msgid "convergence"
 msgstr "convergência"
 
-#: src/ej_dataviz/routes_report.py:303
+#: src/ej_dataviz/routes_report.py:258
 msgid "disagree"
 msgstr "discorda"
 
-#: src/ej_dataviz/routes_report.py:304 src/ej_profiles/enums.py:70
+#: src/ej_dataviz/routes_report.py:259 src/ej_profiles/enums.py:70
 msgid "email"
 msgstr "email"
 
-#: src/ej_dataviz/routes_report.py:305
+#: src/ej_dataviz/routes_report.py:260
 msgid "id"
 msgstr "id"
 
-#: src/ej_dataviz/routes_report.py:306 src/ej_profiles/enums.py:69
+#: src/ej_dataviz/routes_report.py:261 src/ej_profiles/enums.py:69
 msgid "name"
 msgstr "nome"
 
-#: src/ej_dataviz/routes_report.py:307
+#: src/ej_dataviz/routes_report.py:262
 msgid "participation"
 msgstr "participação"
 
-#: src/ej_dataviz/routes_report.py:308
+#: src/ej_dataviz/routes_report.py:263
 msgid "skipped"
 msgstr "pulados"
 
@@ -2573,10 +2600,10 @@ msgid "Back (skip changes)"
 msgstr "Voltar (ignorar mudanças)"
 
 #: src/ej_conversations/jinja2/ej_conversations/edit.jinja2:9
-#: src/ej_conversations/jinja2/ej_conversations/integrations.jinja2:18
-#: src/ej_conversations/jinja2/ej_conversations/integrations.jinja2:20
 #: src/ej_conversations/jinja2/ej_conversations/moderate.jinja2:7
 #: src/ej_conversations/jinja2/ej_conversations/moderate.jinja2:9
+#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:29
+#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:31
 msgid "Back to conversation"
 msgstr "De volta às conversa"
 
@@ -2620,6 +2647,21 @@ msgstr "Rejeitar"
 msgid "Approve"
 msgstr "Aprovar"
 
+#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:21
+#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:14
+msgid "Tools"
+msgstr "Ferramentas"
+
+#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:15
+#, fuzzy
+msgid "Integrates this conversation with external tools and platforms."
+msgstr "Integre a sua conversa com outras ferramentas e plataformas"
+
+#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:19
+#, fuzzy
+msgid "Integration"
+msgstr "Integração"
+
 #: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:20
 #: src/ej_profiles/jinja2/ej_profiles/contributions.jinja2:79
 msgid "Go to conversation"
@@ -2628,11 +2670,6 @@ msgstr "Ir para conversa"
 #: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:16
 msgid "Back to conversations"
 msgstr "De volta às conversas"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:21
-#, fuzzy
-msgid "Integrations"
-msgstr "Conversas"
 
 #: src/ej_dataviz/jinja2/ej/role/conversation-download-data.jinja2:2
 msgid "Downloads: "

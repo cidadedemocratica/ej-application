@@ -25,4 +25,3 @@ RUN pip install invoke markupsafe toolz libsass gunicorn
 RUN pip install sidekick psycopg2 toml
 RUN pip install -r etc/requirements-dev.txt
 RUN inv i18n && inv i18n -c && inv build-assets && inv collect
-ENTRYPOINT inv db && inv db-assets && ./manage.py runserver 0.0.0.0:8000

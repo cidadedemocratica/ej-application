@@ -10,13 +10,24 @@
 {% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
 
 {% block content %}
-	<h1>Integrate EJ with external tools and platforms</h1>
-	{% include 'ej_conversations/integrations/template-generator.jinja2' %}
-	<br>
-	{% include 'ej_conversations/integrations/conversation-component.jinja2' %}
-	<br>
+<div class="tools-title">
+<h1>{{_('Tools') }}</h1>
+<span>{{_('Integrates this conversation with external tools and platforms.') }}</span>
+</div>
+<table class="tools-table">
+	<tr>
+		<th>{{ _('Integration') }}</th>
+		<th>{{ _('Description') }}</th>
+	</tr>
+	{%  for tool in tools %}
+	<tr>
+		<td><a href="{{ tool["link"] }}">{{ tool["integration"] }}</a></td>
+		<td><a href="{{ tool["link"] }}">{{ tool["description"] }}</a></td>
+	</tr>
+	{%  endfor %}
+</table>
 <p><a href="{{ conversation.get_absolute_url() }}" title="{{ _('Back to conversation') }}"
 		class="lowercase bold text-brand">
 	<i class="fa fa-chevron-left"></i>{% trans %}Back to conversation{% endtrans %}
 </a></p>
-{% endblock %}
+{% endblock content %}

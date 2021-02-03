@@ -18,10 +18,12 @@
         {%- if request.user.has_perm('ej.can_moderate_conversation', conversation) %}
             <li><a href="{{ conversation.url('conversation:moderate') }}">{{ _('Moderate') }}</a></li>
         {% endif %}
-            <li><a href="{{ conversation.url('conversation:integrations') }}">{{ _('Integrations') }}</a></li>
         {% for link in page_menu.links('conversations:detail-admin', request, conversation) %}
             <li>{{ link }}</li>
         {% endfor %}
+        {%- if request.user.has_perm('ej.can_moderate_conversation', conversation) %}
+            <li><a href="{{ conversation.url('conversation:tools') }}">{{ _('Tools') }}</a></li>
+        {% endif %}
     </ul>
 </nav>
 {{ page_menu.ACCESSIBILITY() }}

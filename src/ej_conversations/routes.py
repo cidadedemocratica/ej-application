@@ -14,7 +14,8 @@ from .enums import TourStatus
 from .models import Conversation
 from .rules import next_comment
 from .tour import TOUR
-from .integrations.utils import npm_version
+from .tools.utils import npm_version
+from .tools.table import Tools
 from .utils import (
     check_promoted,
     conversation_admin_menu_links,
@@ -173,30 +174,44 @@ def moderate(request, conversation, slug=None, check=check_promoted):
     }
 
 
-@urlpatterns.route(conversation_url + "integrations/")
-def integrations(request, conversation, slug, check=check_promoted, npm=npm_version):
-    from ej_conversations.integrations import TemplateGenerator
-    from django.conf import settings
-    check(conversation, request)
-    if request.method == "POST":
-        generator = TemplateGenerator(conversation, request, "mautic")
-        template = generator.get_template()
-        response = HttpResponse(template, content_type="text/html")
-        response['Content-Disposition'] = 'attachment; filename=template.html'
-        return response
-    else:
-        schema = 'https' if settings.ENVIRONMENT != 'local' else 'http'
-        return {
-            "conversation": conversation,
-            "request": request,
-            "menu_links": conversation_admin_menu_links(conversation, request.user),
-            "schema": schema,
-            "npm_version": npm(),
-        }
+@urlpatterns.route(conversation_url + "tools/")
+def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
+    tools = Tools(conversation)
+    return {
+        "tools": tools.get(),
+        "conversation": conversation
+    }
+
+# @urlpatterns.route(conversation_url + "tools/")
+# def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
+#    from ej_conversations.tools import TemplateGenerator
+#    from django.conf import settings
+#    check(conversation, request)
+#    if request.method == "POST":
+#        generator = TemplateGenerator(conversation, request, "mautic")
+#        template = generator.get_template()
+#        response = HttpResponse(template, content_type="text/html")
+#        response['Content-Disposition'] = 'attachment; filename=template.html'
+#        return response
+#    else:
+#        schema = 'https' if settings.ENVIRONMENT != 'local' else 'http'
+#        return {
+#            "conversation": conversation,
+#            "request": request,
+#            "menu_links": conversation_admin_menu_links(conversation, request.user),
+#            "schema": schema,
+#            "npm_version": npm(),
+#        }
+
+
+@urlpatterns.route(conversation_url + "tools/mailing")
+def mailing(request, conversation, slug, check=check_promoted):
+    return {"conversation": conversation}
 
 #
 # Auxiliary functions
 #
+
 
 def login_link(content, obj):
     path = obj.get_absolute_url()

@@ -1,41 +1,47 @@
-.integration-section,
-.integration-section-2 {
+.tools-section,
+.tools-section-2 {
 	border-width: 1px;
 	border-color: #30BFD3;
 	border-radius: 1rem;
 	padding: 5px;
 }
 
-.integration-section-2 {
+.tools-section-2 {
 	border-style: solid;
 }
 
-.integration-section .scrow,
-.integration-section-2 .scrow{
+.tools-section .scrow,
+.tools-section-2 .scrow{
 	display: flex;
 }
-.integration-section .scrow div:first-child,
-.integration-section-2 .scrow div:first-child {
+.tools-section .scrow div:first-child,
+.tools-section-2 .scrow div:first-child {
 	flex-grow: 2;
 	color: #30BFD3;
 	font-weight: 700;
 }
 
-.integration-section .integration-content {
+.tools-section .tools-content {
 	overflow: hidden;
 	transition: max-height 0.5s;
 }
 
-.integration-content-2 {
+.tools-content-2 {
 	overflow: hidden;
 	max-height: 0px;
 	transition: max-height 0.5s;
 }
 
-.integration-section-2-snippet {
+.tools-section-2-snippet {
 	background-color: #E7E7E7;
 	min-height: 50px;
 	font-size: 0.8rem;
 	margin-top: 10px;
 	margin-bottom: 20px;
+}
+
+.tools-title {
+	border-bottom: 1px solid rgba(0,0,0,.12);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }

@@ -1,10 +1,10 @@
 <div>
-	<div  class="integration-section-2">
+	<div  class="tools-section-2">
 		<div class="scrow" onclick="showContent2()">
 			<div>Collect opinions directly on your site</div>
 			<div><i class="fas fa-angle-down"></i></div>
 		</div>
-	<div class="integration-content-2">
+	<div class="tools-content-2">
 		<p>With this feature you can collect opinions from your audience without
 			using EJ interface directly. This component can be included in your
 			site's html, and it will allow users to participate on conversations
@@ -14,7 +14,7 @@
 			To add this conversation to your site/platform, add the following
 			snippet of code to your page header:
 
-			<div class="integration-section-2-snippet">
+			<div class="tools-section-2-snippet">
 				<div>
 					<code>&lt;script src='https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations.js'&gt&lt;/script&gt</code>
 					<br>
@@ -26,7 +26,7 @@
 			
 			and this snippet of code on the page body:
 
-			<div class="integration-section-2-snippet">
+			<div class="tools-section-2-snippet">
 				<div>
 					<code>&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}}
 					cid="{{conversation.id}}"&gt&lt;/ej-conversation&gt</code>
@@ -37,8 +37,8 @@
 </div>
    <script>
 	   function showContent2() {
-		   let content = document.querySelector(".integration-content-2");
-		   let section = document.querySelector(".integration-section-2");
+		   let content = document.querySelector(".tools-content-2");
+		   let section = document.querySelector(".tools-section-2");
 		   if (window.getComputedStyle(content).maxHeight == "0px") {
 			content.style.maxHeight = "400px";
 			section.style.borderRadius = "unset";
