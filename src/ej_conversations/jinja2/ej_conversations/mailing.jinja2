@@ -10,19 +10,14 @@
 {% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
 
 {% block content %}
+<div class="tools">
+<div class="tools-title">
+<h1>{{ tool["integration"] }}</h1>
+<span>{{tool["description"] }}</span>
+</div>
 <div>
-	<div  class="integration-section">
-		<div class="scrow" onclick="showContent()">
-			<div>Generate a template for segmented marketing campaigns</div>
-			<div><i class="fas fa-angle-down"></i></div>
-		</div>
-	<div class="integration-content">
-		<p>With this feature, you can download an html version of this conversation.
-			You can use it as a template on marketing automation tools like mautic and mailchimp.
-			The template will heritage the palette from conversation's board. If there is no board,
-			the default palette will be applied.
-		</p>
-
+	<div class="tools-section">
+	<div class="tools-content">
 		<span>Select a marketing tool to generate a compatible template</span>
 		<form action="{{conversation.url("conversation:tools")}}" method="post">
 			<select id="" name="">
@@ -38,6 +33,11 @@
 		</form>
 	</div>
 	</div>
+<p><a href="{{ conversation.url('conversation:tools') }}" title="{{ _('Back to tools') }}"
+		class="lowercase bold text-brand">
+	<i class="fa fa-chevron-left"></i>{% trans %}Back to conversation{% endtrans %}
+</a></p>
+</div>
 </div>
    <script>
 	   function showContent() {

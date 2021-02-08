@@ -6,11 +6,11 @@ class Tools():
     def __init__(self, conversation):
         self.conversation = conversation
 
-    def get(self):
+    def list(self):
         return [{
             "integration": _("Mailing campaign"),
             "description": _("Generates a html template of this conversation, for mailing marketing campaigns."),
-            "link": self.conversation.url('conversation:mailing')
+            "link": self.conversation.url('conversation:mailing'),
         },
             {
             "integration": _("Conversation component"),
@@ -18,3 +18,15 @@ class Tools():
             "link": ""
         }
         ]
+
+    def get(self, name):
+        tools = self.list()
+        selected_tool = {}
+        for tool in tools:
+            if(tool["integration"] == name):
+                selected_tool = tool
+                break
+            if(not selected_tool):
+                raise Exception("tool not found")
+        return selected_tool
+

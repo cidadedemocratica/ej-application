@@ -178,7 +178,7 @@ def moderate(request, conversation, slug=None, check=check_promoted):
 def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
     tools = Tools(conversation)
     return {
-        "tools": tools.get(),
+        "tools": tools.list(),
         "conversation": conversation
     }
 
@@ -206,7 +206,8 @@ def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
 
 @urlpatterns.route(conversation_url + "tools/mailing")
 def mailing(request, conversation, slug, check=check_promoted):
-    return {"conversation": conversation}
+    tools = Tools(conversation)
+    return {"conversation": conversation, "tool": tools.get(_('Mailing campaign')) }
 
 #
 # Auxiliary functions
