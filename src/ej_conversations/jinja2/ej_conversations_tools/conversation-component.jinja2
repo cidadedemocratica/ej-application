@@ -1,10 +1,19 @@
-<div>
-	<div  class="tools-section-2">
-		<div class="scrow" onclick="showContent2()">
-			<div>Collect opinions directly on your site</div>
-			<div><i class="fas fa-angle-down"></i></div>
-		</div>
-	<div class="tools-content-2">
+{% extends 'base.jinja2' %}
+{% block metaOG2 %}
+
+    <meta name="description" property="og:title" content="Area de integração da EJ com outras ferramentas.">
+    <meta property="og:description" content="Area de integração da EJ com outras ferramentas.">
+
+{% endblock metaOG2 %}
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
+
+{% block content %}
+<div class="tools">
+<div class="tools-title">
+	<h1>{{_("Tools")}} > {{ tool["integration"] }}</h1>
+<span>{{tool["description"] }}</span>
+</div>
+	<div>
 		<p>With this feature you can collect opinions from your audience without
 			using EJ interface directly. This component can be included in your
 			site's html, and it will allow users to participate on conversations
@@ -33,7 +42,11 @@
 				</div>
 			</div>
 		</p>
-	</div>
+</div>
+<p><a href="{{ conversation.url('conversation_tools:index') }}" title="{{ _('Back to tools') }}"
+		class="lowercase bold text-brand">
+	<i class="fa fa-chevron-left"></i>{% trans %}Back to tools{% endtrans %}
+</a></p>
 </div>
    <script>
 	   function showContent2() {
@@ -51,3 +64,4 @@
 		   }
 	   }
    </script>
+{% endblock %}

@@ -10,12 +10,12 @@ class Tools():
         return [{
             "integration": _("Mailing campaign"),
             "description": _("Generates a html template of this conversation, for mailing marketing campaigns."),
-            "link": self.conversation.url('conversation:mailing'),
+            "link": self.conversation.url('conversation_tools:mailing'),
         },
             {
             "integration": _("Conversation component"),
             "description": _("Adds EJ directly to your site. Enables voting, commenting, and clusters visualization directly on a html page."),
-            "link": ""
+            "link": self.conversation.url('conversation_tools:conversation-component'),
         }
         ]
 
@@ -26,7 +26,6 @@ class Tools():
             if(tool["integration"] == name):
                 selected_tool = tool
                 break
-            if(not selected_tool):
-                raise Exception("tool not found")
+        if(not selected_tool):
+            raise Exception("tool not found")
         return selected_tool
-

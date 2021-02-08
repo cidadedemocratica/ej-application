@@ -22,7 +22,7 @@
             <li>{{ link }}</li>
         {% endfor %}
         {%- if request.user.has_perm('ej.can_moderate_conversation', conversation) %}
-            <li><a href="{{ conversation.url('conversation:tools') }}">{{ _('Tools') }}</a></li>
+            <li><a href="{{ conversation.url('conversation_tools:index') }}">{{ _('Tools') }}</a></li>
         {% endif %}
     </ul>
 </nav>

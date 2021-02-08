@@ -12,14 +12,14 @@
 {% block content %}
 <div class="tools">
 <div class="tools-title">
-<h1>{{ tool["integration"] }}</h1>
+<h1>{{_("Tools")}} > {{ tool["integration"] }}</h1>
 <span>{{tool["description"] }}</span>
 </div>
 <div>
 	<div class="tools-section">
 	<div class="tools-content">
 		<span>Select a marketing tool to generate a compatible template</span>
-		<form action="{{conversation.url("conversation:tools")}}" method="post">
+		<form action="{{conversation.url("conversation_tools:mailing")}}" method="post">
 			<select id="" name="">
 				<option value="mautic">Mautic</option>
 			</select>
@@ -33,9 +33,9 @@
 		</form>
 	</div>
 	</div>
-<p><a href="{{ conversation.url('conversation:tools') }}" title="{{ _('Back to tools') }}"
+<p><a href="{{ conversation.url('conversation_tools:index') }}" title="{{ _('Back to tools') }}"
 		class="lowercase bold text-brand">
-	<i class="fa fa-chevron-left"></i>{% trans %}Back to conversation{% endtrans %}
+	<i class="fa fa-chevron-left"></i>{% trans %}Back to tools{% endtrans %}
 </a></p>
 </div>
 </div>

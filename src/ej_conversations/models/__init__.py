@@ -8,7 +8,6 @@ from .conversation_queryset import ConversationQuerySet
 from .vote import Vote, normalize_choice
 from .vote_queryset import VoteQuerySet
 from ..enums import Choice
-from ej_conversations.tools import TemplateGenerator
 
 log = getLogger("ej")
 

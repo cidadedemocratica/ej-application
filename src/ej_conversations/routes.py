@@ -14,8 +14,6 @@ from .enums import TourStatus
 from .models import Conversation
 from .rules import next_comment
 from .tour import TOUR
-from .tools.utils import npm_version
-from .tools.table import Tools
 from .utils import (
     check_promoted,
     conversation_admin_menu_links,
@@ -174,14 +172,6 @@ def moderate(request, conversation, slug=None, check=check_promoted):
     }
 
 
-@urlpatterns.route(conversation_url + "tools/")
-def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
-    tools = Tools(conversation)
-    return {
-        "tools": tools.list(),
-        "conversation": conversation
-    }
-
 # @urlpatterns.route(conversation_url + "tools/")
 # def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
 #    from ej_conversations.tools import TemplateGenerator
@@ -203,11 +193,6 @@ def tools(request, conversation, slug, check=check_promoted, npm=npm_version):
 #            "npm_version": npm(),
 #        }
 
-
-@urlpatterns.route(conversation_url + "tools/mailing")
-def mailing(request, conversation, slug, check=check_promoted):
-    tools = Tools(conversation)
-    return {"conversation": conversation, "tool": tools.get(_('Mailing campaign')) }
 
 #
 # Auxiliary functions
