@@ -4,7 +4,7 @@ from invoke import task
 
 from .base import su_docker, runner
 
-__all__ = ["docker_up", "docker_build", "docker_exec", "docker_attach", "docker_test"]
+__all__ = ["docker_up", "docker_build", "docker_exec", "docker_attach", "docker_test", "docker_compose_entrypoint"]
 
 
 @task
@@ -61,3 +61,16 @@ def docker_attach(ctx):
     docker = su_docker("docker")
     do = runner(ctx, dry_run=False, pty=True)
     do(f'docker exec -it docker_server_1 bash')
+
+@task
+def docker_compose_entrypoint(ctx):
+    """
+     Entrypoint commands for docker-compose.yml;
+    """
+    docker = su_docker("docker")
+    do = runner(ctx, dry_run=False, pty=True)
+    do(f'inv db')
+    do(f'inv db-assets')
+    do(f'inv i18n --compile')
+    do(f'inv i18n')
+    do(f'inv run')

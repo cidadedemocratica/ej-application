@@ -34,4 +34,4 @@ coreapi
 Pillow
 markdown
 jinja2
-
+psycopg2

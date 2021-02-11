@@ -26,26 +26,9 @@ class TestRoutes(UrlTester, ConversationRecipes):
         response = user_client.get(url)
         assert response.status_code == 200
 
+
 class TestIntegrationsRoutes(ConversationRecipes):
-    def test_post_integrations(self, rf, conversation_db, mk_user):
-        user = mk_user(email="user@domain.com") 
-        request = rf.post('/conversations/' + str(conversation_db.id) + '/' + conversation_db.slug +'/integrations/')
-        request.META['HTTP_HOST'] = '0.0.0.0:8000'
-        conversation_db.create_comment(user, "comment", status="approved", check_limits=False)
-        response = routes.integrations(request, conversation_db, conversation_db.slug)
-
+    def test_get_tools(self, user_client, conversation_db, mk_user):
+        response = user_client.get('/conversations/' + str(conversation_db.id)
+                                   + '/' + conversation_db.slug + '/tools')
         assert response.status_code == 200
-    
-    def test_get_integrations(self, rf, conversation_db, mk_user):
-        user = mk_user(email="user@domain.com")
-        request = rf.get( '/conversations/' + str(conversation_db.id) + '/' + conversation_db.slug +'/integrations/')
-        request.META['HTTP_HOST'] = '0.0.0.0:8000'
-        request.user = user
-        conversation_db.create_comment(user, "comment", status="approved", check_limits=False)
-        response = routes.integrations(request, conversation_db, conversation_db.slug)
-
-        assert response['request'] == request
-        assert response['npm_version'] == routes.npm_version()
-        assert response['schema'] == 'http'
-        assert response['conversation'] == conversation_db
-        assert response['menu_links'] == []

@@ -66,6 +66,7 @@ def test(ctx, verbose=False, lf=False, cov=False):
             "USE_I18N": "false",
             "USE_L10N": "false",
             "USE_TZ": "false",
+            "DB_HOST": "db",
             "COUNTRY": "",
         },
     )

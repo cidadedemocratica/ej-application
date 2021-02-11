@@ -19,7 +19,7 @@ services:
             - variables.env
         ports:
             - 8000:8000
-        entrypoint: ["inv", "db", "&&",  "inv",  "db-assets",  "&&",  "inv", "run"]
+        entrypoint: ["inv", "docker-compose-entrypoint"]
 volumes:
     statics:
     backups:

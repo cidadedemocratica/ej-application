@@ -1,7 +1,6 @@
 import pytest
 import mock
-from ej_conversations.integrations import TemplateGenerator
-from ej_conversations.mommy_recipes import ConversationRecipes
+from ej_conversations.tools.mailing import TemplateGenerator
 from ej_boards.mommy_recipes import BoardRecipes
 
 
@@ -74,7 +73,7 @@ class TestTemplateGenerator(BoardRecipes):
             'light-h1': '',
             'dark-h1': ''
         }
-        
+
         palette = generator._get_palette_css()
         assert palette == expected_palette
 
@@ -101,7 +100,7 @@ class TestTemplateGenerator(BoardRecipes):
             'light-h1': '',
             'dark-h1': ''
         }
-        
+
         palette = generator._get_palette_css()
         assert palette == expected_palette
 
@@ -128,6 +127,6 @@ class TestTemplateGenerator(BoardRecipes):
             'light-h1': 'color: #ffffff !important;',
             'dark-h1': 'color: #1c9dd9 !important;'
         }
-        
+
         palette = campaign._get_palette_css()
         assert palette == expected_palette

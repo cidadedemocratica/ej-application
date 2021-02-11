@@ -12,7 +12,13 @@ selenium ~= 3.141
 codecov ~= 2.0
 black ~= 19.3b0
 sphinx ~= 1.8
-invoke ~= 1.2
+invoke == 1.4.1
+markupsafe
+toolz 
+libsass
+sidekick 
+psycopg2
+toml
 ipdb ~= 0.11.0
 ipython ~= 7.2
 libsass ~= 0.19.0

@@ -21,7 +21,5 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
 COPY ./ /ej-server
 WORKDIR ej-server
 RUN cd lib && npm install
-RUN pip install invoke markupsafe toolz libsass gunicorn
-RUN pip install sidekick psycopg2 toml
 RUN pip install -r etc/requirements-dev.txt
 RUN inv i18n && inv i18n -c && inv build-assets && inv collect

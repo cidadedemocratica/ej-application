@@ -23,7 +23,7 @@ rules<2.0
 sidekick ~= 0.5.1
 numpy ~= 1.16
 scipy ~= 1.2
-pandas ~= 0.24.0
+pandas ~= 1.2
 scikit-learn ~= 0.20.2
 pillow ~= 5.4
 matplotlib ~= 3.0
