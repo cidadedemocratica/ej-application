@@ -4,7 +4,7 @@ from invoke import task
 
 from .base import directory, HELP_MESSAGES, set_theme, exec_watch, manage, python
 
-__all__ = ["build_assets", "docs", "i18n", "js", "requirements", "sass"]
+__all__ = ["build_assets", "docs", "i18n", "js", "sass"]
 
 
 @task
@@ -111,46 +111,6 @@ def js(ctx, watch=False, minify=False):
                     ctx.run(f"{minify} {path} > {path[:-3]}.min.js")
     finally:
         os.chdir(cwd)
-
-
-@task
-def requirements(_ctx):
-    """
-    Extract requirements.txt from Poetry file
-    """
-    import toml
-
-    def extract_deps(deps):
-        deps = deps.copy()
-        deps.pop("python", None)
-        lst = []
-
-        for k, v in deps.items():
-            if isinstance(v, str):
-                version = v
-                extra = ()
-            else:
-                version = v["version"]
-                extra = v.get("extras", ())
-
-            if version[0] == "^":
-                lst.append(f"{k} ~= {version[1:]}")
-            else:
-                lst.append(f"{k}{version}")
-            for extra in extra:
-                lst.append(f"{k}[{extra}]")
-        return "\n".join(lst)
-
-    with open("pyproject.toml") as fd:
-        data = toml.load(fd)
-        deps = data["tool"]["poetry"]["dependencies"]
-        dev_deps = data["tool"]["poetry"]["dev-dependencies"]
-
-        with open("etc/requirements.txt", "w") as fd_dest:
-            fd_dest.write(extract_deps(deps))
-
-        with open("etc/requirements-dev.txt", "w") as fd_dest:
-            fd_dest.write(extract_deps(dev_deps))
 
 
 @task(help={**HELP_MESSAGES, "suffix": "Append suffix to resulting file names."})

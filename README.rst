@@ -29,7 +29,7 @@ you can quickly start the development server using the
 commands::
 
     $ sudo pip3 install invoke==1.4.1 --user
-    $ inv docker up
+    $ inv docker-up
 
 This will deploy EJ using **docker/docker-compose.yml** file.
 Every change made on the repository will be reflected inside the
@@ -42,15 +42,9 @@ Documentation
 
 Documentation can be updated with::
 
-    $ inv docs 
+    $ inv docker-exec "inv docs"
     
 will be available at the ``build/docs/`` directory.
-
-------
-
-with docker:
-
-    $ inv docker exec -c "inv docs"
 
 Changing theme
 --------------
@@ -59,12 +53,12 @@ The previous commands build EJ using the "default" theme. EJ accepts additional
 themes and currently comes pre-installed with the alternate "cpa" theme. The
 first step is to rebuild static assets::
 
-    $ inv js db-assets
-    $ inv sass -t cpa 
+    $ inv docker-exec "inv js db-assets"
+    $ inv docker-exec "inv sass -t cpa" 
 
 Now run the server using the --theme flag::
 
-    $ inv run -t cpa
+    $ inv docker-exec "inv run -t cpa"
 
 Tests
 -----
@@ -72,15 +66,7 @@ Tests
 If you are making changes to EJ codebase, do not forget to run tests frequently.
 EJ uses Pytest_::
 
-    $ inv test
-
-------
-
-with docker:
-
-    $ inv docker exec -c "inv test"
-
-.. _Pytest: https://docs.pytest.org/
+    $ inv docker-test
 
 Docker bash
 -----------
@@ -88,8 +74,8 @@ Docker bash
 You probably will want to execute commands inside the container.
 It is possible to open a bash shell in the main "web" container with::
 
-    $ inv docker run
+    $ inv docker-attach
 
 You also can execute commands without open docker bash shell::
 
-    $ inv docker exec -c " command "
+    $ inv docker-exec "command"

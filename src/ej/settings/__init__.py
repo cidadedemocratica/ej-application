@@ -60,6 +60,7 @@ class Conf(
     MANAGERS = ADMINS = [
         ("Bruno Martin, Luan Guimarães, Ricardo Poppi, Henrique Parra", "bruno@hacklab.com.br"),
         ("Laury Bueno", "laury@hacklab.com.br"),
+        ("David Carlos", "davidcarlos@pencillabs.com.br"),
     ]
 
     #
