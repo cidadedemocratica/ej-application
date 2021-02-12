@@ -1,6 +1,5 @@
 django ~= 2.2
 django-boogie ~= 0.13.1
-django-boogie[stack]
 django-constance ~= 2.3
 django-constance[database]
 django-rest-auth ~= 0.9.3

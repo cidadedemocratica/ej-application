@@ -4,7 +4,8 @@ from invoke import task
 
 from .base import su_docker, runner
 
-__all__ = ["docker_up", "docker_build", "docker_exec", "docker_attach", "docker_test", "docker_compose_entrypoint"]
+__all__ = ["docker_up", "docker_build", "docker_exec", "docker_attach",
+           "docker_test", "docker_compose_entrypoint", "docker_stop", "docker_logs"]
 
 
 @task
@@ -60,7 +61,8 @@ def docker_attach(ctx):
     """
     docker = su_docker("docker")
     do = runner(ctx, dry_run=False, pty=True)
-    do(f'docker exec -it docker_server_1 bash')
+    do(f'{docker} exec -it docker_server_1 bash')
+
 
 @task
 def docker_compose_entrypoint(ctx):
@@ -74,3 +76,23 @@ def docker_compose_entrypoint(ctx):
     do(f'inv i18n --compile')
     do(f'inv i18n')
     do(f'inv run')
+
+
+@task
+def docker_stop(ctx):
+    """
+     Stop EJ containers;
+    """
+    docker = su_docker("docker-compose")
+    do = runner(ctx, dry_run=False, pty=True)
+    do(f'{docker} -f docker/docker-compose.yml stop')
+
+
+@task
+def docker_logs(ctx):
+    """
+     Follows EJ web server log;
+    """
+    docker = su_docker("docker")
+    do = runner(ctx, dry_run=False, pty=True)
+    do(f'{docker} logs -f docker_server_1')
