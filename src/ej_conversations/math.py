@@ -79,10 +79,7 @@ def _make_table(votes, row, col, choice):
     """
     group = votes.groupby([row, choice])
     df = group.count()
-    extra = df.index.to_frame()
-    df[row] = extra[row]
-    df[choice] = extra[choice]
-    df.index = df.reindex()
+    df.reset_index(inplace=True)
     if df.shape[0] == 0:
         return pd.DataFrame({-1: [], 0: [], 1: []})
     return df.pivot_table(index=row, columns=choice, values=col, fill_value=0)
