@@ -40,7 +40,81 @@
 					<br>
 					<code>&lt;link href='{{schema}}://{{request.META['HTTP_HOST']}}/static/css/fontawesome-all.min.css' rel="stylesheet"&gt&lt;/link&gt</code>
 				</div>
+				<code><p>&lt;style&gt;</p>
 
+<p> /* https://github.com/ionic-team/stencil/issues/2072 */</p>
+
+<p>@font-face {</p>
+
+<p> font-family: Folio;</p>
+
+<p> font-style: normal;</p>
+
+<p> font-weight: 400;</p>
+
+<p> font-display: auto;</p>
+
+<p> src: url(https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/folio_bold_condensed.ttf);</p>
+
+<p>}</p>
+
+<p>@font-face {</p>
+
+<p> font-family: Helvetica;</p>
+
+<p> font-style: normal;</p>
+
+<p> font-weight: 400;</p>
+
+<p> font-display: auto;</p>
+
+<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/helvetica_neue_lts_roman.otf');</p>
+
+<p>}</p>
+
+<p>@font-face {</p>
+
+<p> font-family: 'Font Awesome 5 Free';</p>
+
+<p> font-style: normal;</p>
+
+<p> font-weight: 400;</p>
+
+<p> font-display: auto;</p>
+
+<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-regular-400.ttf');</p>
+
+<p>}</p>
+
+<p>@font-face {</p>
+
+<p> font-family: 'Font Awesome 5 Free';</p>
+
+<p> font-style: normal;</p>
+
+<p> font-weight: 400;</p>
+
+<p> font-display: auto;</p>
+
+<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-brands-400.ttf');</p>
+
+<p>}</p>
+
+<p>@font-face {</p>
+
+<p> font-family: 'Font Awesome 5 Free';</p>
+
+<p> font-style: normal;</p>
+
+<p> font-weight: 400;</p>
+
+<p> font-display: auto;</p>
+
+<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-solid-900.ttf');</p>
+
+<p>}</p>
+
+<p>&lt;/style&gt;</p></code>
 				<button onclick="copySnippet('copy-header');">{{_('Copy Script')}}</button>
 			</div>
 
@@ -54,7 +128,6 @@
 				<div>
 					<button onclick="copySnippet('copy-body');">
 						{{_('Copy Script')}}</button>
-				</div>
 				</div>
 			</div>
 		</p>

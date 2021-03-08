@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-04 18:42-0300\n"
+"POT-Creation-Date: 2021-03-08 15:51-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -615,7 +615,7 @@ msgstr "{n} aguardando moderação"
 msgid "{n} of {m} comments"
 msgstr "{n} de {m} comentários"
 
-#: src/ej_conversations/routes.py:55
+#: src/ej_conversations/routes.py:53
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -632,9 +632,16 @@ msgstr ""
 msgid "Your vote has been computed :-)"
 msgstr "Seu voto foi computado :-)"
 
+#: src/ej_conversations/tools/routes.py:36
 #: src/ej_conversations/tools/table.py:11
 msgid "Mailing campaign"
 msgstr "Campanha de email"
+
+#: src/ej_conversations/tools/routes.py:46
+#: src/ej_conversations/tools/table.py:16
+#, fuzzy
+msgid "Conversation component"
+msgstr "Componente de coleta"
 
 #: src/ej_conversations/tools/table.py:12
 msgid ""
@@ -644,11 +651,6 @@ msgstr ""
 "Gere um template html desta conversa, e faça coletas de opinião via disparo "
 "de email. Útil para campanhas de marketing com ferramentas como mautic e "
 "mailchimp."
-
-#: src/ej_conversations/tools/table.py:16
-#, fuzzy
-msgid "Conversation component"
-msgstr "Componente de coleta"
 
 #: src/ej_conversations/tools/table.py:17
 #, fuzzy
@@ -2213,8 +2215,9 @@ msgid "Value"
 msgstr "Valor"
 
 #: src/ej/templates/jinja2/pages/info.jinja2:17
+#, fuzzy
 msgid "Registered users"
-msgstr "Usuários registrados"
+msgstr "Registre novo usuário"
 
 #: src/ej/templates/jinja2/pages/info.jinja2:40
 #: src/ej_dataviz/jinja2/ej_dataviz/report/index.jinja2:36
@@ -2602,8 +2605,8 @@ msgstr "Voltar (ignorar mudanças)"
 #: src/ej_conversations/jinja2/ej_conversations/edit.jinja2:9
 #: src/ej_conversations/jinja2/ej_conversations/moderate.jinja2:7
 #: src/ej_conversations/jinja2/ej_conversations/moderate.jinja2:9
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:29
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:31
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:31
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:33
 msgid "Back to conversation"
 msgstr "De volta às conversa"
 
@@ -2647,21 +2650,6 @@ msgstr "Rejeitar"
 msgid "Approve"
 msgstr "Aprovar"
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:21
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:14
-msgid "Tools"
-msgstr "Ferramentas"
-
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:15
-#, fuzzy
-msgid "Integrates this conversation with external tools and platforms."
-msgstr "Integre a sua conversa com outras ferramentas e plataformas"
-
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:19
-#, fuzzy
-msgid "Integration"
-msgstr "Integração"
-
 #: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:20
 #: src/ej_profiles/jinja2/ej_profiles/contributions.jinja2:79
 msgid "Go to conversation"
@@ -2670,6 +2658,31 @@ msgstr "Ir para conversa"
 #: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:16
 msgid "Back to conversations"
 msgstr "De volta às conversas"
+
+#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:25
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:13
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:15
+#: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:15
+msgid "Tools"
+msgstr "Ferramentas"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:46
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:48
+#: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:36
+#: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:38
+#, fuzzy
+msgid "Back to tools"
+msgstr "De volta às conversas"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:16
+#, fuzzy
+msgid "Integrates this conversation with external tools and platforms."
+msgstr "Integre a sua conversa com outras ferramentas e plataformas"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:20
+#, fuzzy
+msgid "Integration"
+msgstr "Integração"
 
 #: src/ej_dataviz/jinja2/ej/role/conversation-download-data.jinja2:2
 msgid "Downloads: "
@@ -3444,8 +3457,54 @@ msgstr "Mudar a senha"
 
 #: src/ej_users/jinja2/ej_users/includes/menu.jinja2:1
 #: src/ej_users/jinja2/ej_users/includes/menu.jinja2:2
+#, fuzzy
 msgid "Authentication"
 msgstr "Autenticação"
+
+#, fuzzy
+#~ msgid "Register using email"
+#~ msgstr "Registro utilizando email"
+
+#, fuzzy
+#~ msgid "Authentication Type"
+#~ msgstr "Tipo de Autenticação"
+
+#~ msgid "Theme"
+#~ msgstr "Tema"
+
+#, fuzzy
+#~ msgid ""
+#~ "To add this conversation to your site/platform, first select some "
+#~ "settings and then copy the code below:"
+#~ msgstr ""
+#~ "Para adicionar essa conversa em seu site/plataforma, primeiro selecione "
+#~ "algumas configurações e depois copie os trechos de código abaixo:"
+
+#, fuzzy
+#~ msgid "Settings"
+#~ msgstr "Configurações do Django"
+
+#~ msgid "and this snippet of code on the page body:"
+#~ msgstr "e esse trecho de código no corpo (body) da página:"
+
+#~ msgid ""
+#~ "\n"
+#~ "\t\t\tWith this feature you can collect opinions from your audience "
+#~ "without\n"
+#~ "\t\t\tusing EJ interface directly. This component can be included in "
+#~ "your\n"
+#~ "\t\t\tsite's html, and it will allow users to participate on "
+#~ "conversations\n"
+#~ "\t\t\tand add comments from within your personal site.\n"
+#~ "\t\t\t"
+#~ msgstr ""
+#~ "\n"
+#~ "\t\t\tCom este recurso, você pode coletar opiniões de seu público sem\n"
+#~ "\t\t\tusando a interface EJ diretamente. Este componente pode ser "
+#~ "incluído em seu\n"
+#~ "\t\t\thtml do site, e permitirá que os usuários participem das conversas\n"
+#~ "\t\t\te adicione comentários de dentro do seu site pessoal.\n"
+#~ "\t\t\t"
 
 #~ msgid "No comments available for this user"
 #~ msgstr "Não há comentários disponíveis para esse usuário"
