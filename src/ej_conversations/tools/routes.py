@@ -4,7 +4,8 @@ from ..tools.utils import npm_version
 from ..tools.table import Tools
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from .utils import npm_version
+from .utils import npm_version, generate_props
+from .forms import ConversationComponentForm
 
 app_name = "ej_conversations_tools"
 urlpatterns = Router(
@@ -39,11 +40,17 @@ def mailing(request, conversation, slug):
 @urlpatterns.route(conversation_tools_url + "/component")
 def conversation_component(request, conversation, slug):
     from django.conf import settings
-
-    tools = Tools(conversation)
     schema = 'https' if settings.ENVIRONMENT != 'local' else 'http'
+    form = ConversationComponentForm(request.POST)
+    component_props = ""
+
+    if request.method == 'POST':
+        component_props = generate_props(form)
+    tools = Tools(conversation)
     return {"schema": schema,
             "tool": tools.get(_('Conversation component')),
             "npm_version": npm_version(),
-            "conversation": conversation
+            "conversation": conversation,
+            "form": form,
+            "component_props": component_props
             }

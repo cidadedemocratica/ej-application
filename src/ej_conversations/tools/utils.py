@@ -13,3 +13,13 @@ def npm_version():
         return response.json()
     else:
         return {"latest": "request failed"}
+
+def generate_props(form):
+    if form.is_valid():
+        result = ""
+        if form.cleaned_data["theme"]:
+            result = result + f"theme={form.cleaned_data['theme']} "
+        if form.cleaned_data["authentication_type"]:
+            result = result + f" authenticate-with={form.cleaned_data['authentication_type']}"
+        return result
+    return None
