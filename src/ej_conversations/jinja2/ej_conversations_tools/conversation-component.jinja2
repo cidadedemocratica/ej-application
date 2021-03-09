@@ -102,7 +102,7 @@
 			<div class="tools-section-2-snippet">
 				<button onclick="copySnippet('copy-body');">
 					{{_('Copy Script')}}</button>
-				<textarea id="copy-body">
+				<textarea readonly id="copy-body">
 &lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}}
 	cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt
 				</textarea>

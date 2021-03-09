@@ -2698,19 +2698,19 @@ msgstr "Ferramentas"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:18
 msgid "With this feature you can collect opinions from your audience without"
-msgstr ""
+msgstr "Com este recurso, você pode coletar opiniões de seu público sem"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:19
-msgid "using EJ interface directly. This component can be included in your"
+msgid "usar a interface EJ diretamente. Este componente pode ser incluído em seu"
 msgstr ""
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:20
 msgid "site's html, and it will allow users to participate on conversations"
-msgstr ""
+msgstr "no html do seu site e permitirá que os usuários participem das conversas"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:21
 msgid "and add comments from within your personal site."
-msgstr ""
+msgstr "e adicionem comentários a partir de seu site pessoal."
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:24
 #, fuzzy
@@ -2724,7 +2724,7 @@ msgstr ""
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:25
 #, fuzzy
 msgid "Settings"
-msgstr "Configurações do Django"
+msgstr "Configurações"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:38
 msgid "Generate Script"
