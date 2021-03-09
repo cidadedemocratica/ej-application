@@ -24,7 +24,7 @@
 			{{_('To add this conversation to your site/platform, first select some settings and then copy the code below:') }}
 			<h2>{{_("Settings")}}</h2>
 			
-			<form method="POST">
+			<form method="POST" class="tools-settings-form">
 				{{ csrf_input }}
 				{% block form_content %}
 				{{form}}				
@@ -33,101 +33,72 @@
 			</form>
 
 			<div class="tools-section-2-snippet">
-				<div id="copy-header">
-					<code>&lt;script src='https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations.js'&gt&lt;/script&gt</code>
-					<br>
-					<code>&lt;link href='https://fonts.googleapis.com/css?family=Raleway&display=swap' rel="stylesheet"&gt&lt;/link&gt</code>
-					<br>
-					<code>&lt;link href='{{schema}}://{{request.META['HTTP_HOST']}}/static/css/fontawesome-all.min.css' rel="stylesheet"&gt&lt;/link&gt</code>
-				</div>
-				<code><p>&lt;style&gt;</p>
-
-<p> /* https://github.com/ionic-team/stencil/issues/2072 */</p>
-
-<p>@font-face {</p>
-
-<p> font-family: Folio;</p>
-
-<p> font-style: normal;</p>
-
-<p> font-weight: 400;</p>
-
-<p> font-display: auto;</p>
-
-<p> src: url(https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/folio_bold_condensed.ttf);</p>
-
-<p>}</p>
-
-<p>@font-face {</p>
-
-<p> font-family: Helvetica;</p>
-
-<p> font-style: normal;</p>
-
-<p> font-weight: 400;</p>
-
-<p> font-display: auto;</p>
-
-<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/helvetica_neue_lts_roman.otf');</p>
-
-<p>}</p>
-
-<p>@font-face {</p>
-
-<p> font-family: 'Font Awesome 5 Free';</p>
-
-<p> font-style: normal;</p>
-
-<p> font-weight: 400;</p>
-
-<p> font-display: auto;</p>
-
-<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-regular-400.ttf');</p>
-
-<p>}</p>
-
-<p>@font-face {</p>
-
-<p> font-family: 'Font Awesome 5 Free';</p>
-
-<p> font-style: normal;</p>
-
-<p> font-weight: 400;</p>
-
-<p> font-display: auto;</p>
-
-<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-brands-400.ttf');</p>
-
-<p>}</p>
-
-<p>@font-face {</p>
-
-<p> font-family: 'Font Awesome 5 Free';</p>
-
-<p> font-style: normal;</p>
-
-<p> font-weight: 400;</p>
-
-<p> font-display: auto;</p>
-
-<p> src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-solid-900.ttf');</p>
-
-<p>}</p>
-
-<p>&lt;/style&gt;</p></code>
 				<button onclick="copySnippet('copy-header');">{{_('Copy Script')}}</button>
+				<textarea readonly id="copy-header">
+&lt;script src='https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations.js'&gt&lt;/script&gt
+				
+&lt;link href='https://fonts.googleapis.com/css?family=Raleway&display=swap' rel="stylesheet"&gt&lt;/link&gt
+					
+&lt;link href='{{schema}}://{{request.META['HTTP_HOST']}}/static/css/fontawesome-all.min.css' rel="stylesheet"&gt&lt;/link&gt
+
+<style>
+		/* https://github.com/ionic-team/stencil/issues/2072 */
+@font-face {
+  font-family: Folio;
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+  src: url(https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/folio_bold_condensed.ttf);
+}
+
+@font-face {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/helvetica_neue_lts_roman.otf');
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-regular-400.ttf');
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-brands-400.ttf');
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-solid-900.ttf');
+}
+
+</style>
+</textarea>
+
 			</div>
 
 			{{_('and this snippet of code on the page body:') }}
 
 			<div class="tools-section-2-snippet">
+				<button onclick="copySnippet('copy-body');">
+					{{_('Copy Script')}}</button>
+				<textarea id="copy-body">
+&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}}
+	cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt
+				</textarea>
 				<div>
-					<code>&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}}
-					cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt</code>
-				</div>
-				<div>
-					<button onclick="copySnippet('copy-body');">
-						{{_('Copy Script')}}</button>
+
 				</div>
 			</div>
 		</p>

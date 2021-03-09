@@ -39,6 +39,22 @@
 	font-size: 0.8rem;
 	margin-top: 10px;
 	margin-bottom: 20px;
+	& button{
+		float: right;
+	}
+	& textarea {
+		background-color: aliceblue;
+		border: 0;
+		font-family: "IBM Plex Mono", monospace;
+		font-size: 1em;
+		color: black;
+		&#copy-header {
+			min-height: 300px;
+		}
+		&#copy-body {
+			min-height: 70px;
+		}
+	}
 }
 
 .tools-title {
@@ -49,4 +65,10 @@
 
 .tools-table td:first-child a {
 	text-decoration: underline;
+}
+
+.tools-settings-form{
+	& select{
+		width: auto;
+	}
 }
