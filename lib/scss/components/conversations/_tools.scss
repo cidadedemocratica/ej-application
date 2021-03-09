@@ -69,24 +69,34 @@
 
 .tools-settings-form{
 	position: relative;
-	& select{
-		width: auto;
-		min-width: auto;
+	ul {
+		list-style-type:none;
 	}
-	& .column-form {
+	ul:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+	li {
 		float: left;
 		margin-right: 3%;
 		width: 35%;
 		width: auto;
 	}
-	& input {
-		position: absolute;
-		top: 50%;
-		right: 0%;
-		margin-left: 10px;
-		padding: revert;
-		-ms-transform: translate(-50%, -50%);
-		transform: translate(-50%, -50%);
+	#id_authentication_type {
+		input[type="radio"] {
+			display: none;
+		}
+		  
+		label {
+			display: inline-block;
+			background-color: aliceblue;
+			cursor: pointer;
+		}
+		  
+		input[type="radio"]:checked+label {
+			background-color:black;
+		}
 	}
 }
 
@@ -95,4 +105,3 @@
 	display: table;
 	clear: both;
 }
-

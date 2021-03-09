@@ -22,20 +22,15 @@
 		</p>
 		<p>
 			{{_('To add this conversation to your site/platform, first select some settings and then copy the code below:') }}
-			<h2>{{_("Settings")}}</h2>
 			
 			<form method="POST" class="tools-settings-form">
 				{{ csrf_input }}
 				{% block form_content %}
-				<div class="column-form">
-					<label>{{form.authentication_type.label}}</label>
-					{{form.authentication_type}}				
-				</div>
-				<div class="column-form">
-					<label>{{form.theme.label}}</label>
+					<h4>{{form.authentication_type.label}}</h4>
+					{{form.authentication_type}}
+					<h4>{{form.theme.label}}</h4>
 					{{form.theme}}
-				</div>
-                 <input class="is-primary column-form" type="submit" value="{{_('Generate Script')}}">
+                 	<input class="is-primary" type="submit" value="{{_('Generate Script')}}">
 				{% endblock %}
 			</form>
 		<p>

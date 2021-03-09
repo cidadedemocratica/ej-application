@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-09 16:12-0300\n"
+"POT-Creation-Date: 2021-03-09 17:07-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -2701,12 +2701,13 @@ msgid "With this feature you can collect opinions from your audience without"
 msgstr "Com este recurso, você pode coletar opiniões de seu público sem"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:19
-msgid "usar a interface EJ diretamente. Este componente pode ser incluído em seu"
+msgid "using EJ interface directly. This component can be included in your"
 msgstr ""
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:20
 msgid "site's html, and it will allow users to participate on conversations"
-msgstr "no html do seu site e permitirá que os usuários participem das conversas"
+msgstr ""
+"no html do seu site e permitirá que os usuários participem das conversas"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:21
 msgid "and add comments from within your personal site."
