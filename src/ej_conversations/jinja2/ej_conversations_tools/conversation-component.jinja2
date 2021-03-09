@@ -27,11 +27,20 @@
 			<form method="POST" class="tools-settings-form">
 				{{ csrf_input }}
 				{% block form_content %}
-				{{form}}				
-                 <input class="is-primary" type="submit" value="{{_('Generate Script')}}">
+				<div class="column-form">
+					<label>{{form.authentication_type.label}}</label>
+					{{form.authentication_type}}				
+				</div>
+				<div class="column-form">
+					<label>{{form.theme.label}}</label>
+					{{form.theme}}
+				</div>
+                 <input class="is-primary column-form" type="submit" value="{{_('Generate Script')}}">
 				{% endblock %}
 			</form>
-
+		<p>
+			{{_('Add the following snippet of code to your page header:') }}
+		</p>
 			<div class="tools-section-2-snippet">
 				<button onclick="copySnippet('copy-header');">{{_('Copy Script')}}</button>
 				<textarea readonly id="copy-header">
