@@ -2,6 +2,8 @@ from django import forms
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
+from ej_boards.forms import PaletteWidget
+
 AUTH_TYPE_CHOICES = (
     ("register", _("Register using name/email")),
     ("mautic", _("Mautic")),
@@ -35,6 +37,7 @@ class AuthWidget(forms.RadioSelect):
         return self.renderer.render(context)
 
 
+
 class ConversationComponentForm(forms.Form):
     authentication_type = forms.ChoiceField(
         label=_("Authentication Type"), choices=AUTH_TYPE_CHOICES,
@@ -42,5 +45,5 @@ class ConversationComponentForm(forms.Form):
     )
     theme = forms.ChoiceField(
         label=_("Theme"), choices=THEME_CHOICES,
-        required=False, widget=forms.RadioSelect
+        required=False, widget=PaletteWidget
     )

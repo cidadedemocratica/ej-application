@@ -7,8 +7,8 @@
                     <span class="tooltiptext">{{params.attrs[params.value]}}</span>
                 </i>
             </div>
-            <label for="id_authentication_type_{{ params.value }}">
                 <input type="radio"{% if params.selected %} checked{% endif %} name="authentication_type" id="id_authentication_type_{{ params.value }}" value="{{ params.value }}">
+            <label for="id_authentication_type_{{ params.value }}">
                 {{ params.label }}
             </label>
         </li>

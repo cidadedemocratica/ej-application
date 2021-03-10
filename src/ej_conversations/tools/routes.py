@@ -42,7 +42,7 @@ def conversation_component(request, conversation, slug):
     from django.conf import settings
     schema = 'https' if settings.ENVIRONMENT != 'local' else 'http'
     form = ConversationComponentForm(request.POST)
-    component_props = ""
+    component_props = "authenticate-with=register"
 
     if request.method == 'POST':
         component_props = generate_props(form)
