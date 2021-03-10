@@ -5,7 +5,7 @@ from ..tools.table import Tools
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from .utils import npm_version, generate_props
-from .forms import ConversationComponentForm
+from .forms import ConversationComponentForm, AUTH_TOOLTIP_TEXTS, THEME_PALETTES
 
 app_name = "ej_conversations_tools"
 urlpatterns = Router(
@@ -52,5 +52,6 @@ def conversation_component(request, conversation, slug):
             "npm_version": npm_version(),
             "conversation": conversation,
             "form": form,
+            "theme_palettes": THEME_PALETTES,
             "component_props": component_props
             }

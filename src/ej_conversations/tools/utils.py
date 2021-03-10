@@ -1,7 +1,6 @@
 from requests import get
 from .constants import BASE_URL_NPM
 
-
 def get_npm_tag(url=BASE_URL_NPM):
     version = get(url)
     return version
@@ -17,7 +16,8 @@ def npm_version():
 def generate_props(form):
     if form.is_valid():
         result = ""
-        if form.cleaned_data["theme"]:
+        print(form.cleaned_data["authentication_type"])
+        if not form.cleaned_data["theme"] == "default":
             result = result + f"theme={form.cleaned_data['theme']} "
         if form.cleaned_data["authentication_type"]:
             result = result + f" authenticate-with={form.cleaned_data['authentication_type']}"

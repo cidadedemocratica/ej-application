@@ -1,0 +1,16 @@
+<ul id="id_authentication_type">
+    {% for _, lst, __ in widget.optgroups %}
+        {% set params = lst[0] %}
+        <li title="{{ params.value }}">
+            <div class="tooltip">
+                <i class="far fa-question-circle">
+                    <span class="tooltiptext">{{params.attrs[params.value]}}</span>
+                </i>
+            </div>
+            <label for="id_authentication_type_{{ params.value }}">
+                <input type="radio"{% if params.selected %} checked{% endif %} name="authentication_type" id="id_authentication_type_{{ params.value }}" value="{{ params.value }}">
+                {{ params.label }}
+            </label>
+        </li>
+    {% endfor %}
+</ul>

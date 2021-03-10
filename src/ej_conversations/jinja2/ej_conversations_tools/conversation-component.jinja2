@@ -13,7 +13,7 @@
 	<h1>{{_("Tools")}} > {{ tool["integration"] }}</h1>
 <span>{{tool["description"] }}</span>
 </div>
-	<div>
+	<div class="conversation-component">
 		<p>
 			{{_('With this feature you can collect opinions from your audience without') }}
 			{{_('using EJ interface directly. This component can be included in your') }}
@@ -30,14 +30,17 @@
 					{{form.authentication_type}}
 					<h4>{{form.theme.label}}</h4>
 					{{form.theme}}
+
                  	<input class="is-primary" type="submit" value="{{_('Generate Script')}}">
 				{% endblock %}
 			</form>
 		<p>
 			{{_('Add the following snippet of code to your page header:') }}
+			<button onclick="copySnippet('copy-header');">{{_('Copy Script')}}</button>
+
 		</p>
+
 			<div class="tools-section-2-snippet">
-				<button onclick="copySnippet('copy-header');">{{_('Copy Script')}}</button>
 				<textarea readonly id="copy-header">
 &lt;script src='https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations.js'&gt&lt;/script&gt
 				
@@ -93,13 +96,12 @@
 			</div>
 
 			{{_('and this snippet of code on the page body:') }}
-
-			<div class="tools-section-2-snippet">
 				<button onclick="copySnippet('copy-body');">
 					{{_('Copy Script')}}</button>
+			<div class="tools-section-2-snippet">
+
 				<textarea readonly id="copy-body">
-&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}}
-	cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt
+&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}} cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt
 				</textarea>
 				<div>
 

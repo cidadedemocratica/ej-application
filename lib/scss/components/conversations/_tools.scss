@@ -39,12 +39,14 @@
 	font-size: 0.8rem;
 	margin-top: 10px;
 	margin-bottom: 20px;
-	& button{
-		float: right;
-	}
+
 	& textarea {
 		background-color: aliceblue;
 		border: 0;
+		min-width: 100%;
+		-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+		-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+		box-sizing: border-box;  
 		font-family: "IBM Plex Mono", monospace;
 		font-size: 1em;
 		color: black;
@@ -84,18 +86,40 @@
 		width: auto;
 	}
 	#id_authentication_type {
-		input[type="radio"] {
-			display: none;
+		.tooltip {
+			display: inline;
+		}
+		.tooltip .tooltiptext {
+			visibility: hidden;
+			width: 120px;
+			background-color: black;
+			color: #fff;
+			text-align: center;
+			border-radius: 6px;
+			padding: 5px 0;
+			
+			/* Position the tooltip */
+			position: absolute;
+			z-index: 1;
+		}
+		
+		.tooltip:hover .tooltiptext {
+			visibility: visible;
 		}
 		  
 		label {
 			display: inline-block;
 			background-color: aliceblue;
-			cursor: pointer;
+			padding: 10px 20px;
 		}
-		  
-		input[type="radio"]:checked+label {
-			background-color:black;
+		label:hover {
+			background-color: #dfd;
+		}
+		input[type=radio]:checked + label {
+			background:rgb(255, 1, 170);
+		}
+		input[type=radio]:focus + label {
+			border: 2px dashed rgb(166, 255, 0);
 		}
 	}
 }
@@ -104,4 +128,10 @@
 	content: "";
 	display: table;
 	clear: both;
+}
+
+.conversation-component{
+	& button{
+		float: right;
+	}
 }
