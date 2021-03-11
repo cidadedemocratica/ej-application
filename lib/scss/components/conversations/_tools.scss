@@ -120,7 +120,7 @@
 	}
 
 	input[type="radio"]:checked + label {
-		background-color: $color-accent;
+		background-color: $color-brand-alternate;
 	}
 
 	input[type="radio"]:focus + label{
@@ -142,5 +142,14 @@
 .conversation-component{
 	& button{
 		float: right;
+	}
+	#copy-body-message {
+		display: none;
+		font-weight: bold;
+	}	
+	
+	#copy-header-message {
+		display: none;
+		font-weight: bold;
 	}
 }

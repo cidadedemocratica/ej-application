@@ -36,7 +36,9 @@
 			</form>
 		<p>
 			{{_('Add the following snippet of code to your page header:') }}
-			<button onclick="copySnippet('copy-header');">{{_('Copy Script')}}</button>
+			<button onclick="copySnippet('copy-header');" id="copy-header-button">
+			{{_('Copy Script')}}</button>
+			<div id="copy-header-message">{{_("Code was copied to your clipboard.")}}</div>
 
 		</p>
 
@@ -96,10 +98,13 @@
 			</div>
 
 			{{_('and this snippet of code on the page body:') }}
-				<button onclick="copySnippet('copy-body');">
+			<p>
+			<button onclick="copySnippet('copy-body');" id="copy-body-button">
 					{{_('Copy Script')}}</button>
-			<div class="tools-section-2-snippet">
+			<div id="copy-body-message">{{_("Code was copied to your clipboard.")}}</div>
+			</p>
 
+			<div class="tools-section-2-snippet">
 				<textarea readonly id="copy-body">
 &lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}} cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt
 				</textarea>
@@ -135,6 +140,10 @@
 			copyText.select();
 			copyText.setSelectionRange(0, 99999)
 			document.execCommand("copy");
+
+			var success_message = document.getElementById(elementId.concat("-message"));
+			success_message.style.display = "inline";
+			setTimeout(() => {  success_message.style.display = "none"; }, 3000);
 	   }
    </script>
 {% endblock %}

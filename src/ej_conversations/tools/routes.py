@@ -53,5 +53,5 @@ def conversation_component(request, conversation, slug):
             "conversation": conversation,
             "form": form,
             "theme_palettes": THEME_PALETTES,
-            "component_props": component_props
-            }
+            "component_props": component_props,
+    }

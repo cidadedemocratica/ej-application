@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-09 17:07-0300\n"
+"POT-Creation-Date: 2021-03-11 11:28-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -155,7 +155,7 @@ msgstr "Murais"
 msgid "You cannot change this value afterwards"
 msgstr "Você não pode alterar este valor depois"
 
-#: src/ej_boards/models.py:20 src/ej_conversations/tools/forms.py:11
+#: src/ej_boards/models.py:20 src/ej_conversations/tools/forms.py:20
 msgid "Default"
 msgstr "Padrão"
 
@@ -632,33 +632,48 @@ msgstr ""
 msgid "Your vote has been computed :-)"
 msgstr "Seu voto foi computado :-)"
 
-#: src/ej_conversations/tools/forms.py:5
+#: src/ej_conversations/tools/forms.py:8
 #, fuzzy
-msgid "Register using email"
+msgid "Register using name/email"
 msgstr "Registro utilizando email"
 
-#: src/ej_conversations/tools/forms.py:6
+#: src/ej_conversations/tools/forms.py:9
 msgid "Mautic"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:7
+#: src/ej_conversations/tools/forms.py:10
 msgid "Analytics"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:12
+#: src/ej_conversations/tools/forms.py:14
+msgid ""
+"User will use EJ platform interface, creating an account using personal data"
+msgstr "Usuário interagirá com a interface da EJ, criando uma conta com dados pessoais (email e nome)."
+
+#: src/ej_conversations/tools/forms.py:15
+msgid "Uses a mautic campaign "
+msgstr "Usa uma campanha do mautic"
+
+#: src/ej_conversations/tools/forms.py:16
+msgid ""
+"Uses analytics cookies allowing you to cross vote data with user browser "
+"data."
+msgstr "Usa cookies do analytics para cruzar dados de voto com os dados do navegador do usuário."
+
+#: src/ej_conversations/tools/forms.py:21
 msgid "Votorantim"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:13
+#: src/ej_conversations/tools/forms.py:22
 msgid "ICD"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:17
+#: src/ej_conversations/tools/forms.py:43
 #, fuzzy
 msgid "Authentication Type"
 msgstr "Tipo de Autenticação"
 
-#: src/ej_conversations/tools/forms.py:18
+#: src/ej_conversations/tools/forms.py:47
 msgid "Theme"
 msgstr "Tema"
 
@@ -2703,6 +2718,7 @@ msgstr "Com este recurso, você pode coletar opiniões de seu público sem"
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:19
 msgid "using EJ interface directly. This component can be included in your"
 msgstr ""
+"usar a interface do EJ diretamente. Esse componente pode ser incluido "
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:20
 msgid "site's html, and it will allow users to participate on conversations"
@@ -2722,31 +2738,31 @@ msgstr ""
 "Para adicionar essa conversa em seu site/plataforma, primeiro selecione "
 "algumas configurações e depois copie os trechos de código abaixo:"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:25
-#, fuzzy
-msgid "Settings"
-msgstr "Configurações"
-
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:38
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:34
 msgid "Generate Script"
 msgstr "Gerar código"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:42
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:38
 #, fuzzy
 msgid "Add the following snippet of code to your page header:"
 msgstr "Adicione o trecho de código a seguir no cabeçalho (header) da página:"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:45
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:104
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:40
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:103
 msgid "Copy Script"
 msgstr "Copiar código"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:41
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:104
+msgid "Code was copied to your clipboard."
+msgstr "Código copiado para área de transferência."
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:100
 msgid "and this snippet of code on the page body:"
 msgstr "e esse trecho de código no corpo (body) da página:"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:115
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:117
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:119
 #: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:36
 #: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:38
 #, fuzzy
@@ -3539,6 +3555,10 @@ msgstr "Mudar a senha"
 #, fuzzy
 msgid "Authentication"
 msgstr "Autenticação"
+
+#, fuzzy
+#~ msgid "Settings"
+#~ msgstr "Configurações"
 
 #~ msgid ""
 #~ "\n"
