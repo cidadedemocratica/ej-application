@@ -19,7 +19,7 @@ class TestComponentConversationRoute(ConversationRecipes):
             conversation.get_absolute_url() + '/tools/component', {'authentication_type': "register", 'theme': "default"}
         )
         response = conversation_component(request, conversation, None)
-        assert response['component_props'] == " authenticate-with=register"
+        assert response['conversation_component'].get_props() == " authenticate-with=register"
         assert response['form'].is_valid()
         assert response['conversation'].id == conversation.id
 
@@ -30,7 +30,7 @@ class TestComponentConversationRoute(ConversationRecipes):
             conversation.get_absolute_url() + '/tools/rasa', {'authentication_type': "mautic", 'theme': "votorantim"}
         )
         response = conversation_component(request, conversation, None)
-        assert response['component_props'] == 'theme=votorantim  authenticate-with=mautic'
+        assert response['conversation_component'].get_props() == 'theme=votorantim  authenticate-with=mautic'
         assert response['form'].is_valid()
         assert response['conversation'].id == conversation.id
 
@@ -41,6 +41,6 @@ class TestComponentConversationRoute(ConversationRecipes):
             conversation.get_absolute_url() + '/tools/rasa', {'authentication_type': "analytics", 'theme': "icd"}
         )
         response = conversation_component(request, conversation, None)
-        assert response['component_props'] == 'theme=icd  authenticate-with=analytics'
+        assert response['conversation_component'].get_props() == 'theme=icd  authenticate-with=analytics'
         assert response['form'].is_valid()
         assert response['conversation'].id == conversation.id
