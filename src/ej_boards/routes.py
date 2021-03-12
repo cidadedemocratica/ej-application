@@ -8,6 +8,7 @@ from ej_boards.utils import check_board, register_route
 from ej_clusters.models import Stereotype
 from ej_conversations import routes as conversations
 from ej_conversations.models import Conversation
+from ej_conversations.tools import routes as tools_routes
 from .forms import BoardForm
 
 app_name = "ej_boards"
@@ -24,7 +25,6 @@ board_base_url = "<model:board>/conversations/"
 board_conversation_url = board_base_url + "<model:conversation>/<slug:slug>/"
 reports_url = "<model:board>/conversations/<model:conversation>/reports/"
 reports_kwargs = {"login": True}
-
 
 #
 # Board URLs
@@ -103,7 +103,31 @@ def conversation_moderate(request, board, **kwargs):
 
 @urlpatterns.route(board_conversation_url + "integrations/")
 def conversation_integrations(request, board, **kwargs):
-    return conversations.integrations(request, **kwargs, check=check_board(board))
+    return conversations.integrations(request,  check=check_board(board), **kwargs)
+
+
+@urlpatterns.route(board_conversation_url + "tools/", perms=["ej.can_edit_conversation:conversation"])
+def conversation_tools_index(request, board, **kwargs):
+    check_board(board)
+    return tools_routes.index(request, **kwargs)
+
+
+@urlpatterns.route(board_conversation_url + "tools/mailing/", perms=["ej.can_edit_conversation:conversation"])
+def conversation_tools_mailing(request, board, **kwargs):
+    check_board(board)
+    return tools_routes.mailing(request, **kwargs)
+
+
+@urlpatterns.route(board_conversation_url + "tools/component/", perms=["ej.can_edit_conversation:conversation"])
+def conversation_tools_component(request, board, **kwargs):
+    check_board(board)
+    return tools_routes.conversation_component(request, **kwargs)
+
+
+@urlpatterns.route(board_conversation_url + "tools/rasa/", perms=["ej.can_edit_conversation:conversation"])
+def conversation_tools_rasa(request, board, **kwargs):
+    check_board(board)
+    return tools_routes.rasa(request, **kwargs)
 
 
 #

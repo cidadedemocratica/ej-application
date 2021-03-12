@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-04 18:42-0300\n"
+"POT-Creation-Date: 2021-03-10 10:38-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -344,58 +344,58 @@ msgstr "aqui"
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
-#: src/ej_conversations/admin.py:32
+#: src/ej_conversations/admin.py:35
 msgid "Moderation"
 msgstr "Moderação"
 
-#: src/ej_conversations/admin.py:54
+#: src/ej_conversations/admin.py:57
 msgid "Delete all votes for selected conversations"
 msgstr "Conversas Favoritas"
 
-#: src/ej_conversations/admin.py:58
+#: src/ej_conversations/admin.py:61
 msgid "Delete all comments for selected conversations"
 msgstr "Excluir todos os comentários para conversas selecionadas"
 
-#: src/ej_conversations/admin.py:65
+#: src/ej_conversations/admin.py:68
 #, python-brace-format
 msgid "{n} {which} removed!"
 msgstr "{n} {which} removidos!"
 
-#: src/ej_conversations/admin.py:70
+#: src/ej_conversations/admin.py:73
 msgid "Cast 50 random votes per selected conversation (slow)"
 msgstr "Realizar 50 votos aleatórios por conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:74
+#: src/ej_conversations/admin.py:77
 msgid "Cast 500 random votes per selected conversation (slow)"
 msgstr "Realizar 500 votos aleatórios por conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:78
+#: src/ej_conversations/admin.py:81
 msgid "Cast 5000 random votes per selected conversation (slow)"
 msgstr "Realizar 5000 votos aleatórios por conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:82
+#: src/ej_conversations/admin.py:85
 msgid "Create 10 random comments in each selected conversation (slow)"
 msgstr "Criar 10 comentários aleatórios em cada conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:86
+#: src/ej_conversations/admin.py:89
 msgid "Create 100 random comments in each selected conversation (slow)"
 msgstr "Criar 100 comentários aleatórios em cada conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:90
+#: src/ej_conversations/admin.py:93
 msgid "Create 1000 random comments in each selected conversation (slow)"
 msgstr "Criar 1000 comentários aleatórios em cada conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:114
+#: src/ej_conversations/admin.py:117
 #, python-brace-format
 msgid "Created {n} comments"
 msgstr "{n} comentários criados"
 
-#: src/ej_conversations/admin.py:136
+#: src/ej_conversations/admin.py:139
 #, python-brace-format
 msgid "Created {n} votes"
 msgstr "{n} votos criados"
 
-#: src/ej_conversations/admin.py:156
+#: src/ej_conversations/admin.py:159
 msgid "Compute the opinion bridge user for all conversations."
 msgstr "Calcule o usuário da ponte de opinião para todas as conversas."
 
@@ -615,7 +615,7 @@ msgstr "{n} aguardando moderação"
 msgid "{n} of {m} comments"
 msgstr "{n} de {m} comentários"
 
-#: src/ej_conversations/routes.py:55
+#: src/ej_conversations/routes.py:53
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -632,9 +632,39 @@ msgstr ""
 msgid "Your vote has been computed :-)"
 msgstr "Seu voto foi computado :-)"
 
+#: src/ej_conversations/tests/test_rasa_integrations.py:37
+#, fuzzy
+msgid "Enter a valid URL."
+msgstr "URL interna"
+
+#: src/ej_conversations/tests/test_rasa_integrations.py:45
+#, fuzzy
+msgid "Rasa conversation with this Conversation and Domain already exists."
+msgstr "Uma persona com esse nome já existe nessa conversa."
+
+#: src/ej_conversations/tools/models.py:13
+msgid "Domain"
+msgstr "Domínio"
+
+#: src/ej_conversations/tools/models.py:15
+msgid "The domain that the rasa bot webchat is hosted."
+msgstr "O domínio do site que hospeda o webchat do rasa bot."
+
+#: src/ej_conversations/tools/routes.py:38
 #: src/ej_conversations/tools/table.py:11
 msgid "Mailing campaign"
 msgstr "Campanha de email"
+
+#: src/ej_conversations/tools/routes.py:48
+#: src/ej_conversations/tools/table.py:16
+#, fuzzy
+msgid "Conversation component"
+msgstr "Componente de coleta"
+
+#: src/ej_conversations/tools/routes.py:63
+#: src/ej_conversations/tools/table.py:21
+msgid "Rasa chatbot"
+msgstr ""
 
 #: src/ej_conversations/tools/table.py:12
 msgid ""
@@ -645,11 +675,6 @@ msgstr ""
 "de email. Útil para campanhas de marketing com ferramentas como mautic e "
 "mailchimp."
 
-#: src/ej_conversations/tools/table.py:16
-#, fuzzy
-msgid "Conversation component"
-msgstr "Componente de coleta"
-
 #: src/ej_conversations/tools/table.py:17
 #, fuzzy
 msgid ""
@@ -658,6 +683,14 @@ msgid ""
 msgstr ""
 "Adicione a EJ em sites e blogs. Permite votar, comentar e visualizar os "
 "grupos diretamente em páginas html."
+
+#: src/ej_conversations/tools/table.py:22
+msgid ""
+"Collect opinions using EJ's chatbot, also known as Duda. Allows, via "
+"webchat, to vote and comment on EJ's conversations."
+msgstr ""
+"Colete opiniões usando o chatbot da EJ, também conhecido como Duda. Permite, via "
+"webchat, votar e comentar as conversas da EJ."
 
 #: src/ej_conversations/tour.py:4
 msgid "Next"
@@ -2602,8 +2635,8 @@ msgstr "Voltar (ignorar mudanças)"
 #: src/ej_conversations/jinja2/ej_conversations/edit.jinja2:9
 #: src/ej_conversations/jinja2/ej_conversations/moderate.jinja2:7
 #: src/ej_conversations/jinja2/ej_conversations/moderate.jinja2:9
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:29
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:31
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:31
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:33
 msgid "Back to conversation"
 msgstr "De volta às conversa"
 
@@ -2647,29 +2680,80 @@ msgstr "Rejeitar"
 msgid "Approve"
 msgstr "Aprovar"
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:21
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:14
+#: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:20
+#: src/ej_profiles/jinja2/ej_profiles/contributions.jinja2:79
+msgid "Go to conversation"
+msgstr "Voltar para conversa"
+
+#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:16
+msgid "Back to conversations"
+msgstr "Voltar para conversas"
+
+#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:25
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:13
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:15
+#: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:15
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:15
 msgid "Tools"
 msgstr "Ferramentas"
 
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:15
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:46
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:48
+#: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:36
+#: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:38
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:47
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:49
+#, fuzzy
+msgid "Back to tools"
+msgstr "Voltar para ferramentas"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:16
 #, fuzzy
 msgid "Integrates this conversation with external tools and platforms."
 msgstr "Integre a sua conversa com outras ferramentas e plataformas"
 
-#: src/ej_conversations/jinja2/ej_conversations/tools.jinja2:19
+#: src/ej_conversations/jinja2/ej_conversations_tools/index.jinja2:20
 #, fuzzy
 msgid "Integration"
 msgstr "Integração"
 
-#: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:20
-#: src/ej_profiles/jinja2/ej_profiles/contributions.jinja2:79
-msgid "Go to conversation"
-msgstr "Ir para conversa"
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:21
+msgid ""
+"To integrate EJ chatbot with your site, enter the site domain in the field "
+"below."
+msgstr ""
+"Para integrar o chatbot EJ ao seu site, digite o domínio do site no campo "
+"abaixo."
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/menu-detail.jinja2:16
-msgid "Back to conversations"
-msgstr "De volta às conversas"
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:22
+msgid ""
+"When a new user reaches your site, the webchat will send to EJ the location "
+"where it is hosted, and will receive back this conversation."
+msgstr ""
+"Quando um novo usuário chegar ao seu site, o webchat enviará para EJ a localização "
+"onde está hospedado e receberá de volta esta conversa."
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:23
+msgid ""
+"All chatbots that have access to this conversation are also displayed here."
+msgstr ""
+"Todos os chatbots que têm acesso a esta conversa também são exibidos aqui."
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:33
+#, fuzzy
+msgid "Add Integration"
+msgstr "Adicionar Integração"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:37
+msgid "Linked websites"
+msgstr "Sites integrados"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:43
+#, fuzzy
+msgid ""
+"There are no webchats linked with this conversation yet. What are you "
+"waiting for?"
+msgstr "Não existem personas definidas para esta conversa"
 
 #: src/ej_dataviz/jinja2/ej/role/conversation-download-data.jinja2:2
 msgid "Downloads: "
@@ -3447,6 +3531,41 @@ msgstr "Mudar a senha"
 msgid "Authentication"
 msgstr "Autenticação"
 
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "        To integrate EJ chatbot with your site, enter the site domain in "
+#~ "the field below. \n"
+#~ "        When a new user reaches your site, the webchat will send to EJ "
+#~ "the location where it is hosted, and will receive back this "
+#~ "conversation.\n"
+#~ "        All chatbots that have access to this conversation are also "
+#~ "displayed here.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "       Para integrar o chatbot EJ ao seu site, insira o domínio do site "
+#~ "no campo abaixo. \n"
+#~ "        Quando um novo usuário chegar ao seu site, o webchat enviará ao "
+#~ "EJ o endereço do site que está integrado e receberá de volta esta conversa.\n"
+#~ "        Todos os chatbots que têm acesso a esta conversa também são "
+#~ "exibidos aqui.\n"
+#~ "    "
+
+#~ msgid ""
+#~ "Add this conversation to a webchat instance, so that you can collect "
+#~ "opinions via a conversational interface. This tool allows the display, "
+#~ "comments and votes of a conversation in EJ, Duda's Rasa chatbot."
+#~ msgstr ""
+#~ "Adicione esta conversa à uma instância webchat, para que possa realizar "
+#~ "coletas de opinião por meio de interface conversacional. Essa ferramenta "
+#~ "permite a exibição, comentários e votos de uma conversa no chatbot Rasa "
+#~ "da EJ, a Duda."
+
+#, fuzzy
+#~ msgid "Connections"
+#~ msgstr "Conversas"
+
 #~ msgid "No comments available for this user"
 #~ msgstr "Não há comentários disponíveis para esse usuário"
 
@@ -3809,9 +3928,6 @@ msgstr "Autenticação"
 #~ msgstr ""
 #~ "<strong>Nota:</strong> você ainda poe <a href=\"%(email_url)s\">mudar seu "
 #~ "endereço de email</a>."
-
-#~ msgid "A stereotype with this name already exists."
-#~ msgstr "Uma persona com esse nome já existe nessa conversa."
 
 #~ msgid ""
 #~ "A detailed description of your stereotype for future reference. You can "

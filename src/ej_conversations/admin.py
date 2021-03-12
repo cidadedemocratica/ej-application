@@ -11,6 +11,9 @@ SHOW_VOTES = getattr(settings, "EJ_CONVERSATIONS_SHOW_VOTES", False)
 descr = lambda msg: lambda f: setattr(f, "short_description", msg) or f
 
 
+admin.site.register(models.RasaConversation)
+
+
 class VoteInline(admin.TabularInline):
     model = models.Vote
     raw_id_fields = ["author"]

@@ -16,6 +16,11 @@ class Tools():
             "integration": _("Conversation component"),
             "description": _("Adds EJ directly to your site. Enables voting, commenting, and clusters visualization directly on a html page."),
             "link": self.conversation.url('conversation_tools:conversation-component'),
+        },
+            {
+            "integration": _("Rasa chatbot"),
+            "description": _("Collect opinions using EJ's chatbot, also known as Duda. Allows, via webchat, to vote and comment on EJ's conversations."),
+            "link": self.conversation.url('conversation_tools:rasa'),
         }
         ]
 
