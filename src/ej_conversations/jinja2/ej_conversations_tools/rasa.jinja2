@@ -1,0 +1,52 @@
+{% extends 'base.jinja2' %}
+
+{% block metaOG2 %}
+
+    <meta name="description" property="og:title" content="Area de integração da EJ com outras ferramentas.">
+    <meta property="og:description" content="Area de integração da EJ com outras ferramentas.">
+
+{% endblock metaOG2 %}
+
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
+
+{% block content %}
+<div class="tools">
+    <div class="tools-title">
+    <h1>{{_("Tools")}} > {{ tool["integration"] }}</h1>
+    <p>
+    <span>{{tool["description"] }}</span>
+    </p>
+    </div>
+    <p>
+        {{_("To integrate EJ chatbot with your site, enter the site domain in the field below.")}}
+        {{_("When a new user reaches your site, the webchat will send to EJ the location where it is hosted, and will receive back this conversation.")}}
+        {{_("All chatbots that have access to this conversation are also displayed here.")}}
+    </p>
+    <form method="POST" class="width-full">
+        {{ csrf_input }}
+        {% block form_content %}
+                {{ form.conversation.as_hidden() }}
+                {{ form.non_field_errors() }}
+                {{ form.domain.errors }}
+                {{ form.errors }}
+                <label>{{ form.domain.label }}{{ form.domain }}</label>
+                 <input class="is-primary" type="submit" value="{{ _('Add Integration') }}">
+        {% endblock %}
+    </form>
+
+    <h2>{{_("Linked websites")}}</h2>
+        {% if connections %}
+            {% for connection in connections %}
+                <a href={{connection.domain}} target="_blank">{{connection.domain}}</a><br>
+           {% endfor %}
+        {% else %}
+            <p>{{ _("There are no webchats linked with this conversation yet. What are you waiting for?") }}</p>
+        {% endif %}
+
+    <br>
+    <p><a href="{{ conversation.url('conversation_tools:index') }}" title="{{ _('Back to tools') }}"
+		class="lowercase bold text-brand">
+	    <i class="fa fa-chevron-left"></i>{% trans %}Back to tools{% endtrans %}
+    </a></p>
+</div>
+{% endblock %}

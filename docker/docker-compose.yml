@@ -9,6 +9,7 @@ services:
         volumes:
             - "backups:/var/lib/postgresql/data"
     server:
+        container_name: server
         build:
             context: ../
             dockerfile: docker/Dockerfile

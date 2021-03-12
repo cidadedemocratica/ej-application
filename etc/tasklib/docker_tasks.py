@@ -41,7 +41,7 @@ def docker_exec(ctx, command, dry_run=False, build=False):
     """
     docker = su_docker("docker")
     do = runner(ctx, dry_run, pty=True)
-    do(f'docker exec -it docker_server_1 {command}')
+    do(f'docker exec -it server {command}')
 
 
 @task
@@ -51,7 +51,7 @@ def docker_test(ctx, dry_run=False, build=False):
     """
     docker = su_docker("docker")
     do = runner(ctx, dry_run, pty=True)
-    do(f'docker exec -it docker_server_1 inv test')
+    do(f'docker exec -it server inv test')
 
 
 @task
@@ -61,7 +61,7 @@ def docker_attach(ctx):
     """
     docker = su_docker("docker")
     do = runner(ctx, dry_run=False, pty=True)
-    do(f'{docker} exec -it docker_server_1 bash')
+    do(f'{docker} exec -it server bash')
 
 
 @task
@@ -95,4 +95,4 @@ def docker_logs(ctx):
     """
     docker = su_docker("docker")
     do = runner(ctx, dry_run=False, pty=True)
-    do(f'{docker} logs -f docker_server_1')
+    do(f'{docker} logs -f server')
