@@ -73,6 +73,7 @@
 	position: relative;
 	ul {
 		list-style-type:none;
+		margin-bottom: 0;
 	}
 	ul:after {
 		content: "";
@@ -84,6 +85,7 @@
 		margin-right: 3%;
 		width: 35%;
 		width: auto;
+		margin-bottom: 0;
 	}
 }
 
@@ -95,10 +97,13 @@
 		visibility: hidden;
 		width: 120px;
 		background-color: black;
+		opacity: 50%;
 		color: #fff;
 		text-align: center;
 		border-radius: 6px;
 		padding: 5px 0;
+		margin-top: 50px;
+		font-size: small;
 		
 		/* Position the tooltip */
 		position: absolute;
@@ -113,6 +118,7 @@
 		display: inline-block;
 		background-color: aliceblue;
 		padding: 10px 20px;
+		border-radius: 10px;
 	}
 
 	label:hover {
@@ -121,10 +127,11 @@
 
 	input[type="radio"]:checked + label {
 		background-color: $color-brand-alternate;
+		color: white;
 	}
 
 	input[type="radio"]:focus + label{
-		border: 2px dashed $color-accent;
+		border: 2px dashed $color-brand-alternate;
 	}
 	input[type="radio"] {
 		opacity: 0;

@@ -26,9 +26,9 @@
 			<form method="POST" class="tools-settings-form">
 				{{ csrf_input }}
 				{% block form_content %}
-					<h4>{{form.authentication_type.label}}</h4>
+					<label>{{form.authentication_type.label}}</label>
 					{{form.authentication_type}}
-					<h4>{{form.theme.label}}</h4>
+					<label>{{form.theme.label}}</label>
 					{{form.theme}}
 
                  	<input class="is-primary" type="submit" value="{{_('Generate Script')}}">
@@ -37,7 +37,7 @@
 		<p>
 			{{_('Add the following snippet of code to your page header:') }}
 			<button onclick="copySnippet('copy-header');" id="copy-header-button">
-			{{_('Copy Script')}}</button>
+			{{_('Copy')}}</button>
 			<div id="copy-header-message">{{_("Code was copied to your clipboard.")}}</div>
 
 		</p>
@@ -57,7 +57,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-  src: url(https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/folio_bold_condensed.ttf);
+  src: url(https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations/assets/fonts/folio_bold_condensed.ttf);
 }
 
 @font-face {
@@ -65,7 +65,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/helvetica_neue_lts_roman.otf');
+	src: url('https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations/assets/fonts/helvetica_neue_lts_roman.otf');
 }
 
 @font-face {
@@ -73,7 +73,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-regular-400.ttf');
+	src: url('https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations/assets/fonts/fa-regular-400.ttf');
 }
 
 @font-face {
@@ -81,7 +81,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-brands-400.ttf');
+	src: url('https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations/assets/fonts/fa-brands-400.ttf');
 }
 
 @font-face {
@@ -89,7 +89,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-	src: url('https://unpkg.com/ej-conversations@1.7.15/dist/conversations/assets/fonts/fa-solid-900.ttf');
+	src: url('https://unpkg.com/ej-conversations@{{npm_version.latest}}/dist/conversations/assets/fonts/fa-solid-900.ttf');
 }
 
 </style>
@@ -100,19 +100,20 @@
 			{{_('and this snippet of code on the page body:') }}
 			<p>
 			<button onclick="copySnippet('copy-body');" id="copy-body-button">
-					{{_('Copy Script')}}</button>
+					{{_('Copy')}}</button>
 			<div id="copy-body-message">{{_("Code was copied to your clipboard.")}}</div>
 			</p>
 
 			<div class="tools-section-2-snippet">
 				<textarea readonly id="copy-body">
-&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}} cid="{{conversation.id}}" {{component_props}}&gt&lt;/ej-conversation&gt
+&lt;ej-conversation host={{schema}}://{{request.META['HTTP_HOST']}} cid="{{conversation.id}}" {{conversation_component.get_props()}}&gt&lt;/ej-conversation&gt
 				</textarea>
 				<div>
 
 				</div>
 			</div>
 		</p>
+		<br>
 </div>
 <p><a href="{{ conversation.url('conversation_tools:index') }}" title="{{ _('Back to tools') }}"
 		class="lowercase bold text-brand">

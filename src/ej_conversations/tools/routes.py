@@ -1,17 +1,12 @@
 from boogie.router import Router
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-<<<<<<< HEAD
-from .utils import npm_version, generate_props
-from .forms import ConversationComponentForm, AUTH_TOOLTIP_TEXTS, THEME_PALETTES
-=======
-
 from .utils import npm_version
+from .forms import RasaConversationForm, ConversationComponentForm, ConversationComponent
+
 from .. import models
-from ..tools.utils import npm_version
 from ..tools.table import Tools
-from .forms import RasaConversationForm
->>>>>>> ca6a2f53a41419921e2848e2f3780ac958a0aa46
+
 
 app_name = "ej_conversations_tools"
 urlpatterns = Router(
@@ -48,18 +43,15 @@ def conversation_component(request, conversation, slug):
     from django.conf import settings
     schema = 'https' if settings.ENVIRONMENT != 'local' else 'http'
     form = ConversationComponentForm(request.POST)
-    component_props = "authenticate-with=register"
-
-    if request.method == 'POST':
-        component_props = generate_props(form)
+    conversation_component = ConversationComponent(form)
     tools = Tools(conversation)
+
     return {"schema": schema,
             "tool": tools.get(_('Conversation component')),
             "npm_version": npm_version(),
             "conversation": conversation,
             "form": form,
-            "theme_palettes": THEME_PALETTES,
-            "component_props": component_props,
+            "conversation_component": conversation_component,
     }
 
 
