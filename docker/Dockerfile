@@ -20,6 +20,6 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
     && apt install nodejs -y && npm install -g yarn webpack@4.6.0
 COPY ./ /ej-server
 WORKDIR ej-server
-RUN cd lib && npm install
+RUN cd lib && npm i && inv build-assets
 RUN pip install -r etc/requirements-dev.txt
-RUN inv i18n && inv i18n -c && inv build-assets && inv collect
+RUN inv i18n && inv i18n -c && inv collect
