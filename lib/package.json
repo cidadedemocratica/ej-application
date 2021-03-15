@@ -15,7 +15,6 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "parcel-bundler": "1.12.4",
     "uglify-js": "^3.6.0",
@@ -27,5 +26,8 @@
     "watch": "parcel watch js/*.ts -d build/js/ --no-source-maps",
     "build": "parcel build js/*.ts -d build/js/ --no-source-maps",
     "clusterviz": "parcel serve js/clusterviz.html --no-source-maps"
+  },
+  "resolutions": {
+    "@babel/preset-env": "7.13.8"
   }
 }
