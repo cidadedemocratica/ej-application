@@ -6,6 +6,7 @@ from ej_boards.forms import PaletteWidget
 from ej.forms import EjModelForm
 from .models import RasaConversation
 
+
 class ConversationComponent:
     AUTH_TYPE_CHOICES = (
         ("register", _("Register using name/email")),
@@ -62,7 +63,6 @@ class ConversationComponentForm(forms.Form):
         label=_("Theme"), choices=ConversationComponent.THEME_CHOICES,
         required=False, widget=PaletteWidget
     )
-
 
 class RasaConversationForm(EjModelForm):
     class Meta:

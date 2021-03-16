@@ -4,6 +4,25 @@ CHANGELOG of EJPlatform releases
 
 Here you can follow all the fixes and new features on every EJPlatform release.
 
+
+2.2.0 release
+====================
+
+* Date: March 15, 2021
+* Features
+- Adds new page for  EJ opinion component configuration;
+- Adds new page for  ejBot configuration;
+
+2.1.0 release
+====================
+
+* Date: February 15, 2021
+* Features
+- New conversation tools page
+- Improves API to exports EJ data. This data is consumed by conversation component
+- Generates mailing template for marketing campaigns (/conversation/tools/mailing)
+- Initial instructions to conversation component integration (/conversation/tools/component)
+
 ADA LOVELACE release
 ====================
 

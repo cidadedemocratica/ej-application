@@ -21,7 +21,7 @@ def docker_up(ctx, dry_run=False):
 
 
 @task
-def docker_build(ctx, task, dry_run=False, build=False):
+def docker_build(ctx, dry_run=False, no_cache=False):
     """
      Build EJ web server image;
     """
@@ -31,7 +31,10 @@ def docker_build(ctx, task, dry_run=False, build=False):
     file = "docker/docker-compose.yml"
     # compose = prepare_compose_cmd(file, task, rocket, docker)
     compose = f"docker-compose -f {file}"
-    do(f'{compose} up  -d  --build')
+    if(no_cache):
+        do(f'{compose} build  --no-cache')
+    else:
+        do(f'{compose} build')
 
 
 @task

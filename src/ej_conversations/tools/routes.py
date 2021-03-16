@@ -7,7 +7,6 @@ from .forms import RasaConversationForm, ConversationComponentForm, Conversation
 from .. import models
 from ..tools.table import Tools
 
-
 app_name = "ej_conversations_tools"
 urlpatterns = Router(
     template="ej_conversations_tools/{name}.jinja2", models={"conversation": models.Conversation}
