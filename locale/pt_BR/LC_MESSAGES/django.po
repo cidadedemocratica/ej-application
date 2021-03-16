@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-12 14:36-0300\n"
+"POT-Creation-Date: 2021-03-16 09:34-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -155,7 +155,7 @@ msgstr "Murais"
 msgid "You cannot change this value afterwards"
 msgstr "Você não pode alterar este valor depois"
 
-#: src/ej_boards/models.py:20 src/ej_conversations/tools/forms.py:20
+#: src/ej_boards/models.py:20 src/ej_conversations/tools/forms.py:23
 msgid "Default"
 msgstr "Padrão"
 
@@ -642,51 +642,54 @@ msgstr "URL interna"
 msgid "Rasa conversation with this Conversation and Domain already exists."
 msgstr "Uma persona com esse nome já existe nessa conversa."
 
-#: src/ej_conversations/tools/forms.py:8
+#: src/ej_conversations/tools/forms.py:11
 #, fuzzy
 msgid "Register using name/email"
 msgstr "Registrar usando nome/email"
 
-#: src/ej_conversations/tools/forms.py:9
+#: src/ej_conversations/tools/forms.py:12
 msgid "Mautic"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:10
+#: src/ej_conversations/tools/forms.py:13
 msgid "Analytics"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:14
+#: src/ej_conversations/tools/forms.py:17
 msgid ""
 "User will use EJ platform interface, creating an account using personal data"
-msgstr "Usuário interagirá com a interface da EJ, criando uma conta com dados pessoais (email e nome)."
+msgstr ""
+"Usuário interagirá com a interface da EJ, criando uma conta com dados "
+"pessoais (email e nome)."
 
-#: src/ej_conversations/tools/forms.py:15
+#: src/ej_conversations/tools/forms.py:18
 msgid "Uses a mautic campaign "
 msgstr "Usa uma campanha do mautic"
 
-#: src/ej_conversations/tools/forms.py:16
+#: src/ej_conversations/tools/forms.py:19
 msgid ""
 "Uses analytics cookies allowing you to cross vote data with user browser "
 "data."
 msgstr ""
-"Usa cookies do analytics para cruzar dados de voto com os dados do navegador do usuário."
+"Usa cookies do analytics para cruzar dados de voto com os dados do navegador "
+"do usuário."
 
-#: src/ej_conversations/tools/forms.py:21
+#: src/ej_conversations/tools/forms.py:24
 msgid "Votorantim"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:22
+#: src/ej_conversations/tools/forms.py:25
 msgid "ICD"
 msgstr ""
 
-#: src/ej_conversations/tools/forms.py:43
+#: src/ej_conversations/tools/forms.py:58
 #, fuzzy
 msgid "Authentication Type"
 msgstr "Autenticação"
 
-#: src/ej_conversations/tools/forms.py:47
+#: src/ej_conversations/tools/forms.py:62
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: src/ej_conversations/tools/models.py:13
 msgid "Domain"
@@ -696,18 +699,18 @@ msgstr "Domínio"
 msgid "The domain that the rasa bot webchat is hosted."
 msgstr "O domínio do site que hospeda o webchat do rasa bot."
 
-#: src/ej_conversations/tools/routes.py:37
+#: src/ej_conversations/tools/routes.py:38
 #: src/ej_conversations/tools/table.py:11
 msgid "Mailing campaign"
 msgstr "Campanha de email"
 
-#: src/ej_conversations/tools/routes.py:51
+#: src/ej_conversations/tools/routes.py:50
 #: src/ej_conversations/tools/table.py:16
 #, fuzzy
 msgid "Conversation component"
 msgstr "Componente de coleta"
 
-#: src/ej_conversations/tools/routes.py:69
+#: src/ej_conversations/tools/routes.py:67
 #: src/ej_conversations/tools/table.py:21
 msgid "Rasa chatbot"
 msgstr ""
@@ -2753,7 +2756,8 @@ msgstr "usar a interface do EJ diretamente. Esse componente pode ser incluido "
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:20
 msgid "site's html, and it will allow users to participate on conversations"
-msgstr "no html do seu site e permitirá que os usuários participem das conversas"
+msgstr ""
+"no html do seu site e permitirá que os usuários participem das conversas"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:21
 msgid "and add comments from within your personal site."
@@ -2764,31 +2768,33 @@ msgid ""
 "To add this conversation to your site/platform, first select some settings "
 "and then copy the code below:"
 msgstr ""
+"Para adicionar esta conversa no seu site/plataforma, primeiro selecione algumas configurações "
+"e então copie o código abaixo:"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:34
 msgid "Generate Script"
-msgstr ""
+msgstr "Gerar Script"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:38
 msgid "Add the following snippet of code to your page header:"
-msgstr ""
+msgstr "Adicione o seguinte trecho de código para o header da sua página"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:40
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:103
-msgid "Copy Script"
-msgstr ""
+msgid "Copy"
+msgstr "Copiar"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:41
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:104
 msgid "Code was copied to your clipboard."
-msgstr ""
+msgstr "O código foi copiado!"
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:100
 msgid "and this snippet of code on the page body:"
-msgstr ""
+msgstr "e esse trecho no body da página:"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:117
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:119
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:118
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:120
 #: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:36
 #: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:38
 #: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:47

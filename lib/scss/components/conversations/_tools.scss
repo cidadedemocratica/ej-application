@@ -33,6 +33,10 @@
 	transition: max-height 0.5s;
 }
 
+.body-copy-p {
+	margin-bottom: 50px;
+}
+
 .tools-section-2-snippet {
 	background-color: aliceblue;
 	min-height: 50px;
@@ -61,16 +65,19 @@
 
 .tools-title {
 	border-bottom: 1px solid rgba(0,0,0,.12);
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  	padding-bottom: 10px;
+  	margin-bottom: 20px;
 }
 
 .tools-table td:first-child a {
 	text-decoration: underline;
 }
 
-.tools-settings-form{
+.tools-settings-form {
 	position: relative;
+	h3 {
+		margin-block-start: 0;
+	}
 	ul {
 		list-style-type:none;
 		margin-bottom: 0;
@@ -119,6 +126,8 @@
 		background-color: aliceblue;
 		padding: 10px 20px;
 		border-radius: 10px;
+		border: 1px solid #30BFD3;
+		text-indent: 0;
 	}
 
 	label:hover {
@@ -127,7 +136,7 @@
 
 	input[type="radio"]:checked + label {
 		background-color: $color-brand-alternate;
-		color: white;
+		color: #042A46;
 	}
 
 	input[type="radio"]:focus + label{

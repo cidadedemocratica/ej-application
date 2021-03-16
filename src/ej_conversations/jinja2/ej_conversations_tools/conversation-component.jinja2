@@ -20,15 +20,14 @@
 			{{_('site\'s html, and it will allow users to participate on conversations') }}
 			{{_('and add comments from within your personal site.') }}
 		</p>
-		<p>
 			{{_('To add this conversation to your site/platform, first select some settings and then copy the code below:') }}
 			
 			<form method="POST" class="tools-settings-form">
 				{{ csrf_input }}
 				{% block form_content %}
-					<label>{{form.authentication_type.label}}</label>
+					<h3>{{form.authentication_type.label}}</h3>
 					{{form.authentication_type}}
-					<label>{{form.theme.label}}</label>
+					<h3>{{form.theme.label}}</h3>
 					{{form.theme}}
 
                  	<input class="is-primary" type="submit" value="{{_('Generate Script')}}">
@@ -98,10 +97,10 @@
 			</div>
 
 			{{_('and this snippet of code on the page body:') }}
-			<p>
-			<button onclick="copySnippet('copy-body');" id="copy-body-button">
-					{{_('Copy')}}</button>
-			<div id="copy-body-message">{{_("Code was copied to your clipboard.")}}</div>
+			<p class="body-copy-p">
+				<button onclick="copySnippet('copy-body');" id="copy-body-button">
+						{{_('Copy')}}</button>
+				<div id="copy-body-message">{{_("Code was copied to your clipboard.")}}</div>
 			</p>
 
 			<div class="tools-section-2-snippet">
@@ -112,7 +111,6 @@
 
 				</div>
 			</div>
-		</p>
 		<br>
 </div>
 <p><a href="{{ conversation.url('conversation_tools:index') }}" title="{{ _('Back to tools') }}"
