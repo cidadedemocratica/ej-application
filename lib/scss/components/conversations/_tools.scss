@@ -74,9 +74,16 @@
 }
 
 .tools-settings-form {
+	margin-bottom: 1rem;
 	position: relative;
 	h3 {
 		margin-block-start: 0;
+	}
+	hr {
+		color: rgba(0, 0, 0, 0.12)
+	}
+	section {
+		margin: 20px 0px 20px 0px;
 	}
 	ul {
 		list-style-type:none;
@@ -93,6 +100,25 @@
 		width: 35%;
 		width: auto;
 		margin-bottom: 0;
+	}
+}
+
+.copy-script-header {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 5rem 0 0 0;
+	div:first-child {
+		width: 64%;
+		margin: 0 0 10px 0;
+	}
+	div:last-child {
+		flex-grow: 1;
+		max-width: 260px;
+		input {
+			background-color: #042A46;
+			border-color: #042A46;
+		}
+		margin: 0 0 10px 0;
 	}
 }
 

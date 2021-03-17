@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-16 19:04-0300\n"
+"POT-Creation-Date: 2021-03-17 13:10-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -2771,30 +2771,31 @@ msgstr ""
 "Para adicionar esta conversa no seu site/plataforma, primeiro selecione "
 "algumas configurações e então copie o código abaixo:"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:33
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:43
+msgid "Add the following snippet of code to your page header:"
+msgstr ""
+"Gere o script e adicione o seguinte trecho de código no header da sua página"
+
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:46
 msgid "Generate Script"
 msgstr "Gerar Script"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:37
-msgid "Add the following snippet of code to your page header:"
-msgstr "Adicione o seguinte trecho de código para o header da sua página"
-
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:39
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:102
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:47
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:112
 msgid "Copy"
 msgstr "Copiar"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:40
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:103
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:51
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:113
 msgid "Code was copied to your clipboard."
 msgstr "O código foi copiado!"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:99
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:110
 msgid "and this snippet of code on the page body:"
 msgstr "e esse trecho no body da página:"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:116
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:118
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:126
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:128
 #: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:36
 #: src/ej_conversations/jinja2/ej_conversations_tools/mailing.jinja2:38
 #: src/ej_conversations/jinja2/ej_conversations_tools/rasa.jinja2:47

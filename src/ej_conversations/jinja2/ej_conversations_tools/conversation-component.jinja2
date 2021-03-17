@@ -25,21 +25,31 @@
 			<form method="POST" class="tools-settings-form">
 				{{ csrf_input }}
 				{% block form_content %}
-					<h3>{{form.authentication_type.label}}</h3>
-					{{form.authentication_type}}
-					<h3>{{form.theme.label}}</h3>
-					{{form.theme}}
+					<section>
+						<h3>{{form.authentication_type.label}}</h3>
+						{{form.authentication_type}}
+					</section>
+					<hr>
+					<section>
+						<h3>{{form.theme.label}}</h3>
+						{{form.theme}}
+					</section>
+					<div><hr></div>
 
-                 	<input class="is-primary" type="submit" value="{{_('Generate Script')}}">
 				{% endblock %}
+		<div class="copy-script-header">
+			<div>
+				{{_('Add the following snippet of code to your page header:') }}
+			</div>
+			<div>
+			    <input type="submit" value="{{_('Generate Script')}}">
+				<button onclick="copySnippet('copy-header');" id="copy-header-button">{{_('Copy')}}</button>
+			</div>
+		</div>
 			</form>
-		<p>
-			{{_('Add the following snippet of code to your page header:') }}
-			<button onclick="copySnippet('copy-header');" id="copy-header-button">
-			{{_('Copy')}}</button>
+			
 			<div id="copy-header-message">{{_("Code was copied to your clipboard.")}}</div>
 
-		</p>
 
 			<div class="tools-section-2-snippet">
 				<textarea readonly id="copy-header">
@@ -96,8 +106,8 @@
 
 			</div>
 
-			{{_('and this snippet of code on the page body:') }}
 			<p class="body-copy-p">
+			{{_('and this snippet of code on the page body:') }}
 				<button onclick="copySnippet('copy-body');" id="copy-body-button">
 						{{_('Copy')}}</button>
 				<div id="copy-body-message">{{_("Code was copied to your clipboard.")}}</div>
