@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-17 13:10-0300\n"
+"POT-Creation-Date: 2021-03-17 13:34-0300\n"
 "PO-Revision-Date: 2019-09-09 13:55-0300\n"
 "Last-Translator: Fábio Mendes <fabiomacedomendes@gmail.com>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -2764,23 +2764,26 @@ msgid "and add comments from within your personal site."
 msgstr "e adicionem comentários a partir de seu site pessoal."
 
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:23
+#, fuzzy
 msgid ""
-"To add this conversation to your site/platform, first select some settings "
-"and then copy the code below:"
+"To add this conversation to your site/platform, first select the "
+"authentication method and which visual theme the component will use. Than, "
+"just generate the script and adds to your site."
 msgstr ""
-"Para adicionar esta conversa no seu site/plataforma, primeiro selecione "
-"algumas configurações e então copie o código abaixo:"
+"Para adicionar esta conversa no seu site/plataforma, primeiro selecione o "
+"tipo de autenticação e qual tema visual o componente irá utilizar. Depois, "
+"basta gerar o script e inclui-lo no site. "
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:43
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:42
 msgid "Add the following snippet of code to your page header:"
 msgstr ""
 "Gere o script e adicione o seguinte trecho de código no header da sua página"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:46
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:45
 msgid "Generate Script"
 msgstr "Gerar Script"
 
-#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:47
+#: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:46
 #: src/ej_conversations/jinja2/ej_conversations_tools/conversation-component.jinja2:112
 msgid "Copy"
 msgstr "Copiar"
