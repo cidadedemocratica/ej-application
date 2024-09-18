@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from boogie import models
-from boogie.fields import EnumField
 from .vote_queryset import VoteQuerySet
 from ..enums import Choice
 
@@ -44,7 +43,9 @@ class Vote(models.Model):
         settings.AUTH_USER_MODEL, related_name="votes", on_delete=models.PROTECT
     )
     comment = models.ForeignKey("Comment", related_name="votes", on_delete=models.CASCADE)
-    choice = EnumField(Choice, _("Choice"), help_text=_("Agree, disagree or skip"))
+    choice = models.IntegerField(
+        choices=Choice.choices, help_text=_("Agree, disagree or skip")
+    )
     created = models.DateTimeField(_("Created at"), auto_now_add=True)
     channel = models.CharField(
         _("Channel"),

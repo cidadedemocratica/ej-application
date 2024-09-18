@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as __, gettext_lazy as _
 from sidekick import import_later
 
-from ej_clusters.models import Cluster, Clusterization
+from ej_clusters.models import Cluster
 from ej_conversations.utils import check_promoted
 from ej_conversations.models.conversation import Conversation
 
@@ -216,22 +216,6 @@ def get_stop_words():
     return stop_words.get_stop_words("en")
 
 
-def get_biggest_cluster(clusterization):
-    from django.db.models import Count, F
-
-    if isinstance(clusterization, Clusterization):
-        return clusterization.get_biggest_cluster()
-
-    if (
-        clusterization
-        and clusterization.exists()
-        and clusterization.stereotypes().count() > 0
-    ):
-        clusters = clusterization.clusters().annotate(size=Count(F("users")))
-        return clusters.order_by("-size").first()
-    return None
-
-
 def create_stereotype_coords(
     conversation, table, comments: list, transformer: Callable, kwargs: dict
 ):
@@ -365,13 +349,15 @@ def get_biggest_cluster_data(cluster, cluster_as_dataframe):
     return {}
 
 
-def get_dashboard_biggest_cluster(request, conversation, clusterization):
-    biggest_cluster = get_biggest_cluster(clusterization)
-    if biggest_cluster:
-        biggest_cluster_df = comments_data_cluster(
-            request, conversation, None, biggest_cluster.id
-        )
-        return get_biggest_cluster_data(biggest_cluster, biggest_cluster_df)
+def get_conversation_biggest_cluster(request, conversation):
+    clusterization = getattr(conversation, "clusterization", None)
+    if clusterization:
+        biggest_cluster = clusterization.get_biggest_cluster()
+        if biggest_cluster:
+            biggest_cluster_df = comments_data_cluster(
+                request, conversation, None, biggest_cluster.id
+            )
+            return get_biggest_cluster_data(biggest_cluster, biggest_cluster_df)
     return {}
 
 

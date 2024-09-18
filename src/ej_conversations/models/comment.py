@@ -1,4 +1,4 @@
-from boogie import models
+from django.db import models
 from hashlib import blake2b
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -45,8 +45,8 @@ class Comment(StatusModel, TimeStampedModel):
         validators=[MinLengthValidator(2), is_not_empty],
         help_text=_("Body of text for the comment"),
     )
-    rejection_reason = models.EnumField(
-        RejectionReason, _("Rejection reason"), default=RejectionReason.USER_PROVIDED
+    rejection_reason = models.IntegerField(
+        choices=RejectionReason.choices, default=RejectionReason.USER_PROVIDED
     )
     rejection_reason_text = models.TextField(
         _("Rejection reason (free-form)"),

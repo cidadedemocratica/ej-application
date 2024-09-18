@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-12 19:35-0300\n"
+"POT-Creation-Date: 2024-09-17 10:34-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -271,7 +271,6 @@ msgid "Comment"
 msgstr "Comentar"
 
 #: src/ej_clusters/models/stereotype_vote.py:26
-#: src/ej_conversations/models/vote.py:47
 msgid "Choice"
 msgstr "Escolha"
 
@@ -395,6 +394,11 @@ msgstr "Concorda"
 #: src/ej_conversations/enums.py:27 src/ej_conversations/roles/comments.py:35
 msgid "Disagree"
 msgstr "Discorda"
+
+#: src/ej_conversations/enums.py:28
+#, fuzzy
+msgid "(Unknown)"
+msgstr "Desconhecido"
 
 #: src/ej_conversations/forms.py:22
 msgid "Give your opinion here"
@@ -631,23 +635,23 @@ msgstr ""
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: src/ej_conversations/models/vote.py:47
+#: src/ej_conversations/models/vote.py:48
 msgid "Agree, disagree or skip"
 msgstr "Concorda, discorda ou pula"
 
-#: src/ej_conversations/models/vote.py:48
+#: src/ej_conversations/models/vote.py:50
 msgid "Created at"
 msgstr "Criado em"
 
-#: src/ej_conversations/models/vote.py:50
+#: src/ej_conversations/models/vote.py:52
 msgid "Channel"
 msgstr ""
 
-#: src/ej_conversations/models/vote.py:53
+#: src/ej_conversations/models/vote.py:55
 msgid "From which EJ channel the vote comes from"
 msgstr ""
 
-#: src/ej_conversations/models/vote.py:69
+#: src/ej_conversations/models/vote.py:71
 msgid "non-moderated comments cannot receive votes"
 msgstr "comentários não-moderados não podem receber votos"
 

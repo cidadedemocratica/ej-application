@@ -1,5 +1,5 @@
-from boogie import models
-from boogie.fields import EnumField
+from django.db import models
+
 from django.utils.translation import gettext_lazy as _
 from sidekick import alias
 
@@ -23,7 +23,7 @@ class StereotypeVote(models.Model):
         related_name="stereotype_votes",
         on_delete=models.CASCADE,
     )
-    choice = EnumField(Choice, _("Choice"))
+    choice = models.IntegerField(choices=Choice.choices)
     stereotype = alias("author")
     objects = StereotypeVoteQuerySet.as_manager()
 

@@ -1,15 +1,17 @@
+from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 
 from boogie.fields import IntEnum
 from ej_conversations.enums import Choice
 
 
-VOTING_CHOICES = (
-    (None, "--------"),
-    ("agree", "agree"),
-    ("disagree", "disagree"),
-    ("skip", "skip"),
-)
+class StereotypeVoteChoices(TextChoices):
+
+    agree = "agree"
+    disagree = "disagree"
+    skip = "skip"
+    __empty__ = "--------"
+
 
 FORM_CHOICE_MAP = {
     "1": "agree",

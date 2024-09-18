@@ -1,7 +1,7 @@
-from boogie.fields import IntEnum
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from environ import ImproperlyConfigured
+from django.db import models
 
 _ethnicity_enums = getattr(settings, "EJ_PROFILE_ETHNICITY_CHOICES", None)
 _race_enums = getattr(settings, "EJ_PROFILE_RACE_CHOICES", None)
@@ -15,7 +15,7 @@ _age_enums = getattr(settings, "EJ_PROFILE_AGE_CHOICES", None)
 _to_thunks = lambda lst: ((lambda: k, lambda: v) for k, v in lst)
 
 
-class Ethnicity(IntEnum):
+class Ethnicity(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
 
     if _ethnicity_enums is None:
@@ -30,8 +30,11 @@ class Ethnicity(IntEnum):
             locals()[_k()] = _v()
 
 
-class Race(IntEnum):
+class Race(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
+
+    def __str__(self):
+        return "Race"
 
     if _race_enums is None:
         BLACK = 1, _("Black")
@@ -45,7 +48,7 @@ class Race(IntEnum):
             locals()[_k()] = _v()
 
 
-class Region(IntEnum):
+class Region(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
 
     if _region_enums is None:
@@ -59,7 +62,7 @@ class Region(IntEnum):
             locals()[_k()] = _v()
 
 
-class Gender(IntEnum):
+class Gender(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
 
     if _gender_enums is None:
@@ -72,7 +75,7 @@ class Gender(IntEnum):
             locals()[_k()] = _v()
 
 
-class AgeRange(IntEnum):
+class AgeRange(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
 
     if _age_enums is None:

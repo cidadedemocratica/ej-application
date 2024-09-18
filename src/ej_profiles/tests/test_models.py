@@ -77,7 +77,7 @@ class TestProfile(ConversationRecipes):
         delta = datetime.datetime.now().date() - date(1996, 1, 17)
         age = abs(int(delta.days // 365.25))
         assert profile.age == age
-        assert profile.gender_description == Gender.FEMALE.description
+        assert profile.gender_description == Gender.FEMALE.label
         profile.gender = Gender.NOT_FILLED
         assert profile.gender_description == profile.gender_other
         assert profile.has_image
