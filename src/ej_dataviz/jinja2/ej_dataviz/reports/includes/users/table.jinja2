@@ -19,16 +19,16 @@
                     <tr>
                         <td>
                             <div class="report__user">
-                                <div>{{user[1]}}</div>
                                 <div>{{user[0]}}</div>
-                                <div>{{user[8].strftime('%d/%m/%Y')}}</div>
-                                <div>{{user[2]}}</div>
+                                <div>{{user[1]}}</div>
+                                <div>{{user[2].strftime('%d/%m/%Y')}}</div>
+                                <div>{{user[7]}}</div>
                             </div>
                         </td>
+                        <td class="report__percentages">{{"%s%%"|format(user[3]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(user[4]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(user[5]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(user[6]|round)}}</td>
-                        <td class="report__percentages">{{"%s%%"|format(user[7]|round)}}</td>
                     </tr>
                 {% endfor %}
             </tbody>

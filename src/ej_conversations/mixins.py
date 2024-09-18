@@ -5,15 +5,12 @@ from boogie import db
 from boogie.models import QuerySet
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
-from ej_profiles.enums import Gender, Race
-from ej_profiles.utils import years_from
+from django.utils.translation import gettext
+import pandas as pd
 from sidekick import import_later
 
-from .math import user_statistics
+from .math import votes_statistics
 
-db = db.ej_conversations
 np = import_later("numpy")
 NOT_GIVEN = object()
 
@@ -55,7 +52,7 @@ class ConversationMixin:
         queryset.
         """
         conversations = self.conversations()
-        qs = db.comments.filter(conversation__in=conversations)
+        qs = db.ej_conversations.comments.filter(conversation__in=conversations)
         if conversation:
             qs = qs.filter(**conversation_filter(conversation, qs))
         return qs
@@ -98,8 +95,8 @@ class UserMixin(ConversationMixin):
                 Filter comments by conversation, if given. Can be a conversation
                 instance, an id, or a queryset.
         """
-        votes = db.vote_objects.filter(author__in=self)
-        comments = db.comments.filter(votes__in=votes)
+        votes = db.ej_conversations.vote_objects.filter(author__in=self)
+        comments = db.ej_conversations.comments.filter(votes__in=votes)
         if conversation:
             comments = comments.filter(**conversation_filter(conversation))
         return comments
@@ -122,37 +119,36 @@ class UserMixin(ConversationMixin):
         """
 
         if votes is None and comments is None:
-            votes = db.votes.filter(author__in=self, comment__conversation=conversation)
+            votes = db.ej_conversations.votes.filter(
+                author__in=self, comment__conversation=conversation
+            )
         if votes is None:
             votes = comments.votes().filter(
                 author__in=self, comment__conversation=conversation
             )
 
         votes = votes.dataframe("comment", "author", "choice")
-        stats = user_statistics(
+        votes_statistics_df = votes_statistics(
             votes, participation=participation, convergence=convergence, ratios=True
         )
-        stats *= normalization
+        votes_statistics_df *= normalization
 
         # Extend fields with additional data
         extend_full_fields = [EXTEND_FIELDS.get(x, x) for x in extend_fields]
 
-        transforms = {
-            x: EXTEND_FIELDS_VERBOSE.get(x, x)
-            for x in extend_fields
-            if x in EXTEND_FIELDS_VERBOSE
-        }
-
         # Save extended dataframe
         extend_fields = list(extend_fields)
-        stats = self.extend_dataframe(stats, "name", "email", *extend_full_fields)
+        votes_statistics_df = self.extend_dataframe(
+            votes_statistics_df, "name", "email", "date_joined", *extend_full_fields
+        )
         if extend_fields:
-            columns = list(stats.columns[: -len(extend_fields)])
+            columns = list(votes_statistics_df.columns[: -len(extend_fields)])
             columns.extend(extend_fields)
-            stats.columns = columns
+            votes_statistics_df.columns = columns
         cols = [
             "name",
             "email",
+            "date_joined",
             *extend_fields,
             "agree",
             "disagree",
@@ -160,35 +156,28 @@ class UserMixin(ConversationMixin):
             *(["convergence"] if convergence else ()),
             *(["participation"] if participation else ()),
         ]
-        stats = stats[cols]
+        votes_statistics_df = votes_statistics_df[cols]
 
-        # Add phone number to data
-        phone_numbers = [
-            user.profile.phone_number
-            if user.profile.phone_number
-            else str(_("No phone number"))
-            for user in self
-        ]
+        # Retrieve in a single queryset the conversation clusters and the clustered participants.
+        # The queryset is converted to a list of tuples. Each tuple has the user email and his cluster.
+        users_clusters = list(
+            db.ej_clusters.clusters.filter(clusterization__conversation=conversation)
+            .prefetch_related("users")
+            .values_list("users__email", "name")
+        )
 
-        groups = []
-        date_joined = []
-        for user in self:
-            date_joined.append(user.date_joined)
-            users_conversation_cluster = user.clusters.filter(
-                clusterization__conversation=conversation
-            )
-            if users_conversation_cluster.exists():
-                groups.append(users_conversation_cluster.first().name)
-            else:
-                groups.append(str(_("No group")))
-        stats.insert(1, "group", groups, True)
-        stats.insert(7, "phone_number", phone_numbers, True)
-        stats.insert(8, "date_joined", date_joined, True)
-        # Use better values for extended columns
-        for field, transform in transforms.items():
-            stats[field] = stats[field].apply(transform)
+        # Convert the list of tuples to a Pandas Dataframe.
+        users_clusters_df = pd.DataFrame(users_clusters, columns=["email", "group"])
 
-        return stats
+        # Merge the votes Dataframe with the clusters Dataframe.
+        votes_statistics_df = votes_statistics_df.merge(users_clusters_df, how="outer")
+
+        # Fix the Dataframe lines without a valid cluster.
+        votes_statistics_df[["group"]] = votes_statistics_df[["group"]].fillna(
+            gettext("No group")
+        )
+
+        return votes_statistics_df
 
 
 #
@@ -255,9 +244,4 @@ EXTEND_FIELDS = {
     "country": "profile__country",
     "state": "profile__state",
     "age": "profile__birth_date",
-}
-EXTEND_FIELDS_VERBOSE = {
-    "gender": lambda x: "" if is_empty(x) else Gender(x).name.lower(),
-    "race": lambda x: "" if is_empty(x) else Race(x).name.lower(),
-    "age": lambda x: x if is_empty(x) else years_from(x, now().date()),
 }

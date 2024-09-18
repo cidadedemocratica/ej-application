@@ -134,15 +134,6 @@ def get_user_dataframe(conversation: Conversation, page_number: int = 1):
     users_df = conversation.users.statistics_summary_dataframe(
         normalization=100, convergence=False, conversation=conversation
     )
-
-    users_df.insert(
-        0,
-        "participant",
-        users_df[["email"]].agg("\n".join, axis=1),
-        True,
-    )
-
-    users_df.drop(["phone_number"], inplace=True, axis=1)
     users_df = users_df.sort_values("name", ascending=False)
     return users_df
 

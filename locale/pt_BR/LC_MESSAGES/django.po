@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-18 19:14-0300\n"
+"POT-Creation-Date: 2024-09-12 19:35-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -151,7 +151,7 @@ msgid "Slug already exists."
 msgstr "Identificador já existe."
 
 #: src/ej_boards/tests/test_api.py:15
-#: src/ej_conversations/tests/test_api.py:308
+#: src/ej_conversations/tests/test_api.py:318
 msgid "Authentication credentials were not provided."
 msgstr "Credenciais de autenticação não foram fornecidas."
 
@@ -431,12 +431,7 @@ msgstr "Logotipo"
 msgid "This title already exists!"
 msgstr "Esse título já existe."
 
-#: src/ej_conversations/mixins.py:169
-#, fuzzy
-msgid "No phone number"
-msgstr "Sem número de telefone"
-
-#: src/ej_conversations/mixins.py:183
+#: src/ej_conversations/mixins.py:177 src/ej_dataviz/tests/test_views.py:355
 #, fuzzy
 msgid "No group"
 msgstr "Sem grupo"
@@ -492,6 +487,11 @@ msgstr "Deve fornecer uma razão para rejeitar o comentário"
 #: src/ej_conversations/models/comment.py:138
 msgid "Cannot vote on pending comment"
 msgstr ""
+
+#: src/ej_conversations/models/comment_queryset.py:76
+#, fuzzy
+msgid "general"
+msgstr "Geral"
 
 #: src/ej_conversations/models/conversation.py:48
 msgid "Short description used to create URL slugs (e.g. School system)."
@@ -675,7 +675,7 @@ msgstr " comentários"
 msgid " of "
 msgstr " de "
 
-#: src/ej_conversations/serializers.py:254 src/ej_conversations/views.py:164
+#: src/ej_conversations/serializers.py:259 src/ej_conversations/views.py:164
 msgid "Participate"
 msgstr "Participar"
 
@@ -722,13 +722,13 @@ msgstr ""
 msgid "Visualization"
 msgstr "Visualização"
 
-#: src/ej_dataviz/constants.py:185 src/ej_dataviz/views_dataviz.py:105
-#: src/ej_dataviz/views_dataviz.py:120
+#: src/ej_dataviz/constants.py:185 src/ej_dataviz/views/dataviz.py:105
+#: src/ej_dataviz/views/dataviz.py:120
 msgid "Gender"
 msgstr "Gênero"
 
-#: src/ej_dataviz/constants.py:195 src/ej_dataviz/views_dataviz.py:106
-#: src/ej_dataviz/views_dataviz.py:121 src/ej_profiles/models.py:35
+#: src/ej_dataviz/constants.py:195 src/ej_dataviz/views/dataviz.py:106
+#: src/ej_dataviz/views/dataviz.py:121 src/ej_profiles/models.py:35
 #: src/ej_profiles/tests/test_models.py:61
 msgid "Race"
 msgstr "Raça"
@@ -738,95 +738,95 @@ msgstr "Raça"
 msgid "State"
 msgstr "Estado"
 
-#: src/ej_dataviz/utils.py:275
+#: src/ej_dataviz/utils.py:266
 msgid "{} persona"
 msgstr "{} persona"
 
-#: src/ej_dataviz/utils.py:290
+#: src/ej_dataviz/utils.py:281
 msgid "*Unknown*"
 msgstr "*Desconhecido*"
 
-#: src/ej_dataviz/utils.py:317
+#: src/ej_dataviz/utils.py:308
 msgid "PCA data"
 msgstr "Dados do PCA"
 
-#: src/ej_dataviz/utils.py:322 src/ej_dataviz/utils.py:323
-#: src/ej_dataviz/utils.py:324 src/ej_dataviz/utils.py:326
+#: src/ej_dataviz/utils.py:313 src/ej_dataviz/utils.py:314
+#: src/ej_dataviz/utils.py:315 src/ej_dataviz/utils.py:317
 msgid "You!"
 msgstr "Você!"
 
-#: src/ej_dataviz/views_dataviz.py:108 src/ej_dataviz/views_dataviz.py:123
+#: src/ej_dataviz/views/dataviz.py:108 src/ej_dataviz/views/dataviz.py:123
 msgid "https://en.wikipedia.org/wiki/Principal_component_analysis"
 msgstr "https://pt.wikipedia.org/wiki/An%C3%A1lise_de_componentes_principais"
 
-#: src/ej_dataviz/views_dataviz.py:142
+#: src/ej_dataviz/views/dataviz.py:142
 msgid "Not enough data"
 msgstr "Não há dados suficientes"
 
-#: src/ej_dataviz/views_dataviz.py:314
+#: src/ej_dataviz/views/dataviz.py:314
 msgid "agree"
 msgstr "concorda"
 
-#: src/ej_dataviz/views_dataviz.py:315
+#: src/ej_dataviz/views/dataviz.py:315
 msgid "author"
 msgstr "autor"
 
-#: src/ej_dataviz/views_dataviz.py:316
+#: src/ej_dataviz/views/dataviz.py:316
 msgid "author_id"
 msgstr "autor_id"
 
-#: src/ej_dataviz/views_dataviz.py:317
+#: src/ej_dataviz/views/dataviz.py:317
 msgid "choice"
 msgstr "escolha"
 
-#: src/ej_dataviz/views_dataviz.py:318
+#: src/ej_dataviz/views/dataviz.py:318
 #, fuzzy
 msgid "cluster"
 msgstr "Grupos"
 
-#: src/ej_dataviz/views_dataviz.py:319
+#: src/ej_dataviz/views/dataviz.py:319
 #, fuzzy
 msgid "cluster_id"
 msgstr "Grupo_id"
 
-#: src/ej_dataviz/views_dataviz.py:320
+#: src/ej_dataviz/views/dataviz.py:320
 #, fuzzy
 msgid "comment"
 msgstr "comentário"
 
-#: src/ej_dataviz/views_dataviz.py:321
+#: src/ej_dataviz/views/dataviz.py:321
 msgid "comment_id"
 msgstr "comentário_id"
 
-#: src/ej_dataviz/views_dataviz.py:322
+#: src/ej_dataviz/views/dataviz.py:322
 msgid "convergence"
 msgstr "convergência"
 
-#: src/ej_dataviz/views_dataviz.py:323
+#: src/ej_dataviz/views/dataviz.py:323
 msgid "disagree"
 msgstr "discorda"
 
-#: src/ej_dataviz/views_dataviz.py:324 src/ej_profiles/enums.py:119
+#: src/ej_dataviz/views/dataviz.py:324 src/ej_profiles/enums.py:119
 msgid "email"
 msgstr "email"
 
-#: src/ej_dataviz/views_dataviz.py:325
+#: src/ej_dataviz/views/dataviz.py:325
 msgid "id"
 msgstr "id"
 
-#: src/ej_dataviz/views_dataviz.py:326 src/ej_profiles/enums.py:118
+#: src/ej_dataviz/views/dataviz.py:326 src/ej_profiles/enums.py:118
 msgid "name"
 msgstr "nome"
 
-#: src/ej_dataviz/views_dataviz.py:327
+#: src/ej_dataviz/views/dataviz.py:327
 msgid "participation"
 msgstr "participação"
 
-#: src/ej_dataviz/views_dataviz.py:328
+#: src/ej_dataviz/views/dataviz.py:328
 msgid "skipped"
 msgstr "pulados"
 
-#: src/ej_dataviz/views_dataviz.py:329
+#: src/ej_dataviz/views/dataviz.py:329
 #, fuzzy
 msgid "channel"
 msgstr "canal"
@@ -1413,13 +1413,13 @@ msgstr "Datas importantes"
 msgid "User was not found."
 msgstr "O usuário não foi encontrado."
 
-#: src/ej_users/api.py:87
+#: src/ej_users/api.py:84
 #, fuzzy
 msgid "The password is incorrect"
 msgstr "A senha está incorreta"
 
-#: src/ej_users/api.py:118
-msgid "User is already linked to another account."
+#: src/ej_users/api.py:115
+msgid "User already has completed the registration process."
 msgstr ""
 
 #: src/ej_users/apps.py:7
@@ -1563,15 +1563,15 @@ msgstr "Termos de uso"
 msgid "Agree with privacy policy"
 msgstr "Política de privacidade"
 
-#: src/ej_users/models.py:67
+#: src/ej_users/models.py:66
 msgid "Explore"
 msgstr "Explorar"
 
-#: src/ej_users/models.py:198
+#: src/ej_users/models.py:165
 msgid "User token"
 msgstr "Token do usuário"
 
-#: src/ej_users/models.py:245
+#: src/ej_users/models.py:212
 msgid "Anonymous"
 msgstr "Anônimo"
 
@@ -4052,6 +4052,10 @@ msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #, fuzzy
+#~ msgid "No phone number"
+#~ msgstr "Sem número de telefone"
+
+#, fuzzy
 #~ msgid "you don't have groups yet"
 #~ msgstr "você ainda não tem grupos"
 
@@ -4415,10 +4419,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #, fuzzy
 #~ msgid "groups"
 #~ msgstr "grupos"
-
-#, fuzzy
-#~ msgid "general"
-#~ msgstr "Geral"
 
 #, fuzzy
 #~ msgid "No data available"
@@ -5636,8 +5636,8 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ msgstr "Confirmar"
 
 #~ msgid ""
-#~ "This e-mail confirmation link expired or is invalid. Please <a "
-#~ "href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+#~ "This e-mail confirmation link expired or is invalid. Please <a href="
+#~ "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 #~ msgstr ""
 #~ "Este link de confirmação de email expirou ou é inválido. Por favor <a "
 #~ "href=\"%(email_url)s\">peça uma nova confirmação</a>."
@@ -5763,8 +5763,8 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ msgstr "Nome do ícone"
 
 #~ msgid ""
-#~ "Icon name in font-awesome. Use short version like \"google\", \"facebook-"
-#~ "f\", etc."
+#~ "Icon name in font-awesome. Use short version like \"google\", \"facebook-f"
+#~ "\", etc."
 #~ msgstr ""
 #~ "Nome do ícone na Font-awesome. Use a versão curta como \"google\", "
 #~ "\"facebook-f\", etc."
