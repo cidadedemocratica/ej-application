@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.text import slugify
 from django.utils.timezone import make_aware
-from django.utils.translation import gettext as _, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from sidekick import import_later
 from sklearn import impute
@@ -25,8 +25,13 @@ from ej_conversations.utils import check_promoted
 from ej_dataviz.models import ToolsLinksHelper
 from ej_tools.utils import get_host_with_schema
 
-from .constants import *
-from .utils import (
+from ej_dataviz.constants import (
+    FIELD_DATA,
+    VALID_GROUP_BY,
+    GROUP_NAMES,
+    GROUP_DESCRIPTIONS,
+)
+from ej_dataviz.utils import (
     clusters,
     comments_data_common,
     create_stereotype_coords,
@@ -104,7 +109,6 @@ def index(request, conversation_id, **kwargs):
         "biggest_cluster_data": biggest_cluster_data,
         "gender_field": names.get("gender", _("Gender")),
         "race_field": names.get("race", _("Race")),
-        "conversation": check_promoted(conversation, request),
         "pca_link": _("https://en.wikipedia.org/wiki/Principal_component_analysis"),
         "current_page": "dashboard",
     }

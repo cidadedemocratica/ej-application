@@ -4,10 +4,11 @@ from boogie import db
 from boogie.models.wordcloud import WordCloudQuerySet
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from django.utils.translation import gettext
 
-from .vote import Vote
 from ..math import comment_statistics
 from ..mixins import ConversationMixin, EXTEND_FIELDS as _EXTEND_FIELDS
+from .vote import Vote
 
 
 log = logging.getLogger("ej")
@@ -72,7 +73,7 @@ class CommentQuerySet(ConversationMixin, WordCloudQuerySet):
         stats *= normalization
         stats = self.extend_dataframe(stats, "author__name", *extend_fields, "content")
         stats["author"] = stats.pop("author__name")
-        stats["group"] = "geral"
+        stats["group"] = gettext("general")
         stats["created"] = votes["created"]
         cols = [
             "content",

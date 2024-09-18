@@ -54,7 +54,7 @@ def comment_statistics(
     )
 
 
-def user_statistics(
+def votes_statistics(
     votes,
     author="author",
     comment="comment",

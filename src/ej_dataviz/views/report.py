@@ -4,15 +4,14 @@ from sidekick import import_later
 
 from ej.decorators import can_access_dataviz_class_view
 from ej_conversations.models import Conversation
-from ej_dataviz.models import (
+from ej_dataviz.utils import get_clusters, get_comments_dataframe, get_user_dataframe
+from ej_dataviz.views.filters import (
     CommentsReportClustersFilter,
     CommentsReportSearchFilter,
     ReportOrderByFilter,
     UsersReportClustersFilter,
     UsersReportSearchFilter,
 )
-
-from .utils import get_clusters, get_comments_dataframe, get_user_dataframe
 
 pd = import_later("pandas")
 
