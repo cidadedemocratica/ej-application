@@ -112,7 +112,7 @@ class TestEditProfile:
         user = User.objects.get(email="email@server.com")
 
         for attr in ["gender", "race"]:
-            assert getattr(user.profile, attr).value == form_data[attr]
+            assert getattr(user.profile, attr) == form_data[attr]
             inf_fields.remove(attr)
         assert (
             user.profile.birth_date

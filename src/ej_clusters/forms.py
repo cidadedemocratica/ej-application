@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import get_template
 
 from ej.forms import EjModelForm
-from ej_clusters.enums import VOTING_CHOICES, FORM_CHOICE_MAP
+from ej_clusters.enums import FORM_CHOICE_MAP, StereotypeVoteChoices
 from ej_clusters.models.stereotype_vote import StereotypeVote
 from ej_conversations.models import Comment, normalize_choice
 from .models import Stereotype, Cluster
@@ -66,17 +66,19 @@ class SelectWidget(forms.Select):
     template_name = "ej_clusters/stereotype-votes/vote-choice-input.jinja2"
     renderer = get_template(template_name)
 
-    def __init__(self, stereotype_action, attrs=None, comment=None, initial_vote=None):
+    def __init__(
+        self, stereotype_action, attrs=None, comment=None, initial_vote_value=None
+    ):
         super().__init__(attrs)
         self.comment = comment
-        self.initial_vote = initial_vote
+        self.initial_vote_value = initial_vote_value
         self.stereotype_action = stereotype_action
 
     def render(self, name, value, attrs=None, renderer=None):
         context = self.get_context(name, value, attrs)
         context["comment_id"] = self.comment.id
         context["comment_content"] = self.comment.content
-        context["initial_vote"] = getattr(self.initial_vote, "value", None)
+        context["initial_vote_value"] = self.initial_vote_value
         context["stereotype_action"] = self.stereotype_action
 
         value = context["widget"]["value"][0]
@@ -86,6 +88,13 @@ class SelectWidget(forms.Select):
 
 
 class StereotypeVoteForm(forms.ModelForm):
+    class Meta:
+        model = StereotypeVote
+        fields = ["comment", "choice"]
+        widgets = {
+            "comment": forms.HiddenInput(),
+        }
+
     def __init__(
         self,
         stereotype_action="create",
@@ -95,17 +104,17 @@ class StereotypeVoteForm(forms.ModelForm):
         **kwargs,
     ):
         super(StereotypeVoteForm, self).__init__(*args, **kwargs)
-        initial_vote = None
+        initial_vote_value = None
         comment = self.initial.get("comment")
         if not comment or isinstance(comment, int):
             comment = self.instance.comment
-            initial_vote = self.instance.choice
+            initial_vote_value = self.instance.choice
 
         self.fields["choice"] = forms.ChoiceField(
             required=False,
-            choices=VOTING_CHOICES,
+            choices=StereotypeVoteChoices.choices,
             widget=SelectWidget(
-                stereotype_action, comment=comment, initial_vote=initial_vote
+                stereotype_action, comment=comment, initial_vote_value=initial_vote_value
             ),
             label="",
         )
@@ -137,13 +146,6 @@ class StereotypeVoteForm(forms.ModelForm):
         if choice:
             return normalize_choice(choice)
         return None
-
-    class Meta:
-        model = StereotypeVote
-        fields = ["comment", "choice"]
-        widgets = {
-            "comment": forms.HiddenInput(),
-        }
 
 
 class StereotypeVoteFormsetFactory:

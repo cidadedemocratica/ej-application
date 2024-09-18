@@ -11,26 +11,26 @@
         <h1 class="text-accent">{{ _("Modeling") }}</h1>
         <h2 class="manage-stereotypes--margin-top-36">{{_("Personas")}}</h2>
             <p class="margin-y3 helptext">
-                {{_("We use votes to rank users according to their opinions. 
+                {{_("We use votes to rank users according to their opinions.
                     Users who vote in a similar way tend to be in the same group.")}}
             </p>
 
         {{ tabs({
-            _('See/Edit personas'): 'see-edit-personas', 
-            _('Create persona'): 'create-persona'}, 
+            _('See/Edit personas'): 'see-edit-personas',
+            _('Create persona'): 'create-persona'},
             classes='tabs--smaller pointer-' ~ tab_index, selectedIndex=tab_index)}}
-        
-        {% include 'ej_clusters/stereotype-votes/edit-tab.jinja2' %}  
 
-        {% include 'ej_clusters/stereotype-votes/create-tab.jinja2' %} 
+        {% include 'ej_clusters/stereotype-votes/edit-tab.jinja2' %}
+
+        {% include 'ej_clusters/stereotype-votes/create-tab.jinja2' %}
 
         <div id="groups-container" class="manage-stereotypes__grouping"></div>
-        
+
         <div class="scroll-top scroll-top--full-width">
             <i class="fa">&#xf139;</i>
             <a id="stereotype-scroll-top">{{_("Back to top")}}</a>
         </div>
-        
+
         <div id="confirm-create-stereotype" class="hide">
             {{ conclusion_action_modal(static('/img/icons/circle-check-solid.svg'), _("Stereotype created"), conversation, True) }}
         </div>
@@ -40,7 +40,7 @@
         <div id="confirm-delete-stereotype" class="hide">
             {{ conclusion_action_modal(static('/img/icons/circle-x.svg'), _("Excluded stereotype"), conversation) }}
         </div>
-        
+
         <script>
             function showModal(id){
                 const body = $("body").addClass('overflow-deactive');

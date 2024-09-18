@@ -14,7 +14,7 @@ urlpatterns = [
     ),
     path(
         conversation_url + "stereotypes/stereotype-votes/<int:pk>/manage",
-        stereotype_votes.ManageStereotypeVotesView.as_view(),
+        stereotype_votes.StereotypeVotesManageView.as_view(),
         name="manage",
     ),
 ]

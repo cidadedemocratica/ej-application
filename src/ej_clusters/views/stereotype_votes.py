@@ -86,7 +86,7 @@ class StereotypeVotesView(ListView):
 
 
 @method_decorator([login_required, can_edit_conversation], name="dispatch")
-class ManageStereotypeVotesView(CreateView):
+class StereotypeVotesManageView(CreateView):
     template_name = "ej_clusters/stereotype-votes/manage-stereotype-votes.jinja2"
 
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:

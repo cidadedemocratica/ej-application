@@ -2,36 +2,36 @@
     <p>{{ comment_content }}</p>
 
     <div class="stereotype-cards__vote-buttons" id="vote-buttons-{{stereotype_action}}-{{ comment_id }}">
-        <button type="button" 
-                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')" 
-                class="is-clear agree-{{initial_vote}}" 
+        <button type="button"
+                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
+                    class="is-clear agree-{{initial_vote_value}}"
                 name="create"
                 value="agree">
             <i class="fa fa-check"></i> {{ _('Agree') }}
         </button>
-        <button type="button" 
-                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')" 
-                class="is-clear skip-{{initial_vote}}" 
-                name="create" 
+        <button type="button"
+                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
+                class="is-clear skip-{{initial_vote_value}}"
+                name="create"
                 value="skip">
             <i class="far fa-meh"></i> {{ _('Neutral') }}
         </button>
-        <button type="button" 
-                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')" 
-                class="is-clear disagree-{{initial_vote}}" 
-                name="create" 
+        <button type="button"
+                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
+                class="is-clear disagree-{{initial_vote_value}}"
+                name="create"
                 value="disagree">
             <i class="fa fa-times"></i> {{ _('Disagree') }}
         </button>
         <button class="stereotype-cards__vote-buttons__delete {% if not widget.value.0 %}hide{% endif %}"
                 name="update"
-                type="button" 
+                type="button"
                 id="clear-button-{{stereotype_action}}-{{ comment_id }}"
                 onclick="clearVote('{{ comment_id }}', '{{stereotype_action}}')"
         >
                     {{ _('Clear vote') }}
         </button>
-        <button class="is-clear stereotype-cards__vote-buttons__delete--icon-{{initial_vote}} {% if not widget.value.0 %}hide{% endif %}"
+        <button class="is-clear stereotype-cards__vote-buttons__delete--icon-{{initial_vote_value}} {% if not widget.value.0 %}hide{% endif %}"
                 name="update"
                 type="button"
                 id="clear-icon-button-{{stereotype_action}}-{{ comment_id }}" onclick="clearVote('{{ comment_id }}', '{{stereotype_action}}')">
@@ -56,7 +56,7 @@ function showClearButton(commentId, selectedButton, stereotypeAction){
 
     if($(window).width() < 900){
         clearElement = icon;
-    } 
+    }
     clearElement.removeClass('hide');
 
     icon.attr('class', iconClass + selectedButton);

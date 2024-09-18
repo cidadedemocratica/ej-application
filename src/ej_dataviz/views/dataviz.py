@@ -1,4 +1,3 @@
-from collections import defaultdict
 import datetime
 from functools import lru_cache
 from logging import getLogger
@@ -38,7 +37,7 @@ from ej_dataviz.utils import (
     export_data,
     format_echarts_option,
     get_cluster_or_404,
-    get_dashboard_biggest_cluster,
+    get_conversation_biggest_cluster,
     get_stop_words,
     get_user_data,
     vote_data_common,
@@ -93,12 +92,9 @@ def index(request, conversation_id, **kwargs):
     check_promoted(conversation, request)
     can_view_detail = request.user.has_perm("ej.can_view_report_detail", conversation)
     statistics = conversation.statistics()
-    clusterization = Clusterization.objects.filter(conversation=conversation)
     host = get_host_with_schema(request)
     names = getattr(settings, "EJ_PROFILE_FIELD_NAMES", {})
-    biggest_cluster_data = get_dashboard_biggest_cluster(
-        request, conversation, clusterization
-    )
+    biggest_cluster_data = get_conversation_biggest_cluster(request, conversation)
 
     context = {
         "conversation": conversation,
@@ -194,7 +190,7 @@ def scatter_group(request, conversation_id, groupby, **kwargs):
         votes__comment__conversation=conversation
     ).values_list("id", param)
 
-    data = defaultdict(list)
+    data = defaultdict(list)  # noqa: F821
     for user, value in data_pairs:
         data[value].append(user)
 

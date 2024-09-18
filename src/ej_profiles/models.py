@@ -1,7 +1,6 @@
 import hashlib
 import logging
 
-from boogie.fields import EnumField
 from constance import config
 from django.apps import apps
 from django.conf import settings
@@ -32,16 +31,24 @@ class Profile(models.Model):
     """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    race = EnumField(Race, _("Race"), default=Race.NOT_FILLED)
+    race = models.IntegerField(
+        choices=Race.choices, default=Race.NOT_FILLED, verbose_name=_("Race")
+    )
     ethnicity = models.CharField(_("Ethnicity"), blank=True, max_length=50)
-    ethnicity_choices = EnumField(Ethnicity, _("Ethnicity"), default=Ethnicity.NOT_FILLED)
+    ethnicity_choices = models.IntegerField(
+        choices=Ethnicity.choices, default=Ethnicity.NOT_FILLED
+    )
     education = models.CharField(_("Education"), blank=True, max_length=140)
-    gender = EnumField(Gender, _("Gender identity"), default=Gender.NOT_FILLED)
+    gender = models.IntegerField(
+        choices=Gender.choices,
+        default=Gender.NOT_FILLED,
+        verbose_name=("Gender identity"),
+    )
     gender_other = models.CharField(_("User provided gender"), max_length=50, blank=True)
     birth_date = models.DateField(_("Birth Date"), null=True, blank=True)
-    age_range = EnumField(AgeRange, _("Age range"), default=AgeRange.NOT_FILLED)
+    age_range = models.IntegerField(choices=AgeRange.choices, default=AgeRange.NOT_FILLED)
     country = models.CharField(_("Country"), blank=True, max_length=50)
-    region = EnumField(Region, _("Region"), default=Region.NOT_FILLED)
+    region = models.IntegerField(choices=Region.choices, default=Region.NOT_FILLED)
     state = models.CharField(_("State"), blank=True, max_length=3)
     city = models.CharField(_("City"), blank=True, max_length=140)
     biography = models.TextField(_("Biography"), blank=True)
@@ -82,7 +89,7 @@ class Profile(models.Model):
     @property
     def gender_description(self):
         if self.gender != Gender.NOT_FILLED:
-            return self.gender.description
+            return self.gender.label
         return self.gender_other
 
     @property

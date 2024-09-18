@@ -185,7 +185,7 @@ FIELD_DATA = {
         "name": FIELD_NAMES.get("gender", _("Gender")),
         "visual_map": {
             **PIECEWISE_OPTIONS,
-            "categories": [x.description for x in Gender if x != 0],
+            "categories": [choice.label for choice in Gender if choice.value != 0],
             "inRange": {"color": COLORS[: len(list(Gender))]},
         },
         "transform": lambda col: col.apply(field_descriptor(Gender)),
@@ -195,7 +195,7 @@ FIELD_DATA = {
         "name": FIELD_NAMES.get("race", _("Race")),
         "visual_map": {
             **PIECEWISE_OPTIONS,
-            "categories": [x.description for x in Race if x != 0],
+            "categories": [choice.label for choice in Race if choice.value != 0],
             "inRange": {"color": COLORS[: len(list(Race))]},
         },
         "transform": lambda col: col.apply(field_descriptor(Race)),

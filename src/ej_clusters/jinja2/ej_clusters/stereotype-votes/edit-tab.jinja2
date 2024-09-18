@@ -7,8 +7,8 @@
         <div class="manage-stereotypes__container">
             <div class="manage-stereotypes__container-vote-section">
                 <div class="manage-stereotypes__container-header">
-                    <div id="edit-stereotype-container" 
-                        hx-trigger="load" 
+                    <div id="edit-stereotype-container"
+                        hx-trigger="load"
                         hx-get="{{ url('stereotypes:edit', **{'pk': stereotype.id}) }}"
                         hx-swap="innerHTML"
                         hx-target="#edit-stereotype-container">
@@ -18,13 +18,13 @@
                         {{_("Select how the persona votes in this conversation.")}}
                     </p>
                 </div>
-                <div class="stereotype-cards votes-container" id="edit-stereotype-votes-container" 
-                    hx-trigger="load" 
+                <div class="stereotype-cards votes-container" id="edit-stereotype-votes-container"
+                    hx-trigger="load"
                     hx-get="{{ url('boards:stereotype-votes-manage',  pk=stereotype.id, **conversation.get_url_kwargs()) }}"
                     hx-swap="innerHTML"
                     hx-target="#edit-stereotype-votes-container">
                 </div>
-                {% include 'ej_clusters/stereotype-votes/edit-stereotype-buttons.jinja2' %}            
+                {% include 'ej_clusters/stereotype-votes/edit-stereotype-buttons.jinja2' %}
             </div>
         </div>
         {% include 'ej_clusters/includes/delete-confimation-modal.jinja2' %}
