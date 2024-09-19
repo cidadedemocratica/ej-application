@@ -7,6 +7,9 @@ _ethnicity_enums = getattr(settings, "EJ_PROFILE_ETHNICITY_CHOICES", None)
 _race_enums = getattr(settings, "EJ_PROFILE_RACE_CHOICES", None)
 _gender_enums = getattr(settings, "EJ_PROFILE_GENDER_CHOICES", None)
 _not_filed = getattr(settings, "EJ_NOT_FILLED_MARK", "---------")
+_refused_to_answer = getattr(
+    settings, "EJ_REFUSED_TO_ANSWER_MARK", _("refused to answer")
+)
 _region_enums = getattr(settings, "EJ_PROFILE_REGION_CHOICES", None)
 _age_enums = getattr(settings, "EJ_PROFILE_AGE_CHOICES", None)
 
@@ -17,6 +20,7 @@ _to_thunks = lambda lst: ((lambda: k, lambda: v) for k, v in lst)
 
 class Ethnicity(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
+    REFUSED = 7, _refused_to_answer
 
     if _ethnicity_enums is None:
         INDIGENOUS = 1, _("Indigenous")
@@ -24,7 +28,7 @@ class Ethnicity(models.IntegerChoices):
         BROWN = 3, _("Brown")
         WHITE = 4, _("White")
         YELLOW = 5, _("Yellow")
-        PREFER_NOT_TO_SAY = 6, _("Prefer not to say")
+        OTHER = 6, _("Other")
     else:
         for _k, _v in _to_thunks(_ethnicity_enums.items()):
             locals()[_k()] = _v()
@@ -32,6 +36,7 @@ class Ethnicity(models.IntegerChoices):
 
 class Race(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
+    REFUSED = 7, _refused_to_answer
 
     def __str__(self):
         return "Race"
@@ -50,6 +55,7 @@ class Race(models.IntegerChoices):
 
 class Region(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
+    REFUSED = 6, _refused_to_answer
 
     if _region_enums is None:
         NORTH = 1, _("North")
@@ -64,12 +70,13 @@ class Region(models.IntegerChoices):
 
 class Gender(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
+    REFUSED = 5, _refused_to_answer
 
     if _gender_enums is None:
         FEMALE = 1, _("Female")
         MALE = 2, _("Male")
         NO_BINARY = 3, _("Non-binary")
-        OTHER = 20, _("Other")
+        OTHER = 4, _("Other")
     else:
         for _k, _v in _to_thunks(_gender_enums.items()):
             locals()[_k()] = _v()
@@ -77,6 +84,7 @@ class Gender(models.IntegerChoices):
 
 class AgeRange(models.IntegerChoices):
     NOT_FILLED = 0, _not_filed
+    REFUSED = 7, _refused_to_answer
 
     if _age_enums is None:
         RANGE_1 = 1, _("Less than 17 years")

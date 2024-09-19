@@ -5,7 +5,6 @@ import ej_clusters.enums
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("ej_clusters", "0003_barbara_remove_clusterization_counters"),
     ]

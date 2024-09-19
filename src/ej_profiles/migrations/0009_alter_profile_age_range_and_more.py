@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("ej_profiles", "0008_profile_age_range_profile_ethnicity_choices"),
     ]
@@ -16,6 +15,7 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (0, "---------"),
+                    (7, "refused to answer"),
                     (1, "Less than 17 years"),
                     (2, "Between 17-20 years"),
                     (3, "Between 21-29 years"),
@@ -32,12 +32,13 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (0, "---------"),
+                    (7, "refused to answer"),
                     (1, "Indigenous"),
                     (2, "Black"),
                     (3, "Brown"),
                     (4, "White"),
                     (5, "Yellow"),
-                    (6, "Prefer not to say"),
+                    (6, "Other"),
                 ],
                 default=0,
             ),
@@ -48,10 +49,11 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (0, "---------"),
+                    (5, "refused to answer"),
                     (1, "Female"),
                     (2, "Male"),
                     (3, "Non-binary"),
-                    (20, "Other"),
+                    (4, "Other"),
                 ],
                 default=0,
                 verbose_name="Gender identity",
@@ -63,6 +65,7 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (0, "---------"),
+                    (7, "refused to answer"),
                     (1, "Black"),
                     (2, "Brown"),
                     (3, "White"),
@@ -80,6 +83,7 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (0, "---------"),
+                    (6, "refused to answer"),
                     (1, "North"),
                     (2, "Northeast"),
                     (3, "Midwest"),
