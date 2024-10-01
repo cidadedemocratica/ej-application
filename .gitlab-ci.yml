@@ -15,7 +15,7 @@ black:
         name: python:3.9.19-slim-bookworm
         pull_policy: if-not-present
     before_script:
-        - /bin/bash -c "pip install black==22.3.0"
+        - /bin/bash -c "pip install black==22.12.0"
     script:
         - /bin/bash -c "black --check ."
     tags:

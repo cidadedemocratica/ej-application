@@ -6,6 +6,7 @@ from django.core.exceptions import FieldDoesNotExist
 from boogie.models.wordcloud import WordCloudQuerySet
 from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
+from ej_conversations.enums import Choice
 
 from .comment import Comment
 from ..mixins import ConversationMixin
@@ -97,7 +98,7 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
                 List of probabilities for (disagree, skip, agree). If normalized
                 for less than 1, some users will not even cast any vote.
         """
-        from .vote import Vote, normalize_choice
+        from .vote import Vote
 
         if not users:
             users = get_user_model().objects.filter(is_active=True)
@@ -110,7 +111,7 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
 
         # Prepare to sample votes
         probs = [p / vote_prob for p in probs]
-        choices = list(map(normalize_choice, ["disagree", "skip", "agree"]))
+        choices = list(map(Choice.normalize, ["disagree", "skip", "agree"]))
         comments = self.comments()
         votes = set(map(tuple, comments.votes().values_list("comment_id", "author_id")))
 

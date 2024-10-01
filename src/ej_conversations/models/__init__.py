@@ -5,7 +5,7 @@ from .comment_queryset import CommentQuerySet
 from .conversation import Conversation, ConversationTag
 from ej_conversations.models.favorites import FavoriteConversation
 from .conversation_queryset import ConversationQuerySet
-from .vote import Vote, normalize_choice
+from .vote import Vote
 from .vote_queryset import VoteQuerySet
 from ..enums import Choice
 from ej_tools.models import RasaConversation, ConversationMautic

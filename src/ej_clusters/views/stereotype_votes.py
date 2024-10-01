@@ -114,7 +114,6 @@ class StereotypeVotesManageView(CreateView):
             stereotype=self.stereotype,
             queryset=self.stereotype.votes.all(),
         )
-
         for form in voted_formset:
             if form.is_valid():
                 form.save(form["choice"].value(), form["comment"].value())

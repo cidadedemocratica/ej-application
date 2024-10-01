@@ -6,21 +6,21 @@
                 onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
                     class="is-clear agree-{{initial_vote_value}}"
                 name="create"
-                value="agree">
+                value="1">
             <i class="fa fa-check"></i> {{ _('Agree') }}
         </button>
         <button type="button"
                 onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
                 class="is-clear skip-{{initial_vote_value}}"
                 name="create"
-                value="skip">
+                value="0">
             <i class="far fa-meh"></i> {{ _('Neutral') }}
         </button>
         <button type="button"
                 onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
                 class="is-clear disagree-{{initial_vote_value}}"
                 name="create"
-                value="disagree">
+                value="-1">
             <i class="fa fa-times"></i> {{ _('Disagree') }}
         </button>
         <button class="stereotype-cards__vote-buttons__delete {% if not widget.value.0 %}hide{% endif %}"
@@ -42,9 +42,9 @@
 
     <select name="{{ widget.name }}" id="select-{{stereotype_action}}-{{comment_id}}" class="hide" {% for name, value in widget.attrs.items() %}{% if value is not sameas False %} {{ name }}{% if value is not sameas True %}="{{ value }}"{% endif %}{% endif %}{% endfor %}>
         <option value="" {% if widget.value is sameas "" %} selected {% endif %}>--------</option>
-        <option value="agree" {% if widget.value is sameas "agree" %} selected {% endif %}>agree</option>
-        <option value="disagree" {% if widget.value is sameas "disagree" %} selected {% endif %}>disagree</option>
-        <option value="skip" {% if widget.value is sameas "skip" %} selected {% endif %}>skip</option>
+        <option value="1" {% if widget.value is sameas "agree" %} selected {% endif %}>agree</option>
+        <option value="-1" {% if widget.value is sameas "disagree" %} selected {% endif %}>disagree</option>
+        <option value="0" {% if widget.value is sameas "skip" %} selected {% endif %}>skip</option>
     </select>
 </div>
 
@@ -63,12 +63,12 @@ function showClearButton(commentId, selectedButton, stereotypeAction){
 }
 
 function updateButtonColors(value, commentId, stereotypeAction){
-    const selectedButton = getSelectedButton(value);
+    const selectedButton = value;
     const choiceButtonCount = 3;
     const divElement = $(`#vote-buttons-${stereotypeAction}-${commentId}`);
 
     for (let i = 0; i < choiceButtonCount; i++) {
-        updateButtonColor(divElement.children().eq(i), selectedButton);
+        updateButtonColor(divElement.children().eq(i), getVoteOptionLabel(selectedButton));
     }
 
     const select = $(`#select-${stereotypeAction}-${commentId}`);
@@ -78,7 +78,7 @@ function updateButtonColors(value, commentId, stereotypeAction){
 }
 
 function updateButtonColor(button, selectedButton){
-    button.attr('class', 'is-clear ' + button.val() + '-' + selectedButton);
+    button.attr('class', 'is-clear ' + selectedButton + '-' + button.val());
 }
 
 function clearVote(commentId, stereotypeAction){
@@ -98,13 +98,12 @@ function updateDeleteButtonPosition(divElement, selectedButton){
     }
 }
 
-function getSelectedButton(value){
-    const buttonValues = {
-        agree: "1",
-        disagree: "-1",
-        skip: "0"
+function getVoteOptionLabel(value){
+    const labels = {
+        "1": "agree",
+        "-1": "disagree",
+        "0": "skip"
     };
-    const selectedButtonValue = value.split("-")[0];
-    return buttonValues[selectedButtonValue];
+    return labels[value];
 }
 </script>

@@ -10,7 +10,7 @@ from model_utils.choices import Choices
 from model_utils.models import TimeStampedModel, StatusModel
 
 from .comment_queryset import CommentQuerySet, log
-from .vote import Vote, normalize_choice
+from .vote import Vote
 from ..enums import Choice, RejectionReason
 from ..signals import vote_cast
 from ..utils import votes_counter
@@ -132,7 +132,8 @@ class Comment(StatusModel, TimeStampedModel):
 
         >>> comment.vote(user, 'agree')                         # doctest: +SKIP
         """
-        choice = normalize_choice(choice)
+
+        choice = Choice.normalize(choice)
 
         if self.is_pending:
             raise (ValidationError(_("Cannot vote on pending comment")))
