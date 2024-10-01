@@ -43,7 +43,6 @@ class InstalledAppsConf(Base, EjOptions):
         "anymail",
         "ckeditor",
         "drf_spectacular",
-        "jazzmin",
         "django.contrib.admin",
     ]
 

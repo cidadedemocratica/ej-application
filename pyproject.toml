@@ -7,7 +7,7 @@ license = "AGPL-3.0"
 
 [tool.poetry.dependencies]
 python = ">= 3.9.19, <3.10"
-django = "4.2.0"
+django = "4.1.13"
 django-constance = {version = "^2.3", extras = ["database"]}
 django-allauth = "0.59.0"
 django-taggit = "3.0.0"
@@ -51,7 +51,6 @@ pillow = "^10.3.0"
 numpy = "^1.26.4"
 libsass = "^0.23.0"
 drf-spectacular = "^0.27.2"
-django-jazzmin = "^3.0.0"
 
 [tool.poetry.dev-dependencies]
 bs4 = "^0.0.1"
