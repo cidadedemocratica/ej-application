@@ -1,3 +1,4 @@
+from ej_conversations.enums import Choice
 import pytest
 from boogie.testing.pytest import UrlTester
 from django.test import Client
@@ -73,7 +74,7 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         return conversation
 
     def build_formset_post_information(self, comments, stereotype):
-        choices = ["agree", "disagree", "skip"]
+        choices = Choice.values
         comments_dict = {}
         for i, comment in enumerate(comments):
             comments_dict[f"create-{i}-choice"] = [choices[i]]
@@ -261,7 +262,7 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         )
         client.post(path, data)
 
-        choices = [1, -1, 0]
+        choices = Choice.values
         for i, comment in enumerate(comments):
             assert StereotypeVote.objects.filter(
                 comment=comment, choice=choices[i]

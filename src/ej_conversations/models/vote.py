@@ -71,22 +71,6 @@ class Vote(models.Model):
             raise ValidationError(msg)
 
 
-#
-# UTILITY FUNCTIONS
-#
-def normalize_choice(value):
-    """
-    Normalize numeric and string values to the correct vote value that
-    should be stored in the database.
-    """
-    if value in VOTE_NAMES:
-        return value
-    try:
-        return VOTE_VALUES[value]
-    except KeyError:
-        raise VOTING_ERROR(value)
-
-
 def truncate(st, size):
     if len(st) > size - 2:
         return st[: size - 3] + "..."

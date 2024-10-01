@@ -58,7 +58,7 @@ class TestStereotypeVoteForm(ConversationSetup):
         comment = conversation_with_comments.comments.first()
         stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=base_user)
         form = StereotypeVoteForm(
-            data={"comment": comment.id, "choice": "agree"},
+            data={"comment": comment.id, "choice": Choice.AGREE},
             stereotype=stereotype,
             comments_queryset=conversation_with_comments.comments.all(),
             initial={"comment": comment},
@@ -71,7 +71,7 @@ class TestStereotypeVoteForm(ConversationSetup):
     def test_not_sending_comment_queryset(self, conversation_with_comments):
         comment = conversation_with_comments.comments.first()
         form = StereotypeVoteForm(
-            data={"comment": comment.id, "choice": "disagree"},
+            data={"comment": comment.id, "choice": Choice.DISAGREE},
             initial={"comment": comment},
         )
         with pytest.raises(AttributeError):

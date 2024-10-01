@@ -3,9 +3,10 @@ from django.utils.translation import gettext_lazy as _
 from django.template.loader import get_template
 
 from ej.forms import EjModelForm
-from ej_clusters.enums import FORM_CHOICE_MAP, StereotypeVoteChoices
+from ej_clusters.enums import FORM_CHOICE_MAP
 from ej_clusters.models.stereotype_vote import StereotypeVote
-from ej_conversations.models import Comment, normalize_choice
+from ej_conversations.enums import Choice
+from ej_conversations.models import Comment
 from .models import Stereotype, Cluster
 
 
@@ -112,7 +113,7 @@ class StereotypeVoteForm(forms.ModelForm):
 
         self.fields["choice"] = forms.ChoiceField(
             required=False,
-            choices=StereotypeVoteChoices.choices,
+            choices=Choice.choices,
             widget=SelectWidget(
                 stereotype_action, comment=comment, initial_vote_value=initial_vote_value
             ),
@@ -124,7 +125,7 @@ class StereotypeVoteForm(forms.ModelForm):
     def prepare_instance(self, choice):
         instance = super(StereotypeVoteForm, self).save(commit=False)
         instance.author = self.stereotype
-        instance.choice = self.clean_choice(choice)
+        instance.choice = Choice.normalize(choice)
         return instance
 
     def save(self, choice, comment_id=None, commit=True):
@@ -141,11 +142,6 @@ class StereotypeVoteForm(forms.ModelForm):
             )
             instance.delete()
         return instance
-
-    def clean_choice(self, choice=None):
-        if choice:
-            return normalize_choice(choice)
-        return None
 
 
 class StereotypeVoteFormsetFactory:

@@ -142,3 +142,33 @@ class TestVote:
         mk_comment(participant, "bla", status="approved", check_limits=False)
         n_comments = participant.comments.filter(conversation=conversation).count()
         assert not conversation.user_can_add_comment(participant, n_comments)
+
+    def test_normalize_vote_using_labels(self):
+        choice_agree = Choice.normalize("agree")
+        choice_skip = Choice.normalize("skip")
+        choice_disagree = Choice.normalize("disagree")
+        assert choice_agree == Choice.AGREE
+        assert choice_skip == Choice.SKIP
+        assert choice_disagree == Choice.DISAGREE
+
+        with pytest.raises(KeyError):
+            Choice.normalize("xpto")
+
+    def test_normalize_vote_using_numbers(self):
+        choice_agree = Choice.normalize("1")
+        choice_skip = Choice.normalize("0")
+        choice_disagree = Choice.normalize("-1")
+        assert choice_agree == Choice.AGREE
+        assert choice_skip == Choice.SKIP
+        assert choice_disagree == Choice.DISAGREE
+
+        with pytest.raises(ValueError):
+            Choice.normalize(42)
+
+    def test_normalize_vote_using_choices(self):
+        choice_agree = Choice.normalize(Choice.AGREE)
+        choice_skip = Choice.normalize(Choice.SKIP)
+        choice_disagree = Choice.normalize(Choice.DISAGREE)
+        assert choice_agree == Choice.AGREE
+        assert choice_skip == Choice.SKIP
+        assert choice_disagree == Choice.DISAGREE
