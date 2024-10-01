@@ -31,11 +31,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
         serializer.save()
+        return Response(serializer.data)
 
     @action(detail=False, methods=["put"], permission_classes=[IsAuthenticated])
     def update_profile(self, request, *args, **kwargs):
