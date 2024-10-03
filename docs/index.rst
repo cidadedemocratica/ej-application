@@ -46,6 +46,7 @@ tamanhos à mapear as bolhas que compõe seu público-alvo e, a partir disso, tr
    user-guides/pt-br/conversation-access.rst
    user-guides/pt-br/voting
    user-guides/pt-br/analysis
+   user-guides/pt-br/manage-comments
    user-guides/pt-br/tools
    user-guides/pt-br/user-boards
    user-guides/pt-br/user-environment
