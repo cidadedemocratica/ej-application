@@ -16,4 +16,8 @@ def create_board_social(sender, user, request, **kwargs):
 
 @receiver(post_save, sender=User, dispatch_uid="create_user_profile")
 def create_user_profile(sender, instance: User, **kwargs):
-    instance.get_profile()
+    try:
+        getattr(instance, "phone_number")
+        instance.get_profile(instance.phone_number)
+    except AttributeError:
+        instance.get_profile()

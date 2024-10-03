@@ -14,6 +14,7 @@ class UsersSerializer(serializers.ModelSerializer):
     )
     secret_id = serializers.CharField(required=False, max_length=200)
     has_completed_registration = serializers.BooleanField(required=False, default=True)
+    phone_number = serializers.CharField(required=False, max_length=200)
 
     class Meta:
         model = User
@@ -25,6 +26,7 @@ class UsersSerializer(serializers.ModelSerializer):
             "password_confirm",
             "secret_id",
             "has_completed_registration",
+            "phone_number",
         ]
 
     def validate(self, data):
@@ -50,6 +52,14 @@ class UsersSerializer(serializers.ModelSerializer):
             has_completed_registration=validated_data["has_completed_registration"],
         )
         user.set_password(validated_data["password"])
+
+        # monkeypatching the user object to retrieve the phone_number during Profile creation.
+        # In cases where the phone_number is available during user registration, we can send
+        # it along other user fields.
+        # The User profile is automatically created in create_user_profile method.
+        if "phone_number" in validated_data:
+            user.phone_number = validated_data["phone_number"]
+
         user.save()
         return user
 
