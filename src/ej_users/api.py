@@ -4,8 +4,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
-
-from ej_profiles.models import Profile
 from ej_users.serializers import UserAuthSerializer, UsersSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -126,17 +124,8 @@ class UsersViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=400)
 
         user = serializer.save()
-        self.check_profile(user, request)
         tokens = EJTokens(user)
         return Response(tokens.user_data, status=201)
-
-    def check_profile(self, user, request):
-        phone_number = request.data.get("phone_number", None)
-        profile, _ = Profile.objects.get_or_create(user=user)
-
-        if phone_number:
-            profile.phone_number = phone_number
-            profile.save()
 
     def get_permissions(self):
         try:
