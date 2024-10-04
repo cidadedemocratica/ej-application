@@ -57,7 +57,7 @@ class Profile(models.Model):
     profile_photo = models.ImageField(
         _("Profile Photo"), blank=True, null=True, upload_to="profile_images"
     )
-    phone_number = models.CharField(_("Phone number"), blank=True, max_length=11)
+    phone_number = models.CharField(_("Phone number"), blank=True, max_length=16)
     completed_tour = models.BooleanField(default=False, blank=True, null=True)
     filtered_home_tag = models.BooleanField(default=False, blank=True, null=True)
 
@@ -333,15 +333,15 @@ def gravatar_fallback(id_):
     return "https://gravatar.com/avatar/{}?s=40&d=mm".format(digest)
 
 
-def get_profile(user):
+def get_profile(user, phone_number=""):
     """
     Return profile instance for user. Create profile if it does not exist.
     """
     try:
         return user.profile
     except Profile.DoesNotExist:
-        profile = Profile.objects.create(user=user)
-        log.info("profile successfully created")
+        profile = Profile.objects.create(user=user, phone_number=phone_number)
+        log.info(f"{profile.user.email} profile successfully created")
         return profile
 
 
