@@ -55,7 +55,9 @@ class StereotypeVotesView(ListView):
 
         for form in stereotype_votes_formset:
             if form.is_valid():
-                form.save(form["choice"].value(), form["comment"].value())
+                choice, comment = [form["choice"].value(), form["comment"].value()]
+                if choice and comment:
+                    form.save(choice, comment)
 
         context["stereotype_votes_formset"] = stereotype_votes_formset
         return render(request, self.template_name, context)

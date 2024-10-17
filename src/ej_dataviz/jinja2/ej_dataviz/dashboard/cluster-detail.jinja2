@@ -54,14 +54,15 @@
             </div>
             <div class="cluster-modal__comments">
                 {% set agree = cluster_relevant_agreed_comments %}
-                {{ expander(_('Relevant positive comments'), agree, 'agree') }}
+                {{ expander(_('Most agreed comments'), agree, 'agree') }}
                 {{ show_comments(agree, 'agree', _('No positive comments in this cluster')) }}
             </div>
             <div class="cluster-modal__comments">
                 {% set disagree =  cluster_relevant_disagred_comments %}
-                {{ expander(_('Relevant negative comments'), disagree, 'disagree') }}
+                {{ expander(_('Most disagreed comments'), disagree, 'disagree') }}
                 {{ show_comments(disagree, 'disagree', _('No relevant negative comments in this cluster')) }}
             </div>
+            <a class="text-accent is-primary button" href={{url('dataviz:comments', conversation_id=cluster.conversation.id, slug=cluster.conversation.slug)}}>{{_("Comments report")}}</a>
         {% endif %}
     </div>
 

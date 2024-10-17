@@ -4,10 +4,10 @@ from logging import getLogger
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
@@ -21,14 +21,11 @@ from ej_clusters.models.cluster import Cluster
 from ej_clusters.models.clusterization import Clusterization
 from ej_conversations.models import Conversation
 from ej_conversations.utils import check_promoted
-from ej_dataviz.models import ToolsLinksHelper
-from ej_tools.utils import get_host_with_schema
-
 from ej_dataviz.constants import (
     FIELD_DATA,
-    VALID_GROUP_BY,
-    GROUP_NAMES,
     GROUP_DESCRIPTIONS,
+    GROUP_NAMES,
+    VALID_GROUP_BY,
 )
 from ej_dataviz.utils import (
     clusters,
@@ -69,47 +66,41 @@ class ClusterDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         cluster = self.get_object()
-        cluster_relevant_agreed_comments = cache.get_or_set(
-            f"cluster_{cluster.id}_relevant_agreed_comments",
-            cluster.separate_comments()[0],
-        )
-        cluster_relevant_disagred_comments = cache.get_or_set(
-            f"cluster_{cluster.id}_relevant_disagred_comments",
-            cluster.separate_comments()[1],
-        )
+        [agreed_comments, disagred_comments] = cluster.separate_comments()
         conversation = cluster.conversation
         return {
             "cluster": cluster,
-            "cluster_relevant_agreed_comments": cluster_relevant_agreed_comments,
-            "cluster_relevant_disagred_comments": cluster_relevant_disagred_comments,
+            "cluster_relevant_agreed_comments": agreed_comments,
+            "cluster_relevant_disagred_comments": disagred_comments,
             "conversation": conversation,
         }
 
 
-@can_access_dataviz
-def index(request, conversation_id, **kwargs):
-    conversation = Conversation.objects.get(id=conversation_id)
-    check_promoted(conversation, request)
-    can_view_detail = request.user.has_perm("ej.can_view_report_detail", conversation)
-    statistics = conversation.statistics()
-    host = get_host_with_schema(request)
-    names = getattr(settings, "EJ_PROFILE_FIELD_NAMES", {})
-    biggest_cluster_data = get_conversation_biggest_cluster(request, conversation)
+@method_decorator([can_access_dataviz], name="dispatch")
+class ConversationDashboardView(DetailView):
+    model = Conversation
+    template_name = "ej_dataviz/dashboard.jinja2"
 
-    context = {
-        "conversation": conversation,
-        "can_view_detail": can_view_detail,
-        "statistics": statistics,
-        "bot": ToolsLinksHelper.get_bot_link(host),
-        "json_data": clusters(request, conversation),
-        "biggest_cluster_data": biggest_cluster_data,
-        "gender_field": names.get("gender", _("Gender")),
-        "race_field": names.get("race", _("Race")),
-        "pca_link": _("https://en.wikipedia.org/wiki/Principal_component_analysis"),
-        "current_page": "dashboard",
-    }
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
 
-    return render(request, "ej_dataviz/dashboard.jinja2", context=context)
+    def get_context_data(self, **kwargs):
+        conversation = self.get_object()
+        statistics = conversation.statistics()
+        names = getattr(settings, "EJ_PROFILE_FIELD_NAMES", {})
+        biggest_cluster_data = get_conversation_biggest_cluster(
+            self.request, conversation
+        )
+        return {
+            "conversation": conversation,
+            "statistics": statistics,
+            "json_data": clusters(self.request, conversation),
+            "biggest_cluster_data": biggest_cluster_data,
+            "gender_field": names.get("gender", _("Gender")),
+            "race_field": names.get("race", _("Race")),
+            "pca_link": _("https://en.wikipedia.org/wiki/Principal_component_analysis"),
+            "current_page": "dashboard",
+        }
 
 
 @can_access_dataviz
@@ -128,7 +119,6 @@ def scatter(request, conversation_id, **kwargs):
 
 @can_access_dataviz
 def scatter_pca_json(request, conversation_id, **kwargs):
-
     conversation = Conversation.objects.get(id=conversation_id)
     check_promoted(conversation, request)
     kwargs = {}
@@ -217,7 +207,6 @@ def words(request, conversation_id, **kwargs):
 
 @can_access_dataviz
 def votes_over_time(request, conversation_id, **kwargs):
-
     conversation = Conversation.objects.get(pk=conversation_id)
     start_date = request.GET.get("startDate")
     end_date = request.GET.get("endDate")
