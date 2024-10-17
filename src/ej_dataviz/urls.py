@@ -56,7 +56,7 @@ dataviz_urlpatterns = [
     ),
     path(
         conversation_url + "dashboard/",
-        dataviz.index,
+        dataviz.ConversationDashboardView.as_view(),
         name="dashboard",
     ),
     path(

@@ -48,12 +48,13 @@
             color: $color-black-alternative;
             font-weight: 500;
         }
-        
+
         &--sm-height {
             @extend .modal__container;
             max-height: 80vh;
             max-width: 50rem;
             width: 90%;
+            overflow: scroll;
 
             @media (max-width: 414px) {
                 & {
