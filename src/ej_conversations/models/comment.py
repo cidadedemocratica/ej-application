@@ -212,12 +212,6 @@ class Comment(StatusModel, TimeStampedModel):
             )
         return stats
 
-    def comment_url(self):
-        return reverse(
-            "comments:detail",
-            kwargs={"comment_id": self.id, "hex_hash": self.comment_url_hash()},
-        )
-
     def comment_url_hash(self):
         """
         Compute the URL hash for the given comment.

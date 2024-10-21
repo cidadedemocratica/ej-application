@@ -34,11 +34,6 @@ class TestRoutes(UrlTester, ConversationRecipes):
         except Exception:
             pass
 
-    def test_can_view_user_url(self, user_client, comment_db):
-        url = comment_db.comment_url()
-        response = user_client.get(url)
-        assert response.status_code == 200
-
     def test_add_favorite_board(self, admin_client, root_db):
         user = User.objects.create_user("user1@email.br", "password")
         board_1 = Board.objects.create(slug="board1", owner=user, description="board")
