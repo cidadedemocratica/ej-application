@@ -225,12 +225,6 @@ class Profile(models.Model):
             "comments": given_votes,
         }
 
-    def badges(self):
-        """
-        Return all profile badges.
-        """
-        return self.user.badges_earned.all()
-
     def comments(self):
         """
         Return all profile comments.
