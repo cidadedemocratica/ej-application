@@ -1,6 +1,3 @@
-from django.utils.translation import gettext_lazy as _
-
-
 from ej.roles import with_template
 from .. import models
 from ..enums import RejectionReason

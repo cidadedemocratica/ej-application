@@ -8,7 +8,6 @@ from ej_conversations.models import Vote
 from ej_conversations.models.util import statistics, vote_count
 from ej_conversations.models.vote import VoteChannels
 from ej_conversations.mommy_recipes import ConversationRecipes
-from ej_conversations.mommy_recipes import ConversationRecipes
 
 ConversationRecipes.update_globals(globals())
 
