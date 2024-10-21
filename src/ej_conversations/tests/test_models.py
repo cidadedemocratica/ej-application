@@ -1,10 +1,14 @@
+from constance import config
 from django.core.exceptions import ValidationError
+import pytest
+
 from ej_conversations import create_conversation
 from ej_conversations.enums import Choice, RejectionReason
 from ej_conversations.models import Vote
+from ej_conversations.models.util import statistics, vote_count
+from ej_conversations.models.vote import VoteChannels
 from ej_conversations.mommy_recipes import ConversationRecipes
-import pytest
-from constance import config
+from ej_conversations.mommy_recipes import ConversationRecipes
 
 ConversationRecipes.update_globals(globals())
 
@@ -172,3 +176,214 @@ class TestVote:
         assert choice_agree == Choice.AGREE
         assert choice_skip == Choice.SKIP
         assert choice_disagree == Choice.DISAGREE
+
+
+class TestConversartionStatistics(ConversationRecipes):
+    def test_vote_count_of_a_conversation(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        vote_count_result = vote_count(conversation)
+        assert vote_count_result == 0
+
+        user = mk_user(email="user@domain.com")
+        comment = conversation.create_comment(
+            user, "aa", status="approved", check_limits=False
+        )
+        comment.vote(user, "agree")
+        vote_count_result = vote_count(conversation)
+        assert vote_count_result == 1
+
+    def test_vote_count_agree(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        vote_count_result = vote_count(conversation, Choice.AGREE)
+        assert vote_count_result == 0
+
+        comment = conversation.create_comment(
+            user, "aa", status="approved", check_limits=False
+        )
+        comment.vote(user, "agree")
+        vote_count_result = vote_count(conversation, Choice.AGREE)
+        assert vote_count_result == 1
+
+        other = mk_user(email="other@domain.com")
+        comment = conversation.create_comment(
+            user, "ab", status="approved", check_limits=False
+        )
+        comment.vote(other, "disagree")
+        vote_count_result = vote_count(conversation, Choice.AGREE)
+        assert vote_count_result == 1
+
+    def test_vote_count_disagree(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        vote_count_result = vote_count(conversation, Choice.DISAGREE)
+        assert vote_count_result == 0
+
+        comment = conversation.create_comment(
+            user, "ac", status="approved", check_limits=False
+        )
+        comment.vote(user, "disagree")
+        vote_count_result = vote_count(conversation, Choice.DISAGREE)
+        assert vote_count_result == 1
+
+    def test_vote_count_skip(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        vote_count_result = vote_count(conversation, Choice.SKIP)
+        assert vote_count_result == 0
+
+        comment = conversation.create_comment(
+            user, "ad", status="approved", check_limits=False
+        )
+        comment.vote(user, "skip")
+        vote_count_result = vote_count(conversation, Choice.SKIP)
+        assert vote_count_result == 1
+
+    def test_statistics_return(self, db, mk_conversation):
+        conversation = mk_conversation()
+        statistics_result = statistics(conversation)
+
+        assert "votes" in statistics_result
+        assert "agree" in statistics_result["votes"]
+        assert "disagree" in statistics_result["votes"]
+        assert "skip" in statistics_result["votes"]
+        assert "total" in statistics_result["votes"]
+
+        assert "comments" in statistics_result
+        assert "approved" in statistics_result["comments"]
+        assert "rejected" in statistics_result["comments"]
+        assert "pending" in statistics_result["comments"]
+        assert "total" in statistics_result["comments"]
+
+        assert "participants" in statistics_result
+        assert "voters" in statistics_result["participants"]
+        assert "commenters" in statistics_result["participants"]
+
+        assert "channel_votes" in statistics_result
+        assert "webchat" in statistics_result["channel_votes"]
+        assert "telegram" in statistics_result["channel_votes"]
+        assert "whatsapp" in statistics_result["channel_votes"]
+        assert "opinion_component" in statistics_result["channel_votes"]
+        assert "unknown" in statistics_result["channel_votes"]
+        assert "ej" in statistics_result["channel_votes"]
+
+        assert "channel_participants" in statistics_result
+        assert "webchat" in statistics_result["channel_participants"]
+        assert "telegram" in statistics_result["channel_participants"]
+        assert "whatsapp" in statistics_result["channel_participants"]
+        assert "opinion_component" in statistics_result["channel_participants"]
+        assert "unknown" in statistics_result["channel_participants"]
+        assert "ej" in statistics_result["channel_participants"]
+
+        assert conversation._cached_statistics == statistics_result
+
+    def test_statistics_for_channel_votes(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user1 = mk_user(email="user1@domain.com")
+        user2 = mk_user(email="user2@domain.com")
+        user3 = mk_user(email="user3@domain.com")
+        comment = conversation.create_comment(
+            user1, "ad", status="approved", check_limits=False
+        )
+        comment2 = conversation.create_comment(
+            user1, "ad2", status="approved", check_limits=False
+        )
+        comment3 = conversation.create_comment(
+            user2, "ad3", status="approved", check_limits=False
+        )
+
+        vote = comment.vote(user1, Choice.AGREE)
+        vote.channel = VoteChannels.TELEGRAM
+        vote.save()
+
+        vote = comment.vote(user2, Choice.AGREE)
+        vote.channel = VoteChannels.WHATSAPP
+        vote.save()
+
+        vote = comment.vote(user3, Choice.AGREE)
+        vote.channel = VoteChannels.WHATSAPP
+        vote.save()
+
+        vote = comment2.vote(user1, Choice.AGREE)
+        vote.channel = VoteChannels.OPINION_COMPONENT
+        vote.save()
+
+        vote = comment2.vote(user2, Choice.AGREE)
+        vote.channel = VoteChannels.RASA_WEBCHAT
+        vote.save()
+
+        vote = comment2.vote(user3, Choice.AGREE)
+        vote.channel = VoteChannels.UNKNOWN
+        vote.save()
+
+        vote = comment3.vote(user3, Choice.AGREE)
+        vote.channel = VoteChannels.EJ
+        vote.save()
+
+        statistics = conversation.statistics()
+        assert statistics["channel_votes"]["telegram"] == 1
+        assert statistics["channel_votes"]["whatsapp"] == 2
+        assert statistics["channel_votes"]["opinion_component"] == 1
+        assert statistics["channel_votes"]["webchat"] == 1
+        assert statistics["channel_votes"]["unknown"] == 1
+        assert statistics["channel_votes"]["ej"] == 1
+
+    def test_statistics_for_channel_participants(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user1 = mk_user(email="user1@domain.com")
+        user2 = mk_user(email="user2@domain.com")
+        user3 = mk_user(email="user3@domain.com")
+
+        comment = conversation.create_comment(
+            user1, "ad", status="approved", check_limits=False
+        )
+        comment2 = conversation.create_comment(
+            user1, "ad2", status="approved", check_limits=False
+        )
+        comment3 = conversation.create_comment(
+            user2, "ad3", status="approved", check_limits=False
+        )
+
+        # 3 participantes pelo telegram
+        vote = comment.vote(user1, Choice.AGREE)
+        vote.channel = VoteChannels.TELEGRAM
+        vote.save()
+
+        vote = comment.vote(user2, Choice.AGREE)
+        vote.channel = VoteChannels.TELEGRAM
+        vote.save()
+
+        vote = comment.vote(user3, Choice.AGREE)
+        vote.channel = VoteChannels.TELEGRAM
+        vote.save()
+
+        vote = comment2.vote(user1, Choice.AGREE)
+        vote.channel = VoteChannels.TELEGRAM
+        vote.save()
+
+        vote = comment2.vote(user2, Choice.AGREE)
+        vote.channel = VoteChannels.OPINION_COMPONENT
+        vote.save()
+
+        vote = comment2.vote(user3, Choice.AGREE)
+        vote.channel = VoteChannels.UNKNOWN
+        vote.save()
+
+        vote = comment3.vote(user1, Choice.AGREE)
+        vote.channel = VoteChannels.RASA_WEBCHAT
+        vote.save()
+
+        vote = comment3.vote(user2, Choice.AGREE)
+        vote.channel = VoteChannels.WHATSAPP
+        vote.save()
+
+        vote = comment3.vote(user3, Choice.AGREE)
+        vote.channel = VoteChannels.OPINION_COMPONENT
+        vote.save()
+
+        statistics = conversation.statistics()
+        assert statistics["channel_participants"]["telegram"] == 3
+        assert statistics["channel_participants"]["whatsapp"] == 1
+        assert statistics["channel_participants"]["opinion_component"] == 2
+        assert statistics["channel_participants"]["webchat"] == 1
+        assert statistics["channel_participants"]["unknown"] == 1

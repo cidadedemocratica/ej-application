@@ -58,7 +58,7 @@ class ConstanceConf:
             ),
             "RETURN_USER_SKIPED_COMMENTS": (
                 self.RETURN_USER_SKIPED_COMMENTS,
-                "Set this variable to 'False' if you don't want the user voting again in comments he already skiped. You can edit this value in Django admin, in the Constance page.",
+                "Set this variable to 'False' if you don't want users to vote again on comments they already skipped.",
                 bool,
             ),
         }
