@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
 from model_utils.choices import Choices
 from model_utils.models import TimeStampedModel, StatusModel
 
