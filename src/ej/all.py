@@ -49,7 +49,9 @@ _enums = {ClusterStatus, Choice, RejectionReason, Race, Gender}
 #
 settings.ALLOWED_HOSTS.append("testserver")
 
-_first = lambda obj: deferred(lambda: obj.first())
+
+def first(obj):
+    return deferred(lambda: obj.first())
 
 
 def extract(obj):
@@ -57,14 +59,14 @@ def extract(obj):
 
 
 conversations = Conversation.objects
-conversation = _first(conversations)
+conversation = first(conversations)
 comments = Comment.objects
-comment = _first(Comment)
+comment = first(Comment)
 votes = Vote.objects
 favorite_conversations = FavoriteConversation.objects
-favorite_conversation = _first(FavoriteConversation)
+favorite_conversation = first(FavoriteConversation)
 conversation_tags = ConversationTag.objects
-conversation_tag = _first(ConversationTag)
+conversation_tag = first(ConversationTag)
 
 # User app
 if apps.is_installed("ej_users"):
@@ -80,7 +82,7 @@ if apps.is_installed("ej_profiles"):
     from ej_profiles.models import Profile  # noqa: E402
 
     profiles = Profile.objects
-    profile = _first(Profile)
+    profile = first(Profile)
 
 # Clusterization app
 if apps.is_installed("ej_clusters"):
@@ -92,13 +94,13 @@ if apps.is_installed("ej_clusters"):
     )  # noqa: E402
 
     clusterizations = Clusterization.objects
-    clusterization = _first(clusterizations)
+    clusterization = first(clusterizations)
     stereotypes = Stereotype.objects
-    stereotype = _first(stereotypes)
+    stereotype = first(stereotypes)
     clusters = Cluster.objects
-    cluster = _first(Cluster)
+    cluster = first(Cluster)
     stereotype_votes = StereotypeVote.objects
-    stereotype_vote = _first(StereotypeVote)
+    stereotype_vote = first(StereotypeVote)
 
 
 def fix_links(data, prefix="http://localhost:8000"):

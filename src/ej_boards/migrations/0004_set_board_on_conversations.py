@@ -5,7 +5,7 @@ from django.db import transaction
 
 
 def set_board_on_conversation(apps, schema_editor):
-    db_alias = schema_editor.connection.alias
+    
     Conversation = apps.get_model("ej_conversations", "Conversation")
 
     for conversation in Conversation.objects.all():

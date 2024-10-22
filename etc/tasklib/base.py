@@ -106,7 +106,10 @@ def watch_path(app_name, func, poll_time=0.5, name=None, skip_first=False):
 
 def exec_watch(app_name, func, name, watch=False, background=False, poll_time=0.5):
     if watch and background:
-        go = lambda app_name: watch_path(app_name, func, name=name, poll_time=poll_time)
+
+        def go(app_name):
+            return watch_path(app_name, func, name=name, poll_time=poll_time)
+
         return exec_watch(app_name, go, name, background=True)
     elif watch:
         return watch_path(app_name, func, name=name, poll_time=poll_time)

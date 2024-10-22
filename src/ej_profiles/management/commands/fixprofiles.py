@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from ej_profiles import enums
-from ej_profiles import models
+from ej_profiles import enums, models
 
 GENDER_CHOICES = [int(x) for x in enums.Gender]
 RACE_CHOICES = [int(x) for x in enums.Race]
@@ -9,7 +8,9 @@ RACE_CHOICES = [int(x) for x in enums.Race]
 
 class Command(BaseCommand):
     help = "Update profile entries and make sure that invalid profile items are reset to default values"
-    log = lambda self, *args, **kwargs: print(*args, **kwargs)
+
+    def log(self, *args, **kwargs):
+        print(*args, **kwargs)
 
     def handle(self, *args, **options):
         for profile in models.Profile.objects.values(

@@ -1,16 +1,14 @@
 import json
-import pytest
+
 import mock
-
-from django.test.client import Client
+import pytest
 from django.contrib.auth.models import AnonymousUser
-
-from ej_conversations import create_conversation
-from ej_boards.models import Board
-from ej_users.models import User
-from ej.tests.pytest.conftest import user  # noqa: F403,F401
-
+from django.test.client import Client
 from rest_framework.test import APIClient
+
+from ej_boards.models import Board
+from ej_conversations import create_conversation
+from ej_users.models import User
 
 API_V1_URL = "/api/v1"
 
@@ -21,6 +19,21 @@ def get_authorized_api_client(user_info):
     access_token = response.json()["access_token"]
     api.credentials(HTTP_AUTHORIZATION="Bearer " + access_token)
     return api
+
+
+@pytest.fixture
+def user(db):
+    user = User.objects.create_user("email@server.com", "password")
+    user.board_name = "testboard"
+
+    # TODO: Fix this dirty way to set user permissions
+    def has_perm(self, x, y=None):
+        return True  # Modify the function body as needed
+
+    user.has_perm = has_perm.__get__(user)
+
+    user.save()
+    return user
 
 
 @pytest.fixture

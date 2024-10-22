@@ -1,6 +1,7 @@
 """
 A few functions for creating plausible synthetic data.
 """
+
 from functools import wraps
 from random import choice, random
 
@@ -53,21 +54,26 @@ class ExampleData:
             self.get_user(), comment, check_limits=False, status=status, **kwargs
         )
 
+    def get_staff_user(self):
+        return choice(self.staff_users)
+
+    def new(self, question, title):
+        return create_conversation(
+            question, title, self.get_staff_user, is_promoted=True, commit=False
+        )
+
     @bulk_create
     def make_conversations(self):
-        new = lambda question, title: create_conversation(
-            question, title, self.get_staff_user(), is_promoted=True, commit=False
-        )
         return [
-            new(
+            self.new(
                 "We want to create the best programming language. How should it be?",
                 "A better programming language",
             ),
-            new(
+            self.new(
                 "How can we improve the schools and education in our community?",
                 "School system",
             ),
-            new(
+            self.new(
                 "How can we make our democracy more participative?",
                 "Participative democracy",
             ),
@@ -141,9 +147,6 @@ class ExampleData:
         self.make_school_comments(school)
         self.make_democracy_comments(democracy)
         self.make_votes()
-
-    def get_staff_user(self):
-        return choice(self.staff_users)
 
     def get_user(self):
         return choice(self.users)

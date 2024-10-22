@@ -30,7 +30,7 @@ def main():
     locales = set(all_locales)
 
     for basedir in basedirs:
-        dirs = [os.path.join(basedir, l, "LC_MESSAGES") for l in locales]
+        dirs = [os.path.join(basedir, locale, "LC_MESSAGES") for locale in locales]
         locations = []
         for ldir in dirs:
             for dirpath, dirnames, filenames in os.walk(ldir):

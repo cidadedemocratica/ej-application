@@ -19,7 +19,10 @@ class CommentQuerySet(ConversationMixin, WordCloudQuerySet):
     A table of comments.
     """
 
-    comments = lambda self, conversation=None: self
+    def get_comments(self, conversation=None):
+        return self
+
+    comments = get_comments
 
     def _votes_from_comments(self, comments):
         return Vote.objects.filter(comment__in=self)

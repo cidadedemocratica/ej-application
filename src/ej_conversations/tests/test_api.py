@@ -1,5 +1,5 @@
-from django.utils.translation import gettext_lazy as _
 import pytest
+from django.utils.translation import gettext_lazy as _
 from rest_framework.viewsets import reverse
 
 from ej_boards.models import Board
@@ -316,7 +316,7 @@ class TestGetViews:
         path = API_V1_URL + f"/conversations/{conversation.id}/votes/"
         response = api.get(path, format="json")
         data = response.data
-        assert type(data) == list
+        assert isinstance(data, list)
         assert data[0].get("id") == VOTES[0].get("id")
         assert data[0].get("content") == VOTES[0].get("content")
         assert data[0].get("comment_id") == VOTES[0].get("comment_id")
