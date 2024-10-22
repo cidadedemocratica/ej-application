@@ -1,3 +1,4 @@
+from logging import log
 from typing import Callable
 
 from django.apps import apps
@@ -5,15 +6,21 @@ from django.conf import settings
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
-from django.utils.translation import gettext as __, gettext_lazy as _
+from django.utils.translation import gettext as __
+from django.utils.translation import gettext_lazy as _
 from sidekick import import_later
 
 from ej_clusters.models import Cluster
 from ej_conversations.utils import check_promoted
 from ej_conversations.models.conversation import Conversation
 
-from .constants import EXPOSED_PROFILE_FIELDS
-from .constants import *
+from .constants import (
+    COLORS,
+    EXPOSED_PROFILE_FIELDS,
+    FIELD_DATA,
+    NORMALIZE_LANGUAGES,
+    PIECEWISE_OPTIONS,
+)
 
 pd = import_later("pandas")
 stop_words = import_later("stop_words")

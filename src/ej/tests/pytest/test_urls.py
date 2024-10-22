@@ -9,6 +9,8 @@ from ej_users.mommy_recipes import UserRecipes
 
 User = get_user_model()
 
+conversation_url = "/board-slug/conversations/1/conversation/"
+
 
 class DataMixin(
     ClusterRecipes,
@@ -45,7 +47,7 @@ class TestAuthorCrawl(TestUserCrawl):
 
     user = "author"
     conversation_actions = []
-    conversation_url = "/board-slug/conversations/1/conversation/"
+
     must_visit = (
         *TestUserCrawl.must_visit,
         *[conversation_url + x for x in conversation_actions],

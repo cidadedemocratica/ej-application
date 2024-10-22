@@ -13,7 +13,6 @@ from ej.permissions import (
     IsViewRetrieve,
     ParticipantCanAddComment,
 )
-from django.db.models import Q
 from ej.viewsets import RestAPIBaseViewSet
 from ej_conversations.models import Conversation, Comment, Vote
 from ej_conversations.serializers import (
@@ -24,7 +23,6 @@ from ej_conversations.serializers import (
     CommentSummarySerializer,
     ConversationCardDataSerializer,
 )
-from ej_conversations.models.vote import Vote
 from ej_dataviz.utils import votes_as_dataframe
 
 

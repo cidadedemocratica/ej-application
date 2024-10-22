@@ -1,13 +1,13 @@
-from django.test import RequestFactory
-from django.test import Client
+import pytest
+from django.test import Client, RequestFactory
+
 from ej_clusters.models.cluster import Cluster
 from ej_clusters.models.clusterization import Clusterization
 from ej_clusters.models.stereotype import Stereotype
 from ej_clusters.models.stereotype_vote import StereotypeVote
 from ej_conversations.enums import Choice
-from ej_conversations.tests.conftest import *
 from ej_users.models import User
-import pytest
+from ej_conversations.tests.conftest import *
 
 
 @pytest.fixture

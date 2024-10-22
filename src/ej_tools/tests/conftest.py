@@ -1,5 +1,4 @@
 import pytest
-
 from ej_conversations.tests.conftest import *
 from ej_tools.models import OpinionComponent
 

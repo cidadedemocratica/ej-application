@@ -1,23 +1,16 @@
-from django.urls import reverse
-from .cluster import Cluster
-from .cluster_queryset import ClusterQuerySet, ClusterManager
 from .clusterization import Clusterization
-from .querysets import (
-    ClusterizationQuerySet,
-    ClusterizationManager,
-    StereotypeVoteQuerySet,
-    StereotypeQuerySet,
-)
+from .cluster import Cluster
 from .stereotype import Stereotype
 from .stereotype_vote import StereotypeVote
 
 #
 # Patch conversation app keeping namespace clean.
 #
-_apply_patch = lambda f: f()
+def apply_patch(f):
+    return f()
 
 
-@_apply_patch
+@apply_patch
 def _patch_conversation_app():
     from ej.components import register_menu
     from ej_conversations.models import Conversation

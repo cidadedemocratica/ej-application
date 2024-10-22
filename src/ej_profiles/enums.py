@@ -13,9 +13,11 @@ _refused_to_answer = getattr(
 _region_enums = getattr(settings, "EJ_PROFILE_REGION_CHOICES", None)
 _age_enums = getattr(settings, "EJ_PROFILE_AGE_CHOICES", None)
 
+
 # Here we fool the IntEnum metaclass into believing that items of a list are
 # methods
-_to_thunks = lambda lst: ((lambda: k, lambda: v) for k, v in lst)
+def _to_thunks(lst):
+    return tuple((lambda: k, lambda: v) for k, v in lst)
 
 
 class Ethnicity(models.IntegerChoices):

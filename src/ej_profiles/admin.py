@@ -3,7 +3,13 @@ from django.utils.translation import gettext_lazy as _
 
 from . import models
 
-descr = lambda msg: lambda f: setattr(f, "short_description", msg) or f
+
+def descr(msg):
+    def decorator(f):
+        setattr(f, "short_description", msg)
+        return f
+
+    return decorator
 
 
 @admin.register(models.Profile)

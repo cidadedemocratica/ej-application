@@ -1,15 +1,15 @@
 import logging
 import random
 
-from boogie.models import F, Value, IntegerField
-from django.core.exceptions import FieldDoesNotExist
+from boogie.models import F, IntegerField, Value
 from boogie.models.wordcloud import WordCloudQuerySet
 from django.contrib.auth import get_user_model
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Count, Q
 from ej_conversations.enums import Choice
 
-from .comment import Comment
 from ..mixins import ConversationMixin
+from .comment import Comment
 
 log = logging.getLogger("ej")
 
@@ -19,7 +19,8 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
     A table of conversations.
     """
 
-    conversations = lambda self: self
+    def conversations(self):
+        return self
 
     def authors(self):
         """

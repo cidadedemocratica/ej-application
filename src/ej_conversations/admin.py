@@ -8,7 +8,14 @@ from . import models
 from .enums import Choice
 
 SHOW_VOTES = getattr(settings, "EJ_CONVERSATIONS_SHOW_VOTES", False)
-descr = lambda msg: lambda f: setattr(f, "short_description", msg) or f
+
+
+def descr(msg):
+    def decorator(f):
+        setattr(f, "short_description", msg)
+        return f
+
+    return decorator
 
 
 admin.site.register(models.RasaConversation)
@@ -106,8 +113,9 @@ class ConversationAdmin(AuthorIsUserMixin, admin.ModelAdmin):
         self._random_comments(request, queryset, 1000)
 
     def _random_comments(self, request, queryset, size):
-        from faker import Factory
         from random import choice
+
+        from faker import Factory
 
         fake = Factory.create()
         users = list(get_user_model().objects.all())

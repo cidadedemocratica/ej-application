@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-21 13:13-0300\n"
+"POT-Creation-Date: 2024-10-22 18:03-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -37,11 +37,11 @@ msgstr "Tamanho da fonte"
 msgid "Toggle Contrast"
 msgstr "Alto contraste"
 
-#: src/ej/forms.py:137
+#: src/ej/forms.py:146
 msgid "Choose a file"
 msgstr "Escolha um arquivo"
 
-#: src/ej/forms.py:139
+#: src/ej/forms.py:148
 msgid "No file chosen"
 msgstr "Nenhum arquivo selecionado"
 
@@ -53,35 +53,9 @@ msgstr "Este template não define variáveis extras"
 msgid "List of roles"
 msgstr "Lista de papéis"
 
-#: src/ej/roles/tags.py:16
+#: src/ej/roles/tags.py:14
 msgid "hello"
 msgstr "olá"
-
-#: src/ej/roles/tags.py:111
-msgid "Go!"
-msgstr "Quero ir!"
-
-#: src/ej/roles/tags.py:201
-#, python-brace-format
-msgid "Your progress: {pc} percent"
-msgstr "Seu progresso: {pc} por cento"
-
-#: src/ej/roles/tags.py:208
-#, fuzzy, python-brace-format
-msgid "Your progress: {n} of {total} {text}"
-msgstr "Seu progresso: {n} de {total} {text}"
-
-#: src/ej/settings/options.py:31
-msgid "EJ Platform"
-msgstr "Plataforma EJ"
-
-#: src/ej/settings/options.py:32
-msgid "Not part of EJ yet?"
-msgstr "Não faz parte da EJ ainda?"
-
-#: src/ej/settings/options.py:33
-msgid "Welcome!"
-msgstr "Boas vindas!"
 
 #: src/ej_boards/apps.py:7 src/ej_boards/models.py:59
 msgid "Boards"
@@ -288,53 +262,53 @@ msgstr "Grupos de opinião"
 msgid "This field is required."
 msgstr "Este campo é obrigatório."
 
-#: src/ej_conversations/admin.py:37
+#: src/ej_conversations/admin.py:44
 msgid "Moderation"
 msgstr "Moderação"
 
-#: src/ej_conversations/admin.py:68
+#: src/ej_conversations/admin.py:75
 msgid "Delete all votes for selected conversations"
 msgstr "Conversas Favoritas"
 
-#: src/ej_conversations/admin.py:72
+#: src/ej_conversations/admin.py:79
 msgid "Delete all comments for selected conversations"
 msgstr "Excluir todos os comentários para conversas selecionadas"
 
-#: src/ej_conversations/admin.py:79
+#: src/ej_conversations/admin.py:86
 #, python-brace-format
 msgid "{n} {which} removed!"
 msgstr "{n} {which} removidos!"
 
-#: src/ej_conversations/admin.py:84
+#: src/ej_conversations/admin.py:91
 msgid "Cast 50 random votes per selected conversation (slow)"
 msgstr "Realizar 50 votos aleatórios por conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:88
+#: src/ej_conversations/admin.py:95
 msgid "Cast 500 random votes per selected conversation (slow)"
 msgstr "Realizar 500 votos aleatórios por conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:92
+#: src/ej_conversations/admin.py:99
 msgid "Cast 5000 random votes per selected conversation (slow)"
 msgstr "Realizar 5000 votos aleatórios por conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:96
+#: src/ej_conversations/admin.py:103
 msgid "Create 10 random comments in each selected conversation (slow)"
 msgstr "Criar 10 comentários aleatórios em cada conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:100
+#: src/ej_conversations/admin.py:107
 msgid "Create 100 random comments in each selected conversation (slow)"
 msgstr "Criar 100 comentários aleatórios em cada conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:104
+#: src/ej_conversations/admin.py:111
 msgid "Create 1000 random comments in each selected conversation (slow)"
 msgstr "Criar 1000 comentários aleatórios em cada conversa selecionada (lenta)"
 
-#: src/ej_conversations/admin.py:128
+#: src/ej_conversations/admin.py:136
 #, python-brace-format
 msgid "Created {n} comments"
 msgstr "{n} comentários criados"
 
-#: src/ej_conversations/admin.py:150
+#: src/ej_conversations/admin.py:158
 #, python-brace-format
 msgid "Created {n} votes"
 msgstr "{n} votos criados"
@@ -431,31 +405,31 @@ msgstr "Esse título já existe."
 msgid "No group"
 msgstr "Sem grupo"
 
-#: src/ej_conversations/models/comment.py:26
+#: src/ej_conversations/models/comment.py:25
 msgid "awaiting moderation"
 msgstr "aguardando moderação"
 
-#: src/ej_conversations/models/comment.py:27
+#: src/ej_conversations/models/comment.py:26
 msgid "approved"
 msgstr "aprovado"
 
-#: src/ej_conversations/models/comment.py:28
+#: src/ej_conversations/models/comment.py:27
 msgid "rejected"
 msgstr "rejeitado"
 
-#: src/ej_conversations/models/comment.py:43
+#: src/ej_conversations/models/comment.py:42
 msgid "Content"
 msgstr "Conteúdo"
 
-#: src/ej_conversations/models/comment.py:46
+#: src/ej_conversations/models/comment.py:45
 msgid "Body of text for the comment"
 msgstr "Corpo de texto do comentário"
 
-#: src/ej_conversations/models/comment.py:52
+#: src/ej_conversations/models/comment.py:51
 msgid "Rejection reason (free-form)"
 msgstr "Motivo para rejeição (livre)"
 
-#: src/ej_conversations/models/comment.py:55
+#: src/ej_conversations/models/comment.py:54
 msgid ""
 "You must provide a reason to reject a comment. Users will receive this "
 "feedback."
@@ -463,23 +437,23 @@ msgstr ""
 "Você deve fornecer uma razão para rejeitar um comentário. O autor do "
 "comentário verá este feedback."
 
-#: src/ej_conversations/models/comment.py:103
+#: src/ej_conversations/models/comment.py:102
 msgid "Comment is approved"
 msgstr "Comentário aprovado"
 
-#: src/ej_conversations/models/comment.py:105
+#: src/ej_conversations/models/comment.py:104
 msgid "Comment is pending moderation"
 msgstr "Comentário está com moderação pendente"
 
-#: src/ej_conversations/models/comment.py:125
+#: src/ej_conversations/models/comment.py:124
 msgid "Must give a reason to reject a comment"
 msgstr "Deve fornecer uma razão para rejeitar o comentário"
 
-#: src/ej_conversations/models/comment.py:139
+#: src/ej_conversations/models/comment.py:138
 msgid "Cannot vote on pending comment"
 msgstr ""
 
-#: src/ej_conversations/models/comment_queryset.py:76
+#: src/ej_conversations/models/comment_queryset.py:79
 #, fuzzy
 msgid "general"
 msgstr "Geral"
@@ -597,48 +571,48 @@ msgstr "Pode moderar comentários em qualquer conversa"
 msgid "User does not have permission to create a promoted conversation."
 msgstr "Usuário não tem permissão para criar uma conversa promovida."
 
-#: src/ej_conversations/models/vote.py:9
+#: src/ej_conversations/models/vote.py:13
 #, python-brace-format
 msgid "vote should be one of 'agree', 'disagree' or 'skip', got {value}"
 msgstr ""
 "voto que deve ser uma das opções de 'concorda', 'discorda' ou 'pula', foi "
 "{value}"
 
-#: src/ej_conversations/models/vote.py:30
+#: src/ej_conversations/models/vote.py:34
 #, fuzzy
 msgid "Opinion Component"
 msgstr "Componente de Opinião"
 
-#: src/ej_conversations/models/vote.py:31
+#: src/ej_conversations/models/vote.py:35
 msgid "Rasa webchat"
 msgstr ""
 
-#: src/ej_conversations/models/vote.py:32
+#: src/ej_conversations/models/vote.py:36
 msgid "EJ"
 msgstr ""
 
-#: src/ej_conversations/models/vote.py:33
+#: src/ej_conversations/models/vote.py:37
 #, fuzzy
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: src/ej_conversations/models/vote.py:47
+#: src/ej_conversations/models/vote.py:51
 msgid "Agree, disagree or skip"
 msgstr "Concorda, discorda ou pula"
 
-#: src/ej_conversations/models/vote.py:49
+#: src/ej_conversations/models/vote.py:53
 msgid "Created at"
 msgstr "Criado em"
 
-#: src/ej_conversations/models/vote.py:51
+#: src/ej_conversations/models/vote.py:55
 msgid "Channel"
 msgstr ""
 
-#: src/ej_conversations/models/vote.py:54
+#: src/ej_conversations/models/vote.py:58
 msgid "From which EJ channel the vote comes from"
 msgstr ""
 
-#: src/ej_conversations/models/vote.py:70
+#: src/ej_conversations/models/vote.py:74
 msgid "non-moderated comments cannot receive votes"
 msgstr "comentários não-moderados não podem receber votos"
 
@@ -695,11 +669,11 @@ msgstr "Gerenciar!"
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
-#: src/ej_conversations/views_comments.py:32
+#: src/ej_conversations/views_comments.py:31
 msgid "Your vote has been computed :-)"
 msgstr "Seu voto foi computado :-)"
 
-#: src/ej_conversations/views_comments.py:50
+#: src/ej_conversations/views_comments.py:49
 #, python-brace-format
 msgid ""
 "You already voted in this comment as <strong>{vote}</strong>. You cannot "
@@ -728,20 +702,20 @@ msgstr "Raça"
 msgid "State"
 msgstr "Estado"
 
-#: src/ej_dataviz/utils.py:250
+#: src/ej_dataviz/utils.py:257
 msgid "{} persona"
 msgstr "{} persona"
 
-#: src/ej_dataviz/utils.py:265
+#: src/ej_dataviz/utils.py:272
 msgid "*Unknown*"
 msgstr "*Desconhecido*"
 
-#: src/ej_dataviz/utils.py:292
+#: src/ej_dataviz/utils.py:299
 msgid "PCA data"
 msgstr "Dados do PCA"
 
-#: src/ej_dataviz/utils.py:297 src/ej_dataviz/utils.py:298
-#: src/ej_dataviz/utils.py:299 src/ej_dataviz/utils.py:301
+#: src/ej_dataviz/utils.py:304 src/ej_dataviz/utils.py:305
+#: src/ej_dataviz/utils.py:306 src/ej_dataviz/utils.py:308
 msgid "You!"
 msgstr "Você!"
 
@@ -796,7 +770,7 @@ msgstr "convergência"
 msgid "disagree"
 msgstr "discorda"
 
-#: src/ej_dataviz/views/dataviz.py:313 src/ej_profiles/enums.py:130
+#: src/ej_dataviz/views/dataviz.py:313 src/ej_profiles/enums.py:132
 msgid "email"
 msgstr "email"
 
@@ -804,7 +778,7 @@ msgstr "email"
 msgid "id"
 msgstr "id"
 
-#: src/ej_dataviz/views/dataviz.py:315 src/ej_profiles/enums.py:129
+#: src/ej_dataviz/views/dataviz.py:315 src/ej_profiles/enums.py:131
 msgid "name"
 msgstr "nome"
 
@@ -821,15 +795,15 @@ msgstr "pulados"
 msgid "channel"
 msgstr "canal"
 
-#: src/ej_profiles/admin.py:13
+#: src/ej_profiles/admin.py:19
 msgid "Basic information"
 msgstr "Informações básicas"
 
-#: src/ej_profiles/admin.py:25
+#: src/ej_profiles/admin.py:31
 msgid "Address"
 msgstr "Endereço"
 
-#: src/ej_profiles/admin.py:26
+#: src/ej_profiles/admin.py:32
 msgid "Advanced"
 msgstr "Avançado"
 
@@ -841,190 +815,190 @@ msgstr "Perfis"
 msgid "refused to answer"
 msgstr ""
 
-#: src/ej_profiles/enums.py:26 src/ej_profiles/enums.py:49
+#: src/ej_profiles/enums.py:28 src/ej_profiles/enums.py:51
 #: src/ej_profiles/tests/test_models.py:62
 msgid "Indigenous"
 msgstr "Indígena"
 
-#: src/ej_profiles/enums.py:27 src/ej_profiles/enums.py:45
+#: src/ej_profiles/enums.py:29 src/ej_profiles/enums.py:47
 msgid "Black"
 msgstr "Preto"
 
-#: src/ej_profiles/enums.py:28 src/ej_profiles/enums.py:46
+#: src/ej_profiles/enums.py:30 src/ej_profiles/enums.py:48
 msgid "Brown"
 msgstr "Pardo"
 
-#: src/ej_profiles/enums.py:29 src/ej_profiles/enums.py:47
+#: src/ej_profiles/enums.py:31 src/ej_profiles/enums.py:49
 msgid "White"
 msgstr "Branco"
 
-#: src/ej_profiles/enums.py:30 src/ej_profiles/enums.py:48
+#: src/ej_profiles/enums.py:32 src/ej_profiles/enums.py:50
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: src/ej_profiles/enums.py:31 src/ej_profiles/enums.py:50
-#: src/ej_profiles/enums.py:79
+#: src/ej_profiles/enums.py:33 src/ej_profiles/enums.py:52
+#: src/ej_profiles/enums.py:81
 msgid "Other"
 msgstr "Outro"
 
-#: src/ej_profiles/enums.py:61
+#: src/ej_profiles/enums.py:63
 #, fuzzy
 msgid "North"
 msgstr "Norte"
 
-#: src/ej_profiles/enums.py:62
+#: src/ej_profiles/enums.py:64
 msgid "Northeast"
 msgstr "Nordeste"
 
-#: src/ej_profiles/enums.py:63
+#: src/ej_profiles/enums.py:65
 msgid "Midwest"
 msgstr "Centro-Oeste"
 
-#: src/ej_profiles/enums.py:64
+#: src/ej_profiles/enums.py:66
 msgid "Southeast"
 msgstr "Sudeste"
 
-#: src/ej_profiles/enums.py:65
+#: src/ej_profiles/enums.py:67
 msgid "South"
 msgstr "Sul"
 
-#: src/ej_profiles/enums.py:76 src/ej_profiles/tests/test_models.py:61
+#: src/ej_profiles/enums.py:78 src/ej_profiles/tests/test_models.py:61
 msgid "Female"
 msgstr "Feminino"
 
-#: src/ej_profiles/enums.py:77
+#: src/ej_profiles/enums.py:79
 msgid "Male"
 msgstr "Masculino"
 
-#: src/ej_profiles/enums.py:78
+#: src/ej_profiles/enums.py:80
 msgid "Non-binary"
 msgstr "Não binário"
 
-#: src/ej_profiles/enums.py:90
+#: src/ej_profiles/enums.py:92
 msgid "Less than 17 years"
 msgstr "Menos que 17 anos"
 
-#: src/ej_profiles/enums.py:91
+#: src/ej_profiles/enums.py:93
 msgid "Between 17-20 years"
 msgstr "Entre 17-20 anos"
 
-#: src/ej_profiles/enums.py:92
+#: src/ej_profiles/enums.py:94
 msgid "Between 21-29 years"
 msgstr "Entre 21-29 anos"
 
-#: src/ej_profiles/enums.py:93
+#: src/ej_profiles/enums.py:95
 msgid "Between 30-45 years"
 msgstr "Entre 30-45 anos"
 
-#: src/ej_profiles/enums.py:94
+#: src/ej_profiles/enums.py:96
 msgid "Between 45-60 years"
 msgstr "Entre 45-60 anos"
 
-#: src/ej_profiles/enums.py:95
+#: src/ej_profiles/enums.py:97
 msgid "Over 60 years"
 msgstr "Mais que 60 anos"
 
-#: src/ej_profiles/enums.py:111
+#: src/ej_profiles/enums.py:113
 msgid "user"
 msgstr "usuário"
 
-#: src/ej_profiles/enums.py:112
+#: src/ej_profiles/enums.py:114
 msgid "race"
 msgstr "raça"
 
-#: src/ej_profiles/enums.py:113 src/ej_profiles/tests/test_models.py:60
+#: src/ej_profiles/enums.py:115 src/ej_profiles/tests/test_models.py:60
 msgid "ethnicity"
 msgstr "etnia"
 
-#: src/ej_profiles/enums.py:114
+#: src/ej_profiles/enums.py:116
 msgid "education"
 msgstr "escolaridade"
 
-#: src/ej_profiles/enums.py:115
+#: src/ej_profiles/enums.py:117
 msgid "gender"
 msgstr "expressão e identidade de gênero"
 
-#: src/ej_profiles/enums.py:116
+#: src/ej_profiles/enums.py:118
 msgid "gender_other"
 msgstr "gênero (outro)"
 
-#: src/ej_profiles/enums.py:117
+#: src/ej_profiles/enums.py:119
 msgid "gender other"
 msgstr "gênero (outro)"
 
-#: src/ej_profiles/enums.py:118
+#: src/ej_profiles/enums.py:120
 msgid "birth_date"
 msgstr "data de nascimento"
 
-#: src/ej_profiles/enums.py:119
+#: src/ej_profiles/enums.py:121
 msgid "birth date"
 msgstr "data de Nascimento"
 
-#: src/ej_profiles/enums.py:120 src/ej_profiles/tests/test_models.py:56
+#: src/ej_profiles/enums.py:122 src/ej_profiles/tests/test_models.py:56
 msgid "country"
 msgstr "país"
 
-#: src/ej_profiles/enums.py:121 src/ej_profiles/tests/test_models.py:55
+#: src/ej_profiles/enums.py:123 src/ej_profiles/tests/test_models.py:55
 msgid "state"
 msgstr "estado"
 
-#: src/ej_profiles/enums.py:122 src/ej_profiles/tests/test_models.py:54
+#: src/ej_profiles/enums.py:124 src/ej_profiles/tests/test_models.py:54
 msgid "city"
 msgstr "cidade"
 
-#: src/ej_profiles/enums.py:123 src/ej_profiles/tests/test_models.py:64
+#: src/ej_profiles/enums.py:125 src/ej_profiles/tests/test_models.py:64
 msgid "biography"
 msgstr "biografia"
 
-#: src/ej_profiles/enums.py:124 src/ej_profiles/tests/test_models.py:58
+#: src/ej_profiles/enums.py:126 src/ej_profiles/tests/test_models.py:58
 msgid "occupation"
 msgstr "ocupação"
 
-#: src/ej_profiles/enums.py:125 src/ej_profiles/tests/test_models.py:63
+#: src/ej_profiles/enums.py:127 src/ej_profiles/tests/test_models.py:63
 msgid "political_activity"
 msgstr "atividade política"
 
-#: src/ej_profiles/enums.py:126
+#: src/ej_profiles/enums.py:128
 msgid "political activity"
 msgstr "atividade política"
 
-#: src/ej_profiles/enums.py:127
+#: src/ej_profiles/enums.py:129
 msgid "profile_photo"
 msgstr "foto de perfil"
 
-#: src/ej_profiles/enums.py:128
+#: src/ej_profiles/enums.py:130
 msgid "profile photo"
 msgstr "foto de perfil"
 
-#: src/ej_profiles/enums.py:131
+#: src/ej_profiles/enums.py:133
 msgid "is_active"
 msgstr "ativo"
 
-#: src/ej_profiles/enums.py:132
+#: src/ej_profiles/enums.py:134
 msgid "is active"
 msgstr "é ativo"
 
-#: src/ej_profiles/enums.py:133
+#: src/ej_profiles/enums.py:135
 msgid "is_staff"
 msgstr "é da equipe"
 
-#: src/ej_profiles/enums.py:134
+#: src/ej_profiles/enums.py:136
 msgid "is staff"
 msgstr "é da equipe"
 
-#: src/ej_profiles/enums.py:135
+#: src/ej_profiles/enums.py:137
 msgid "is_superuser"
 msgstr "é super-usuário"
 
-#: src/ej_profiles/enums.py:136
+#: src/ej_profiles/enums.py:138
 msgid "is superuser"
 msgstr "é super-usuário"
 
-#: src/ej_profiles/enums.py:137
+#: src/ej_profiles/enums.py:139
 msgid "limit_board_conversations"
 msgstr "limita_conversas_do_board"
 
-#: src/ej_profiles/enums.py:138
+#: src/ej_profiles/enums.py:140
 msgid "limit board conversations"
 msgstr "limita conversas do board"
 
@@ -2349,7 +2323,6 @@ msgstr "Conversa: \"{}\""
 msgid "Edit conversation"
 msgstr "Editar conversa"
 
-#: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:7
 #: src/ej_conversations/jinja2/ej_conversations/conversation-moderate.jinja2:8
 #: src/ej_dataviz/jinja2/ej_dataviz/dashboard/comments.jinja2:2
 #: src/ej_tools/jinja2/ej_tools/edit-comments.jinja2:29
@@ -2536,19 +2509,6 @@ msgstr "Você já votou em todos os comentários."
 #, fuzzy
 msgid "Thank you for your participation!"
 msgstr "Obrigada pela sua participação!"
-
-#: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:13
-msgid "Congratulations!"
-msgstr "Parabéns!"
-
-#: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:14
-msgid "There are no comments left to vote :)"
-msgstr "Não há comentários para votar :)"
-
-#: src/ej_conversations/jinja2/ej_conversations/comments/detail.jinja2:20
-#, fuzzy
-msgid "Go to conversation"
-msgstr "Voltar para conversa"
 
 #: src/ej_conversations/jinja2/ej_conversations/comments/moderation-macros.jinja2:8
 msgid "Reject"
@@ -4026,6 +3986,16 @@ msgstr "Logar com conta "
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
 
+#~ msgid "Congratulations!"
+#~ msgstr "Parabéns!"
+
+#~ msgid "There are no comments left to vote :)"
+#~ msgstr "Não há comentários para votar :)"
+
+#, fuzzy
+#~ msgid "Go to conversation"
+#~ msgstr "Voltar para conversa"
+
 #, python-format
 #~ msgid ""
 #~ "It is necessary to %(login_anchor)s before voting or sending a comment!"
@@ -4052,14 +4022,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #~ msgid "Region"
 #~ msgstr "Região"
-
-#, fuzzy
-#~ msgid "Relevant positive comments"
-#~ msgstr "Comentários positivos mais relevantes"
-
-#, fuzzy
-#~ msgid "Relevant negative comments"
-#~ msgstr "Comentários negativos mais relevantes"
 
 #, fuzzy
 #~ msgid "No phone number"

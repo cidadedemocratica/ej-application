@@ -1,6 +1,8 @@
 from boogie.configurations import Conf, env
 
-_ = lambda x: x
+
+def get_instance(x):
+    return x
 
 
 class EjOptions(Conf):
@@ -28,6 +30,6 @@ class EjOptions(Conf):
     EJ_PROFILE_EXCLUDE_FIELDS = env([], name="{attr}")
 
     # Messages
-    EJ_PAGE_TITLE = env(_("EJ Platform"), name="{attr}")
-    EJ_REGISTER_TEXT = _("Not part of EJ yet?")
-    EJ_LOGIN_TITLE_TEXT = _("Welcome!")
+    EJ_PAGE_TITLE = env(get_instance("EJ Platform"), name="{attr}")
+    EJ_REGISTER_TEXT = get_instance("Not part of EJ yet?")
+    EJ_LOGIN_TITLE_TEXT = get_instance("Welcome!")

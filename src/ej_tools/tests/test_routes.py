@@ -1,8 +1,8 @@
 from django.test import Client
 
 from ej_conversations.mommy_recipes import ConversationRecipes
-from ej_tools.views import *
 from ej_tools.tools import BotsWebchatTool, BotsWhatsappTool, MauticTool
+from ej_tools.views import whatsapp
 
 
 class TestRoutes(ConversationRecipes):

@@ -23,7 +23,8 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
     Represents a table of Cluster objects.
     """
 
-    clusters = lambda self: self
+    def get_clusters(self):
+        return self
 
     def users(self, by_comment=False):
         """
