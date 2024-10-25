@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ej-platform"
-version = "3.6.0"
+version = "3.8.2"
 description = "A Django-powered participation platform"
 authors = ["Fábio Macêdo Mendes <fabiomacedomendes@gmail.com>, Pencillabs <contato@pencillabs.tec.br>"]
 license = "AGPL-3.0"
