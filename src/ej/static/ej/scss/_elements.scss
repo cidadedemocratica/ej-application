@@ -62,6 +62,14 @@ label + select + br {
     }
 }
 
+.ej-margin-top {
+    margin-top: 1rem;
+}
+
+.ej-margin-bottom {
+    margin-bottom: 1rem;
+}
+
 
 input + .helptext,
 textarea + .helptext,

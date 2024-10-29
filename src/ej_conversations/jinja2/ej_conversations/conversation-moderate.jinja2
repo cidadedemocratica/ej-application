@@ -6,13 +6,13 @@
     <section class="content-grid moderate">
         <h1 class="relative text-accent left header-space">
             {{ _('Comments') }}
-            <div class="tooltip">
-                <i class="tooltip__icon fas fa-info-circle"></i>
-                <div class="tooltip__content">
-                    {{ _('Here you can moderate the comments and add new ones. Those that have not yet been approved or rejected are in the "Pending" Tab') }}
-                </div>
-            </div>
         </h1>
+        <div class="flex ej-margin-bottom">
+            <i class="tooltip__icon fas fa-info-circle"></i>
+            <legend>
+                {{ _('Here you can moderate the comments and add new ones. Those that have not yet been approved or rejected are in the "Pending" Tab') }}
+            </legend>
+        </div>
 
         {% if comment_saved %}
             <div class="modal__overlay" id="comment-saved">

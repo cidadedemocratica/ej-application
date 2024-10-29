@@ -32,6 +32,8 @@ class ClusterizationBaseMixin(ConversationMixin):
         Return queryset with all stereotypes associated with the current
         queryset.
         """
+        if self.model.__name__ == "Cluster":
+            return db.stereotypes.filter(clusters__in=self)
         return db.stereotypes.filter(clusters__in=self.clusters())
 
     def users(self, by_comment=False):

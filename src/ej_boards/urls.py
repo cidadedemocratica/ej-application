@@ -5,7 +5,7 @@ from ej_clusters.urls.clusters import urlpatterns as cluster_urlpatterns
 from ej_clusters.urls.stereotype_votes import urlpatterns as stereotype_votes_urlpatterns
 from ej_conversations.urls.conversations import urlpatterns as conversation_urlpatterns
 from ej_dataviz.urls import urlpatterns as dataviz_urlpatterns
-from ej_tools.urls import urlpatterns as conversation_tools_urlpatterns
+from ej_integrations.urls import urlpatterns as conversation_tools_urlpatterns
 
 from . import views
 

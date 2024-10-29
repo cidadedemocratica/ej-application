@@ -77,7 +77,7 @@ def docs(ctx, watch=False, orm=False):
             "ej_boards",
             "ej_clusters",
             "ej_dataviz",
-            "ej_tools",
+            "ej_integrations",
         ]:
             print_green(f"Making ORM graph for {app}")
             manage(

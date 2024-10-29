@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from ej.components.builtins import toast
 from ej_boards.models import Board
 from ej_conversations.models import Conversation, ConversationTag
-from ej_tools.utils import get_host_with_schema
+from ej_integrations.utils import get_host_with_schema
 from ej_users.forms import ChangePasswordForm
 
 from . import forms

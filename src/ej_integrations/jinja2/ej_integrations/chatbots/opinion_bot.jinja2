@@ -1,0 +1,119 @@
+
+{% macro opinion_bot(conversation, tool, type, image) %}
+{% from "ej_integrations/includes/help-card.jinja2" import help_card %}
+
+<div class="tools-card-container tools-card-expand tools-share-content">
+    <div class="tools-card-body">
+      <div class="tools-card-body-img"><img class="avatar" src="{{ image }}"/></div>
+      <div class="tools-card-content">
+        <span class="tools-card-title">{{_("Opinion Bot")}}</span>
+        <p class="helptext">{{_("Collect your audience's opinion using our guided bot, also known as Duda. Allows user to vote in comments without leaving Telegram.")}}</p>
+        <span class="instruction">{{_("Select one of the bots to start collecting")}}</span>
+        <div class="tools-card-body-buttons">
+          <span>{{_("Collect with:")}}</span>
+          <div class="bots-buttons">
+            {% for channel in tool.options %}
+              <button value={{channel[1]}} id="id-{{channel[1]}}"
+                onclick="selectOpinionBot(event.target)">{{channel[0]}}</button>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="tools-card-footer">
+        <span id="tools-tip-text">{{_("Copied to clipboard!")}}</span>
+        <button id="share-text" class="grey">
+          <span id="tools-icon-share" class="tools-icon-share">
+          <img src="{{ static('/img/icons/share.svg') }}" alt="Share icon"/>
+            <span> {{_("Share Bot")}} </span>
+          </span>
+        </button>
+          <a id="bot-link" target="_blank">
+            <button class="blue">
+                <span class="tools-icon-share">
+                  <img src="{{ static('/img/icons/comments.svg') }}" alt="Share icon"/>
+                  <span> {{_("Starts conversation")}} </span>
+                </span>
+            </button>
+          </a>
+      </div>
+</div>
+{{ help_card(_("When should I use the opinion bot?"), "/docs/user-guides/pt-br/tools-chatbot.html")}}
+
+<script charset="utf-8">
+
+function selectOpinionBot(target) {
+  let buttons = document.querySelector(".bots-buttons").children;
+  for (let button of buttons) {
+    if (button.id == target.id) {
+      target.classList = ["pink"];
+      getOpinionBotLink(target);
+    } else {
+      button.classList = ["grey"];
+    }
+  }
+}
+
+function getLinkByPlatform(type, botName){
+  if(type === "telegram"){
+    return `https://t.me/${botName}?start={{conversation.id}}`;
+  }else if(type === "whatsapp"){
+    const number = botName === "DudaEjBot" ? "{{tool.options[1][1]}}" : "{{tool.options[0][1]}}";
+    return `https://web.whatsapp.com/send?phone=${number}&text=start+{{conversation.id}}`;
+  }
+}
+
+function getOpinionBotLink(target="") {
+  let botLink = document.querySelector("#bot-link");
+  let botName = "DudaEjBot";
+  if (target) {
+      botName = target.value;
+  }
+  tokens = window.location.href.split("/");
+  plataform = tokens[tokens.length - 1];
+  let link = getLinkByPlatform(plataform, botName);
+  botLink.href = link;
+  return link;
+}
+
+const makeText = function() {
+  let conversationText = "{{conversation.text.replace('\r', '').replace('\n', '')}}";
+  return "{{tool.share }}" + conversationText + "\n";
+}
+
+const copyText = async function(makeText, link) {
+  try {
+    const tip = document.getElementById("tools-tip-text");
+    var text = makeText + link
+    navigator.clipboard.writeText(text);
+    tip.classList.add('tools-tip-text-show');
+
+    await new Promise(r => setTimeout(r, 2000));
+    tip.classList.remove('tools-tip-text-show');
+    tip.classList.add('tools-tip-text-hidde');
+  } catch(err){
+    alert("Error")
+    }
+}
+
+window.onload = function() {
+  getOpinionBotLink();
+  btn_share = document.getElementById('share-text');
+  btn_share.addEventListener('click', async () => {
+  link = document.getElementById('bot-link').href;
+    let shareData = {
+        title: "{{conversation.title}}",
+        text: makeText(),
+        url: link
+    }
+    try {
+      await navigator.share(shareData)
+    } catch (err) {
+        await copyText(makeText(),link)
+    }
+  });
+};
+</script>
+
+
+{% endmacro %}}
