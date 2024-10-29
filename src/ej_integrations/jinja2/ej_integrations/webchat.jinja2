@@ -1,0 +1,39 @@
+{% extends 'ej_conversations/base.jinja2' %}
+{% from "ej_integrations/includes/help-card.jinja2" import help_card %}
+
+{% block metaOG2 %}
+
+    <meta name="description" property="og:title" content="Area de integração da EJ com outras ferramentas.">
+    <meta property="og:description" content="Area de integração da EJ com outras ferramentas.">
+
+{% endblock metaOG2 %}
+
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
+
+{% block content %}
+<div class="tools">
+    <div class="tools-title">
+        <h1 class="h2 text-accent"><a href="{{ conversation.patch_url('conversation-tools:index') }}">{{_("Integrations")}}</a>
+            > <a href="{{ conversation.patch_url('conversation-tools:chatbot') }}">{{ _("Opinion Bots") }}</a>
+            > Webchat</h1>
+        <span class="helptext" id="description-info">
+            {{_("Gather feedback using EJ's chatbot infrastructure.")}}
+        </span>
+        <span class="helptext">{{_("With Webchat you can perform collections on web pages using our guided bot.")}}</span>
+    </div>
+
+    <h3 class="h3 divider">{{_("Webchat")}}</h3>
+    <span class="helptext">{{_("Integrate a new page with webchat or click <b>Start Collection</b> to utilize our standard integration.")}}</span>
+    <div class="webchat-card">
+        {% include 'ej_integrations/webchat/webchat-preview-card.jinja2' %}
+        <hr class="webchat-card__divider">
+        {% include 'ej_integrations/webchat/form-integration.jinja2' %}
+    </div>
+
+    <div id="webchat-help-card">
+        {{ help_card(_("When should I use webchat?"), "/docs/user-guides/pt-br/tools-chatbot.html#webchat")}}
+        {{ help_card(_("How can I Integrate webchat into my website?"), "/docs/user-guides/pt-br/tools-chatbot.html#webchat")}}
+    </div>
+</div>
+
+{% endblock %}

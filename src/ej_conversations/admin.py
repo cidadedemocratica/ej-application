@@ -19,7 +19,6 @@ def descr(msg):
 
 
 admin.site.register(models.RasaConversation)
-admin.site.register(models.ConversationMautic)
 
 
 class VoteInline(admin.TabularInline):

@@ -9,11 +9,15 @@
 <section class="content-grid header-space manage-stereotypes">
     <script src="/static/js/simplePagination.js"></script>
         <h1 class="text-accent">{{ _("Modeling") }}</h1>
-        <h2 class="manage-stereotypes--margin-top-36">{{_("Personas")}}</h2>
-            <p class="margin-y3 helptext">
-                {{_("We use votes to rank users according to their opinions.
-                    Users who vote in a similar way tend to be in the same group.")}}
-            </p>
+        <div class="stereotypes-section">
+            <section class="stereotypes-section__container">
+                <h2 class="bold">{{_("Personas")}}</h2>
+                    <legend>
+                        {{_("We use votes to rank users according to their opinions.
+                            Users who vote in a similar way tend to be in the same group.")}}
+                    </legend>
+            </section>
+        </div>
 
         {{ tabs({
             _('See/Edit personas'): 'see-edit-personas',

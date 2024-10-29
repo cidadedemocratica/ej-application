@@ -26,7 +26,7 @@ Dentro do arquivo *django.po* são exibidos todos os trechos de texto que podem 
 
 .. code-block:: python
 
-    #: src/ej_tools/jinja2/ej_tools/ndex.jinja2:20
+    #: src/ej_integrations/jinja2/ej_integrations/ndex.jinja2:20
     #, fuzzy
     msgid "Integration"
     msgstr "Integração"

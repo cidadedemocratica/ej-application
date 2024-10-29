@@ -8,7 +8,7 @@ from .conversation_queryset import ConversationQuerySet
 from .vote import Vote
 from .vote_queryset import VoteQuerySet
 from ..enums import Choice
-from ej_tools.models import RasaConversation, ConversationMautic
+from ej_integrations.models import RasaConversation
 
 
 log = getLogger("ej")

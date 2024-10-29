@@ -1,17 +1,10 @@
 {% from "ej_clusters/includes/clusters-generator.jinja2" import clustersGenerator %}
 {% set main_class = 'measure-wide margin-xauto pad-x2' %}
-<head><script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://unpkg.com/htmx.org@1.9.5"></script>
-{% block css %}{% include 'ej/includes/head/css.jinja2' %}{% endblock %}</head>
 
 {% block content %}
-<div class="grouping">
-    <section class="grouping__container">
-        <h2 class="header-space">{{_("Grouping")}}</h2>
-            <p class="margin-y2 helptext">
-                {{_("We use votes to rank users according to their opinions.
-                    Users who vote in a similar way tend to be in the same group.")}}
-            </p>
+<div class="stereotypes-section">
+    <section class="stereotypes-section__container">
+        <h2 class="bold">{{_("Opinion Groups")}}</h2>
     </section>
 </div>
 

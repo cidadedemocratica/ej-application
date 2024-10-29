@@ -1,0 +1,39 @@
+{% extends 'ej_conversations/base.jinja2' %}
+{% from "ej_integrations/includes/help-card.jinja2" import help_card %}
+{% from "ej_integrations/chatbots/opinion_bot.jinja2" import opinion_bot %}
+
+
+{% block metaOG2 %}
+
+    <meta name="description" property="og:title" content="Area de integração da EJ com outras ferramentas.">
+    <meta property="og:description" content="Area de integração da EJ com outras ferramentas.">
+
+{% endblock metaOG2 %}
+
+
+{% block _menu %} {{ menu(request.user, board_palette) }} {% endblock %}
+
+{% block content %}
+
+<div class="tools">
+  <div class="tools-container-full-width">
+    <div class="tools-title">
+      <h1 class="h2 text-accent"><a href="{{ conversation.patch_url('conversation-tools:index') }}">{{_("Integrations")}}</a>
+        > <a href="{{ conversation.patch_url('conversation-tools:chatbot') }}">{{ _("Opinion Bots") }}</a>
+        > Whatsapp </h1>
+      <span class="helptext tool-description">
+        {{_("Collect opinions using EJ's chatbot, also known as Duda.")}}
+        {{_("Allows you to collect the opinion of whatsapp users.")}}
+        {{_("To make the collection available, forward the participation link to groups, channels or directly in the user's private chat.")}}
+      </span>
+    </div>
+    <h3 class="h3 divider">{{_("Collect Bot")}}</h3>
+    <span class="helptext">{{_("Share the participation link to start the collection.")}}</span>
+
+    <div class="tools-divider">
+      {{opinion_bot(conversation, tool, "whatsapp", static('/img/logo/channel_wpp.svg'))}}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+<form action="{{conversation.patch_url('conversation-tools:mailing')}}" method="post" class="tools-settings-form" name="mailingForm">
+  <div class="title-theme">
+    <h4>
+      {{form.template_type.label}}
+    </h4>
+    <span class="helptext">
+      {{_("Choose a marketing tool to send your template.")}}
+    </span>
+  </div>
+  <section>
+    {{form.template_type}}
+  </section>
+
+  <div class="title-theme">
+    <h4>
+      {{form.theme.label}}
+    </h4>
+    <span class="helptext">
+      {{_("Customize the collection component with our color options.")}}
+    </span>
+  </div>
+  <section>
+    {{form.theme}}
+  </section>
+  <section class="section-custom">
+    <h3 class="h3">
+      {{_('Opinion Component')}}
+      <div class="display-down" onclick="showSection('isexpanded1', 'mailing-section');">
+        <input type="checkbox" id="isexpanded1"/>
+        <label for="isexpanded1"><i class="fa fa-chevron-down"></i></label>
+      </div>
+    </h3>
+    <span class="helptext">{{_("Redirect your participant to a page with the integrated opinion component. The vote given in the email will be processed automatically by the component.")}}</span>
+    <div id="mailing-section" onclick="setChecked('isexpanded1')" class="hide">
+      <label id="custom-domain-label">{{form.is_custom_domain.label}}</label>
+      <input name="custom-domain" id="domain-input" type="text" placeholder="https://example.com">
+    </div>
+  </section>
+  <section class="section-custom">
+    <h3 class="h3">
+      {{ _('Custom fields') }}
+      <div class="display-down" onclick="showSection('isexpanded2', 'custom-field-section');">
+        <input type="checkbox" id="isexpanded2"/>
+        <label for="isexpanded2"><i class="fa fa-chevron-down"></i></label>
+      </div>
+    </h3>
+    <span class="helptext">{{_("Changes fields like comment and title.")}}</span>
+    <div id="custom-field-section" onclick="setChecked('isexpanded2')" class="hide">
+      <label>{{form.custom_title.label}}</label>
+      {{form.custom_title}}
+      <label>{{form.custom_comment.label}}</label>
+      {{form.custom_comment}}
+    </div>
+  </section>
+  <div class="tools-card-footer mailing">
+    <input type="hidden" id="token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    {% include 'ej_integrations/modal-preview-mailing.jinja2' %}
+    {% if conversation.n_approved_comments == 0 %}
+      <button class="blue" type="submit" name="download" value="{{ _('Download Template') }}" disabled>
+        <i class="fas fa-cloud-download-alt" id="download-icon"></i>
+        <a>{{ _('Download') }}</a>
+      </button>
+      <span id="no-comments-helptext" class="helptext text-accent">{{_("Create comments to use this tool.")}}</span>
+    {% else %}
+      <button class="blue" type="submit" name="download" value="{{ _('Download Template') }}">
+        <i class="fas fa-cloud-download-alt" id="download-icon"></i>
+        <a>{{ _('Download') }}</a>
+      </button>
+    {% endif %}
+  </div>
+</form>
+
+<script>
+function setChecked(check_id) {
+    event.preventDefault();
+    let checkbox = document.getElementById(check_id);
+    checkbox.checked = !checkbox.checked;
+}
+
+function showSection(check_id, section_id) {
+    let checkbox = document.getElementById(check_id)
+    let section = document.getElementById(section_id);
+    if (checkbox.checked) {
+        section.className = "show"
+    } else {
+        section.className = "hide"
+    }
+}
+</script>
