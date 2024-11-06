@@ -42,7 +42,7 @@ class StereotypeQuerySet(UserMixin, QuerySet):
     A table of Stereotypes.
     """
 
-    def get_votes_from_comments(_, comments):
+    def _votes_from_comments(_, comments):
         return comments.stereotype_votes()
 
     def fill_votes(self, choice=Choice.DISAGREE, comments=None):

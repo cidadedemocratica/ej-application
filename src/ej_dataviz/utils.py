@@ -253,7 +253,10 @@ def create_stereotype_coords(
                     "symbol": "circle",
                     "coord": [x, y, names[pk], None, None],
                     "label": {"show": True, "formatter": names[pk], "color": "black"},
-                    "itemStyle": {"opacity": 0.75, "color": "rgba(180, 180, 180, 0.33)"},
+                    "itemStyle": {
+                        "opacity": 0.75,
+                        "color": "rgba(180, 180, 180, 0.33)",
+                    },
                     "tooltip": {"formatter": _("{} persona").format(names[pk])},
                 }
 

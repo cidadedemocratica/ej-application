@@ -67,7 +67,7 @@ class Vote(models.Model):
 
     def __str__(self):
         comment = truncate(self.comment.content, 40)
-        return f"{self.author} - {self.choice.name} ({comment})"
+        return f"{self.author} - {Choice.normalize(str(self.choice))} ({comment})"
 
     def clean(self, *args, **kwargs):
         if self.comment.is_pending:
