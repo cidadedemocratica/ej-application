@@ -44,7 +44,7 @@ def api_client():
 @pytest.fixture
 def conversation(db, user):  # noqa: F811
     conversation_object = create_conversation(
-        text="test", title="title", author=user, is_promoted=True, anonymous_votes_limit=1
+        text="test", title="title", author=user, is_promoted=True, anonymous_votes=1
     )
     yield conversation_object
     conversation_object.delete()

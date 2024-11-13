@@ -95,7 +95,7 @@ class TestGetBoards(ConversationRecipes):
                         },
                     },
                     "participants_can_add_comments": True,
-                    "anonymous_votes_limit": 0,
+                    "anonymous_votes": 0,
                     "links": {"self": "/api/v1/boards/1/conversations/1/"},
                 }
             ],
@@ -140,7 +140,7 @@ class TestGetBoards(ConversationRecipes):
                 },
             },
             "participants_can_add_comments": True,
-            "anonymous_votes_limit": 0,
+            "anonymous_votes": 0,
             "links": {"self": "/api/v1/boards/1/conversations/1/"},
         }
 

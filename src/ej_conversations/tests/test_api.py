@@ -51,7 +51,7 @@ class TestGetViews:
         assert data.get("text") == conversation.text
         assert data.get("statistics")
         assert "participants_can_add_comments" in data.keys()
-        assert "anonymous_votes_limit" in data.keys()
+        assert "anonymous_votes" in data.keys()
         assert "send_profile_question" in data.keys()
         assert "votes_to_send_profile_question" in data.keys()
 
@@ -66,7 +66,7 @@ class TestGetViews:
         assert data.get("text") == conversation.text
         assert data.get("statistics")
         assert "participants_can_add_comments" in data.keys()
-        assert "anonymous_votes_limit" in data.keys()
+        assert "anonymous_votes" in data.keys()
         assert "send_profile_question" in data.keys()
         assert "votes_to_send_profile_question" in data.keys()
 

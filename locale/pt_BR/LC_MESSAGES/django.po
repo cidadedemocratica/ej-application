@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-28 22:10-0300\n"
+"POT-Creation-Date: 2024-11-13 17:58-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -311,20 +311,9 @@ msgid "Created {n} votes"
 msgstr "{n} votos criados"
 
 #: src/ej_conversations/apps.py:8
-#: src/ej_conversations/models/conversation.py:177
+#: src/ej_conversations/models/conversation.py:189
 msgid "Conversations"
 msgstr "Conversas"
-
-#: src/ej_conversations/decorators.py:8 src/ej_conversations/decorators.py:9
-#: src/ej_conversations/decorators.py:10 src/ej_integrations/tools.py:79
-#, fuzzy
-msgid "Opinion Bots"
-msgstr "Bot de Opinião"
-
-#: src/ej_conversations/decorators.py:11 src/ej_integrations/tools.py:111
-#, fuzzy
-msgid "Opinion component"
-msgstr "Componente de opinião"
 
 #: src/ej_conversations/enums.py:10
 msgid "User provided"
@@ -383,8 +372,8 @@ msgid "Tags, separated by commas."
 msgstr "Temas, separados por vírgula."
 
 #: src/ej_conversations/forms.py:78 src/ej_conversations/forms.py:81
-#: src/ej_conversations/models/conversation.py:109
-#: src/ej_conversations/models/conversation.py:116
+#: src/ej_conversations/models/conversation.py:121
+#: src/ej_conversations/models/conversation.py:128
 msgid "Background image"
 msgstr "Imagem de fundo"
 
@@ -392,7 +381,7 @@ msgstr "Imagem de fundo"
 msgid "Logo"
 msgstr "Logotipo"
 
-#: src/ej_conversations/forms.py:127
+#: src/ej_conversations/forms.py:126
 #, fuzzy
 msgid "This title already exists!"
 msgstr "Esse título já existe."
@@ -500,8 +489,22 @@ msgid ""
 "conversations/ endpoint."
 msgstr "Conversas ocultas não aparecem no mural principal /conversations/."
 
-#: src/ej_conversations/models/conversation.py:89
-msgid "Configures how many anonymous votes participants can give."
+#: src/ej_conversations/models/conversation.py:90
+msgid ""
+"Check this option if you want your audience to vote without registering. All "
+"users will be created with a random and unique ID."
+msgstr ""
+
+#: src/ej_conversations/models/conversation.py:93
+#, fuzzy
+msgid "Enable anonymous votes"
+msgstr "Habilitar votos anônimos"
+
+#: src/ej_conversations/models/conversation.py:98
+#, fuzzy
+msgid ""
+"Configures how many anonymous votes the participants can give before asking "
+"him to register"
 msgstr ""
 "Defina quantos votos anônimos o participante poderá registrar antes de "
 "solicitarmos que ele se cadastre. Exemplo: caso a conversa tenha 4 "
@@ -509,62 +512,62 @@ msgstr ""
 "apresentado após o segundo voto na conversa. Caso o input tenha valor 0, a "
 "conversa não poderá receber votos anônimos."
 
-#: src/ej_conversations/models/conversation.py:90
+#: src/ej_conversations/models/conversation.py:101
 #, fuzzy
 msgid "Number of anonymous votes"
 msgstr "Quantidade de votos anônimos"
 
-#: src/ej_conversations/models/conversation.py:94
+#: src/ej_conversations/models/conversation.py:106
 #, fuzzy
 msgid "Send profile question?"
 msgstr "Enviar questões de perfil durante a enquete?"
 
-#: src/ej_conversations/models/conversation.py:95
+#: src/ej_conversations/models/conversation.py:107
 msgid "Send a question to participants to complete their profile."
 msgstr "Envia questões de perfil para o usuário responder durante as enquetes"
 
-#: src/ej_conversations/models/conversation.py:99
+#: src/ej_conversations/models/conversation.py:111
 msgid "Votes to send profile question"
 msgstr "Votos necessários para iniciar as perguntas"
 
-#: src/ej_conversations/models/conversation.py:100
+#: src/ej_conversations/models/conversation.py:112
 msgid "Number of votes to send profile question."
 msgstr ""
-"Numero de votos realizados pelo usuário antes de iniciar as perguntas sobre "
-"perfil"
+"Número de votos realizados pelo usuário antes de iniciar as perguntas "
+"demográficas. "
 
-#: src/ej_conversations/models/conversation.py:123
+#: src/ej_conversations/models/conversation.py:135
 msgid "A message to be presented to participants before starting voting."
 msgstr ""
 "Um texto que poderá ser apresentado antes da tela de votação. A página "
 "ficará na rota /welcome da conversa."
 
-#: src/ej_conversations/models/conversation.py:129
+#: src/ej_conversations/models/conversation.py:141
 #, fuzzy
 msgid "Text to be presented to participants in the end of voting."
 msgstr "Texto que será apresentado no final da votação."
 
-#: src/ej_conversations/models/conversation.py:132
-#: src/ej_conversations/models/conversation.py:134
+#: src/ej_conversations/models/conversation.py:144
+#: src/ej_conversations/models/conversation.py:146
 #, fuzzy
 msgid "Participants will be able to add comments to this conversation."
 msgstr "Os participantes poderão adicionar comentários à conversa."
 
-#: src/ej_conversations/models/conversation.py:176
+#: src/ej_conversations/models/conversation.py:188
 #: src/ej_conversations/roles/conversations.py:140
 #, fuzzy
 msgid "Conversation"
 msgstr "Conversa"
 
-#: src/ej_conversations/models/conversation.py:179
+#: src/ej_conversations/models/conversation.py:191
 msgid "Can publish promoted conversations"
 msgstr "Pode publicar conversas promovidas"
 
-#: src/ej_conversations/models/conversation.py:180
+#: src/ej_conversations/models/conversation.py:192
 msgid "Can moderate comments in any conversation"
 msgstr "Pode moderar comentários em qualquer conversa"
 
-#: src/ej_conversations/models/conversation.py:291
+#: src/ej_conversations/models/conversation.py:303
 msgid "User does not have permission to create a promoted conversation."
 msgstr "Usuário não tem permissão para criar uma conversa promovida."
 
@@ -699,20 +702,20 @@ msgstr "Raça"
 msgid "State"
 msgstr "Estado"
 
-#: src/ej_dataviz/utils.py:257
+#: src/ej_dataviz/utils.py:260
 msgid "{} persona"
 msgstr "{} persona"
 
-#: src/ej_dataviz/utils.py:272
+#: src/ej_dataviz/utils.py:275
 msgid "*Unknown*"
 msgstr "*Desconhecido*"
 
-#: src/ej_dataviz/utils.py:299
+#: src/ej_dataviz/utils.py:302
 msgid "PCA data"
 msgstr "Dados do PCA"
 
-#: src/ej_dataviz/utils.py:304 src/ej_dataviz/utils.py:305
-#: src/ej_dataviz/utils.py:306 src/ej_dataviz/utils.py:308
+#: src/ej_dataviz/utils.py:307 src/ej_dataviz/utils.py:308
+#: src/ej_dataviz/utils.py:309 src/ej_dataviz/utils.py:311
 msgid "You!"
 msgstr "Você!"
 
@@ -918,6 +921,11 @@ msgstr ""
 "Platforma EJ, é uma plataforma de consultas de opinião com foco em Estado e "
 "Organizações. Gostaríamos da sua participação na seguinte discussão: "
 
+#: src/ej_integrations/tools.py:79
+#, fuzzy
+msgid "Opinion Bots"
+msgstr "Bot de Opinião"
+
 #: src/ej_integrations/tools.py:81
 #, fuzzy
 msgid ""
@@ -926,6 +934,11 @@ msgid ""
 msgstr ""
 "Colete opiniões usando os chatbots da EJ. Permite coletar a opinião de "
 "usuários do Telegram."
+
+#: src/ej_integrations/tools.py:111
+#, fuzzy
+msgid "Opinion component"
+msgstr "Componente de opinião"
 
 #: src/ej_integrations/tools.py:113
 msgid ""
@@ -1824,6 +1837,7 @@ msgid "Edit board"
 msgstr "Editar mural"
 
 #: src/ej_boards/jinja2/ej_boards/board-edit.jinja2:3
+#: src/ej_conversations/jinja2/ej_conversations/conversation-edit.jinja2:16
 #: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-add-comments.jinja2:18
 #: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:26
 #: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:28
@@ -2164,22 +2178,25 @@ msgstr ""
 msgid "Anonymous participation"
 msgstr "Participação anônima"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:32
-#, fuzzy
-msgid "Send a profile queston"
-msgstr "Coleta de perfil"
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:40
+msgid "Demographic questions"
+msgstr "Perguntas demográficas"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:46
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:52
+msgid "This configuration only afects EJ API."
+msgstr "Essa configuração afeta apenas a API da EJ."
+
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:56
 #, fuzzy
 msgid "Conversation duration"
 msgstr "Duração da conversa"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:52
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:62
 #, fuzzy
 msgid "Customize"
 msgstr "Personalize"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:56
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:66
 #, fuzzy
 msgid ""
 "This image will be presented to your audience on the participation page,\n"
@@ -2189,17 +2206,17 @@ msgstr ""
 "Essa imagem será apresentada para o seu público na página de participação, "
 "permitindo dar mais contexto ao tema pesquisado."
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:67
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:78
 msgid "This image will be presented to your audience on the welcome page"
 msgstr ""
 "Esta imagem será apresentada para sua audiência na página de boas-vindas"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:75
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:86
 #, fuzzy
 msgid "Text to be displayed as welcome"
 msgstr "Texto adicional a ser apresentado na tela de boas-vindas."
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:79
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:90
 #, fuzzy
 msgid ""
 "This text will be presented to new participants who access\n"
@@ -2208,12 +2225,12 @@ msgstr ""
 "Esse texto será apresentado para os novos participantes que acessarem o link "
 "compartilhado dessa conversa."
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:84
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:95
 #, fuzzy
 msgid "Text to be presented at the end of the collection"
 msgstr "Texto a ser apresentado no final da coleta"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:88
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:99
 #, fuzzy
 msgid ""
 "This text will be presented to participants who have\n"
@@ -2221,18 +2238,18 @@ msgid ""
 msgstr ""
 "Esse texto será apresentado para os participantes que finalizarem a coleta."
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:94
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:105
 #: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:14
 msgid "Create conversation"
 msgstr "Criar conversa"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:134
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:152
 #: src/ej_conversations/jinja2/ej_conversations/includes/comments-form.jinja2:35
 #, fuzzy
 msgid " Comment "
 msgstr "Comentário"
 
-#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:135
+#: src/ej_conversations/jinja2/ej_conversations/conversation-create.jinja2:153
 #: src/ej_conversations/jinja2/ej_conversations/includes/comments-form.jinja2:16
 #: src/ej_conversations/jinja2/ej_conversations/includes/comments-form.jinja2:36
 msgid "Type your comment here"
@@ -2241,11 +2258,6 @@ msgstr "Escreva seu comentário aqui"
 #: src/ej_conversations/jinja2/ej_conversations/conversation-detail.jinja2:3
 msgid "Conversation: \"{}\""
 msgstr "Conversa: \"{}\""
-
-#: src/ej_conversations/jinja2/ej_conversations/conversation-edit.jinja2:16
-#: src/ej_conversations/jinja2/ej_conversations/includes/menu.jinja2:26
-msgid "Edit conversation"
-msgstr "Editar conversa"
 
 #: src/ej_conversations/jinja2/ej_conversations/conversation-moderate.jinja2:8
 #: src/ej_dataviz/jinja2/ej_dataviz/dashboard/comments.jinja2:2
@@ -2687,6 +2699,10 @@ msgstr "Encontrar arquivo"
 #: src/ej_conversations/jinja2/ej_conversations/includes/menu-list.jinja2:6
 msgid "New Conversation"
 msgstr "Nova conversa"
+
+#: src/ej_conversations/jinja2/ej_conversations/includes/menu.jinja2:26
+msgid "Edit conversation"
+msgstr "Editar conversa"
 
 #: src/ej_conversations/jinja2/ej_conversations/includes/menu.jinja2:36
 msgid "Back to conversations"
@@ -3872,6 +3888,10 @@ msgstr "Logar com conta "
 #: src/ej_users/jinja2/ej_users/includes/terms.jinja2:6
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
+
+#, fuzzy
+#~ msgid "Send a profile queston"
+#~ msgstr "Coleta de perfil"
 
 #, fuzzy
 #~ msgid "Grouping"

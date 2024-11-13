@@ -86,11 +86,11 @@ class User(AbstractUser):
     @staticmethod
     def get_or_create_from_session(conversation, request):
         """
-        get or creates new user from request session if conversation has
-        anonymous_votes_limit attribute bigger then 0 and user is anonymous.
+        get or create a new user from the request session if the conversation have
+        the anonymous_votes attribute bigger then zero and the request.user is anonymous.
         """
         user = request.user
-        if user.is_anonymous and conversation.anonymous_votes_limit:
+        if user.is_anonymous and conversation.anonymous_votes_enabled:
             request = User.creates_request_session_key(request)
             session_key = request.session.session_key
             user, _ = User.objects.get_or_create(

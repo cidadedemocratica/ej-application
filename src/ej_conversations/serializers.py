@@ -112,7 +112,7 @@ class PartialConversationSerializer(BaseApiSerializer):
             "text",
             "statistics",
             "participants_can_add_comments",
-            "anonymous_votes_limit",
+            "anonymous_votes",
             "participants_can_add_comments",
             "send_profile_question",
             "votes_to_send_profile_question",
@@ -129,7 +129,7 @@ class BoardConversationSerializer(BaseApiSerializer):
             "text",
             "statistics",
             "participants_can_add_comments",
-            "anonymous_votes_limit",
+            "anonymous_votes",
             "links",
         ]
 
