@@ -1,8 +1,11 @@
 {% extends 'base.jinja2' %}
-
 {% set page_title = flatpage.title %}
-
+{% set hide_menu = true -%}
 {% block content %}
-  <h1 class="text-accent">{{ flatpage.title }}</h1>
-  {% block render_flatpage %}{{ flatpage.content|safe }}{% endblock %}
+    <div class="content-grid">
+        <div>
+            <h1 class="text-accent margin-b3 margin-t3">{{ flatpage.title }}</h1>
+            {% block render_flatpage %}{{ flatpage.content.replace('\n', '<br>') |safe }}{% endblock %}
+        </div>
+    </div>
 {% endblock %}

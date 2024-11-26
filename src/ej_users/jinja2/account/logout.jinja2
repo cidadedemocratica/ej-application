@@ -3,12 +3,10 @@
 {% set show_account_link = false %}
 {% set login_link = link(_('login'), href='auth:login') %}
 {% set hide_menu = true %}
-
 {% block content %}
     {% if has_logout %}
         <div class="col height-full flex-center center">
-            <p class="text-1 center margin-y5 margin-x3">
-                {% trans %}We hope we'll see you soon ;){% endtrans %}</p>
+            <p class="text-1 center margin-y5 margin-x3">{% trans %}We hope we'll see you soon ;){% endtrans %}</p>
             <p>{% trans %}Go back to {{ login_link }} page.{% endtrans %}</p>
         </div>
     {% else %}
@@ -16,9 +14,7 @@
             <h1 class="h2 text-accent">{% trans %}Logout{% endtrans %}</h1>
             <p>{% trans %}Please press the logout button to confirm.{% endtrans %}</p>
             {{ csrf_input }}
-            <button class="is-primary width-full" type="submit" name="action">
-                {% trans %}Logout{% endtrans %}</button>
+            <button class="is-primary width-full" type="submit" name="action">{% trans %}Logout{% endtrans %}</button>
         </form>
     {% endif %}
 {% endblock %}
-

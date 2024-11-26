@@ -192,7 +192,7 @@ class TestGetViews:
             {"email": "email@server.com", "password": "password"}
         )
         expected_data = {
-            "url": "/emailservercom/conversations/1/title/",
+            "url": conversation.get_absolute_url(),
             "title": "title",
             "text": "test",
             "author": "email@server.com",
@@ -218,7 +218,7 @@ class TestGetViews:
         )
 
         expected_data = {
-            "url": "/emailservercom/conversations/1/title/",
+            "url": conversation.get_absolute_url(),
             "title": "title",
             "text": "test",
             "author": "email@server.com",
@@ -252,7 +252,7 @@ class TestGetViews:
         )
 
         expected_data = {
-            "url": "/emailservercom/conversations/1/title/",
+            "url": conversation.get_absolute_url(),
             "title": "title",
             "text": "test",
             "author": "email@server.com",
@@ -276,7 +276,7 @@ class TestGetViews:
         )
 
         expected_data = {
-            "url": "/emailservercom/conversations/1/title/",
+            "url": conversation.get_absolute_url(),
             "title": "title",
             "text": "test",
             "author": "email@server.com",

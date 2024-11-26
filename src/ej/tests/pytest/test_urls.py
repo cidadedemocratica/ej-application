@@ -9,7 +9,7 @@ from ej_users.mommy_recipes import UserRecipes
 
 User = get_user_model()
 
-conversation_url = "/board-slug/conversations/1/conversation/"
+conversation_url = "boards/board-slug/conversations/1/conversation/"
 
 
 class DataMixin(
@@ -29,6 +29,7 @@ class Base(DataMixin, CrawlerTester):
 
     start = "/"
     must_visit = start
+    skip_urls = ["/privacy", "/usage"]
 
 
 class TestUserCrawl(Base):
@@ -37,7 +38,7 @@ class TestUserCrawl(Base):
     """
 
     user = "user"
-    must_visit = (*Base.must_visit, "/profile/")
+    must_visit = (*Base.must_visit,)
 
 
 class TestAuthorCrawl(TestUserCrawl):

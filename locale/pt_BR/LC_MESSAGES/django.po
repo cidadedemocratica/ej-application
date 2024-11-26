@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-26 00:36-0300\n"
+"POT-Creation-Date: 2024-11-26 19:38-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -56,6 +56,19 @@ msgstr "Lista de papéis"
 #: src/ej/roles/tags.py:14
 msgid "hello"
 msgstr "olá"
+
+#: src/ej/settings/options.py:31
+msgid "EJ Platform"
+msgstr "Plataforma EJ"
+
+#: src/ej/settings/options.py:32
+msgid "Not part of EJ yet?"
+msgstr "Não faz parte da EJ ainda?"
+
+#: src/ej/settings/options.py:33
+#, fuzzy
+msgid "Welcome!"
+msgstr "Boas vindas!"
 
 #: src/ej_boards/apps.py:7 src/ej_boards/models.py:59
 msgid "Boards"
@@ -386,7 +399,7 @@ msgstr "Logotipo"
 msgid "This title already exists!"
 msgstr "Esse título já existe."
 
-#: src/ej_conversations/mixins.py:177 src/ej_dataviz/tests/test_views.py:389
+#: src/ej_conversations/mixins.py:177 src/ej_dataviz/tests/test_views.py:390
 #, fuzzy
 msgid "No group"
 msgstr "Sem grupo"
@@ -1448,12 +1461,16 @@ msgid "Name used to publicly identify user"
 msgstr "Apelido público usado para identificar o usuário"
 
 #: src/ej_users/models.py:41
-#, fuzzy
-msgid "Agree with terms"
+msgid "Terms of use"
 msgstr "Termos de uso"
 
-#: src/ej_users/models.py:45 src/ej_users/models.py:46
+#: src/ej_users/models.py:45
 msgid "Agree with privacy policy"
+msgstr "Política de privacidade"
+
+#: src/ej_users/models.py:46
+#, fuzzy
+msgid "Privacy policy"
 msgstr "Política de privacidade"
 
 #: src/ej_users/models.py:66
@@ -1503,20 +1520,11 @@ msgstr "E-mail ou senha inválida"
 msgid "Welcome to EJ!"
 msgstr "Bem vindo à EJ!"
 
-#: src/ej_users/views/user.py:96
-msgid "You must agree with EJ terms before register"
-msgstr "Você precisa concordar com os nossos termos antes de se cadastrar."
-
-#: src/ej_users/views/user.py:104
-#, fuzzy
-msgid "You must agree with EJ privacy policy before register"
-msgstr "Você precisa concordar com os nossos termos antes de se cadastrar."
-
-#: src/ej_users/views/user.py:193
+#: src/ej_users/views/user.py:173
 msgid "Please reset your password"
 msgstr "Por favor reset sua senha"
 
-#: src/ej/templates/jinja2/base.jinja2:58
+#: src/ej/templates/jinja2/base.jinja2:70
 msgid "Please override the \"content\" block of your template!"
 msgstr "Por favor substitua o bloco \"content\" do seu template!"
 
@@ -1590,8 +1598,8 @@ msgstr "Foto de perfil"
 #: src/ej/templates/jinja2/ej/includes/profile-menu.jinja2:40
 #: src/ej_users/jinja2/account/index.jinja2:17
 #: src/ej_users/jinja2/account/logout.jinja2:2
-#: src/ej_users/jinja2/account/logout.jinja2:16
-#: src/ej_users/jinja2/account/logout.jinja2:20
+#: src/ej_users/jinja2/account/logout.jinja2:14
+#: src/ej_users/jinja2/account/logout.jinja2:17
 #: src/ej_users/jinja2/ej_users/includes/account-menu.jinja2:6
 msgid "Logout"
 msgstr "Sair"
@@ -3689,7 +3697,7 @@ msgstr "Conta inativa"
 msgid "This account is inactive."
 msgstr "Essa conta está inativa."
 
-#: src/ej_users/jinja2/account/base.jinja2:25
+#: src/ej_users/jinja2/account/base.jinja2:26
 msgid "Accounts"
 msgstr "Contas"
 
@@ -3778,16 +3786,16 @@ msgstr "Entre com um usuário diferente"
 msgid "Remove account"
 msgstr "Remover conta"
 
-#: src/ej_users/jinja2/account/logout.jinja2:11
+#: src/ej_users/jinja2/account/logout.jinja2:9
 msgid "We hope we'll see you soon ;)"
 msgstr "Esperamos ver você em breve;)"
 
-#: src/ej_users/jinja2/account/logout.jinja2:12
+#: src/ej_users/jinja2/account/logout.jinja2:10
 #, python-format
 msgid "Go back to %(login_link)s page."
 msgstr "Voltar a página de login: %(login_link)s."
 
-#: src/ej_users/jinja2/account/logout.jinja2:17
+#: src/ej_users/jinja2/account/logout.jinja2:15
 msgid "Please press the logout button to confirm."
 msgstr "Por favor, pressione o botão de logout para confirmar."
 
@@ -3820,25 +3828,26 @@ msgstr "Esta operação não pode ser desfeita!"
 msgid "You have to type your e-mail to confirm."
 msgstr "Você tem que digitar seu e-mail para confirmar."
 
-#: src/ej_users/jinja2/ej_users/login.jinja2:4
+#: src/ej_users/jinja2/ej_users/login.jinja2:8
 msgid "Login form"
 msgstr "Formulário de login"
 
-#: src/ej_users/jinja2/ej_users/login.jinja2:19
+#: src/ej_users/jinja2/ej_users/login.jinja2:25
 #, fuzzy
 msgid "I forgot my password"
 msgstr "Esqueci minha senha"
 
 #: src/ej_users/jinja2/ej_users/includes/menu.jinja2:4
-#: src/ej_users/jinja2/ej_users/login.jinja2:20
+#: src/ej_users/jinja2/ej_users/login.jinja2:28
+#: src/ej_users/jinja2/ej_users/register.jinja2:80
 msgid "Login"
 msgstr "Entrar"
 
-#: src/ej_users/jinja2/ej_users/login.jinja2:36
+#: src/ej_users/jinja2/ej_users/login.jinja2:47
 msgid "Create your account!"
 msgstr "Criar uma conta!"
 
-#: src/ej_users/jinja2/ej_users/login.jinja2:36
+#: src/ej_users/jinja2/ej_users/login.jinja2:47
 msgid "Register now!"
 msgstr "Registre-se"
 
@@ -3900,10 +3909,23 @@ msgstr ""
 msgid "Register new user"
 msgstr "Registre-se para continuar"
 
+#: src/ej_users/jinja2/ej_users/register.jinja2:50
+msgid "When registering, you agreed to the "
+msgstr "Ao se registrar, você concorda com os "
+
+#: src/ej_users/jinja2/ej_users/register.jinja2:52
+msgid "and"
+msgstr ""
+
 #: src/ej_users/jinja2/ej_users/includes/menu.jinja2:5
-#: src/ej_users/jinja2/ej_users/register.jinja2:68
+#: src/ej_users/jinja2/ej_users/register.jinja2:63
 msgid "Register"
 msgstr "Registrar"
+
+#: src/ej_users/jinja2/ej_users/register.jinja2:76
+#: src/ej_users/jinja2/ej_users/register.jinja2:80
+msgid "Already has an account?"
+msgstr "Já possui uma conta?"
 
 #: src/ej_users/jinja2/ej_users/includes/account-menu.jinja2:4
 msgid "Manage account"
@@ -3928,6 +3950,21 @@ msgstr "Logar com conta "
 #: src/ej_users/jinja2/ej_users/includes/terms.jinja2:6
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
+
+#~ msgid "You must agree with EJ terms before register"
+#~ msgstr "Você precisa concordar com os nossos termos antes de se cadastrar."
+
+#, fuzzy
+#~ msgid "You must agree with EJ privacy policy before register"
+#~ msgstr "Você precisa concordar com os nossos termos antes de se cadastrar."
+
+#, fuzzy
+#~ msgid "Continue with your account!"
+#~ msgstr "Criar uma conta!"
+
+#, fuzzy
+#~ msgid "Agree with terms"
+#~ msgstr "Termos de uso"
 
 #, fuzzy
 #~ msgid "More informations"
