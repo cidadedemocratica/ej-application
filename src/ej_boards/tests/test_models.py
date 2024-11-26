@@ -12,7 +12,7 @@ class TestBoardModel(ConversationRecipes):
         assert board.title == str(board)
 
     def test_get_board_absolute_url(self, db, board):
-        assert board.get_absolute_url() == f"/{board.slug}/conversations/"
+        assert board.get_absolute_url() == f"/boards/{board.slug}/conversations/"
 
     def test_get_board_palette_from_conversation(self, mk_conversation, mk_user):
         user = mk_user(email="someuser@mail.com")

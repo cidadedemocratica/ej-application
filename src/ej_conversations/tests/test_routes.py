@@ -12,13 +12,12 @@ TEST_DOMAIN = "https://domain.com.br"
 class TestRoutes(UrlTester, ConversationRecipes):
     public_urls = ["/conversations/"]
     user_urls = [
-        "/board-slug/conversations/1/conversation/",
-        # '/comments/<id>-<hash>/'
+        "/boards/board-slug/conversations/1/conversation/",
     ]
-    admin_urls = ["/board-slug/conversations/add/"]
+    admin_urls = ["/boards/board-slug/conversations/add/"]
     owner_urls = [
-        "/board-slug/conversations/1/conversation/edit/",
-        "/board-slug/conversations/1/conversation/moderate/",
+        "/boards/board-slug/conversations/1/conversation/edit/",
+        "/boards/board-slug/conversations/1/conversation/moderate/",
     ]
 
     def get_data(self, request):

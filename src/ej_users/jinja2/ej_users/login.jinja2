@@ -1,39 +1,51 @@
-{% extends 'ej_users/base.jinja2' %}
-
-{% block form_data %}
-    <form method="post" class="login-form pad-t3 form-narrow" aria-label="{{ _('Login form') }}" aria-live="assertive">
-        {{ csrf_input }}
-        <div class="login-form__logo">
-            <img src="{{ static('/img/logo/logo-dark.png') }}" alt="ej dark logo">
+{% extends 'base.jinja2' %}
+{% set next = ('?next=' + next if next else '') %}
+{% set hide_menu = true -%}
+{% block content %}
+    {% block form_data %}
+        <form method="post"
+              class="login-form pad-t3 form-narrow"
+              aria-label="{{ _("Login form") }}"
+              aria-live="assertive">
+            {{ csrf_input }}
+            <div class="login-form__logo">
+                <img src="{{ static("/img/logo/logo-dark.png") }}" alt="ej dark logo">
+            </div>
+            <div class="login-form__input">
+                <label class="login-form__label">{{ form.email.label }}</label>
+                {{ form.email }}
+            </div>
+            <div class="login-form__input">
+                <label class="login-form__label">{{ form.password.label }}</label>
+                {{ form.password }}
+                {{ form.non_field_errors() }}
+            </div>
+            <div class="login-form__button-container">
+                <a href="{{ url("auth:recover-password") }}"
+                   class="underline login-form__reset-password">{{ _("I forgot my password") }}</a>
+                <input type="submit"
+                       name="submit"
+                       value="{{ _("Login") }}"
+                       class="width-full is-primary login-form__submit-button">
+            </div>
+        </form>
+        {% if social_buttons|default(false) %}
+            {{ social_js }}
+            {% include 'ej_users/includes/social-buttons.jinja2' %}
+        {% endif %}
+        <script src="/static/js/vote-from-template.js"></script>
+    {% endblock %}
+    {% block form_footer %}
+        <hr class="margin-auto register-redirection__hr">
+        <div class="register-redirection">
+            <img src="{{ static("/img/login/login.svg") }}" alt="ej cat logo">
+            <div class="register-redirection__button">
+                <span>{{ _(settings.EJ_REGISTER_TEXT) }}</span>
+                <a class="button"
+                   href="{{ url("auth:register") + next }}"
+                   secondary
+                   aria-label="{{ _("Create your account!") }}">{{ _("Register now!") }}</a>
+            </div>
         </div>
-        <div class="login-form__input">
-            <label class="login-form__label">{{ form.email.label }}</label>
-            {{ form.email }}
-        </div>
-        <div class="login-form__input">
-            <label class="login-form__label">{{ form.password.label }}</label>
-            {{ form.password }}
-            {{ form.non_field_errors() }}
-        </div>
-        <div class="login-form__button-container">
-            <a href="{{ url('auth:recover-password') }}" class="underline login-form__reset-password">{{ _('I forgot my password') }}</a>
-            <input type="submit" name="submit" value="{{ _('Login') }}" class="width-full is-primary login-form__submit-button">
-        </div>
-    </form>
-    {% if social_buttons|default(false) %}
-        {{ social_js }}
-        {% include 'ej_users/includes/social-buttons.jinja2' %}
-    {% endif %}
-<script src="/static/js/vote-from-template.js"></script>
-{% endblock %}
-
-{% block form_footer %}
-    <hr class="margin-auto register-redirection__hr">
-    <div class="register-redirection">
-        <img src="{{ static('/img/login/login.svg') }}" alt="ej cat logo">
-        <div class="register-redirection__button">
-            <span>{{ _(settings.EJ_REGISTER_TEXT) }}</span>
-            <a class="button" href="{{ url('auth:register') + next }}" secondary aria-label="{{ _('Create your account!') }}">{{ _('Register now!') }}</a>
-        </div>
-    </div>
+    {% endblock %}
 {% endblock %}

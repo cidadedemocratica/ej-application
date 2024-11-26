@@ -38,12 +38,12 @@ class User(AbstractUser):
     )
     username = property(lambda self: self.name or self.email.replace("@", "__"))
     agree_with_terms = models.BooleanField(
-        default=False, help_text=_("Agree with terms"), verbose_name=_("Agree with terms")
+        default=True, help_text=_("Terms of use"), verbose_name=_("Terms of use")
     )
     agree_with_privacy_policy = models.BooleanField(
-        default=False,
+        default=True,
         help_text=_("Agree with privacy policy"),
-        verbose_name=_("Agree with privacy policy"),
+        verbose_name=_("Privacy policy"),
     )
     secret_id = models.CharField(unique=True, null=True, max_length=200)
     has_completed_registration = models.BooleanField(default=True)

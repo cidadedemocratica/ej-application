@@ -1,14 +1,15 @@
 {% extends 'base.jinja2' %}
-
 {% set main_class = "form-container" %}
-{% block menu %}{% include 'ej_users/includes/account-menu.jinja2' %}{% endblock %}
-
+{% block menu %}
+    {% include 'ej_users/includes/account-menu.jinja2' %}
+{% endblock %}
 {% block main %}
     <main class="{{ main_class }}">
         {%- block message_area %}
             <div id="message-area" up-hungry>
                 {% for msg in get_messages() %}
-                    <div class="toast"{% if msg.tags %} {{ msg.tags }}{% endif %}>{{ msg|safe }}</div>
+                    <div class="toast"{% if msg.tags %} {{ msg.tags }}{% endif %}>{{ msg|safe }}
+                    </div>
                 {% endfor %}
             </div>
         {% endblock %}
@@ -19,8 +20,8 @@
         {% block content %}{% endblock %}
     </main>
 {% endblock %}
-
 {% macro account_link() %}
-<a class="width-full bold lowercase text-brand margin-3 block left" href="{{ url('account:index') }}">
-    <i class="fa fa-chevron-left"></i> {% trans %}Accounts{% endtrans %}</a>
+    <a class="width-full bold lowercase text-brand margin-3 block left"
+       href="{{ url("account:index") }}">
+        <i class="fa fa-chevron-left"></i> {% trans %}Accounts{% endtrans %}</a>
 {% endmacro %}

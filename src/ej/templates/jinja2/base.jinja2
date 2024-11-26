@@ -1,7 +1,6 @@
 {% set page_title = page_title|default(settings.EJ_PAGE_TITLE) -%}
 {% set main_tag = main_tag|default("main") %}
 {% set main_class = "main-container" %}
-
 <!DOCTYPE html>
 <html lang="{{ get_language() }}">
     {% block head %}
@@ -12,42 +11,55 @@
             <script src="https://unpkg.com/htmx.org@1.9.5"></script>
             <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
             <script src=" https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js "></script>
-
             {% block meta %}{% endblock %}
-            {% block css %}{% include 'ej/includes/head/css.jinja2' %}{% endblock %}
-            {% block javascript %}{% include 'ej/includes/head/javascript.jinja2' %}{% endblock %}
+            {% block css %}
+                {% include 'ej/includes/head/css.jinja2' %}
+            {% endblock %}
+            {% block javascript %}
+                {% include 'ej/includes/head/javascript.jinja2' %}
+            {% endblock %}
             {% include ['ej/includes/head/favicons.jinja2',
-                        'ej/includes/head/pwa.jinja2',
-                        'ej/includes/head/open_graph.jinja2'] %}
+            'ej/includes/head/pwa.jinja2',
+            'ej/includes/head/open_graph.jinja2'] %}
         </head>
     {% endblock %}
-
     {%- block body %}
-        <body class="{{ body_class|default('body') }}" {% if request is defined %} data-current-url="{{ request.path }}" {% endif %} {{ salt_attr()|safe }}>
-
-            {% if not hide_header|default(False) %}{% include 'ej/includes/header.jinja2' %}{% endif %}
-
+        <body class="{{ body_class|default("body") }}" {% if request is defined %}data-current-url="{{ request.path }}"{% endif %} {{ salt_attr() |safe }}>
+            {% if not hide_header|default(False) %}
+                {% include 'ej/includes/header.jinja2' %}
+            {% endif %}
             <div id="page-wrapper">
                 {%- if not hide_menu|default(False) %}
-                {%- if menu_contents is defined %}
-                    {{ page_menu(menu_contents|default([]), request=request) }}
-                {% else %}
-                    {% call page_menu() %}
-                        {%- block menu %}{{ page_menu.DEFAULT_MENU_SECTIONS(request)|safe }}{% endblock %}
-                    {% endcall %}
+                    {%- if menu_contents is defined %}
+                        {{ page_menu(menu_contents|default([]) , request=request) }}
+                    {% else %}
+                        {% call page_menu() %}
+                            {%- block menu %}{{ page_menu.DEFAULT_MENU_SECTIONS(request) |safe }}{% endblock %}
+                        {% endcall %}
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-
                 {%- block main %}
-                    <{{ main_tag }} id="main-content" tabindex=0 class="{{ main_class|default('container-1') }}{% if request is defined %}{{- '' if request.user.is_authenticated else ' is-anonymous' }}"{% endif %}>
+                    {%- block main_tag %}
+                        <{{ main_tag }} id="main-content" tabindex=0 class="{{ main_class|default("container-1") }}
+                        {% if request is defined %}
+                            {{- '' if not hide_menu|default(False) else ' is-anonymous main-container--without-margin' }}
+                        {% endif %}
+                        "
+                        >
+                    {% endblock %}
                     {%- block message_area %}
-                        <div id="message-area" up-hungry role="status" role="alert" aria-live="polite" {% if aria_flowto is defined %}aria-flowto="{{ aria_flowto }}"{% endif %}>
+                        <div id="message-area"
+                             up-hungry
+                             role="status"
+                             role="alert"
+                             aria-live="polite"
+                             {% if aria_flowto is defined %}aria-flowto="{{ aria_flowto }}"{% endif %}>
                             {% for msg in get_messages() %}
-                                <div class="toast"{% if msg.tags %} {{ msg.tags }}{% endif %} tabindex="0">{{ msg|safe }}</div>
+                                <div class="toast"{% if msg.tags %} {{ msg.tags }}{% endif %} tabindex="0">{{ msg|safe }}
+                                </div>
                             {% endfor %}
                         </div>
                     {% endblock %}
-
                     {% if content is defined %}
                         {{ content }}
                     {% else %}
@@ -55,7 +67,7 @@
                             {% if content_html is defined %}
                                 {{ content_html|safe }}
                             {% else %}
-                                <p>{{ _('Please override the "content" block of your template!') }}</p>
+                                <p>{{ _("Please override the \"content\" block of your template!") }}</p>
                             {% endif %}
                         {% endblock content %}
                     {% endif %}
