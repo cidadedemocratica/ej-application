@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-13 17:58-0300\n"
+"POT-Creation-Date: 2024-11-26 00:36-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -372,8 +372,8 @@ msgid "Tags, separated by commas."
 msgstr "Temas, separados por vírgula."
 
 #: src/ej_conversations/forms.py:78 src/ej_conversations/forms.py:81
-#: src/ej_conversations/models/conversation.py:121
-#: src/ej_conversations/models/conversation.py:128
+#: src/ej_conversations/models/conversation.py:123
+#: src/ej_conversations/models/conversation.py:130
 msgid "Background image"
 msgstr "Imagem de fundo"
 
@@ -386,7 +386,7 @@ msgstr "Logotipo"
 msgid "This title already exists!"
 msgstr "Esse título já existe."
 
-#: src/ej_conversations/mixins.py:177 src/ej_dataviz/tests/test_views.py:355
+#: src/ej_conversations/mixins.py:177 src/ej_dataviz/tests/test_views.py:389
 #, fuzzy
 msgid "No group"
 msgstr "Sem grupo"
@@ -489,18 +489,18 @@ msgid ""
 "conversations/ endpoint."
 msgstr "Conversas ocultas não aparecem no mural principal /conversations/."
 
-#: src/ej_conversations/models/conversation.py:90
+#: src/ej_conversations/models/conversation.py:91
 msgid ""
 "Check this option if you want your audience to vote without registering. All "
 "users will be created with a random and unique ID."
 msgstr ""
 
-#: src/ej_conversations/models/conversation.py:93
+#: src/ej_conversations/models/conversation.py:94
 #, fuzzy
 msgid "Enable anonymous votes"
 msgstr "Habilitar votos anônimos"
 
-#: src/ej_conversations/models/conversation.py:98
+#: src/ej_conversations/models/conversation.py:100
 #, fuzzy
 msgid ""
 "Configures how many anonymous votes the participants can give before asking "
@@ -512,31 +512,31 @@ msgstr ""
 "apresentado após o segundo voto na conversa. Caso o input tenha valor 0, a "
 "conversa não poderá receber votos anônimos."
 
-#: src/ej_conversations/models/conversation.py:101
+#: src/ej_conversations/models/conversation.py:103
 #, fuzzy
 msgid "Number of anonymous votes"
 msgstr "Quantidade de votos anônimos"
 
-#: src/ej_conversations/models/conversation.py:106
+#: src/ej_conversations/models/conversation.py:108
 #, fuzzy
 msgid "Send profile question?"
 msgstr "Enviar questões de perfil durante a enquete?"
 
-#: src/ej_conversations/models/conversation.py:107
+#: src/ej_conversations/models/conversation.py:109
 msgid "Send a question to participants to complete their profile."
 msgstr "Envia questões de perfil para o usuário responder durante as enquetes"
 
-#: src/ej_conversations/models/conversation.py:111
+#: src/ej_conversations/models/conversation.py:114
 msgid "Votes to send profile question"
 msgstr "Votos necessários para iniciar as perguntas"
 
-#: src/ej_conversations/models/conversation.py:112
+#: src/ej_conversations/models/conversation.py:115
 msgid "Number of votes to send profile question."
 msgstr ""
 "Número de votos realizados pelo usuário antes de iniciar as perguntas "
 "demográficas. "
 
-#: src/ej_conversations/models/conversation.py:135
+#: src/ej_conversations/models/conversation.py:136
 msgid "A message to be presented to participants before starting voting."
 msgstr ""
 "Um texto que poderá ser apresentado antes da tela de votação. A página "
@@ -1790,11 +1790,13 @@ msgstr "de"
 
 #: src/ej_admin/jinja2/ej_admin/environment/paginator.jinja2:6
 #: src/ej_admin/jinja2/ej_admin/environment/recent-boards-paginator.jinja2:5
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:66
 msgid "Previous"
 msgstr "Anterior"
 
 #: src/ej_admin/jinja2/ej_admin/environment/paginator.jinja2:18
 #: src/ej_admin/jinja2/ej_admin/environment/recent-boards-paginator.jinja2:17
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:77
 #: src/ej_profiles/jinja2/ej_profiles/includes/tour-page2.jinja2:20
 msgid "Next"
 msgstr "Próximo"
@@ -1806,6 +1808,7 @@ msgid "boards"
 msgstr "murais"
 
 #: src/ej_admin/jinja2/ej_admin/environment/searched-conversations.jinja2:6
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:30
 msgid "Author"
 msgstr "Autor"
 
@@ -1982,6 +1985,7 @@ msgstr "Conta"
 
 #: src/ej_clusters/jinja2/ej_clusters/stereotype-votes/create-tab.jinja2:11
 #: src/ej_clusters/jinja2/ej_clusters/stereotype-votes/edit-tab.jinja2:16
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:24
 #, fuzzy
 msgid "Votes"
 msgstr "votos"
@@ -2989,29 +2993,68 @@ msgstr "Exibindo"
 msgid "creation date"
 msgstr "data de criação"
 
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:5
+msgid "Chart line up"
+msgstr "Linha de gráfico crescente"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:7
+#, fuzzy
+msgid "Statistics in the group "
+msgstr "Estatísticas no grupo "
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:9
+#, fuzzy
+msgid "General statistics"
+msgstr "Estatísticas gerais"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:14
+#, fuzzy
+msgid "Comment "
+msgstr "Comentário"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:20
+#, fuzzy
+msgid "Creation date"
+msgstr "data de criação"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:36
+msgid "Concordance"
+msgstr "Concordância"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:40
+msgid "Discordance"
+msgstr "Discordância"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:44
+#, fuzzy
+msgid "Abstentions"
+msgstr "Abstenções"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:48
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:12
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:67
+msgid "Convergence"
+msgstr "Convergência"
+
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/modal.jinja2:52
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:13
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:68
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/users/table.jinja2:55
+#, fuzzy
+msgid "Participation"
+msgstr "Participação"
+
 #: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:8
 #, fuzzy
 msgid "Comment content"
 msgstr "Comentário"
 
 #: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:11
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:55
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:66
 #: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/users/table.jinja2:11
 #: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/users/table.jinja2:54
 msgid "Skipped"
 msgstr "Pulados"
-
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:12
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:56
-msgid "Convergence"
-msgstr "Convergência"
-
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:13
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/comments/table.jinja2:57
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/users/table.jinja2:55
-#, fuzzy
-msgid "Participation"
-msgstr "Participação"
 
 #: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/users/table.jinja2:13
 #, fuzzy
@@ -3472,9 +3515,6 @@ msgid ""
 "Use EJ's web chatbot from our infrastructure. It does not require any "
 "additional configuration. The user will access an EJ route to participate."
 msgstr ""
-"Utilize o chatbot web da EJ a partir da nossa infraestrutura. Não exige "
-"nenhuma configuração adicional. O usuário irá acessar uma rota da EJ para "
-"participar."
 
 #: src/ej_profiles/jinja2/ej_profiles/detail.jinja2:16
 #: src/ej_profiles/jinja2/ej_profiles/edit.jinja2:26
@@ -3890,8 +3930,15 @@ msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #, fuzzy
-#~ msgid "Send a profile queston"
-#~ msgstr "Coleta de perfil"
+#~ msgid "More informations"
+#~ msgstr "Mais informações"
+
+#, fuzzy
+#~ msgid "Comment added date"
+#~ msgstr "Data de adição de comentário"
+
+#~ msgid "Absolute number of votes"
+#~ msgstr "Número absoluto de votos"
 
 #, fuzzy
 #~ msgid "Grouping"
@@ -5355,10 +5402,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ "Para adicionar esta conversa no seu site/plataforma, primeiro selecione o "
 #~ "tipo de autenticação e qual tema visual o componente irá utilizar. "
 #~ "Depois, basta gerar o script e adiciona-lo às tags header e body do html. "
-
-#, fuzzy
-#~ msgid "More information"
-#~ msgstr "Saiba mais"
 
 #~ msgid "If you want a custom title for the e-mail template, enter here"
 #~ msgstr "Caso queira um título diferente para o e-mail, digite aqui"

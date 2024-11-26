@@ -327,7 +327,7 @@ body {
 
 .isexpanded-cluster-comments {
     &--overflow {
-        overflow: scroll;
+        overflow: hidden scroll;
         max-height: 50vh;
     }
 }

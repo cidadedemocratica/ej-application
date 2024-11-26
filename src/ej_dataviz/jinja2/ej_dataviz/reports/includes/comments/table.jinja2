@@ -15,21 +15,32 @@
             </thead>
             <tbody>
                 {% for comment in page %}
-                    <tr>
+                    <tr id="comment-{{loop.index0}}"
+                        hx-post="{{ url('dataviz:comments-modal', pk=comment[0]) }}"
+                        hx-target="#comments-detail-modal"
+                        hx-trigger="click[event.target.matches('#comment-link-{{loop.index0}}')] from:body"
+                        hx-vals='{"comments": {{comments}}, "current_index": {{loop.index0}}}'
+                    >
                         <td>
+                            {{csrf_input}}
                             <div class="report__comment">
-                                <div>{{comment[0]}}</div>
-                                <div>{{comment[1]}}</div>
-                                {% if comment|length > 7 %}
-                                    <div>{{comment[7]}}</div>
+                                <div class="report__comment-detail">
+                                    <div>{{comment[1]}}</div>
+                                    <img id="comment-link-{{loop.index0}}" class="cursor-pointer"
+                                        src="{{ static('/img/icons/chart-line-white.svg') }}"
+                                    >
+                                </div>
+                                <div>{{comment[2]}}</div>
+                                {% if comment|length > 8 %}
+                                    <div>{{comment[8]}}</div>
                                 {% endif %}
                             </div>
                         </td>
-                        <td class="report__percentages">{{"%s%%"|format(comment[2]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(comment[3]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(comment[4]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(comment[5]|round)}}</td>
                         <td class="report__percentages">{{"%s%%"|format(comment[6]|round)}}</td>
+                        <td class="report__percentages">{{"%s%%"|format(comment[7]|round)}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -66,3 +77,5 @@
         });
     </script>
 </div>
+
+<div id="comments-detail-modal"></div>

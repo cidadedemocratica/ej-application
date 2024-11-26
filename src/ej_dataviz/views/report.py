@@ -1,9 +1,11 @@
+import json
 from django.core.paginator import Paginator
+from django.shortcuts import render
 from django.views.generic import DetailView
 from sidekick import import_later
 
 from ej.decorators import can_access_dataviz_class_view
-from ej_conversations.models import Conversation
+from ej_conversations.models import Conversation, Comment
 from ej_dataviz.utils import get_clusters, get_comments_dataframe, get_user_dataframe
 from ej_dataviz.views.filters import (
     CommentsReportClustersFilter,
@@ -85,7 +87,10 @@ class CommentReportFilterView(ReportsBaseView):
         comments_df = ReportOrderByFilter(
             order_by, comments_df, ascending, "comment"
         ).filter()
+        comments_df = comments_df.reset_index()
+
         context["page"] = self.paginate(comments_df, self.request.GET.get("page") or 1)
+        context["comments"] = json.dumps(comments_df.to_json(orient="records"))
         return context
 
 
@@ -97,7 +102,43 @@ class CommentReportDetailView(ReportsBaseView):
     template_name = "ej_dataviz/reports/comments.jinja2"
 
     def get_dataframe(self, conversation):
-        return get_comments_dataframe(conversation, "")
+        comments_df = get_comments_dataframe(conversation, "")
+        comments_df = comments_df.reset_index()
+        return comments_df
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        conversation = context["object"]
+        dataframe = self.get_dataframe(conversation)
+        context["comments"] = json.dumps(dataframe.to_json(orient="records"))
+        return context
+
+
+class CommentDetailView(DetailView):
+    """
+    Returns comment report page.
+    """
+
+    template_name = "ej_dataviz/reports/includes/comments/modal.jinja2"
+    model = Comment
+
+    def post(self, *args, **kwargs):
+        context = self.get_context_data()
+        return render(self.request, self.template_name, context)
+
+    def get_context_data(self, *args, **kwargs):
+        comment = self.get_object()
+        comment_index = int(self.request.POST["current_index"][0])
+        comments = json.loads(self.request.POST["comments"])
+
+        return {
+            "comment": comment,
+            "comments": json.dumps(self.request.POST["comments"]),
+            "comment_statistics": comments[comment_index],
+            "previous_id": comment.previous(comment_index, comments),
+            "next_id": comment.next(comment_index, comments),
+            "current_index": comment_index,
+        }
 
 
 class UsersReportDetailView(ReportsBaseView):
