@@ -17,6 +17,11 @@ reports_urlpatterns = [
         name="comments-filter",
     ),
     path(
+        "comments/modal/<pk>",
+        report.CommentDetailView.as_view(),
+        name="comments-modal",
+    ),
+    path(
         report_url + "users/",
         report.UsersReportDetailView.as_view(),
         name="users",

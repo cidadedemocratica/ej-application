@@ -56,6 +56,10 @@ label + select + br {
     justify-content: center;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .full-width {
     @media only screen and (max-width: 900px) {
         grid-column: 1 / 4 !important;

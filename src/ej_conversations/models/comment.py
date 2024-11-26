@@ -216,3 +216,38 @@ class Comment(StatusModel, TimeStampedModel):
         Compute the URL hash for the given comment.
         """
         return blake2b(self.content.encode("utf8"), digest_size=4).hexdigest()
+
+    def next(self, current_index, comments):
+        """
+        Get next comment of a conversation, according to create date
+        """
+        next_index = current_index + 1
+        id = None
+
+        try:
+            id = comments[next_index]["comment"]
+        except IndexError:
+            pass
+
+        return id
+
+    def previous(self, current_index, comments):
+        """
+        Get previous comment of a conversation, according to create date
+        """
+        previous_index = current_index - 1
+        id = None
+
+        try:
+            id = comments[previous_index]["comment"]
+        except IndexError:
+            pass
+
+        if previous_index < 0:
+            id = None
+
+        return id
+
+    @property
+    def participation(self):
+        return self.n_votes / self.conversation.users.count() * 100

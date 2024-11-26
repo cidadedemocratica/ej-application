@@ -51,18 +51,17 @@
 
         &--sm-height {
             @extend .modal__container;
-            max-height: 80vh;
+            max-height: 90vh;
             max-width: 50rem;
             width: 90%;
-            overflow: scroll;
 
             @media (max-width: 414px) {
                 & {
                     padding: 1rem;
                     width: 95%;
-                    height: 0;
-                    max-height: unset;
+                    max-height: 80vh;
                     transition: height .5s;
+                    overflow-y: scroll;
                 }
 
                 &-transition {

@@ -1,0 +1,100 @@
+<div id="comments-detail-modal" class="cluster-modal modal__overlay">
+    <div class="comments-modal modal modal__container modal__container--text-align-unset modal__container--sm-height modal__container--lighter-bg modal--full-screen-mobile">
+        <div class="comment-detail">
+            <div class="cluster-modal__header comment-detail__modal-header">
+                <img src="{{ static('/img/icons/chart-line.svg') }}" alt="{{ _('Chart line up') }}">
+                {% if comment_statistics["group"] %}
+                    <p>{{_("Statistics in the group ")}}{{comment_statistics["group"]}}</p>
+                {% else %}
+                    <p>{{_("General statistics")}}</p>
+                {% endif %}
+                <i onclick="closeCommentModal()" class="fas fa-times"></i>
+            </div>
+            <div class="comment-detail__info">
+                <span>{{_("Comment ")}}</span>
+                <p class="comment-detail__info-content">{{comment.content}}</p>
+            </div>
+
+            <div class="comment-detail_container-info">
+                <div class="comment-detail__info">
+                    <span>{{_("Creation date")}}</span>
+                    <p>{{ comment.created.strftime("%d/%m/%Y") }}</p>
+                </div>
+                <div class="comment-detail__info">
+                    {{_("Votes")}}
+                    <p>{{ comment.n_votes }}</p>
+                </div>
+            </div>
+        
+            <div class="comment-detail__info">
+                {{_("Author")}}
+                <p class="comment-detail__info-author">{{comment.author.name}}</p>
+            </div>
+            
+            <div class="comment-detail__statistics">
+                <div class="comment-detail__info">
+                    <span>{{_("Concordance")}}</span>
+                    <p>{{"%s%%"|format(comment_statistics["agree"]|round)}}</p>
+                </div>
+                <div class="comment-detail__info">
+                    <span>{{_("Discordance")}}</span>
+                    <p>{{"%s%%"|format(comment_statistics["disagree"]|round)}}</p>
+                </div>
+                <div class="comment-detail__info">
+                    <span>{{_("Abstentions")}}</span>
+                    <p>{{"%s%%"|format(comment_statistics["skipped"]|round)}}</p>
+                </div>
+                <div class="comment-detail__info">
+                    <span>{{_("Convergence")}}</span>
+                    <p>{{"%s%%"|format(comment_statistics["convergence"]|round)}}</p>
+                </div>
+                <div class="comment-detail__info">
+                    <span>{{_("Participation")}}</span>
+                     <p>{{"%s%%"|format(comment_statistics["participation"]|round)}}</p>
+                </div>
+            </div>
+            <div class="comment-detail__buttons">
+            {% if previous_id %}
+                <a class="comment-detail__buttons-link"
+                    id="previous-{{current_index-1}}"
+                    hx-post="{{ url('dataviz:comments-modal', pk=previous_id) }}"
+                    hx-target="#comments-detail-modal"
+                    hx-vals='{"comments": {{comments}}, "current_index": {{current_index-1}}}'
+                    hx-trigger="click delay:0.5s">
+                    {{csrf_input}}
+                    <i class="fas fa-chevron-left"></i>
+                    {{_("Previous")}}
+                </a>
+            {% endif %}
+            {% if next_id %}
+                <a class="comment-detail__buttons-link comment-detail__buttons-link--left"
+                    id="next-{{current_index+1}}"
+                    hx-post="{{ url('dataviz:comments-modal', pk=next_id) }}"
+                    hx-target="#comments-detail-modal"
+                    hx-vals='{"comments": {{comments}}, "current_index": {{current_index+1}}}'
+                    hx-trigger="click delay:0.5s">
+                    {{csrf_input}}
+                    {{_("Next")}}
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function closeCommentModal() {
+        const modal = $('#comments-detail-modal');
+        const body = $("body").removeClass('modal--hide-overflow-y');
+        modalContainer = modal.find('.modal__container--sm-height');
+        modalContainer.removeClass('modal__container--sm-height-transition');
+        modal.addClass('hide');
+    }
+
+    $(".comment-detail__buttons-link").click(function(){
+        $(".comments-modal").fadeOut(200);
+        $(".comments-modal").fadeIn(200);
+    });
+
+</script>

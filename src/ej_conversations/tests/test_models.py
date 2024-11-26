@@ -177,6 +177,58 @@ class TestVote:
         assert choice_disagree == Choice.DISAGREE
 
 
+class TestComment(ConversationRecipes):
+    def test_no_neighbours_comment(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        mk_comment = conversation.create_comment
+        comment = mk_comment(user, "aa", status="approved", check_limits=False)
+        index = 0
+        assert not comment.next(index, [{"comment": comment.id}])
+        assert not comment.previous(index, [])
+
+    def test_next_neighbour_comment(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        mk_comment = conversation.create_comment
+        comment = mk_comment(user, "aa", status="approved", check_limits=False)
+        next_comment = mk_comment(
+            user, "another content", status="approved", check_limits=False
+        )
+        comments = [{"comment": comment.id}, {"comment": next_comment.id}]
+        index = 0
+        assert comment.next(index, comments) == next_comment.id
+        assert not comment.previous(index, comments)
+
+    def test_previous_next_neighbour_comment(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        mk_comment = conversation.create_comment
+        comments = [
+            mk_comment(user, "aa", status="approved", check_limits=False),
+            mk_comment(user, "bb", status="approved", check_limits=False),
+            mk_comment(user, "cc", status="approved", check_limits=False),
+        ]
+        comments_id = [{"comment": comment.id} for comment in comments]
+        index = 1
+        assert comments[index].next(index, comments_id) == comments[2].id
+        assert comments[index].previous(index, comments_id) == comments[0].id
+
+    def test_only_previous_neighbour_comment(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        mk_comment = conversation.create_comment
+        comments = [
+            mk_comment(user, "aa", status="approved", check_limits=False),
+            mk_comment(user, "bb", status="approved", check_limits=False),
+            mk_comment(user, "cc", status="approved", check_limits=False),
+        ]
+        comments_id = [{"comment": comment.id} for comment in comments]
+        index = 2
+        assert not comments[index].next(index, comments_id)
+        assert comments[index].previous(index, comments_id) == comments[1].id
+
+
 class TestConversartionStatistics(ConversationRecipes):
     def test_vote_count_of_a_conversation(self, db, mk_conversation, mk_user):
         conversation = mk_conversation()
