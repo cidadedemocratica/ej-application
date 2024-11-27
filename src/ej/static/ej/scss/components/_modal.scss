@@ -48,10 +48,10 @@
             color: $color-black-alternative;
             font-weight: 500;
         }
-        
+
         &--sm-height {
             @extend .modal__container;
-            max-height: 80vh;
+            max-height: 90vh;
             max-width: 50rem;
             width: 90%;
 
@@ -59,9 +59,9 @@
                 & {
                     padding: 1rem;
                     width: 95%;
-                    height: 0;
-                    max-height: unset;
+                    max-height: 80vh;
                     transition: height .5s;
+                    overflow-y: scroll;
                 }
 
                 &-transition {

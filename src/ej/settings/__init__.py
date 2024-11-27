@@ -167,6 +167,12 @@ class Conf(
         USE_TZ = os.getenv("USE_TZ", False)
         TIME_ZONE = os.getenv("TIME_ZONE", "America/Sao_Paulo")
 
+    # The persona's managing form uses a Formset to send the comments and their votes
+    # to the backend using a POST request. In a conversation with several comments, Django
+    # will complain about the number of uploaded fields during the request.
+    # This variable increases this limit.
+    DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
 
 Conf.save_settings(globals())
 

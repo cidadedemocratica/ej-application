@@ -1,4 +1,4 @@
-@import '../node_modules/mendeleev.css/src/elements';
+@import "../node_modules/mendeleev.css/src/elements";
 
 h1,
 h2 {
@@ -56,12 +56,23 @@ label + select + br {
     justify-content: center;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 .full-width {
     @media only screen and (max-width: 900px) {
         grid-column: 1 / 4 !important;
     }
 }
 
+.ej-margin-top {
+    margin-top: 1rem;
+}
+
+.ej-margin-bottom {
+    margin-bottom: 1rem;
+}
 
 input + .helptext,
 textarea + .helptext,
@@ -79,10 +90,10 @@ select + br + .helptext {
     font-size: 1rem;
     text-align: left;
     color: $color-theme-report-dark-gray;
-    &-center{
-    text-align: center;
-    max-width: 50%;
-    margin: auto;
+    &-center {
+        text-align: center;
+        max-width: 50%;
+        margin: auto;
     }
 }
 
@@ -96,7 +107,7 @@ label + ul.errorlist {
 }
 
 ul.errorlist {
-    color: color('red');
+    color: color("red");
     font-size: 0.75rem;
     font-weight: 600;
     list-style: none;
@@ -109,13 +120,13 @@ ul.errorlist {
     &__content {
         height: 20rem;
         overflow: scroll;
-        font-size: .9rem;
+        font-size: 0.9rem;
         border-radius: 0.3125rem;
         height: 6.725rem;
         color: $color-theme-report-dark-gray;
     }
     &__checkbox {
-        font-size: .8rem;
+        font-size: 0.8rem;
 
         label {
             margin-bottom: 4.145rem;
@@ -130,6 +141,13 @@ ul.errorlist {
 }
 
 .register-form {
+    max-width: 800px;
+    margin: auto;
+
+    form {
+        margin-bottom: unset !important;
+    }
+
     &__title {
         display: flex;
         justify-content: space-between;
@@ -142,33 +160,6 @@ ul.errorlist {
     &__image {
         width: 5.4rem;
         height: 4.6rem;
-
-    }
-
-    &-container {
-        display: grid;
-        grid-template-columns: 7% 40.5% 5% 40.5% 7%;
-        max-width: unset !important;
-        padding: unset !important;
-
-        ul.errorlist {
-            margin-top: -1rem;
-        }
-
-        &--first-column {
-            grid-column: 2;
-        }
-
-        &--second-column {
-            grid-column: 4;
-        }
-
-        &--full-width {
-            grid-column: 2/5;
-        }
-        &--align-end {
-            justify-self: end;
-        }
     }
 
     &__submit-button {
@@ -176,8 +167,11 @@ ul.errorlist {
         padding-left: 5.5rem !important;
         padding-right: 5.5rem !important;
         height: 3.3rem !important;
-        margin-bottom: 5.9rem !important;
         border: unset !important;
+
+        @media (max-width: 414px) {
+            margin-bottom: 1.5rem !important;
+        }
     }
 
     &__label {
@@ -191,17 +185,39 @@ ul.errorlist {
         margin-bottom: 0.75rem;
     }
 
-    &__input--margin {
-        input {
-            margin-bottom: 4.145rem;
-        }
-    }
-
-    &__register-buttons {
+    &__buttons {
         display: flex;
         align-items: start;
-    }
+        float: right;
+        margin-top: 3.9rem;
 
+        @media (max-width: 414px) {
+            flex-direction: column-reverse;
+            align-items: center;
+
+            .login-form__social-button {
+                width: 17.5rem;
+            }
+        }
+    }
+    @media (max-width: 414px) {
+        max-width: unset !important;
+        input {
+            max-width: unset !important;
+            min-width: unset !important;
+        }
+    }
+}
+
+.register-form,
+.login-form {
+    &__input {
+        input {
+            border-radius: 0.625rem !important;
+            background-color: $color-theme-report-gray-blue-transparent;
+            margin-bottom: 2.0625rem;
+        }
+    }
 }
 
 .login-form {
@@ -209,19 +225,6 @@ ul.errorlist {
         display: flex;
         justify-content: center;
         margin-bottom: 2.0625rem;
-    }
-
-    &__input {
-        input[type='password'] {
-            margin: 0;
-            margin-top: -1.125rem;
-        }
-
-        input {
-            border-radius: 0.625rem !important;
-            background-color: $color-theme-report-gray-blue-transparent;
-            margin-bottom: 2.0625rem;
-        }
     }
 
     &__label {
@@ -255,11 +258,10 @@ ul.errorlist {
         height: 3.36rem;
         border: 1px solid $color-button-gray;
         border-radius: 0.3125rem;
-        box-shadow: 1px 1px 1px gray;;
+        box-shadow: 1px 1px 1px gray;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 3.4375rem !important;
 
         span {
             font-weight: 700;
@@ -269,7 +271,14 @@ ul.errorlist {
             }
         }
         a i {
-            background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat !important;
+            background: conic-gradient(
+                    from -45deg,
+                    #ea4335 110deg,
+                    #4285f4 90deg 180deg,
+                    #34a853 180deg 270deg,
+                    #fbbc05 270deg
+                )
+                73% 55%/150% 150% no-repeat !important;
             -webkit-background-clip: text !important;
             background-clip: text !important;
             color: transparent !important;
@@ -292,7 +301,7 @@ ul.errorlist {
     padding: 0 1.5rem;
 
     &__hr {
-        margin-bottom: 3.0625rem !important;
+        margin: 3.0625rem auto !important;
         width: 45%;
     }
 
@@ -330,7 +339,6 @@ ul.errorlist {
     }
 }
 
-
 //overwrite mendeleev rules
 legend,
 textarea,
@@ -340,7 +348,7 @@ input {
     text-indent: unset !important;
 }
 input:not(.button) {
-    border: 1px solid color('brand');
+    border: 1px solid color("brand");
     border-radius: 0.3125rem;
 }
 legend {
@@ -349,7 +357,10 @@ legend {
 }
 
 .content-grid {
-    grid-template-columns: minmax(4%, auto) minmax(auto, 1400px) minmax(4%, auto);
+    grid-template-columns: minmax(4%, auto) minmax(auto, 1400px) minmax(
+            4%,
+            auto
+        );
     display: grid;
 
     & > * {
@@ -397,11 +408,11 @@ legend {
     opacity: 1;
 }
 
-.htmx-request .loader{
-    display:inline;
+.htmx-request .loader {
+    display: inline;
 }
-.htmx-request.loader{
-    display:inline;
+.htmx-request.loader {
+    display: inline;
 }
 
 @keyframes rotation {
@@ -425,30 +436,8 @@ legend {
             }
         }
     }
+
     .register-form {
-        &-container {
-            grid-template-columns: 7% 80% 7%;
-
-            &--first-column {
-                &--password {
-                    input {margin: 0.375rem 0 1.5rem 0;}
-                }
-            }
-
-            &--second-column {
-                grid-column: 2/3;
-
-                &--email {
-                    input {margin: 0.375rem 0 1.5rem 0;}
-                }
-            }
-            &--full-width {
-                grid-column: 2/3;
-            }
-            &--align-end {
-                justify-self: center;
-            }
-        }
         &__title {
             grid-column: 2/3;
             flex-direction: column;
@@ -459,31 +448,12 @@ legend {
                 margin: 3.375rem 0 1.5rem 0;
             }
         }
+
         &__image {
             width: 11.5625rem;
             height: 9.75rem;
             margin-bottom: 1.75rem;
         }
-
-        &__input--margin {
-            input {
-                margin-bottom: 2.625rem;
-            }
-        }
-
-        &__register-buttons {
-            flex-direction: column-reverse;
-            align-items: center;
-
-            .login-form__social-button {
-                width: 17.5rem;
-            }
-        }
-
-        &__submit-button {
-            margin-bottom: 0.9rem !important;
-        }
-
     }
 
     .register-redirection {
@@ -543,29 +513,6 @@ legend {
         }
     }
     .register-form {
-        &-container {
-            grid-template-columns: 4% auto 4%;
-
-            &--first-column {
-                &--password {
-                    input {margin: 0.375rem 0 1.5rem 0;}
-                }
-            }
-
-            &--second-column {
-                grid-column: 2/3;
-
-                &--email {
-                    input {margin: 0.375rem 0 1.5rem 0;}
-                }
-            }
-            &--full-width {
-                grid-column: 2/3;
-            }
-            &--align-end {
-                justify-self: center;
-            }
-        }
         &__title {
             grid-column: 2/3;
             flex-direction: column;
@@ -588,7 +535,7 @@ legend {
             }
         }
 
-        &__register-buttons {
+        &__buttons {
             flex-direction: column-reverse;
             align-items: center;
 
@@ -600,7 +547,6 @@ legend {
         &__submit-button {
             margin-bottom: 0.9rem !important;
         }
-
     }
 
     .register-redirection {

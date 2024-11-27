@@ -1,13 +1,17 @@
+from boogie import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-
-from boogie import models
-from .vote_queryset import VoteQuerySet
 from ..enums import Choice
+from .vote_queryset import VoteQuerySet
+
+
+def return_voting_error(value):
+    return ValueError(_(VOTE_ERROR_MESSAGE).format(value=value))
+
 
 VOTE_ERROR_MESSAGE = _("vote should be one of 'agree', 'disagree' or 'skip', got {value}")
-VOTING_ERROR = lambda value: ValueError(VOTE_ERROR_MESSAGE.format(value=value))
+VOTING_ERROR = return_voting_error
 VOTE_NAMES = {Choice.AGREE: "agree", Choice.DISAGREE: "disagree", Choice.SKIP: "skip"}
 VOTE_VALUES = {v: k for k, v in VOTE_NAMES.items()}
 
@@ -63,7 +67,7 @@ class Vote(models.Model):
 
     def __str__(self):
         comment = truncate(self.comment.content, 40)
-        return f"{self.author} - {self.choice.name} ({comment})"
+        return f"{self.author} - {Choice.normalize(str(self.choice))} ({comment})"
 
     def clean(self, *args, **kwargs):
         if self.comment.is_pending:

@@ -19,7 +19,7 @@ class InstalledAppsConf(Base, EjOptions):
         "ej_dataviz",
         "ej_profiles",
         "ej_conversations",
-        "ej_tools",
+        "ej_integrations",
         "ej_admin",
     ]
 

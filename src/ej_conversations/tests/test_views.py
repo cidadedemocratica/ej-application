@@ -274,11 +274,12 @@ class TestConversationDetail(ConversationSetup):
         conversation_url = reverse(
             "boards:conversation-detail", kwargs=first_conversation.get_url_kwargs()
         )
+        response = client.get(conversation_url)
+        assert response.status_code == 200
+
         conversation_vote_url = reverse(
             "boards:conversation-vote", kwargs=first_conversation.get_url_kwargs()
         )
-        response = client.get(conversation_url)
-        assert response.status_code == 200
         response = client.post(
             conversation_vote_url,
             {"vote": "agree", "comment_id": comment.id},
@@ -286,7 +287,8 @@ class TestConversationDetail(ConversationSetup):
         assert response.status_code == 302
         assert response["HX-Redirect"] == f"/register/?next={conversation_url}"
 
-        first_conversation.anonymous_votes_limit = 1
+        first_conversation.anonymous_votes_enabled = True
+        first_conversation.anonymous_votes = 1
         first_conversation.save()
 
         response = client.post(
@@ -298,7 +300,8 @@ class TestConversationDetail(ConversationSetup):
     def test_register_user_from_session_after_conversation_anonymous_limit(
         self, first_conversation
     ):
-        first_conversation.anonymous_votes_limit = 1
+        first_conversation.anonymous_votes_enabled = True
+        first_conversation.anonymous_votes = 1
         first_conversation.save()
 
         client = Client()
@@ -347,9 +350,10 @@ class TestConversationDetail(ConversationSetup):
         client = Client()
         client.force_login(user)
 
-        client.post(
-            f"/board/conversations/{first_conversation.id}/{first_conversation.slug}/comment/favorite/",
+        favorite_route = reverse(
+            "boards:conversation-favorite", kwargs=first_conversation.get_url_kwargs()
         )
+        client.post(favorite_route)
 
         assert FavoriteConversation.objects.filter(
             user=user, conversation=first_conversation
@@ -392,7 +396,9 @@ class TestConversationDetail(ConversationSetup):
 
 class TestConversationCreate(ConversationSetup):
     def test_board_owner_can_create_conversation(self, base_board, base_user):
-        url = "/userboard/conversations/add/"
+        url = reverse(
+            "boards:conversation-create", kwargs={"board_slug": base_board.slug}
+        )
         client = Client()
         client.force_login(base_user)
 
@@ -403,11 +409,11 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
             },
         )
         assert response.status_code == 302
-        assert response.url == "/userboard/conversations/1/whatever/"
+        assert response.url == "/boards/userboard/conversations/1/whatever/"
 
         conversation = Conversation.objects.first()
         assert not conversation.is_promoted
@@ -416,7 +422,9 @@ class TestConversationCreate(ConversationSetup):
     def test_user_should_not_create_conversation_on_another_users_board(
         self, base_board, base_user
     ):
-        url = "/userboard/conversations/add/"
+        url = reverse(
+            "boards:conversation-create", kwargs={"board_slug": base_board.slug}
+        )
 
         user = User.objects.create_user("user2@email.br", "password")
         client = Client()
@@ -429,14 +437,16 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
             },
         )
         assert response.status_code == 302
         assert response.url == "/login/"
 
-    def test_anonymous_user_should_not_create_conversation(self):
-        url = "/userboard/conversations/add/"
+    def test_anonymous_user_should_not_create_conversation(self, base_board):
+        url = reverse(
+            "boards:conversation-create", kwargs={"board_slug": base_board.slug}
+        )
         client = Client()
 
         response = client.post(
@@ -450,10 +460,12 @@ class TestConversationCreate(ConversationSetup):
         )
 
         assert response.status_code == 302
-        assert response.url == "/login/?next=/userboard/conversations/add/"
+        assert response.url == "/login/?next=/boards/userboard/conversations/add/"
 
     def test_should_not_create_invalid_conversation(self, base_board, base_user):
-        url = "/userboard/conversations/add/"
+        url = reverse(
+            "boards:conversation-create", kwargs={"board_slug": base_board.slug}
+        )
         client = Client()
         client.force_login(base_user)
 
@@ -467,7 +479,9 @@ class TestConversationCreate(ConversationSetup):
     def test_admin_can_create_conversations_on_another_users_board(
         self, admin_user, logged_admin, base_board
     ):
-        url = "/userboard/conversations/add/"
+        url = reverse(
+            "boards:conversation-create", kwargs={"board_slug": base_board.slug}
+        )
         response = logged_admin.post(
             url,
             {
@@ -475,13 +489,13 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
             },
         )
         conversation = Conversation.objects.first()
 
         assert response.status_code == 302
-        assert response.url == "/userboard/conversations/1/whatever/"
+        assert response.url == "/boards/userboard/conversations/1/whatever/"
         assert conversation.board == base_board
         assert conversation.author == admin_user
 
@@ -502,7 +516,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": background_image,
                 "logo_image": logo_image,
                 "ending_message": "ending message",
@@ -530,7 +544,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": "",
                 "logo_image": "",
             },
@@ -557,7 +571,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": "",
                 "ending_message": "ending message",
             },
@@ -583,7 +597,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": "",
                 "ending_message": "",
             },
@@ -613,7 +627,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": background_image,
                 "logo_image": "",
             },
@@ -641,7 +655,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": "",
                 "logo_image": "",
             },
@@ -669,7 +683,7 @@ class TestConversationCreate(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": "",
                 "logo_image": logo_image,
             },
@@ -693,7 +707,9 @@ class TestConversationComments(ConversationSetup):
         client.login(email="user1@email.br", password="password")
         conversation = create_conversation("foo", "conv1", user, board=board)
         comments = ["Some comment to test", "Some other comment to test"]
-        url = f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/comments/new/"
+        url = reverse(
+            "boards:conversation-new_comment", kwargs=conversation.get_url_kwargs()
+        )
         client.post(url, {"comment": comments})
 
         assert Comment.objects.get(content=comments[0], author=user).status == "approved"
@@ -706,7 +722,9 @@ class TestConversationComments(ConversationSetup):
         client.login(email="user1@email.br", password="password")
         conversation = create_conversation("foo", "conv1", user, board=board)
         comments = ["A", "Some other comment to test"]
-        url = f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/comments/new/"
+        url = reverse(
+            "boards:conversation-new_comment", kwargs=conversation.get_url_kwargs()
+        )
         client.post(url, {"comment": comments})
 
         assert Comment.objects.get(content=comments[1], author=user).status == "approved"
@@ -721,7 +739,9 @@ class TestConversationComments(ConversationSetup):
         comment = conversation.create_comment(
             author=user, content="comment to delete", status="approved"
         )
-        url = f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/comments/delete/"
+        url = reverse(
+            "boards:conversation-delete_comment", kwargs=conversation.get_url_kwargs()
+        )
         client.post(url, {"comment_id": comment.id})
 
         assert Comment.objects.all().count() == 0
@@ -736,7 +756,9 @@ class TestConversationComments(ConversationSetup):
         comment = conversation.create_comment(
             author=user_2, content="comment to not delete", status="approved"
         )
-        url = f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/comments/delete/"
+        url = reverse(
+            "boards:conversation-delete_comment", kwargs=conversation.get_url_kwargs()
+        )
         client.post(url, {"comment_id": comment.id})
 
         assert Comment.objects.all().count() == 1
@@ -750,7 +772,9 @@ class TestConversationComments(ConversationSetup):
         conversation.create_comment(
             author=user, content="comment to check", status="approved"
         )
-        url = f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/comments/check/"
+        url = reverse(
+            "boards:conversation-check_comment", kwargs=conversation.get_url_kwargs()
+        )
         response = client.post(url, {"comment_content": "comment to check"})
 
         assert response.status_code == 200
@@ -764,7 +788,9 @@ class TestConversationComments(ConversationSetup):
         conversation.create_comment(
             author=user, content="comment to check", status="approved"
         )
-        url = f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/comments/check/"
+        url = reverse(
+            "boards:conversation-check_comment", kwargs=conversation.get_url_kwargs()
+        )
         response = client.post(
             url, {"comment_content": "new and different comment to check"}
         )
@@ -792,7 +818,9 @@ class TestConversationEdit(ConversationSetup):
         return conversation
 
     def test_edit_conversation(self, base_user, new_conversation):
-        url = f"/userboard/conversations/{new_conversation.id}/{new_conversation.slug}/edit/"
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
 
         client = Client()
         client.force_login(base_user)
@@ -804,19 +832,21 @@ class TestConversationEdit(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
             },
         )
 
         new_conversation.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == "/userboard/conversations/1/bar/"
+        assert response.url == "/boards/userboard/conversations/1/bar/"
         assert new_conversation.title == "bar updated"
         assert new_conversation.text == "description"
 
     def test_edit_invalid_conversation(self, base_user, new_conversation):
-        url = f"/userboard/conversations/{new_conversation.id}/{new_conversation.slug}/edit/"
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
 
         client = Client()
         client.force_login(base_user)
@@ -828,7 +858,9 @@ class TestConversationEdit(ConversationSetup):
         assert not response.context["form"].is_valid()
 
     def test_author_can_edit_not_promoted_conversation(self, base_user, new_conversation):
-        url = f"/{new_conversation.board.slug}/conversations/{new_conversation.id}/{new_conversation.slug}/edit/"
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
         new_conversation.is_promoted = False
         new_conversation.save()
 
@@ -837,16 +869,18 @@ class TestConversationEdit(ConversationSetup):
 
         client.post(
             url,
-            {"title": "bar updated", "text": "description", "anonymous_votes_limit": 1},
+            {"title": "bar updated", "text": "description", "anonymous_votes": 1},
         )
 
         conversation = Conversation.objects.get(id=new_conversation.id)
         assert conversation.title == "bar updated"
         assert conversation.text == "description"
-        assert conversation.anonymous_votes_limit == 1
+        assert conversation.anonymous_votes == 1
 
     def test_get_edit_conversation(self, base_user, new_conversation):
-        url = f"/userboard/conversations/{new_conversation.id}/{new_conversation.slug}/edit/"
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
         comment = new_conversation.create_comment(base_user, "comment", "pending")
         new_conversation.create_comment(base_user, "comment1")
         comment.status = comment.STATUS.pending
@@ -861,7 +895,9 @@ class TestConversationEdit(ConversationSetup):
         assert response.context["conversation"] == new_conversation
 
     def test_admin_can_edit_conversation(self, new_conversation, logged_admin):
-        url = f"/userboard/conversations/{new_conversation.id}/{new_conversation.slug}/edit/"
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
 
         response = logged_admin.post(
             url,
@@ -870,21 +906,23 @@ class TestConversationEdit(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
             },
         )
 
         new_conversation.refresh_from_db()
 
         assert response.status_code == 302
-        assert response.url == "/userboard/conversations/1/bar/"
+        assert response.url == "/boards/userboard/conversations/1/bar/"
         assert new_conversation.title == "bar updated"
         assert new_conversation.text == "description"
 
     def test_user_cannot_edit_anothers_one_conversation(
         self, new_conversation, another_logged_user
     ):
-        url = f"/userboard/conversations/{new_conversation.id}/{new_conversation.slug}/edit/"
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
         client = Client()
 
         response = client.post(
@@ -940,7 +978,7 @@ class TestConversationEdit(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": background_image,
                 "logo_image": logo_image,
                 "ending_message": "ending message",
@@ -978,7 +1016,7 @@ class TestConversationEdit(ConversationSetup):
                 "tags": "tag",
                 "text": "description",
                 "comments_count": 0,
-                "anonymous_votes_limit": 0,
+                "anonymous_votes": 0,
                 "background_image": "",
                 "logo_image": "",
             },
@@ -1060,7 +1098,7 @@ class TestConversationDelete(ConversationSetup):
         votes_ids = list(conversation_with_comments.votes)
 
         assert response.status_code == 302
-        assert response.url == "/userboard/conversations/"
+        assert response.url == "/boards/userboard/conversations/"
         assert not Conversation.objects.filter(id=conversation_with_comments.id).exists()
         assert not Comment.objects.filter(id__in=comments_ids).exists()
         assert not Vote.objects.filter(id__in=votes_ids).exists()
@@ -1076,7 +1114,7 @@ class TestConversationDelete(ConversationSetup):
         votes_ids = list(conversation_with_comments.votes)
 
         assert response.status_code == 302
-        assert response.url == "/userboard/conversations/"
+        assert response.url == "/boards/userboard/conversations/"
         assert not Conversation.objects.filter(id=conversation_with_comments.id).exists()
         assert not Comment.objects.filter(id__in=comments_ids).exists()
         assert not Vote.objects.filter(id__in=votes_ids).exists()
@@ -1095,8 +1133,8 @@ class TestConversationModerate(ConversationSetup):
         comment_to_reject = conversation.create_comment(
             author=user, content="comment to reject", status="pending"
         )
-        url = (
-            f"/{board.slug}/conversations/{conversation.id}/{conversation.slug}/moderate/"
+        url = reverse(
+            "boards:conversation-moderate", kwargs=conversation.get_url_kwargs()
         )
         client.post(
             url, {"approved": comment_to_approve.id, "rejected": comment_to_reject.id}
@@ -1129,7 +1167,9 @@ class TestConversationModerate(ConversationSetup):
         client = Client()
         client.force_login(base_user)
 
-        url = f"/{base_board.slug}/conversations/{conversation.id}/{conversation.slug}/moderate/"
+        url = reverse(
+            "boards:conversation-moderate", kwargs=conversation.get_url_kwargs()
+        )
         client.post(
             url,
             {
@@ -1174,7 +1214,9 @@ class TestConversationModerate(ConversationSetup):
         client = Client()
         client.force_login(base_user)
 
-        url = f"/{base_board.slug}/conversations/{conversation.id}/{conversation.slug}/moderate/"
+        url = reverse(
+            "boards:conversation-moderate", kwargs=conversation.get_url_kwargs()
+        )
         client.post(
             url,
             {
@@ -1265,7 +1307,10 @@ class TestPrivateConversations(ConversationRecipes):
         second_conversation,
         third_conversation,
     ):
-        user_url = "/userboard/conversations/"
+        user_url = reverse(
+            "boards:conversation-list",
+            kwargs={"board_slug": first_conversation.board.slug},
+        )
 
         client = Client()
         client.login(email="tester@email.br", password="password")
@@ -1277,7 +1322,10 @@ class TestPrivateConversations(ConversationRecipes):
         assert len(response.context["user_boards"]) == 2
         assert base_board in response.context["user_boards"]
 
-        admin_url = "/adminboard/conversations/"
+        admin_url = reverse(
+            "boards:conversation-list",
+            kwargs={"board_slug": hiden_conversation.board.slug},
+        )
         response = logged_admin.get(admin_url)
 
         assert len(response.context["conversations"]) == 1
@@ -1285,34 +1333,34 @@ class TestPrivateConversations(ConversationRecipes):
 
     def test_anonymous_user_should_not_access_board_conversations(
         self,
-        admin_user,
-        base_user,
         hiden_conversation,
-        first_conversation,
-        second_conversation,
     ):
-        admin_url = "/adminboard/conversations/"
+        admin_url = reverse(
+            "boards:conversation-list",
+            kwargs={"board_slug": hiden_conversation.board.slug},
+        )
         anonymous_user = Client()
         response = anonymous_user.get(admin_url)
         assert response.status_code == 302
-        assert response.url == "/login/?next=/adminboard/conversations/"
+        assert response.url == "/login/?next=/boards/adminboard/conversations/"
 
     def test_only_admin_user_can_access_others_conversations(
-        self,
-        logged_admin,
-        base_user,
-        hiden_conversation,
-        first_conversation,
-        second_conversation,
+        self, logged_admin, first_conversation, second_conversation, hiden_conversation
     ):
-        user_url = "/userboard/conversations/"
+        user_url = reverse(
+            "boards:conversation-list",
+            kwargs={"board_slug": first_conversation.board.slug},
+        )
         response = logged_admin.get(user_url)
 
         assert len(response.context["conversations"]) == 2
         assert first_conversation in response.context["conversations"]
         assert second_conversation in response.context["conversations"]
 
-        admin_url = "/adminboard/conversations/"
+        admin_url = reverse(
+            "boards:conversation-list",
+            kwargs={"board_slug": hiden_conversation.board.slug},
+        )
         client = Client()
         client.login(email="tester@email.br", password="password")
         response = client.get(admin_url)

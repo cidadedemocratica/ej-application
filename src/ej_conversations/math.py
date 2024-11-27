@@ -104,9 +104,10 @@ def _statistics(table, convergence=False, ratios=False, participation=False):
 
     # Adds additional columns
     if convergence:
-        table["convergence"] = compute_convergence(table)
+        table["convergence"] = compute_convergence(table["agree"], table["disagree"])
     if participation is not False:
         table["participation"] = compute_participation(table, participation)
+
     if ratios:
         e = 1e-50
         data = table[["agree", "disagree", "skipped"]]
@@ -117,13 +118,12 @@ def _statistics(table, convergence=False, ratios=False, participation=False):
     return table
 
 
-def compute_convergence(df, agree="agree", disagree="disagree"):
+def compute_convergence(n_agree, n_disagree):
     """
-    Compute the fractional convergence coefficient from a dataframe that have an
-    'agree' and a 'disagree' columns.
+    Compute the fractional convergence coefficient
     """
     e = 1e-50
-    return abs(df[agree] - df[disagree]) / (df[agree] + df[disagree] + e)
+    return abs(n_agree - n_disagree) / (n_agree + n_disagree + e)
 
 
 def compute_participation(

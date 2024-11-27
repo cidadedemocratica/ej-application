@@ -38,12 +38,12 @@ class User(AbstractUser):
     )
     username = property(lambda self: self.name or self.email.replace("@", "__"))
     agree_with_terms = models.BooleanField(
-        default=False, help_text=_("Agree with terms"), verbose_name=_("Agree with terms")
+        default=True, help_text=_("Terms of use"), verbose_name=_("Terms of use")
     )
     agree_with_privacy_policy = models.BooleanField(
-        default=False,
+        default=True,
         help_text=_("Agree with privacy policy"),
-        verbose_name=_("Agree with privacy policy"),
+        verbose_name=_("Privacy policy"),
     )
     secret_id = models.CharField(unique=True, null=True, max_length=200)
     has_completed_registration = models.BooleanField(default=True)
@@ -86,11 +86,11 @@ class User(AbstractUser):
     @staticmethod
     def get_or_create_from_session(conversation, request):
         """
-        get or creates new user from request session if conversation has
-        anonymous_votes_limit attribute bigger then 0 and user is anonymous.
+        get or create a new user from the request session if the conversation have
+        the anonymous_votes attribute bigger then zero and the request.user is anonymous.
         """
         user = request.user
-        if user.is_anonymous and conversation.anonymous_votes_limit:
+        if user.is_anonymous and conversation.anonymous_votes_enabled:
             request = User.creates_request_session_key(request)
             session_key = request.session.session_key
             user, _ = User.objects.get_or_create(

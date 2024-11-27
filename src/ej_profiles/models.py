@@ -190,7 +190,7 @@ class Profile(models.Model):
 
     def statistics(self):
         """
-        Return a dictionary with all profile statistics.
+        Return a dictionary with the participatory user's statistics.
         """
         return dict(
             votes=self.user.votes.count(),
@@ -200,7 +200,7 @@ class Profile(models.Model):
 
     def conversation_statistics(self, conversation: Conversation):
         """
-        Return the profile statistics in the conversation.
+        Return a dictionary containing the participatory user's statistics in the conversation.
         """
         approved_comments = conversation.comments.filter(
             status=Comment.STATUS.approved
@@ -224,12 +224,6 @@ class Profile(models.Model):
             "total_comments": approved_comments,
             "comments": given_votes,
         }
-
-    def badges(self):
-        """
-        Return all profile badges.
-        """
-        return self.user.badges_earned.all()
 
     def comments(self):
         """

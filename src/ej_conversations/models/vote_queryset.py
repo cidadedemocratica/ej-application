@@ -1,6 +1,7 @@
 from numbers import Number
 
 from boogie.models import QuerySet
+
 from ..math import imputation
 
 
@@ -9,7 +10,8 @@ class VoteQuerySet(QuerySet):
     A table of votes.
     """
 
-    votes = lambda self: self
+    def votes(self):
+        return self
 
     def dataframe(self, *fields, index=None, verbose=False):
         if not fields:

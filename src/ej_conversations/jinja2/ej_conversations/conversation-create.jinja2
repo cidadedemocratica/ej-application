@@ -24,23 +24,33 @@
 
                     <h4 class="conversation-form__h4">{{_("Anonymous participation")}}</h4>
                     <div class="block">
-                        <label for="">{{form.anonymous_votes_limit.label}}</label>
-                        {{form.anonymous_votes_limit}}
-                        <legend>{{form.anonymous_votes_limit.help_text}}</legend>
+                        <label style="text-transform: unset">
+                            {{form.anonymous_votes_enabled}}
+                            <span class="margin-x1">{{form.anonymous_votes_enabled.label}}</span>
+                        </label>
+                    </div>
+                    <div id="anonymous_votes" class="block">
+                        <label style="text-transform: unset">
+                            {{form.anonymous_votes.label}}
+                        </label>
+                        {{form.anonymous_votes}}
+                        <legend>{{form.anonymous_votes.help_text}}</legend>
                     </div>
 
-                    <h4 class="conversation-form__h4">{{_("Send a profile queston")}}</h4>
+                    <h4 class="conversation-form__h4">{{_("Demographic questions")}}</h4>
                     <div class="block">
-                        <label class="margin-y3">
+                        <label class="margin-y3" style="text-transform: unset">
                             {{form.send_profile_question}}
-                            <span class="checkbox-label">{{form.send_profile_question.label}}</span>
+                            <span class="margin-x1">{{form.send_profile_question.label}}</span>
                         </label>
-                        <legend>{{form.send_profile_question.help_text}}</legend>
                     </div>
-                    <div class="block">
-                        <label for="">{{form.votes_to_send_profile_question.label}}</label>
+                    <div id="demographic_questions" class="block">
+                        <label style="text-transform: unset">{{form.votes_to_send_profile_question.label}}</label>
                         {{form.votes_to_send_profile_question}}
-                        <legend>{{form.votes_to_send_profile_question.help_text}}</legend>
+                        <legend>
+                            {{form.votes_to_send_profile_question.help_text}}
+                            <b>{{_("This configuration only afects EJ API.")}}</b>
+                        </legend>
                     </div>
 
                     <h4 class="conversation-form__h4">{{_("Conversation duration")}}</h4>
@@ -57,6 +67,7 @@
                                 allowing you to give more context to the researched topic")}}
                         </legend>
                     </div>
+
                     {% if "background_image" in form.errors %}
                         {{ form.errors["background_image"] }}
                     {% endif %}
@@ -105,23 +116,30 @@
     {{ super() }}
     <!--suppress SpellCheckingInspection -->
     <script>
-        $(document).ready(function() {
-            const $sendProfileQuestionCheckbox = $('#id_send_profile_question');
-            const $votesToSendProfileQuestion = $('#id_votes_to_send_profile_question');
-    
-            function toggleVotesToSendProfileQuestion() {
-                if ($sendProfileQuestionCheckbox.is(':checked')) {
-                    $votesToSendProfileQuestion.prop('disabled', false).css('opacity', 1);
+        function toggleConversationOption(checkboxOptionID, optionID) {
+            const $checkbox = $(checkboxOptionID)
+            const $option = $(optionID);
+            const $optionInput = $option.children('input');
+
+            function toggleOption() {
+                if ($checkbox.is(':checked')) {
+                    $option.css('opacity', 1);
+                    $optionInput[0].disabled = false;
                 } else {
-                    $votesToSendProfileQuestion.prop('disabled', true).css('opacity', 0.5);
+                    $option.css('opacity', 0.5);
+                    $optionInput[0].value = 0;
+                    $optionInput[0].disabled = true;
                 }
             }
-    
-            $sendProfileQuestionCheckbox.on('change', toggleVotesToSendProfileQuestion);
-    
-            toggleVotesToSendProfileQuestion();
+            $checkbox.on('change', toggleOption);
+            toggleOption();
+        }
+
+        $(document).ready(function() {
+            toggleConversationOption("#id_send_profile_question", "#demographic_questions")
+            toggleConversationOption("#id_anonymous_votes_enabled", "#anonymous_votes")
         });
-    
+
         $(window).on('load', function () {
             $('#add-more-comments')
                 .on('click keypress', function (ev) {

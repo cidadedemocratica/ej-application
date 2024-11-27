@@ -31,7 +31,9 @@ class StereotypeVoteQuerySet(QuerySet):
     A table of StereotypeVotes.
     """
 
-    votes = lambda self: self
+    def get_votes(self):
+        return self
+
     votes_table = VoteQuerySet.votes_table
 
 
@@ -40,7 +42,8 @@ class StereotypeQuerySet(UserMixin, QuerySet):
     A table of Stereotypes.
     """
 
-    _votes_from_comments = lambda _, comments: comments.stereotype_votes()
+    def _votes_from_comments(_, comments):
+        return comments.stereotype_votes()
 
     def fill_votes(self, choice=Choice.DISAGREE, comments=None):
         """

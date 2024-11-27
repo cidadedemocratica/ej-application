@@ -84,24 +84,38 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
             "endpoint."
         ),
     )
-    anonymous_votes_limit = models.IntegerField(
+    anonymous_votes_enabled = models.BooleanField(
+        default=False,
+        blank=True,
+        help_text=_(
+            "Check this option if you want your audience to vote without registering. "
+            "All users will be created with a random and unique ID."
+        ),
+        verbose_name=_("Enable anonymous votes"),
+    )
+    anonymous_votes = models.IntegerField(
         default=0,
-        help_text=_("Configures how many anonymous votes participants can give."),
+        blank=True,
+        help_text=_(
+            "Configures how many anonymous votes the participants can give before "
+            "asking him to register"
+        ),
         verbose_name=_("Number of anonymous votes"),
     )
     send_profile_question = models.BooleanField(
         default=False,
+        blank=True,
         verbose_name=_("Send profile question?"),
         help_text=_("Send a question to participants to complete their profile."),
     )
     votes_to_send_profile_question = models.IntegerField(
         default=0,
+        blank=True,
         verbose_name=_("Votes to send profile question"),
         help_text=_("Number of votes to send profile question."),
     )
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-
     background_image = models.ImageField(
         upload_to="conversations/background/",
         blank=True,
@@ -116,13 +130,11 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         verbose_name=_("Background image"),
         validators=[validate_file_size],
     )
-
     welcome_message = RichTextField(
         blank=True,
         null=True,
         help_text=_("A message to be presented to participants before starting voting."),
     )
-
     ending_message = RichTextField(
         blank=True,
         null=True,
@@ -428,15 +440,15 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
 
     def reaches_anonymous_particiption_limit(self, user):
         """
-        Check if user is anonymous and if him reached the anonymous participation limit.
+        Check if user is anonymous and has reached the anonymous votes limit.
         """
         user_is_anonymous = user.is_anonymous or re.match(
             r"^anonymoususer-.*", user.email
         )
         return (
             (user_is_anonymous or not user.has_completed_registration)
-            and self.anonymous_votes_limit
-            and self.votes.filter(author=user).count() == self.anonymous_votes_limit
+            and self.anonymous_votes
+            and self.votes.filter(author=user).count() == self.anonymous_votes
         )
 
     def user_progress_percentage(self, user):

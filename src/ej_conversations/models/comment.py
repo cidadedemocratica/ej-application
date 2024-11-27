@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
 from model_utils.choices import Choices
 from model_utils.models import TimeStampedModel, StatusModel
 
@@ -212,14 +211,39 @@ class Comment(StatusModel, TimeStampedModel):
             )
         return stats
 
-    def comment_url(self):
-        return reverse(
-            "comments:detail",
-            kwargs={"comment_id": self.id, "hex_hash": self.comment_url_hash()},
-        )
-
     def comment_url_hash(self):
         """
         Compute the URL hash for the given comment.
         """
         return blake2b(self.content.encode("utf8"), digest_size=4).hexdigest()
+
+    def next(self, current_index, comments):
+        """
+        Get next comment of a conversation, according to create date
+        """
+        next_index = current_index + 1
+        id = None
+
+        try:
+            id = comments[next_index]["comment"]
+        except IndexError:
+            pass
+
+        return id
+
+    def previous(self, current_index, comments):
+        """
+        Get previous comment of a conversation, according to create date
+        """
+        previous_index = current_index - 1
+        id = None
+
+        try:
+            id = comments[previous_index]["comment"]
+        except IndexError:
+            pass
+
+        if previous_index < 0:
+            id = None
+
+        return id

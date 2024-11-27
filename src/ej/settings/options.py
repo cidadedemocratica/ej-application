@@ -1,6 +1,6 @@
 from boogie.configurations import Conf, env
-
-_ = lambda x: x
+from django.utils.translation import gettext_lazy as _
+import os
 
 
 class EjOptions(Conf):
@@ -28,6 +28,6 @@ class EjOptions(Conf):
     EJ_PROFILE_EXCLUDE_FIELDS = env([], name="{attr}")
 
     # Messages
-    EJ_PAGE_TITLE = env(_("EJ Platform"), name="{attr}")
-    EJ_REGISTER_TEXT = _("Not part of EJ yet?")
-    EJ_LOGIN_TITLE_TEXT = _("Welcome!")
+    EJ_PAGE_TITLE = os.getenv("EJ_PAGE_TITLE", _("EJ Platform"))
+    EJ_REGISTER_TEXT = os.getenv("EJ_REGISTER_TEXT", _("Not part of EJ yet?"))
+    EJ_LOGIN_TITLE_TEXT = os.getenv("EJ_LOGIN_TITLE_TEXT", _("Welcome!"))

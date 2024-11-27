@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from django.core.exceptions import ValidationError
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.utils.translation import gettext_lazy as _
 from sidekick import import_later
 
@@ -111,3 +111,17 @@ def handle_detail_favorite(request, conversation):
 
     log.info(f"user {user.id} toggled favorite status of conversation {conversation.id}")
     return {}
+
+
+def get_htmx_redirect_response(url, response=None):
+    """
+    Participation page uses HTMX library to make backend AJAX requests.
+    In order to make a redirect with HTMX,
+    we need to include HX-Redirect header to the response.
+    For more information, access https://htmx.org/reference/.
+    """
+
+    _response = response or HttpResponse()
+    _response["HX-Redirect"] = url
+    _response.status_code = 302
+    return _response

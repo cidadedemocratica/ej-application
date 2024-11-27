@@ -23,7 +23,7 @@ from ej.decorators import (
 )
 from ej_boards.models import Board
 from ej_conversations.rules import max_comments_per_conversation
-from ej_tools.utils import get_host_with_schema
+from ej_integrations.utils import get_host_with_schema
 from ej_users.models import User
 
 from . import forms

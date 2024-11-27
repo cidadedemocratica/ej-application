@@ -55,11 +55,20 @@ class EjForm(Form):
         else:
             return False
 
-    is_valid_post = lambda self: self.is_valid_http("POST")
-    is_valid_get = lambda self: self.is_valid_http("GET")
-    is_valid_put = lambda self: self.is_valid_http("PUT")
-    is_valid_patch = lambda self: self.is_valid_http("PATCH")
-    is_valid_delete = lambda self: self.is_valid_http("DELETE")
+    def is_valid_post(self):
+        return self.is_valid_http("POST")
+
+    def is_valid_get(self):
+        return self.is_valid_http("GET")
+
+    def is_valid_put(self):
+        return self.is_valid_http("PUT")
+
+    def is_valid_patch(self):
+        return self.is_valid_http("PATCH")
+
+    def is_valid_delete(self):
+        return self.is_valid_http("DELETE")
 
     def set_widget_attributes(self, attribute, value=None, from_attr=None):
         """

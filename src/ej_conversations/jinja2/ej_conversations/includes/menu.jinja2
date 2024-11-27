@@ -44,10 +44,10 @@
     <ul class="participant-menu__item">
         {{ menu_item(current_page, "dashboard", url('boards:dataviz-dashboard', **conversation.get_url_kwargs()), _('Dashboard')) }}
         {{ menu_item(current_page, "voting", conversation.patch_url('conversation:detail'), _('Voting')) }}
-        {{ menu_item(current_page, "tools", conversation.patch_url('conversation-tools:index'), _('Tools')) }}
         {%- if request.user.has_perm('ej.can_moderate_conversation', conversation) %}
             {{ menu_item(current_page, "moderate", conversation.patch_url('conversation:moderate'), _('Manage Comments')) }}
         {% endif %}
+        {{ menu_item(current_page, "tools", conversation.patch_url('conversation-tools:index'), _('Integrations')) }}
         </ul>
 
     <hr class="nav-divider">

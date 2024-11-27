@@ -29,7 +29,6 @@ class ClustersIndexView(ListView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         conversation = Conversation.objects.get(id=self.kwargs["conversation_id"])
-        check_promoted(conversation, self.request)
         user = self.request.user
         clusterization = self.get_queryset()
         clusterization.update_clusterization(force=True)

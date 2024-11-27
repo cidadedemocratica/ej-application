@@ -86,7 +86,7 @@ class Cluster(TimeStampedModel):
         kwargs = dict(normalization=normalization, votes=self.votes)
         return self.comments.statistics_summary_dataframe(**kwargs)
 
-    def separate_comments(self, sort=True, participation_index=0.30):
+    def separate_comments(self, sort=True):
         """
         Separate comments into a pair for comments that cluster agrees to and
         comments that cluster disagree.
@@ -109,27 +109,19 @@ class Cluster(TimeStampedModel):
         disagree = []
 
         comments_df = self.comments_statistics_summary_dataframe()
-        relevant_comments = comments_df[
-            comments_df["participation"] >= participation_index
-        ]
-
         for comment in Comment.objects.filter(id__in=d_agree):
             # It would accept 0% agreement since we test sfor n_agree >= n_disagree
             # We must prevent cases with 0 agrees (>= 0 disagrees) to enter in
             # the calculation
             n_agree = d_agree[comment.id]
-            comment_is_relevant = comment.id in relevant_comments.index
-            if n_agree and comment_is_relevant:
-                comment.agree = n_agree
-                comment.participation = relevant_comments.loc[comment.id]["participation"]
-                agree.append(comment)
+            comment.agree = n_agree
+            comment.participation = comments_df.loc[comment.id]["participation"]
+            agree.append(comment)
 
         for comment in Comment.objects.filter(id__in=d_disagree):
-            comment_is_relevant = comment.id in relevant_comments.index
-            if comment_is_relevant:
-                comment.disagree = d_disagree[comment.id]
-                comment.participation = relevant_comments.loc[comment.id]["participation"]
-                disagree.append(comment)
+            comment.disagree = d_disagree[comment.id]
+            comment.participation = comments_df.loc[comment.id]["participation"]
+            disagree.append(comment)
 
         if sort:
             agree.sort(key=lambda c: c.agree, reverse=True)

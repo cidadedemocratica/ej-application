@@ -30,8 +30,11 @@ def kmeans(data, k, n_runs=10, **kwargs):
         It accepts all keyword arguments of the :func:`kmeans_single` function.
     """
     distance = kwargs.get("distance")
-    objective = lambda x: vq(data, *x, distance=distance)
-    return worker(n_runs, objective, kmeans_run, data, k, **kwargs)
+
+    def get_objective(x):
+        return vq(data, *x, distance=distance)
+
+    return worker(n_runs, get_objective, kmeans_run, data, k, **kwargs)
 
 
 def worker(nruns, objective, func, *args, **kwargs):
@@ -270,7 +273,11 @@ def normalize_distance(value):
         raise ValueError(f"invalid distance: {value}")
 
 
-def vq(data, labels, centroids, distance=None, transform=(lambda x: x * x)):
+def squared(x):
+    return x * x
+
+
+def vq(data, labels, centroids, distance=None, transform=squared):
     """
     Return the variation coefficient of data.
     """

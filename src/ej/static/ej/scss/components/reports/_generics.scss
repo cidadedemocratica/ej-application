@@ -107,6 +107,19 @@
             color: $color-accent;
             font-weight: 600;
         }
+
+        &-detail {
+            display: flex;
+            align-items: flex-start; 
+            gap: 1.375rem; 
+            justify-content: space-between;
+
+            img {
+                background-color: $color-theme-report-light-blue; 
+                border-radius: 50%; 
+                padding: 0.425rem 0.3rem;
+            }
+        }
     }
 
     &__user {

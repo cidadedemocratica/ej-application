@@ -1,19 +1,20 @@
 import datetime
 from datetime import date
-import pytest
 
-from django.urls import reverse
+from constance import config
 from django.conf import settings
+from django.urls import reverse
 from django.utils.translation import gettext as _
+import pytest
 
 from ej_conversations import create_conversation
 from ej_conversations.enums import Choice
 from ej_conversations.models.comment import Comment
 from ej_conversations.models.vote import Vote
+from ej_conversations.mommy_recipes import ConversationRecipes
 from ej_profiles.enums import Gender, Race
 from ej_profiles.models import Profile
 from ej_users.models import User
-from ej_conversations.mommy_recipes import ConversationRecipes
 
 
 @pytest.fixture
@@ -183,3 +184,70 @@ class TestProfile(ConversationRecipes):
 
         assert conversation in retrieved_conversations
         assert other_conversation in retrieved_conversations
+
+    def test_statistics_for_user(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        author = mk_user(email="anotherauthor@domain.com")
+
+        comment = conversation.create_comment(
+            author, "ad", status="approved", check_limits=False
+        )
+        comment2 = conversation.create_comment(
+            author, "ad2", status="approved", check_limits=False
+        )
+        comment3 = conversation.create_comment(
+            author, "ad3", status="approved", check_limits=False
+        )
+
+        comment.vote(user, "agree")
+        comment2.vote(user, "disagree")
+        comment3.vote(user, "skip")
+
+        statistics_for_user_result = user.profile.conversation_statistics(conversation)
+
+        assert "votes" in statistics_for_user_result
+        assert statistics_for_user_result["votes"] == 2
+
+        assert "missing_votes" in statistics_for_user_result
+        assert statistics_for_user_result["missing_votes"] == 1
+
+        assert "total_comments" in statistics_for_user_result
+        assert statistics_for_user_result["total_comments"] == 3
+
+        assert "comments" in statistics_for_user_result
+        assert statistics_for_user_result["comments"] == 2
+
+    def test_statistics_for_user_without_skiped_votes(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        user = mk_user(email="user@domain.com")
+        author = mk_user(email="anotherauthor@domain.com")
+
+        comment = conversation.create_comment(
+            author, "ad", status="approved", check_limits=False
+        )
+        comment2 = conversation.create_comment(
+            author, "ad2", status="approved", check_limits=False
+        )
+        comment3 = conversation.create_comment(
+            author, "ad3", status="approved", check_limits=False
+        )
+
+        comment.vote(user, "agree")
+        comment2.vote(user, "disagree")
+        comment3.vote(user, "skip")
+
+        config.RETURN_USER_SKIPED_COMMENTS = False
+        statistics_for_user_result = user.profile.conversation_statistics(conversation)
+
+        assert "votes" in statistics_for_user_result
+        assert statistics_for_user_result["votes"] == 3
+
+        assert "missing_votes" in statistics_for_user_result
+        assert statistics_for_user_result["missing_votes"] == 0
+
+        assert "total_comments" in statistics_for_user_result
+        assert statistics_for_user_result["total_comments"] == 3
+
+        assert "comments" in statistics_for_user_result
+        assert statistics_for_user_result["comments"] == 3

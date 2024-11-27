@@ -7,7 +7,6 @@ from .conversations import (
     conversation_user_progress,
 )
 from .comments import (
-    comment_card,
     comment_moderate,
     comment_summary,
     comment_reject_reason,

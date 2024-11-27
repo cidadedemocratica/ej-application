@@ -12,13 +12,12 @@ TEST_DOMAIN = "https://domain.com.br"
 class TestRoutes(UrlTester, ConversationRecipes):
     public_urls = ["/conversations/"]
     user_urls = [
-        "/board-slug/conversations/1/conversation/",
-        # '/comments/<id>-<hash>/'
+        "/boards/board-slug/conversations/1/conversation/",
     ]
-    admin_urls = ["/board-slug/conversations/add/"]
+    admin_urls = ["/boards/board-slug/conversations/add/"]
     owner_urls = [
-        "/board-slug/conversations/1/conversation/edit/",
-        "/board-slug/conversations/1/conversation/moderate/",
+        "/boards/board-slug/conversations/1/conversation/edit/",
+        "/boards/board-slug/conversations/1/conversation/moderate/",
     ]
 
     def get_data(self, request):
@@ -33,11 +32,6 @@ class TestRoutes(UrlTester, ConversationRecipes):
             conversation.save()
         except Exception:
             pass
-
-    def test_can_view_user_url(self, user_client, comment_db):
-        url = comment_db.comment_url()
-        response = user_client.get(url)
-        assert response.status_code == 200
 
     def test_add_favorite_board(self, admin_client, root_db):
         user = User.objects.create_user("user1@email.br", "password")

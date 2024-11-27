@@ -1,0 +1,98 @@
+.comment-detail {
+    display: grid; 
+    grid-template-rows: 4.313rem 5.625rem 5.75rem 5.75rem auto auto; 
+    color: $color-black;
+
+    @media only screen and (max-width: 900px) {
+        grid-template-rows: 4.313rem 6rem 10.5rem 5rem auto auto;
+    }
+
+    &__modal-header {
+        display: flex; 
+        gap: 1.013rem; 
+        margin-bottom: 0; 
+        align-self: baseline;
+
+        p {
+            font-size: 1.5em;
+            color: $color-gray-darker; 
+            letter-spacing: 0; 
+            font-weight: 400; 
+            margin: 0;
+        }
+    }
+
+    &_container-info {
+        display: flex; 
+        gap: 3rem;
+
+        @media only screen and (max-width: 900px) {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+    }
+
+    &__info {
+        font-weight: 600; 
+        font-size: 0.75em;
+        letter-spacing: 0; 
+        text-transform: uppercase; 
+
+        &-content {
+            font-size: 0.875rem !important;
+            letter-spacing: 0; 
+            text-transform: none; 
+            font-weight: 400 !important; 
+        }
+
+        p {
+            font-size: 1.67em;
+            font-weight: 600; 
+            letter-spacing: 0; 
+            margin: 0.75rem 0 0;
+        }
+
+        &-author {
+            text-transform: lowercase; 
+            color: $color-accent; 
+            text-decoration: underline; 
+        }
+    }
+
+    &__statistics {
+        display: grid; 
+        grid-template-columns: auto auto auto; 
+        grid-template-rows: 5rem;
+
+        @media only screen and (max-width: 900px) {
+            grid-template-columns: auto; 
+            grid-template-rows: auto;
+            row-gap: 1.5rem;
+        }
+    }
+
+    &__buttons {
+        display: flex; 
+        justify-content: space-between;
+        margin: 3rem 0 0;
+
+        @media only screen and (max-width: 900px) {
+            margin: 2.375rem 0;
+        }
+
+        @media only screen and (min-width: 900px) and (max-width: 1350px){
+            margin: 1.25rem 0 0;
+        }     
+
+        &-link {
+            font-weight: 600; 
+            font-size: 0.75em;
+            letter-spacing: 0; 
+            text-transform: uppercase;
+
+            &--left {
+                margin-left: auto;
+            }
+        }
+    }
+}

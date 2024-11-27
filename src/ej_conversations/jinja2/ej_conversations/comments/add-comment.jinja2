@@ -32,14 +32,14 @@
                 </p>
 
             {% if conversation.user_can_add_comment(request.user, n_comments) %}
-                <div class="modal__buttons">
-                    <button class="modal__buttons--white" type="button"
+                <div class="comment__buttons">
+                    <button class="comment__buttons--white" type="button"
                         hx-get="{{ url('boards:conversation-detail-content', **conversation.get_url_kwargs()) }}"
                         hx-target="#conversation-detail-content"
                         hx-swap="innerHTML">
                         {{ _('Return') }}
                     </button>
-                    <button class="modal__buttons--blue" type="submit">
+                    <button class="comment__buttons--blue" type="submit">
                         {{ _('Send to moderation') }}
                     </button>
                 </div>

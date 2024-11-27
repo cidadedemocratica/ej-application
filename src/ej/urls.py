@@ -17,10 +17,11 @@ from ej_boards.api import BoardViewSet
 from ej_clusters.api import ClusterizationViewSet
 from ej_conversations.api import CommentViewSet, ConversationViewSet, VoteViewSet
 from ej_profiles.api import ProfileViewSet
-from ej_tools.api import OpinionComponentViewSet, RasaConversationViewSet
+from ej_integrations.api import OpinionComponentViewSet, RasaConversationViewSet
 from ej_users.api import TokenViewSet, UsersViewSet
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
+from django.contrib.flatpages import views as flat_views
 
 unregister_admin.unregister_apps()
 
@@ -146,9 +147,9 @@ def get_urlpatterns():
             if apps.is_installed("django.contrib.admin")
             else ()
         ),
-        #
+        path("usage", flat_views.flatpage, {"url": "usage"}, name="Terms of use"),
         # Boards URLs
-        path("", include("ej_boards.urls", namespace="boards")),
+        path("boards/", include("ej_boards.urls", namespace="boards")),
         #
         #  Allauth
         path("accounts/", include("allauth.urls")),

@@ -77,7 +77,7 @@ def docs(ctx, watch=False, orm=False):
             "ej_boards",
             "ej_clusters",
             "ej_dataviz",
-            "ej_tools",
+            "ej_integrations",
         ]:
             print_green(f"Making ORM graph for {app}")
             manage(
@@ -217,9 +217,12 @@ def sass(ctx, watch=False, background=False, minify=False, app_name=None):
             app_root = f"{directory}/src/{app_name}"
             app_static_root = f"{app_root}/static/{app_name}/scss"
             if os.path.isdir(app_static_root):
-                go = lambda app_name, run, name, watch, background: exec_watch(
-                    app_name, run, name=name, watch=watch, background=background
-                )
+
+                def go(app_name, run, name, watch, background):
+                    return exec_watch(
+                        app_name, run, name=name, watch=watch, background=background
+                    )
+
                 thread = Thread(None, go, args=(app_name, run, "sass", watch, background))
                 thread.start()
 

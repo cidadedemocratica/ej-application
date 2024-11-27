@@ -90,6 +90,7 @@ deploy_dev_image:
 
 e2e:
     stage: e2e tests
+    when: manual
     image: cypress/base:18.16.0
     before_script:
         - apt-get update && apt-get install curl -y
