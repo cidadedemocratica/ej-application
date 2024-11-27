@@ -11,6 +11,7 @@ class MiddlewareConf(Base):
             "ej_boards.middleware.BoardFallbackMiddleware",
             *middleware,
             "allauth.account.middleware.AccountMiddleware",
+            "django.middleware.locale.LocaleMiddleware",
         ]
         if "debug_toolbar" in self.INSTALLED_APPS:
             middleware = ["debug_toolbar.middleware.DebugToolbarMiddleware", *middleware]
