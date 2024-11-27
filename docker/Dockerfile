@@ -13,10 +13,13 @@ RUN apt-get update \
     libpq-dev \
     libjpeg-dev \
     zlib1g-dev \
-    g++
+    g++ \
+    locales
+RUN sed -i 's/^# *\(pt_BR.UTF-8\)/\1/' /etc/locale.gen
+RUN locale-gen
 RUN touch /etc/apt/preferences.d/nodejs && \
     echo "Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 1001" > /etc/apt/preferences.d/nodejs
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt install nodejs -y
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && apt install nodejs -y
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="${PATH}:/root/.local/bin"
 RUN poetry config virtualenvs.create false
