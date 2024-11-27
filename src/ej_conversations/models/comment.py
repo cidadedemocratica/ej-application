@@ -247,7 +247,3 @@ class Comment(StatusModel, TimeStampedModel):
             id = None
 
         return id
-
-    @property
-    def participation(self):
-        return self.n_votes / self.conversation.users.count() * 100
