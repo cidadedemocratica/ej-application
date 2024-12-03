@@ -77,3 +77,6 @@ e2e/
 
 # ignore ruff (linter tool) cache folder
 .ruff_cache
+
+# ignores python virtualenv in the host machine
+.venv

@@ -15,6 +15,8 @@ __pycache__/
 .pytest_cache/
 .sass-cache/
 .tox/
+.venv/
+.python-version
 venv/
 build/
 !lib/build/.gitkeep
