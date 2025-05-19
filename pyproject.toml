@@ -39,7 +39,7 @@ toml = "^0.10.0"
 gunicorn = "^19.9"
 jinja2 = "2.11.3"
 django-debug-toolbar = "3.2.0"
-setuptools = "61.2.0"
+setuptools = "78.1.1"
 django-anymail = {extras = ["mailgun"], version = "^10.0"}
 django-ckeditor = "6.3.2"
 colorama = "^0.4.6"
