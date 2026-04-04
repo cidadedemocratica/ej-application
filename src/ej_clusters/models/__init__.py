@@ -3,6 +3,7 @@ from .cluster import Cluster
 from .stereotype import Stereotype
 from .stereotype_vote import StereotypeVote
 
+
 #
 # Patch conversation app keeping namespace clean.
 #
@@ -29,7 +30,9 @@ def _patch_conversation_app():
             return conversation.clusterization
         except (AttributeError, Clusterization.DoesNotExist):
             if default is not_given:
-                mgm, _ = Clusterization.objects.get_or_create(conversation=conversation)
+                mgm, _ = Clusterization.objects.get_or_create(
+                    conversation=conversation
+                )
                 return mgm
             else:
                 return default

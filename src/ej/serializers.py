@@ -11,7 +11,9 @@ class BaseApiSerializer(serializers.HyperlinkedModelSerializer):
         raise_errors_on_nested_writes("create", self, validated_data)
         request = self.context["request"]
 
-        many_to_many = remove_many_to_many_relationships(self.Meta.model, validated_data)
+        many_to_many = remove_many_to_many_relationships(
+            self.Meta.model, validated_data
+        )
         try:
             instance = self.get_instance(request, validated_data)
         except TypeError:

@@ -7,13 +7,21 @@ class UsersSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=50, min_length=5, required=True)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(
-        required=True, write_only=True, style={"input_type": "password"}, max_length=128
+        required=True,
+        write_only=True,
+        style={"input_type": "password"},
+        max_length=128,
     )
     password_confirm = serializers.CharField(
-        required=True, write_only=True, style={"input_type": "password"}, max_length=128
+        required=True,
+        write_only=True,
+        style={"input_type": "password"},
+        max_length=128,
     )
     secret_id = serializers.CharField(required=False, max_length=200)
-    has_completed_registration = serializers.BooleanField(required=False, default=True)
+    has_completed_registration = serializers.BooleanField(
+        required=False, default=True
+    )
     phone_number = serializers.CharField(required=False, max_length=200)
 
     class Meta:
@@ -48,8 +56,12 @@ class UsersSerializer(serializers.ModelSerializer):
         user = User(
             email=validated_data["email"],
             name=validated_data["name"],
-            secret_id=User.encode_secret_id(validated_data.get("secret_id", None)),
-            has_completed_registration=validated_data["has_completed_registration"],
+            secret_id=User.encode_secret_id(
+                validated_data.get("secret_id", None)
+            ),
+            has_completed_registration=validated_data[
+                "has_completed_registration"
+            ],
         )
         user.set_password(validated_data["password"])
 

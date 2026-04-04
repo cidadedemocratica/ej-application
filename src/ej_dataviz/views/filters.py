@@ -22,7 +22,9 @@ class CommentsDataframeUtils:
         content has the substring variable.
         """
 
-        return self.comments_df[self.comments_df.content.str.contains(text, case=False)]
+        return self.comments_df[
+            self.comments_df.content.str.contains(text, case=False)
+        ]
 
     def get_cluster_comments_df(self, cluster, cluster_name):
         """
@@ -40,8 +42,12 @@ class CommentsDataframeUtils:
         """
         for cluster in clusters:
             if cluster.name in cluster_filters:
-                cluster_comments_df = self.get_cluster_comments_df(cluster, cluster.name)
-                self.comments_df = self.comments_df.append(cluster_comments_df)
+                cluster_comments_df = self.get_cluster_comments_df(
+                    cluster, cluster.name
+                )
+                self.comments_df = pd.concat(
+                    [self.comments_df, cluster_comments_df]
+                )
 
         if "general" not in cluster_filters:
             self.comments_df = self.comments_df[self.comments_df.group != ""]
@@ -93,7 +99,9 @@ class ReportClustersFilter:
         dataframe_utils = self.get_dataframe_utils(df)
         clusters = get_clusters(self.conversation)
 
-        return dataframe_utils.filter_by_cluster(clusters, self.clusters_filters)
+        return dataframe_utils.filter_by_cluster(
+            clusters, self.clusters_filters
+        )
 
     def get_dataframe(self, conversation: Conversation, cluster_name: str = ""):
         pass

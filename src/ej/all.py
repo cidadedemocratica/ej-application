@@ -114,7 +114,10 @@ def fix_links(data, prefix="http://localhost:8000"):
 # Math module
 #
 math = namespace(
-    clusters=_cmath, kmeans=_cmath.kmeans, pipeline=_cmath.pipeline, factories=_factories
+    clusters=_cmath,
+    kmeans=_cmath.kmeans,
+    pipeline=_cmath.pipeline,
+    factories=_factories,
 )
 
 

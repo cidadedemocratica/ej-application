@@ -43,7 +43,9 @@ class DetailView(DetailView):
         }
 
     def post(self, request):
-        change_password_form = ChangePasswordForm(self.request.user, request=request)
+        change_password_form = ChangePasswordForm(
+            self.request.user, request=request
+        )
         if change_password_form.is_valid():
             change_password_form.save()
             update_session_auth_hash(request, request.user)
@@ -98,7 +100,9 @@ class EditView(UpdateView):
 @method_decorator([login_required], name="dispatch")
 class HomeView(ListView):
     template_name = "ej_profiles/home.jinja2"
-    queryset = Conversation.objects.filter(is_promoted=True).order_by("-created")
+    queryset = Conversation.objects.filter(is_promoted=True).order_by(
+        "-created"
+    )
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -111,7 +115,9 @@ class HomeView(ListView):
         public_conversations = self.get_queryset()
         profile = self.request.user.profile
         profile_conversations_tags = list(
-            profile.participated_public_tags().values_list("tag__name", flat=True)
+            profile.participated_public_tags().values_list(
+                "tag__name", flat=True
+            )
         )
         public_tags = list(
             ConversationTag.objects.filter(content_object__is_promoted=True)
@@ -119,7 +125,9 @@ class HomeView(ListView):
             .values_list("tag__name", flat=True)
         )
         profile_selected_tags = list(
-            ConversationTag.objects.filter(content_object__author=self.request.user)
+            ConversationTag.objects.filter(
+                content_object__author=self.request.user
+            )
             .distinct("tag")
             .values_list("tag__name", flat=True)
         )

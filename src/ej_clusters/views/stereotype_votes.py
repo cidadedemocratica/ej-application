@@ -23,7 +23,9 @@ class StereotypeVotesView(ListView):
         self.conversation = get_object_or_404(Conversation, id=conversation_id)
         self.clusterization = self.conversation.get_clusterization()
 
-    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def dispatch(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         if self.clusterization is None:
             return render(
                 request,
@@ -36,14 +38,20 @@ class StereotypeVotesView(ListView):
             )
         return super().dispatch(request, *args, **kwargs)
 
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def get(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         self.stereotype = self.clusterization.stereotypes.first()
 
         if "stereotype-select" in request.GET:
-            self.stereotype = Stereotype.objects.get(id=request.GET["stereotype-select"])
+            self.stereotype = Stereotype.objects.get(
+                id=request.GET["stereotype-select"]
+            )
         return render(request, self.template_name, self.get_context_data())
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         stereotype = Stereotype.objects.get(id=request.POST["stereotype_id"])
         self.stereotype = stereotype
         context = self.get_context_data()
@@ -55,7 +63,10 @@ class StereotypeVotesView(ListView):
 
         for form in stereotype_votes_formset:
             if form.is_valid():
-                choice, comment = [form["choice"].value(), form["comment"].value()]
+                choice, comment = [
+                    form["choice"].value(),
+                    form["comment"].value(),
+                ]
                 if choice and comment:
                     form.save(choice, comment)
 
@@ -63,7 +74,9 @@ class StereotypeVotesView(ListView):
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
-        conversation = Conversation.objects.get(id=self.kwargs["conversation_id"])
+        conversation = Conversation.objects.get(
+            id=self.kwargs["conversation_id"]
+        )
         groups = self.clusterization.get_stereotypes()
         self.comments = conversation.comments.approved()
 
@@ -89,13 +102,19 @@ class StereotypeVotesView(ListView):
 
 @method_decorator([login_required, can_edit_conversation], name="dispatch")
 class StereotypeVotesManageView(CreateView):
-    template_name = "ej_clusters/stereotype-votes/manage-stereotype-votes.jinja2"
+    template_name = (
+        "ej_clusters/stereotype-votes/manage-stereotype-votes.jinja2"
+    )
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         context = self.get_context_data()
 
         non_voted = self.stereotype.non_voted_comments(context["conversation"])
-        non_voted_formset = forms.StereotypeVoteFormsetFactory(extra=non_voted.count())
+        non_voted_formset = forms.StereotypeVoteFormsetFactory(
+            extra=non_voted.count()
+        )
         non_voted_formset = non_voted_formset.make_edit(
             comments=non_voted,
             prefix="non-voted",
@@ -123,12 +142,16 @@ class StereotypeVotesManageView(CreateView):
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
-        conversation = Conversation.objects.get(id=self.kwargs["conversation_id"])
+        conversation = Conversation.objects.get(
+            id=self.kwargs["conversation_id"]
+        )
         self.comments = conversation.comments.approved()
         self.stereotype = Stereotype.objects.get(id=self.kwargs["pk"])
 
         non_voted = self.stereotype.non_voted_comments(conversation)
-        non_voted_formset = forms.StereotypeVoteFormsetFactory(extra=non_voted.count())
+        non_voted_formset = forms.StereotypeVoteFormsetFactory(
+            extra=non_voted.count()
+        )
         non_voted_formset = non_voted_formset.make_edit(
             comments=non_voted, prefix="non-voted", stereotype=self.stereotype
         )

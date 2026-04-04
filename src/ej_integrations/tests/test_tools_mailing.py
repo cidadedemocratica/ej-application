@@ -86,7 +86,11 @@ class TestTemplateGenerator(ConversationRecipes):
         expected_url = (
             "http://ejplatform.local/{}/conversations/{}/{}"
             "?comment_id={}&action=vote&origin=campaign{}".format(
-                board.slug, conversation.id, conversation.slug, comment_1.id, email_tag
+                board.slug,
+                conversation.id,
+                conversation.slug,
+                comment_1.id,
+                email_tag,
             )
         )
 
@@ -104,7 +108,9 @@ class TestTemplateGenerator(ConversationRecipes):
         generator = TemplateGenerator(conversation, request, form_data)
 
         arrow = "border-top: 28px solid {} !important;".format("#C4F2F4")
-        dark = "color: {} !important; background-color: {};".format("#C4F2F4", "#30BFD3")
+        dark = "color: {} !important; background-color: {};".format(
+            "#C4F2F4", "#30BFD3"
+        )
         light = "color: {}; background-color: {};".format("#30BFD3", "#C4F2F4")
         expected_palette = {
             "arrow": arrow,
@@ -160,7 +166,9 @@ class TestTemplateGenerator(ConversationRecipes):
         generator = TemplateGenerator(conversation, request, form_data)
 
         arrow = "border-top: 28px solid {} !important;".format("#FFE1CA")
-        dark = "color: {} !important; background-color: {};".format("#FFE1CA", "#F5700A")
+        dark = "color: {} !important; background-color: {};".format(
+            "#FFE1CA", "#F5700A"
+        )
         light = "color: {}; background-color: {};".format("#F5700A", "#FFE1CA")
         expected_palette = {
             "arrow": arrow,
@@ -230,14 +238,17 @@ class TestTemplateGenerator(ConversationRecipes):
         form_data = {"template_type": "mautic", "custom_title": new_title}
         generator = TemplateGenerator(conversation_db, request, form_data)
         assert (
-            generator.comment.content == conversation_db.approved_comments.last().content
+            generator.comment.content
+            == conversation_db.approved_comments.last().content
         )
         assert generator.comment == conversation_db.approved_comments.last()
         assert generator.conversation.text == new_title
 
 
 class TestMailingToolForm(ConversationRecipes):
-    def test_valid_mautic_form_for_conversation_component(self, conversation_db, mk_user):
+    def test_valid_mautic_form_for_conversation_component(
+        self, conversation_db, mk_user
+    ):
         user = mk_user(email="test@domain.com")
         conversation_db.create_comment(
             user, "comment 1", status="approved", check_limits=False

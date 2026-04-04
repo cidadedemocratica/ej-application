@@ -39,6 +39,7 @@ from ej_dataviz.utils import (
     get_user_data,
     vote_data_common,
 )
+from ej_clusters.tasks import update_clusterization
 
 log = getLogger("ej")
 np = import_later("numpy")
@@ -62,7 +63,9 @@ class ClusterDetailView(DetailView):
         try:
             return Cluster.objects.get(id=cluster_id)
         except Exception:
-            raise ValidationError(f"could not find cluster with id {cluster_id}")
+            raise ValidationError(
+                f"could not find cluster with id {cluster_id}"
+            )
 
     def get_context_data(self, **kwargs):
         cluster = self.get_object()
@@ -88,6 +91,7 @@ class ConversationDashboardView(DetailView):
         conversation = self.get_object()
         statistics = conversation.statistics()
         names = getattr(settings, "EJ_PROFILE_FIELD_NAMES", {})
+        update_clusterization.delay(conversation.clusterization.id)
         biggest_cluster_data = get_conversation_biggest_cluster(
             self.request, conversation
         )
@@ -98,7 +102,9 @@ class ConversationDashboardView(DetailView):
             "biggest_cluster_data": biggest_cluster_data,
             "gender_field": names.get("gender", _("Gender")),
             "race_field": names.get("race", _("Race")),
-            "pca_link": _("https://en.wikipedia.org/wiki/Principal_component_analysis"),
+            "pca_link": _(
+                "https://en.wikipedia.org/wiki/Principal_component_analysis"
+            ),
             "current_page": "dashboard",
         }
 
@@ -111,7 +117,9 @@ def scatter(request, conversation_id, **kwargs):
         "gender_field": names.get("gender", _("Gender")),
         "race_field": names.get("race", _("Race")),
         "conversation": check_promoted(conversation, request),
-        "pca_link": _("https://en.wikipedia.org/wiki/Principal_component_analysis"),
+        "pca_link": _(
+            "https://en.wikipedia.org/wiki/Principal_component_analysis"
+        ),
         "json_data": clusters(request, conversation),
     }
     return render(request, "ej_dataviz/scatter.jinja2", render_context)
@@ -189,7 +197,9 @@ def scatter_group(request, conversation_id, groupby, **kwargs):
     return JsonResponse(
         {
             "groups": {name_transform(k): v for k, v in data.items()},
-            "descriptions": {name_transform(k): description_transform(k) for k in data},
+            "descriptions": {
+                name_transform(k): description_transform(k) for k in data
+            },
             "groupby": groupby,
         }
     )
@@ -198,7 +208,9 @@ def scatter_group(request, conversation_id, groupby, **kwargs):
 @can_access_dataviz
 def words(request, conversation_id, **kwargs):
     conversation = Conversation.objects.get(id=conversation_id)
-    data = "\n".join(conversation.approved_comments.values_list("content", flat=True))
+    data = "\n".join(
+        conversation.approved_comments.values_list("content", flat=True)
+    )
     regexp = r"\w[\w'\u0327]+"
     wc = wordcloud.WordCloud(stopwords=get_stop_words(), regexp=regexp)
     cloud = sorted(wc.process_text(data).items(), key=lambda x: -x[1])[:50]
@@ -216,7 +228,9 @@ def votes_over_time(request, conversation_id, **kwargs):
         # convert js naive date
         end_date = make_aware(datetime.datetime.fromisoformat(end_date))
         if start_date > end_date:
-            return JsonResponse({"error": "end date must be gratter then start date."})
+            return JsonResponse(
+                {"error": "end date must be gratter then start date."}
+            )
         votes = conversation.time_interval_votes(start_date, end_date)
         return JsonResponse({"data": votes})
     else:
@@ -250,7 +264,9 @@ def votes_data(request, conversation_id, fmt, **kwargs):
 @can_view_report_details
 def votes_data_cluster(request, conversation, fmt, cluster_id, **kwargs):
     if not request.user.has_perm("ej.can_view_report_detail", conversation):
-        return JsonResponse({"error": "You don't have permission to view this data."})
+        return JsonResponse(
+            {"error": "You don't have permission to view this data."}
+        )
     cluster = get_cluster_or_404(cluster_id, conversation)
     filename = conversation.slug + f"-{slugify(cluster.name)}-votes"
     return vote_data_common(cluster.votes.all(), filename, fmt)
@@ -265,7 +281,9 @@ def comments_data(request, conversation_id, fmt, **kwargs):
     comments = conversation.comments
     try:
         clusters = (
-            Clusterization.objects.filter(conversation=conversation).last().clusters
+            Clusterization.objects.filter(conversation=conversation)
+            .last()
+            .clusters
         )
     except AttributeError:
         clusters = None

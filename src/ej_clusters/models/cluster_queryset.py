@@ -134,11 +134,13 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
 
         # Fetch votes from database
         kwargs.update(kind_col=kind_col, cluster_col=cluster_col)
-        stereotype_votes = self._stereotypes_votes_table(mean_stereotype, **kwargs)
+        stereotype_votes = self._stereotypes_votes_table(
+            mean_stereotype, **kwargs
+        )
         user_votes = self._users_votes_table(non_classified, **kwargs)
 
         # Imputation must occur after both set of votes are joined together.
-        votes = user_votes.append(stereotype_votes)
+        votes = pd.concat([user_votes, stereotype_votes])
         if cluster_col is None:
             return imputation(votes, data_imputation)
 
@@ -170,7 +172,9 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
             stereotype_votes[cluster_col] = clusters
         return stereotype_votes
 
-    def _users_votes_table(self, non_classified, kind_col, cluster_col, **kwargs):
+    def _users_votes_table(
+        self, non_classified, kind_col, cluster_col, **kwargs
+    ):
         users = self.participants() if non_classified else self.users()
         user_votes = users.votes_table(**kwargs)
 
@@ -243,7 +247,9 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
             log.error("Trying to clusterize empty cluster set.")
             return ClusterDict(pipeline=pipeline)
         elif n_clusters == 1:
-            log.warning("Creating clusters for cluster set with a single element.")
+            log.warning(
+                "Creating clusters for cluster set with a single element."
+            )
 
         # Collect votes
         imputer = impute.SimpleImputer()
@@ -256,7 +262,7 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
             # Aggregate user and cluster votes
             cluster_votes = pd.DataFrame(cluster_votes)
             cluster_votes.index *= -1
-            votes = user_votes.append(cluster_votes)
+            votes = pd.concat([user_votes, cluster_votes])
             votes_data = imputer.transform(votes.values)
 
             # Find labels and associate them with cluster labels
@@ -279,7 +285,11 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
         stereotype_ids = self.dataframe("id", "stereotypes__id", index=None)
 
         stereotype_with_votes = list(
-            set(self.stereotype_votes(comments).values_list("author__id", flat=True))
+            set(
+                self.stereotype_votes(comments).values_list(
+                    "author__id", flat=True
+                )
+            )
         )
         stereotype_ids = stereotype_ids[
             stereotype_ids["stereotypes__id"].isin(stereotype_with_votes)
@@ -287,7 +297,9 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
 
         cluster_votes = []
         for cluster_id in cluster_ids:
-            ids = stereotype_ids[stereotype_ids.id == cluster_id]["stereotypes__id"]
+            ids = stereotype_ids[stereotype_ids.id == cluster_id][
+                "stereotypes__id"
+            ]
             mean_votes = stereotype_votes.loc[ids].mean(0)
 
             # We fill empty clusters with random values to avoid superposition of
@@ -297,13 +309,17 @@ class ClusterQuerySet(ClusterizationBaseMixin, QuerySet):
                 log.warning(
                     f"[clusters] cluster {cluster_id} of {clusterization} is empty!"
                 )
-                mean_votes.values[:] = np.random.uniform(-1, 1, size=len(mean_votes))
+                mean_votes.values[:] = np.random.uniform(
+                    -1, 1, size=len(mean_votes)
+                )
 
             mean_votes.name = cluster_id
             cluster_votes.append(mean_votes)
         return cluster_votes
 
-    def _save_clusterization(self, pipeline, cluster_ids, stereotype, user, commit=True):
+    def _save_clusterization(
+        self, pipeline, cluster_ids, stereotype, user, commit=True
+    ):
         result = ClusterDict(pipeline=pipeline)
         m2m_objects = []
         m2m = self.model.users.through

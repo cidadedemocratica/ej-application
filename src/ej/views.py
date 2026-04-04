@@ -62,4 +62,6 @@ class InfoEnvironView(DetailView):
 #
 class ServiceWorkerView(DetailView):
     def get(self, request):
-        return render(request, "js/sw.js", {}, content_type="application/javascript")
+        return render(
+            request, "js/sw.js", {}, content_type="application/javascript"
+        )

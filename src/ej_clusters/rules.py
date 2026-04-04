@@ -37,9 +37,10 @@ def must_update_clusterization(obj):
         clusterization is None
         or (
             clusterization.cluster_status == ClusterStatus.PENDING_DATA
-            and not rules.test_rule("ej.can_activate_clusterization", clusterization)
+            and not rules.test_rule(
+                "ej.can_activate_clusterization", clusterization
+            )
         )
-        or clusterization.n_clusters >= 2
         or clusterization.n_unprocessed_votes < 5
     ):
         return False
@@ -54,7 +55,7 @@ def can_activate_clusterization(obj):
     clusterization job.
 
     * Must have a defined clusterization
-    * Has at least 10 comments with at least 10 votes.
+    * Has at least 3 comments with at least 10 votes.
     * Has at least 2 clusters with at least 1 registered stereotype.
     """
     clusterization = get_clusterization(obj)
@@ -63,15 +64,15 @@ def can_activate_clusterization(obj):
 
     filled_comments = (
         clusterization.comments.annotate(count=Count("votes"))
-        .filter(count__gte=10)
+        .filter(count__gte=5)
         .count()
     )
     filled_clusters = (
         clusterization.clusters.annotate(count=Count("stereotypes"))
-        .filter(count__gte=10)
+        .filter(count__gte=1)
         .count()
     )
-    return filled_comments >= 10 and filled_clusters >= 10
+    return filled_comments >= 3 and filled_clusters >= 2
 
 
 def requires_update(self):

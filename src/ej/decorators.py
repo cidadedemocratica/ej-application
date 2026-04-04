@@ -137,11 +137,19 @@ def can_view_report_details(view_func):
             conversation_id = kwargs.get("conversation_id")
             Conversation.objects.get(id=conversation_id)
         except AttributeError:
-            return JsonResponse({"error": "You don't have permission to view this data."})
+            return JsonResponse(
+                {"error": "You don't have permission to view this data."}
+            )
 
-        if request.user.id or request.user.is_staff or request.user.is_superuser:
+        if (
+            request.user.id
+            or request.user.is_staff
+            or request.user.is_superuser
+        ):
             return view_func(request, *args, **kwargs)
-        return JsonResponse({"error": "You don't have permission to view this data."})
+        return JsonResponse(
+            {"error": "You don't have permission to view this data."}
+        )
 
     return wrapper_func
 

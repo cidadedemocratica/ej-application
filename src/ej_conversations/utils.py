@@ -94,7 +94,9 @@ def handle_detail_comment(request, conversation):
         content = form.cleaned_data.get("content")
         user = request.user
         new_comment = conversation.create_comment(user, content)
-        log.info(f"user {user.id} posted comment {new_comment.id} on {conversation.id}")
+        log.info(
+            f"user {user.id} posted comment {new_comment.id} on {conversation.id}"
+        )
     return {"form": form}
 
 
@@ -109,7 +111,9 @@ def handle_detail_favorite(request, conversation):
     else:
         toast(request, _("Conversation removed from favorites."))
 
-    log.info(f"user {user.id} toggled favorite status of conversation {conversation.id}")
+    log.info(
+        f"user {user.id} toggled favorite status of conversation {conversation.id}"
+    )
     return {}
 
 

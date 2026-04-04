@@ -2,7 +2,13 @@ import matplotlib.pyplot as plt
 
 from sidekick import import_later
 from sklearn.decomposition import PCA, KernelPCA
-from sklearn.manifold import TSNE, Isomap, MDS, LocallyLinearEmbedding, SpectralEmbedding
+from sklearn.manifold import (
+    TSNE,
+    Isomap,
+    MDS,
+    LocallyLinearEmbedding,
+    SpectralEmbedding,
+)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Imputer
 
@@ -43,7 +49,9 @@ def random_cluster(n_users, n_comments, alpha=DEFAULT_ALPHA, missing=0.25):
     # rand = np.random.uniform(size=(n_users, n_comments))
     # votes[rand < missing] = 0
 
-    votes = np.vstack([random_user(probs, missing=missing) for _ in range(n_users)])
+    votes = np.vstack(
+        [random_user(probs, missing=missing) for _ in range(n_users)]
+    )
 
     # Fill-in again users who did not vote in anything
     for k, row in enumerate(votes):
@@ -87,7 +95,9 @@ def random_votes(sizes, n_comments, alpha=DEFAULT_ALPHA, missing=0.5):
     """
     Return a full votation based on clusters of the given sizes.
     """
-    clusters = [random_cluster(size, n_comments, alpha, missing) for size in sizes]
+    clusters = [
+        random_cluster(size, n_comments, alpha, missing) for size in sizes
+    ]
     data = np.vstack(clusters)
     return data
 
@@ -162,7 +172,13 @@ def reduce_dimensionality(votes, method="pca", **kwargs):
 
 
 def show_votes(
-    votes, method="pca", display=True, title=None, labels=None, legend=None, **kwargs
+    votes,
+    method="pca",
+    display=True,
+    title=None,
+    labels=None,
+    legend=None,
+    **kwargs,
 ):
     """
     Show votes dataset in a 2D plot.

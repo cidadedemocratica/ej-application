@@ -17,7 +17,7 @@ def role_index():
     classes = set()
 
     # Collect all models and roles in the default render registry
-    for (cls, __) in html.registry:
+    for cls, __ in html.registry:
         if not issubclass(cls, Model) or cls in classes:
             continue
         classes.add(cls)
@@ -27,12 +27,15 @@ def role_index():
 
     # Now we collect the queryset renderers
     classes = set()
-    for (cls, __) in register_queryset.registry:
+    for cls, __ in register_queryset.registry:
         classes.add(cls)
         name = cls.__name__
         href = reverse("role-model-queryset", kwargs={"model": name.lower()})
         data.append(
-            [name + " (queryset)", span([a(name, href=href), ": " + get_doc(cls)])]
+            [
+                name + " (queryset)",
+                span([a(name, href=href), ": " + get_doc(cls)]),
+            ]
         )
 
     return {"data": html_map(data)}
@@ -60,7 +63,8 @@ def role_model_list(request, model, role):
     data = []
     for idx, obj in enumerate(cls.objects.all()[:size], 1):
         link = reverse(
-            "role-model-instance", kwargs={"model": model, "role": role, "id": obj.id}
+            "role-model-instance",
+            kwargs={"model": model, "role": role, "id": obj.id},
         )
         key = span([f"{idx}) ", a(str(obj), href=link)])
         data.append((key, html(obj, role, **kwargs)))
@@ -110,7 +114,7 @@ def get_class(model):
     """
     Return class for string reference of model.
     """
-    for (cls, __) in html.registry:
+    for cls, __ in html.registry:
         if cls.__name__.lower() == model:
             return cls
     raise Http404
@@ -121,7 +125,7 @@ def get_roles(cls):
     Return a list of roles assigned to the given class.
     """
     roles = []
-    for (cls_, role) in html.registry:
+    for cls_, role in html.registry:
         if cls_ is cls and role is not None:
             roles.append(role)
     if roles:

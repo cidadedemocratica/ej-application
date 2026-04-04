@@ -41,12 +41,16 @@ class StereotypeCreateView(CreateView):
         context = self.get_context_data()
         clusterization = Clusterization.objects.filter(pk=id).get()
         form = StereotypeForm(
-            owner=self.request.user, request=request, clusterization=clusterization
+            owner=self.request.user,
+            request=request,
+            clusterization=clusterization,
         )
         if form.is_valid_post():
             stereotype = form.save()
             response = HttpResponse("")
-            response["HX-Trigger"] = '{"integrateData": ' + str(stereotype.id) + "}"
+            response["HX-Trigger"] = (
+                '{"integrateData": ' + str(stereotype.id) + "}"
+            )
             return response
         context["create_form"] = form
         return render(request, self.template_name, context)

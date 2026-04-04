@@ -56,7 +56,9 @@ class TestStereotypeForm(ClusterRecipes):
 class TestStereotypeVoteForm(ConversationSetup):
     def test_valid_data(self, base_user, conversation_with_comments):
         comment = conversation_with_comments.comments.first()
-        stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=base_user)
+        stereotype, _ = Stereotype.objects.get_or_create(
+            name="name", owner=base_user
+        )
         form = StereotypeVoteForm(
             data={"comment": comment.id, "choice": Choice.AGREE},
             stereotype=stereotype,
@@ -64,7 +66,9 @@ class TestStereotypeVoteForm(ConversationSetup):
             initial={"comment": comment},
         )
         assert form.is_valid()
-        stereotype_vote = form.save(form["choice"].value(), form["comment"].value())
+        stereotype_vote = form.save(
+            form["choice"].value(), form["comment"].value()
+        )
         assert stereotype_vote.comment == comment
         assert stereotype_vote.choice == Choice.AGREE
 

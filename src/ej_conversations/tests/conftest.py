@@ -44,7 +44,11 @@ def api_client():
 @pytest.fixture
 def conversation(db, user):  # noqa: F811
     conversation_object = create_conversation(
-        text="test", title="title", author=user, is_promoted=True, anonymous_votes=1
+        text="test",
+        title="title",
+        author=user,
+        is_promoted=True,
+        anonymous_votes=1,
     )
     yield conversation_object
     conversation_object.delete()
@@ -59,8 +63,12 @@ def comment(db, conversation, user):  # noqa: F811
 
 @pytest.fixture
 def comments(db, conversation, user):  # noqa: F811
-    comment_object_1 = conversation.create_comment(user, "content 1", "approved")
-    comment_object_2 = conversation.create_comment(user, "content 2", "approved")
+    comment_object_1 = conversation.create_comment(
+        user, "content 1", "approved"
+    )
+    comment_object_2 = conversation.create_comment(
+        user, "content 2", "approved"
+    )
     yield [comment_object_1, comment_object_2]
     map(lambda x: x.delete(), [comment_object_1, comment_object_2])
 
@@ -74,7 +82,9 @@ def vote(db, user, comment):  # noqa: F811
 
 @pytest.fixture
 def board(user):  # noqa: F811
-    board = Board.objects.create(slug="userboard", owner=user, description="board")
+    board = Board.objects.create(
+        slug="userboard", owner=user, description="board"
+    )
     return board
 
 

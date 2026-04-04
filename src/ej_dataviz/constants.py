@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from ej_profiles.enums import Gender, Race, STATE_CHOICES
 
 np = import_later("numpy")
+
+
 #
 # Grouping constants
 #
@@ -185,7 +187,9 @@ FIELD_DATA = {
         "name": FIELD_NAMES.get("gender", _("Gender")),
         "visual_map": {
             **PIECEWISE_OPTIONS,
-            "categories": [choice.label for choice in Gender if choice.value != 0],
+            "categories": [
+                choice.label for choice in Gender if choice.value != 0
+            ],
             "inRange": {"color": COLORS[: len(list(Gender))]},
         },
         "transform": lambda col: col.apply(field_descriptor(Gender)),
@@ -195,7 +199,9 @@ FIELD_DATA = {
         "name": FIELD_NAMES.get("race", _("Race")),
         "visual_map": {
             **PIECEWISE_OPTIONS,
-            "categories": [choice.label for choice in Race if choice.value != 0],
+            "categories": [
+                choice.label for choice in Race if choice.value != 0
+            ],
             "inRange": {"color": COLORS[: len(list(Race))]},
         },
         "transform": lambda col: col.apply(field_descriptor(Race)),

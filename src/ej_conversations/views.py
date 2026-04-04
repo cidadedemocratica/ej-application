@@ -27,10 +27,17 @@ from ej_integrations.utils import get_host_with_schema
 from ej_users.models import User
 
 from . import forms
-from .decorators import redirect_to_conversation_detail, user_can_post_anonymously
+from .decorators import (
+    redirect_to_conversation_detail,
+    user_can_post_anonymously,
+)
 from .forms import CommentForm, ConversationForm
 from .models import Comment, Conversation
-from .utils import handle_detail_comment, handle_detail_favorite, handle_detail_vote
+from .utils import (
+    handle_detail_comment,
+    handle_detail_favorite,
+    handle_detail_vote,
+)
 
 log = getLogger("ej")
 
@@ -90,7 +97,9 @@ class ConversationCommonView:
             "comment": comment,
             "comment_form": self.form_class(conversation=conversation),
             "user_is_author": conversation.author == user,
-            "user_progress_percentage": conversation.user_progress_percentage(user),
+            "user_progress_percentage": conversation.user_progress_percentage(
+                user
+            ),
             "n_comments": n_comments,
             "max_comments": max_comments,
             "n_user_final_votes": n_user_final_votes,
@@ -122,7 +131,9 @@ class ConversationView(ListView):
         else:
             queryset = Conversation.objects.filter(is_promoted=True)
 
-        return queryset.cache_annotations(*annotations, user=user).order_by("-created")
+        return queryset.cache_annotations(*annotations, user=user).order_by(
+            "-created"
+        )
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         return super().get_context_data(**kwargs)
@@ -133,7 +144,9 @@ class PublicConversationView(ConversationView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         user = self.request.user
-        user_boards = Board.objects.filter(owner=user) if user.is_authenticated else []
+        user_boards = (
+            Board.objects.filter(owner=user) if user.is_authenticated else []
+        )
 
         return {
             "conversations": self.get_queryset(),
@@ -210,7 +223,9 @@ class BoardConversationsView(ConversationView):
         else:
             queryset = Conversation.objects.filter(is_promoted=True)
 
-        return queryset.cache_annotations(*annotations, user=user).order_by("-created")
+        return queryset.cache_annotations(*annotations, user=user).order_by(
+            "-created"
+        )
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         user = self.request.user
@@ -278,7 +293,9 @@ class ConversationCommentView(ConversationCommonView, DetailView):
 class ConversationDetailContentView(ConversationCommonView, DetailView):
     form_class = CommentForm
     model = Conversation
-    template_name = "ej_conversations/includes/conversation-detail-content.jinja2"
+    template_name = (
+        "ej_conversations/includes/conversation-detail-content.jinja2"
+    )
     ctx = {}
 
 
@@ -319,7 +336,9 @@ class ConversationVoteView(ConversationCommonView, DetailView):
         conversation = self.get_object()
         request.user = User.get_or_create_from_session(conversation, request)
         return render(
-            request, "ej_conversations/comments/card.jinja2", self.get_context_data()
+            request,
+            "ej_conversations/comments/card.jinja2",
+            self.get_context_data(),
         )
 
     @user_can_post_anonymously
@@ -328,7 +347,9 @@ class ConversationVoteView(ConversationCommonView, DetailView):
         request.user = User.get_or_create_from_session(conversation, request)
         self.ctx = handle_detail_vote(request)
         return render(
-            request, "ej_conversations/comments/card.jinja2", self.get_context_data()
+            request,
+            "ej_conversations/comments/card.jinja2",
+            self.get_context_data(),
         )
 
 
@@ -349,7 +370,8 @@ class ConversationCreateView(CreateView):
 
             return redirect(
                 reverse(
-                    "boards:conversation-detail", kwargs=conversation.get_url_kwargs()
+                    "boards:conversation-detail",
+                    kwargs=conversation.get_url_kwargs(),
                 )
             )
 
@@ -382,7 +404,9 @@ class ConversationEditView(UpdateView):
     def post(self, request, conversation_id, slug, board_slug, *args, **kwargs):
         conversation = self.get_object()
         board = Board.objects.get(slug=board_slug)
-        form = self.form_class(request.POST, request.FILES, instance=conversation)
+        form = self.form_class(
+            request.POST, request.FILES, instance=conversation
+        )
 
         if form.is_valid():
             form.save(board=board, **kwargs)
@@ -411,7 +435,9 @@ class ConversationEditView(UpdateView):
         return {
             "conversation": conversation,
             "form": form or self.form_class(instance=conversation),
-            "can_publish": user.has_perm("ej_conversations.can_publish_promoted"),
+            "can_publish": user.has_perm(
+                "ej_conversations.can_publish_promoted"
+            ),
             "board": conversation.board,
         }
 
@@ -427,12 +453,14 @@ class ConversationDeleteView(DeleteView):
     def get_success_url(self):
         conversation = self.object
         return reverse_lazy(
-            "boards:conversation-list", kwargs={"board_slug": conversation.board.slug}
+            "boards:conversation-list",
+            kwargs={"board_slug": conversation.board.slug},
         )
 
 
 @method_decorator(
-    [login_required, can_edit_conversation, can_moderate_conversation], name="dispatch"
+    [login_required, can_edit_conversation, can_moderate_conversation],
+    name="dispatch",
 )
 class ConversationModerateView(UpdateView):
     model = Conversation
@@ -441,7 +469,11 @@ class ConversationModerateView(UpdateView):
 
     def post(self, request, conversation_id, slug, board_slug, *args, **kwargs):
         payload = request.POST
-        for status in [self.status.approved, self.status.pending, self.status.rejected]:
+        for status in [
+            self.status.approved,
+            self.status.pending,
+            self.status.rejected,
+        ]:
             if status in payload:
                 comments_ids = payload.getlist(status)
                 Comment.objects.filter(id__in=comments_ids).update(
@@ -481,7 +513,8 @@ class ConversationModerateView(UpdateView):
 
 
 @method_decorator(
-    [login_required, can_edit_conversation, can_moderate_conversation], name="dispatch"
+    [login_required, can_edit_conversation, can_moderate_conversation],
+    name="dispatch",
 )
 class CommentModerationView(UpdateView):
     model = Conversation
@@ -544,7 +577,9 @@ def delete_comment(request, conversation_id, slug, board_slug):
 def check_comment(request, conversation_id, slug, board_slug):
     comment_content = request.POST.get("comment_content")
     try:
-        Comment.objects.get(content=comment_content, conversation_id=conversation_id)
+        Comment.objects.get(
+            content=comment_content, conversation_id=conversation_id
+        )
         return HttpResponse(status=200)
     except Comment.DoesNotExist:
         return HttpResponse(status=204)

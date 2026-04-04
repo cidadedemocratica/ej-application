@@ -13,6 +13,7 @@ def opinion_groups_summary(conversation, request=None, **kwargs):
     n_groups = 3
     group_id = 2
     msg = _(
-        "This conversation has {n_groups} groups, " "and you are in group {group_id}."
+        "This conversation has {n_groups} groups, "
+        "and you are in group {group_id}."
     ).format(n_groups=n_groups, group_id=group_id)
     return extra_content(_("Opinion groups"), msg, icon="chart-pie")

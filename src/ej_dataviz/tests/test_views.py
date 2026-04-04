@@ -26,20 +26,15 @@ from ej_dataviz.views.filters import (
 BASE_URL = "/api/v1"
 
 
-class TestRoutes(ConversationRecipes, UrlTester):
-    admin_urls = [
-        "/conversations/1/conversation/report/users/",
-        "/conversations/1/conversation/report/comments/",
-        "/conversations/1/conversation/dashboard/",
-    ]
-
-
 class TestClusterDetailView:
     def test_cluster_detail_view_bad_request(self, cluster, logged_client):
         conversation = cluster.conversation
         url = reverse(
             "dataviz:cluster-detail",
-            kwargs={"conversation_id": conversation.id, "slug": conversation.slug},
+            kwargs={
+                "conversation_id": conversation.id,
+                "slug": conversation.slug,
+            },
         )
         with pytest.raises(ValidationError) as validation_error:
             logged_client.get(url)
@@ -48,7 +43,9 @@ class TestClusterDetailView:
             == "cluster_id parameter was not passed to ClusterDetailView"
         )
 
-    def test_cluster_detail_view_with_wrong_cluster_id(self, cluster, logged_client):
+    def test_cluster_detail_view_with_wrong_cluster_id(
+        self, cluster, logged_client
+    ):
         conversation = cluster.conversation
         url = reverse(
             "dataviz:cluster-detail",
@@ -60,7 +57,8 @@ class TestClusterDetailView:
         with pytest.raises(ValidationError) as validation_error:
             logged_client.get(url, {"cluster_id": "123456789"})
         assert (
-            validation_error.value.args[0] == "could not find cluster with id 123456789"
+            validation_error.value.args[0]
+            == "could not find cluster with id 123456789"
         )
 
     def test_cluster_detail_view_with_cluster_id(self, cluster, logged_client):
@@ -92,7 +90,8 @@ class TestReportRoutes:
         today = datetime.datetime.now().date()  # 2022-04-04
         one_week_ago = today - datetime.timedelta(days=7)
         url = reverse(
-            "boards:dataviz-votes_over_time", kwargs=conversation.get_url_kwargs()
+            "boards:dataviz-votes_over_time",
+            kwargs=conversation.get_url_kwargs(),
         )
         url = url + f"?startDate={one_week_ago}&endDate={today}"
         response = logged_client.get(url)
@@ -117,12 +116,15 @@ class TestReportRoutes:
     ):
         conversation = conversation_with_votes
         url = reverse(
-            "boards:dataviz-votes_over_time", kwargs=conversation.get_url_kwargs()
+            "boards:dataviz-votes_over_time",
+            kwargs=conversation.get_url_kwargs(),
         )
         response = logged_client.get(url)
         data = json.loads(response.content)
 
-        assert data["start_date"] == conversation.votes.first().created.isoformat()
+        assert (
+            data["start_date"] == conversation.votes.first().created.isoformat()
+        )
         assert data["end_date"] == conversation.votes.last().created.isoformat()
 
     def test_should_return_error_if_start_date_is_bigger_than_end_date(
@@ -133,7 +135,8 @@ class TestReportRoutes:
         conversation.save()
 
         url = reverse(
-            "boards:dataviz-votes_over_time", kwargs=conversation.get_url_kwargs()
+            "boards:dataviz-votes_over_time",
+            kwargs=conversation.get_url_kwargs(),
         )
         url = url + "?startDate=2021-10-13&endDate=2021-10-06"
         response = logged_client.get(url)
@@ -147,7 +150,8 @@ class TestReportRoutes:
         conversation.save()
 
         base_url = reverse(
-            "boards:dataviz-votes_over_time", kwargs=conversation.get_url_kwargs()
+            "boards:dataviz-votes_over_time",
+            kwargs=conversation.get_url_kwargs(),
         )
         response = logged_client.get(base_url)
         assert json.loads(response.content) == {
@@ -166,13 +170,17 @@ class TestReportRoutes:
         clusterization = Clusterization.objects.create(
             conversation=conversation, cluster_status=ClusterStatus.ACTIVE
         )
-        cluster = Cluster.objects.create(name="name", clusterization=clusterization)
+        cluster = Cluster.objects.create(
+            name="name", clusterization=clusterization
+        )
         stereotype, _ = Stereotype.objects.get_or_create(
             name="name", owner=conversation.author
         )
         cluster.stereotypes.add(stereotype)
 
-        url = reverse("boards:dataviz-dashboard", kwargs=conversation.get_url_kwargs())
+        url = reverse(
+            "boards:dataviz-dashboard", kwargs=conversation.get_url_kwargs()
+        )
         response = logged_client.get(url)
         assert (
             "Your conversation still does not have defined personas. Without personas, it is not possible to generate opinion groups."
@@ -181,15 +189,25 @@ class TestReportRoutes:
 
     def test_get_page(self, conversation_with_comments, logged_client):
         conv = conversation_with_comments
-        base_url = reverse("boards:dataviz-comments", kwargs=conv.get_url_kwargs())
+        base_url = reverse(
+            "boards:dataviz-comments", kwargs=conv.get_url_kwargs()
+        )
         url = f"{base_url}?page=1"
 
         response = logged_client.get(url)
-        comments = list(response.context_data["page"])
-        assert conversation_with_comments.comments.all()[0].content == comments[0][1]
-        assert conversation_with_comments.comments.all()[1].content == comments[1][1]
-        assert conversation_with_comments.comments.all()[2].content == comments[2][1]
-        assert conversation_with_comments.comments.all()[3].content == comments[3][1]
+        page = response.context["page"]
+        assert (
+            conversation_with_comments.comments.all()[0].content == page[0][1]
+        )
+        assert (
+            conversation_with_comments.comments.all()[1].content == page[1][1]
+        )
+        assert (
+            conversation_with_comments.comments.all()[2].content == page[2][1]
+        )
+        assert (
+            conversation_with_comments.comments.all()[3].content == page[3][1]
+        )
 
     def test_get_dashboard_with_clusters(
         self, cluster, stereotype_vote, comment, logged_client
@@ -203,11 +221,18 @@ class TestReportRoutes:
         )
         comment.vote(conversation.author, "agree")
         comment.save()
-        url = reverse("boards:dataviz-dashboard", kwargs=conversation.get_url_kwargs())
+        url = reverse(
+            "boards:dataviz-dashboard", kwargs=conversation.get_url_kwargs()
+        )
         response = logged_client.get(url)
         assert response.status_code == 200
-        assert response.context["biggest_cluster_data"].get("name") == "My Cluster"
-        assert response.context["biggest_cluster_data"].get("content") == comment.content
+        assert (
+            response.context["biggest_cluster_data"].get("name") == "My Cluster"
+        )
+        assert (
+            response.context["biggest_cluster_data"].get("content")
+            == comment.content
+        )
         assert response.context["biggest_cluster_data"].get("percentage")
 
     def test_get_dashboard_without_clusters(
@@ -236,9 +261,12 @@ class TestCommentsReport(TestReportRoutes):
 
     def test_get_cluster_comments_dataframe(self, conversation_with_comments):
         clusterization = Clusterization.objects.create(
-            conversation=conversation_with_comments, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_comments,
+            cluster_status=ClusterStatus.ACTIVE,
         )
-        cluster = Cluster.objects.create(name="name", clusterization=clusterization)
+        cluster = Cluster.objects.create(
+            name="name", clusterization=clusterization
+        )
 
         clusters_filter = CommentsReportClustersFilter(
             cluster_ids=[cluster.id], conversation=conversation_with_comments
@@ -253,7 +281,8 @@ class TestCommentsReport(TestReportRoutes):
 
     def test_filter_comments_by_group(self, conversation_with_comments):
         clusterization = Clusterization.objects.create(
-            conversation=conversation_with_comments, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_comments,
+            cluster_status=ClusterStatus.ACTIVE,
         )
         clusters_filter = CommentsReportClustersFilter(
             cluster_ids=[], conversation=conversation_with_comments
@@ -265,15 +294,25 @@ class TestCommentsReport(TestReportRoutes):
         assert filtered_comments_df.iloc[[3]].get("group").item() == ""
         assert len(filtered_comments_df.index) == 4
 
-        cluster = Cluster.objects.create(name="name", clusterization=clusterization)
+        cluster = Cluster.objects.create(
+            name="name", clusterization=clusterization
+        )
         clusters_filter = CommentsReportClustersFilter(
             cluster_ids=[cluster.id], conversation=conversation_with_comments
         )
         filtered_comments_df = clusters_filter.filter()
-        assert filtered_comments_df.iloc[[0]].get("group").item() == cluster.name
-        assert filtered_comments_df.iloc[[1]].get("group").item() == cluster.name
-        assert filtered_comments_df.iloc[[2]].get("group").item() == cluster.name
-        assert filtered_comments_df.iloc[[3]].get("group").item() == cluster.name
+        assert (
+            filtered_comments_df.iloc[[0]].get("group").item() == cluster.name
+        )
+        assert (
+            filtered_comments_df.iloc[[1]].get("group").item() == cluster.name
+        )
+        assert (
+            filtered_comments_df.iloc[[2]].get("group").item() == cluster.name
+        )
+        assert (
+            filtered_comments_df.iloc[[3]].get("group").item() == cluster.name
+        )
         assert len(filtered_comments_df.index) == 4
 
     def test_sort_comments_dataframe_in_descending_order(
@@ -287,26 +326,45 @@ class TestCommentsReport(TestReportRoutes):
         orderby_filter = ReportOrderByFilter("agree", comments_df)
         sorted_comments_df = orderby_filter.filter()
         assert sorted_comments_df.iloc[[0]].get("content").item() == "aa"
-        assert round(sorted_comments_df.iloc[[0]].get("agree").item(), 1) == 100.0
+        assert (
+            round(sorted_comments_df.iloc[[0]].get("agree").item(), 1) == 100.0
+        )
         assert sorted_comments_df.iloc[[1]].get("content").item() == "aaa"
-        assert round(sorted_comments_df.iloc[[1]].get("agree").item(), 1) == 66.7
+        assert (
+            round(sorted_comments_df.iloc[[1]].get("agree").item(), 1) == 66.7
+        )
         assert sorted_comments_df.iloc[[2]].get("content").item() == "aaaa"
-        assert round(sorted_comments_df.iloc[[2]].get("agree").item(), 1) == 33.3
+        assert (
+            round(sorted_comments_df.iloc[[2]].get("agree").item(), 1) == 33.3
+        )
         assert sorted_comments_df.iloc[[3]].get("content").item() == "test"
         assert round(sorted_comments_df.iloc[[3]].get("agree").item(), 1) == 0.0
 
         orderby_filter = ReportOrderByFilter("disagree", comments_df)
         sorted_comments_df = orderby_filter.filter()
         assert sorted_comments_df.iloc[[0]].get("content").item() == "test"
-        assert round(sorted_comments_df.iloc[[0]].get("disagree").item(), 1) == 100.0
+        assert (
+            round(sorted_comments_df.iloc[[0]].get("disagree").item(), 1)
+            == 100.0
+        )
         assert sorted_comments_df.iloc[[1]].get("content").item() == "aaaa"
-        assert round(sorted_comments_df.iloc[[1]].get("disagree").item(), 1) == 66.7
+        assert (
+            round(sorted_comments_df.iloc[[1]].get("disagree").item(), 1)
+            == 66.7
+        )
         assert sorted_comments_df.iloc[[2]].get("content").item() == "aaa"
-        assert round(sorted_comments_df.iloc[[2]].get("disagree").item(), 1) == 33.3
+        assert (
+            round(sorted_comments_df.iloc[[2]].get("disagree").item(), 1)
+            == 33.3
+        )
         assert sorted_comments_df.iloc[[3]].get("content").item() == "aa"
-        assert round(sorted_comments_df.iloc[[3]].get("disagree").item(), 1) == 0.0
+        assert (
+            round(sorted_comments_df.iloc[[3]].get("disagree").item(), 1) == 0.0
+        )
 
-    def test_sort_comments_dataframe_in_ascending_order(self, conversation_with_comments):
+    def test_sort_comments_dataframe_in_ascending_order(
+        self, conversation_with_comments
+    ):
         clusters_filter = CommentsReportClustersFilter(
             cluster_ids=[], conversation=conversation_with_comments
         )
@@ -317,22 +375,39 @@ class TestCommentsReport(TestReportRoutes):
         assert sorted_comments_df.iloc[[0]].get("content").item() == "test"
         assert round(sorted_comments_df.iloc[[0]].get("agree").item(), 1) == 0.0
         assert sorted_comments_df.iloc[[1]].get("content").item() == "aaaa"
-        assert round(sorted_comments_df.iloc[[1]].get("agree").item(), 1) == 33.3
+        assert (
+            round(sorted_comments_df.iloc[[1]].get("agree").item(), 1) == 33.3
+        )
         assert sorted_comments_df.iloc[[2]].get("content").item() == "aaa"
-        assert round(sorted_comments_df.iloc[[2]].get("agree").item(), 1) == 66.7
+        assert (
+            round(sorted_comments_df.iloc[[2]].get("agree").item(), 1) == 66.7
+        )
         assert sorted_comments_df.iloc[[3]].get("content").item() == "aa"
-        assert round(sorted_comments_df.iloc[[3]].get("agree").item(), 1) == 100.0
+        assert (
+            round(sorted_comments_df.iloc[[3]].get("agree").item(), 1) == 100.0
+        )
 
         orderby_filter = ReportOrderByFilter("disagree", comments_df, True)
         sorted_comments_df = orderby_filter.filter()
         assert sorted_comments_df.iloc[[0]].get("content").item() == "aa"
-        assert round(sorted_comments_df.iloc[[0]].get("disagree").item(), 1) == 0.0
+        assert (
+            round(sorted_comments_df.iloc[[0]].get("disagree").item(), 1) == 0.0
+        )
         assert sorted_comments_df.iloc[[1]].get("content").item() == "aaa"
-        assert round(sorted_comments_df.iloc[[1]].get("disagree").item(), 1) == 33.3
+        assert (
+            round(sorted_comments_df.iloc[[1]].get("disagree").item(), 1)
+            == 33.3
+        )
         assert sorted_comments_df.iloc[[2]].get("content").item() == "aaaa"
-        assert round(sorted_comments_df.iloc[[2]].get("disagree").item(), 1) == 66.7
+        assert (
+            round(sorted_comments_df.iloc[[2]].get("disagree").item(), 1)
+            == 66.7
+        )
         assert sorted_comments_df.iloc[[3]].get("content").item() == "test"
-        assert round(sorted_comments_df.iloc[[3]].get("disagree").item(), 1) == 100.0
+        assert (
+            round(sorted_comments_df.iloc[[3]].get("disagree").item(), 1)
+            == 100.0
+        )
 
     def test_search_string_comments_dataframe(self, conversation_with_comments):
         clusters_filter = CommentsReportClustersFilter(
@@ -372,16 +447,21 @@ class TestCommentsReport(TestReportRoutes):
         ]
 
         response = logged_client.post(
-            url, {"comments": json.dumps(comments_ids_dict), "current_index": index}
+            url,
+            {"comments": json.dumps(comments_ids_dict), "current_index": index},
         )
         context = response.context
         comment_statistics = context["comment_statistics"]
         statistics = comment.statistics(ratios=True)
         assert context["comment"] == comment
         assert context["next_id"] == comment.next(index, comments_ids_dict)
-        assert context["previous_id"] == comment.previous(index, comments_ids_dict)
+        assert context["previous_id"] == comment.previous(
+            index, comments_ids_dict
+        )
         assert comment_statistics["agree"] == statistics["agree_ratio"] * 100
-        assert comment_statistics["disagree"] == statistics["disagree_ratio"] * 100
+        assert (
+            comment_statistics["disagree"] == statistics["disagree_ratio"] * 100
+        )
         assert comment_statistics["skipped"] == statistics["skip_ratio"] * 100
         assert context["comment"].n_votes == statistics["total"]
 
@@ -392,9 +472,12 @@ class TestUsersReport(TestReportRoutes):
     @pytest.fixture
     def user_cluster(self, conversation_with_comments):
         clusterization = Clusterization.objects.create(
-            conversation=conversation_with_comments, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_comments,
+            cluster_status=ClusterStatus.ACTIVE,
         )
-        cluster = Cluster.objects.create(name="name", clusterization=clusterization)
+        cluster = Cluster.objects.create(
+            name="name", clusterization=clusterization
+        )
         comments = conversation_with_comments.comments
         stereotype, _ = Stereotype.objects.get_or_create(
             name="name", owner=conversation_with_comments.author
@@ -418,12 +501,23 @@ class TestUsersReport(TestReportRoutes):
 
     def test_get_user_dataframe(self, conversation_with_comments):
         users_df = get_user_dataframe(conversation_with_comments, "")
-        assert users_df.iloc[[0]].get("group").item() == TestUsersReport.no_group_text
-        assert users_df.iloc[[1]].get("group").item() == TestUsersReport.no_group_text
-        assert users_df.iloc[[2]].get("group").item() == TestUsersReport.no_group_text
+        assert (
+            users_df.iloc[[0]].get("group").item()
+            == TestUsersReport.no_group_text
+        )
+        assert (
+            users_df.iloc[[1]].get("group").item()
+            == TestUsersReport.no_group_text
+        )
+        assert (
+            users_df.iloc[[2]].get("group").item()
+            == TestUsersReport.no_group_text
+        )
         assert len(users_df.index) == 3
 
-    def test_get_cluster_users_dataframe(self, conversation_with_comments, user_cluster):
+    def test_get_cluster_users_dataframe(
+        self, conversation_with_comments, user_cluster
+    ):
         clusters_filter = UsersReportClustersFilter(
             [user_cluster.id], conversation_with_comments
         )
@@ -434,8 +528,12 @@ class TestUsersReport(TestReportRoutes):
         assert users_df.iloc[[2]].get("group").item() == user_cluster.name
         assert len(users_df.index) == 3
 
-    def test_filter_users_by_group_with_no_group(self, conversation_with_comments):
-        clusters_filter = UsersReportClustersFilter([], conversation_with_comments)
+    def test_filter_users_by_group_with_no_group(
+        self, conversation_with_comments
+    ):
+        clusters_filter = UsersReportClustersFilter(
+            [], conversation_with_comments
+        )
         filtered_users_df = clusters_filter.filter()
         assert (
             filtered_users_df.iloc[[0]].get("group").item()
@@ -451,18 +549,30 @@ class TestUsersReport(TestReportRoutes):
         )
         assert len(filtered_users_df.index) == 3
 
-    def test_filter_users_by_group(self, conversation_with_comments, user_cluster):
+    def test_filter_users_by_group(
+        self, conversation_with_comments, user_cluster
+    ):
         clusters_filter = UsersReportClustersFilter(
             [user_cluster.id], conversation_with_comments
         )
         filtered_users_df = clusters_filter.filter()
-        assert filtered_users_df.iloc[[0]].get("group").item() == user_cluster.name
-        assert filtered_users_df.iloc[[1]].get("group").item() == user_cluster.name
-        assert filtered_users_df.iloc[[2]].get("group").item() == user_cluster.name
+        assert (
+            filtered_users_df.iloc[[0]].get("group").item() == user_cluster.name
+        )
+        assert (
+            filtered_users_df.iloc[[1]].get("group").item() == user_cluster.name
+        )
+        assert (
+            filtered_users_df.iloc[[2]].get("group").item() == user_cluster.name
+        )
         assert len(filtered_users_df.index) == 3
 
-    def test_sort_user_dataframe_in_descending_order(self, conversation_with_comments):
-        clusters_filter = UsersReportClustersFilter([], conversation_with_comments)
+    def test_sort_user_dataframe_in_descending_order(
+        self, conversation_with_comments
+    ):
+        clusters_filter = UsersReportClustersFilter(
+            [], conversation_with_comments
+        )
         users_df = clusters_filter.filter()
 
         orderby_filter = ReportOrderByFilter("email", users_df)
@@ -483,8 +593,12 @@ class TestUsersReport(TestReportRoutes):
         assert sorted_users_df.iloc[[1]].get("email").item() == "user2@email.br"
         assert sorted_users_df.iloc[[2]].get("email").item() == "user1@email.br"
 
-    def test_sort_users_dataframe_in_ascending_order(self, conversation_with_comments):
-        clusters_filter = UsersReportClustersFilter([], conversation_with_comments)
+    def test_sort_users_dataframe_in_ascending_order(
+        self, conversation_with_comments
+    ):
+        clusters_filter = UsersReportClustersFilter(
+            [], conversation_with_comments
+        )
         users_df = clusters_filter.filter()
 
         orderby_filter = ReportOrderByFilter("email", users_df, True)
@@ -500,7 +614,9 @@ class TestUsersReport(TestReportRoutes):
         assert sorted_users_df.iloc[[2]].get("email").item() == "user3@email.br"
 
     def test_search_string_users_dataframe(self, conversation_with_comments):
-        clusters_filter = UsersReportClustersFilter([], conversation_with_comments)
+        clusters_filter = UsersReportClustersFilter(
+            [], conversation_with_comments
+        )
         users_df = clusters_filter.filter()
 
         search_filter = UsersReportSearchFilter("user", users_df)

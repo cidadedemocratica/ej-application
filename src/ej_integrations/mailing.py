@@ -59,7 +59,9 @@ class TemplateGenerator:
         templates_dir = os.path.join(root, "./jinja2/ej_integrations")
         env = Environment(loader=FileSystemLoader(templates_dir))
         host = get_host_with_schema(self.request)
-        template = env.get_template("mailing_template.jinja2".format(self.template_type))
+        template = env.get_template(
+            "mailing_template.jinja2".format(self.template_type)
+        )
         return template.render(
             conversation_title=self.conversation.text,
             comment_content=self.comment.content,
@@ -103,7 +105,9 @@ class TemplateGenerator:
                 )
         else:
             url = "{}/?cid={}&comment_id={}&action=vote&origin=campaign{}"
-            return url.format(self.vote_domain, conversation_id, comment_id, email_tag)
+            return url.format(
+                self.vote_domain, conversation_id, comment_id, email_tag
+            )
 
     def _get_vote_domain(self):
         if self.request.POST.get("custom-domain"):
@@ -143,10 +147,14 @@ class BaseCssGenerator:
         palette_style["light"] = "color: {}; background-color: {};".format(
             colors[0], colors[1]
         )
-        palette_style["dark"] = "color: {} !important; background-color: {};".format(
-            colors[1], colors[0]
+        palette_style["dark"] = (
+            "color: {} !important; background-color: {};".format(
+                colors[1], colors[0]
+            )
         )
-        palette_style["arrow"] = "border-top: 28px solid {} !important;".format(colors[1])
+        palette_style["arrow"] = "border-top: 28px solid {} !important;".format(
+            colors[1]
+        )
         palette_style["light-h1"] = ""
         palette_style["dark-h1"] = ""
         return palette_style
@@ -163,10 +171,14 @@ class CampaignCssGenerator:
         palette_style["light"] = "color: {}; background-color: {};".format(
             colors[0], colors[1]
         )
-        palette_style["dark"] = "color: {} !important; background-color: {};".format(
-            colors[1], colors[0]
+        palette_style["dark"] = (
+            "color: {} !important; background-color: {};".format(
+                colors[1], colors[0]
+            )
         )
-        palette_style["arrow"] = "border-top: 28px solid {} !important;".format(colors[1])
+        palette_style["arrow"] = "border-top: 28px solid {} !important;".format(
+            colors[1]
+        )
         border_style = " border-radius: unset;"
         palette_style["light-h1"] = "color: #ffffff !important;"
         palette_style["dark-h1"] = "color: #1c9dd9 !important;"

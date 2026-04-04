@@ -11,7 +11,9 @@ from ej_conversations.models import Vote
 User = get_user_model()
 
 
-def set_clusters_from_comments(conversation, comment_map, exclusive=True, author=None):
+def set_clusters_from_comments(
+    conversation, comment_map, exclusive=True, author=None
+):
     """
     Create clusters and stereotypes from conversation.
 
@@ -39,7 +41,9 @@ def set_clusters_from_comments(conversation, comment_map, exclusive=True, author
             description = f'Stereotype for the "{cluster_name}" cluster'
 
         # Create cluster and stereotype
-        cluster = Cluster.objects.create(clusterization=clusterization, name=cluster_name)
+        cluster = Cluster.objects.create(
+            clusterization=clusterization, name=cluster_name
+        )
         stereotype, _ = Stereotype.objects.get_or_create(
             name=cluster_name, description=description, owner=author
         )
@@ -96,7 +100,9 @@ def cluster_votes(conversation, users):
                 vote = random_vote(prob)
 
                 if vote is not None:
-                    vote = comments_map[comment_id].vote(user, vote, commit=False)
+                    vote = comments_map[comment_id].vote(
+                        user, vote, commit=False
+                    )
                     votes.append(vote)
 
     Vote.objects.bulk_create(votes)

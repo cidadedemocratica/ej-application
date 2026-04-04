@@ -29,7 +29,9 @@ def clusterization(db, conversation):
 
 @pytest.fixture
 def cluster(db, clusterization, stereotype):
-    cluster = Cluster.objects.create(clusterization=clusterization, name="My Cluster")
+    cluster = Cluster.objects.create(
+        clusterization=clusterization, name="My Cluster"
+    )
     cluster.stereotypes.add(stereotype)
     cluster.save()
     return cluster

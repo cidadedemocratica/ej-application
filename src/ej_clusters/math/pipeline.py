@@ -23,7 +23,9 @@ def clusterization_pipeline(whiten=False, distance=None, only_preprocess=False):
         else:
             clusterization_method = StereotypeKMeans(k, distance=distance)
 
-        return pipeline(scale=scaler, whiten=whitener, clusterize=clusterization_method)
+        return pipeline(
+            scale=scaler, whiten=whitener, clusterize=clusterization_method
+        )
 
     return make_pipeline
 

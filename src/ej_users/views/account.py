@@ -49,13 +49,16 @@ class RemoveAccountView(FormView):
     template_name = "account/remove-account.jinja2"
     farewell_message = None
 
-    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: str, **kwargs: Any
+    ) -> HttpResponse:
         form = forms.RemoveAccountForm(request=request)
         if form.is_valid_post():
             user = request.user
             if form.cleaned_data["confirm"] is False:
                 form.add_error(
-                    "confirm", _("You must confirm that you want to remove your account.")
+                    "confirm",
+                    _("You must confirm that you want to remove your account."),
                 )
             elif form.cleaned_data["email"] != user.email:
                 form.add_error("email", _("Wrong e-mail address"))
@@ -68,9 +71,13 @@ class RemoveAccountView(FormView):
                 )
                 log.info(f"User {request.user} removed their EJ account.")
         return render(
-            request, "account/remove-account.jinja2", self.get_context_data(form=form)
+            request,
+            "account/remove-account.jinja2",
+            self.get_context_data(form=form),
         )
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        form = self.kwargs.get("form", forms.RemoveAccountForm(request=self.request))
+        form = self.kwargs.get(
+            "form", forms.RemoveAccountForm(request=self.request)
+        )
         return {"form": form, "farewell_message": self.farewell_message}

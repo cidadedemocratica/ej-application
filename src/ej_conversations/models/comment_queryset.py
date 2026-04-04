@@ -74,7 +74,9 @@ class CommentQuerySet(ConversationMixin, WordCloudQuerySet):
             votes, participation=True, convergence=True, ratios=True
         )
         stats *= normalization
-        stats = self.extend_dataframe(stats, "author__name", *extend_fields, "content")
+        stats = self.extend_dataframe(
+            stats, "author__name", *extend_fields, "content"
+        )
         stats["author"] = stats.pop("author__name")
         stats["group"] = gettext("general")
         stats["created"] = votes["created"]

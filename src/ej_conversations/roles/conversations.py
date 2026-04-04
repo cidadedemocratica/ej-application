@@ -78,7 +78,9 @@ def conversation_comment_form(
         login = reverse("auth:login")
         return {
             "user": None,
-            "login_anchor": a(_("login"), href=f"{login}?next={conversation_url}"),
+            "login_anchor": a(
+                _("login"), href=f"{login}?next={conversation_url}"
+            ),
         }
 
     # Check if user still have comments left
@@ -93,7 +95,8 @@ def conversation_comment_form(
         "n_comments": n_comments,
         "content": content,
         "target": target or "main",
-        "form": form or forms.CommentForm(request=request, conversation=conversation),
+        "form": form
+        or forms.CommentForm(request=request, conversation=conversation),
     }
 
 
@@ -115,10 +118,15 @@ def conversation_create_comment(conversation, request=None, **kwargs):
     max_comments = fn()
 
     moderation_msg = _("{n} awaiting moderation").format(n=n_moderation)
-    comments_count = _("{n} of {m} comments").format(n=n_comments, m=max_comments)
+    comments_count = _("{n} of {m} comments").format(
+        n=n_comments, m=max_comments
+    )
 
     return div(
-        Blob(f"{comments_count}" f'<div class="text-7 strong">{moderation_msg}</div>'),
+        Blob(
+            f"{comments_count}"
+            f'<div class="text-7 strong">{moderation_msg}</div>'
+        ),
         id="create-comment",
         class_="extra-content",
     )
@@ -159,7 +167,9 @@ def conversation_user_progress(conversation, request=None, user=None, **kwargs):
 
 
 @html.register(models.Conversation, role="user-home-progress")
-def conversation_user_home_progress(conversation, request=None, user=None, **kwargs):
+def conversation_user_home_progress(
+    conversation, request=None, user=None, **kwargs
+):
     """
     Render comment form for one conversation.
     """

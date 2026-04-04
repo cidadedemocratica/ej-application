@@ -29,9 +29,13 @@ class TestRolesElements:
                 desc = pp.children[0]
                 assert desc.json()["text"] == desc_test
             else:
-                pytest.fail("Paragraph from roles hasn't text description inside of p.")
+                pytest.fail(
+                    "Paragraph from roles hasn't text description inside of p."
+                )
         else:
-            pytest.fail("Paragraph from roles hasn't h1 title or description p.")
+            pytest.fail(
+                "Paragraph from roles hasn't h1 title or description p."
+            )
 
     def test_create_icon_with_name_and_href(self):
         icon_name_test = "Icon test"
@@ -41,6 +45,8 @@ class TestRolesElements:
         if len(i.children) == 1:
             ii = i.children[0]
             iclass = ii.attrs["class"]
-            assert ii.tag == "i" and any(icon_name_test in tag for tag in iclass)
+            assert ii.tag == "i" and any(
+                icon_name_test in tag for tag in iclass
+            )
         else:
             pytest.fail("Icon from roles hasn't i.")

@@ -50,7 +50,9 @@ class TestUserSecretIdManager:
         assert user.votes.all().count() == user_votes_count
         assert user.comments.all().count() == user_comments_count
 
-    def test_merge_users_with_profile_data(self, db, vote, comments, user, another_user):
+    def test_merge_users_with_profile_data(
+        self, db, vote, comments, user, another_user
+    ):
 
         temporary_user = user
         unique_user = another_user
@@ -74,7 +76,9 @@ class TestUserSecretIdManager:
         assert user.profile.region == 5
         assert user.profile.biography == "Software Engineer"
 
-    def test_merge_users_with_invalid_data(self, db, vote, comments, user, another_user):
+    def test_merge_users_with_invalid_data(
+        self, db, vote, comments, user, another_user
+    ):
 
         temporary_user = user
 
@@ -105,7 +109,9 @@ class TestUserManager(EjRecipes):
         assert User.objects.get_by_email("name@server.com") == user
 
     def test_can_create_and_fetch_superuser(self, db):
-        user = User.objects.create_superuser("name@server.com", "1234", name="name")
+        user = User.objects.create_superuser(
+            "name@server.com", "1234", name="name"
+        )
         assert user.name == "name"
         assert user.password != "1234"
         assert user.is_superuser
@@ -113,9 +119,13 @@ class TestUserManager(EjRecipes):
 
         # Check unhappy paths
         with pytest.raises(ValueError):
-            User.objects.create_superuser("name@server.com", "1234", is_superuser=False)
+            User.objects.create_superuser(
+                "name@server.com", "1234", is_superuser=False
+            )
         with pytest.raises(ValueError):
-            User.objects.create_superuser("name@server.com", "1234", is_staff=False)
+            User.objects.create_superuser(
+                "name@server.com", "1234", is_staff=False
+            )
 
     def test_generate_username(self):
         user = User(email="email@at.com")

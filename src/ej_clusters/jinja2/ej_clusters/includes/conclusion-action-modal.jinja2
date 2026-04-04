@@ -1,14 +1,14 @@
 {% macro conclusion_action_modal(icon, title, conversation, stereotype_select=False) %}
     <div class="modal__overlay">
         <div class="modal__container">
-                <img class="modal__icon" src="{{icon}}"/>
-                <h3>{{title}}</h3>
-                <div class="modal__btn modal__btn--no-fill bold underline" onclick="closeConclusionModal('{{stereotype_select}}')">{{_("close")}}</div>
-            </div>
+            <img class="modal__icon" src="{{ icon }}" />
+            <h3>{{ title }}</h3>
+            <div class="modal__btn modal__btn--no-fill bold underline"
+                 onclick="closeConclusionModal('{{ stereotype_select }}')">{{ _("close") }}</div>
         </div>
     </div>
-
-    <script>
+</div>
+<script>
     let closeConclusionModal = (stereotypeSelect) => {
         let mainPage = "{{ url('boards:stereotype-votes-list',  **conversation.get_url_kwargs()) }}";
 
@@ -19,5 +19,5 @@
         window.location.href = mainPage;
     };
 
-    </script>
+</script>
 {% endmacro %}

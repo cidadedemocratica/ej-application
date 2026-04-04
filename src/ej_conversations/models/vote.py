@@ -10,9 +10,15 @@ def return_voting_error(value):
     return ValueError(_(VOTE_ERROR_MESSAGE).format(value=value))
 
 
-VOTE_ERROR_MESSAGE = _("vote should be one of 'agree', 'disagree' or 'skip', got {value}")
+VOTE_ERROR_MESSAGE = _(
+    "vote should be one of 'agree', 'disagree' or 'skip', got {value}"
+)
 VOTING_ERROR = return_voting_error
-VOTE_NAMES = {Choice.AGREE: "agree", Choice.DISAGREE: "disagree", Choice.SKIP: "skip"}
+VOTE_NAMES = {
+    Choice.AGREE: "agree",
+    Choice.DISAGREE: "disagree",
+    Choice.SKIP: "skip",
+}
 VOTE_VALUES = {v: k for k, v in VOTE_NAMES.items()}
 
 
@@ -46,7 +52,9 @@ class Vote(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="votes", on_delete=models.PROTECT
     )
-    comment = models.ForeignKey("Comment", related_name="votes", on_delete=models.CASCADE)
+    comment = models.ForeignKey(
+        "Comment", related_name="votes", on_delete=models.CASCADE
+    )
     choice = models.IntegerField(
         choices=Choice.choices, help_text=_("Agree, disagree or skip")
     )
@@ -67,7 +75,9 @@ class Vote(models.Model):
 
     def __str__(self):
         comment = truncate(self.comment.content, 40)
-        return f"{self.author} - {Choice.normalize(str(self.choice))} ({comment})"
+        return (
+            f"{self.author} - {Choice.normalize(str(self.choice))} ({comment})"
+        )
 
     def clean(self, *args, **kwargs):
         if self.comment.is_pending:

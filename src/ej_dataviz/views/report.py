@@ -6,7 +6,11 @@ from sidekick import import_later
 
 from ej.decorators import can_access_dataviz_class_view
 from ej_conversations.models import Conversation, Comment
-from ej_dataviz.utils import get_clusters, get_comments_dataframe, get_user_dataframe
+from ej_dataviz.utils import (
+    get_clusters,
+    get_comments_dataframe,
+    get_user_dataframe,
+)
 from ej_dataviz.views.filters import (
     CommentsReportClustersFilter,
     CommentsReportSearchFilter,
@@ -35,7 +39,11 @@ class ReportsBaseView(DetailView):
         context["clusters"] = clusters
 
         dataframe = self.get_dataframe(conversation)
-        context["page"] = self.paginate(dataframe, self.request.GET.get("page") or 1)
+        # TODO: check why get_dataframe is returning a dataframe with null rows.
+        dataframe.dropna(inplace=True)
+        context["page"] = self.paginate(
+            dataframe, self.request.GET.get("page") or 1
+        )
         return context
 
     @can_access_dataviz_class_view
@@ -83,13 +91,17 @@ class CommentReportFilterView(ReportsBaseView):
         comments_df = CommentsReportClustersFilter(
             cluster_ids=cluster_ids, conversation=conversation
         ).filter()
-        comments_df = CommentsReportSearchFilter(search_text, comments_df).filter()
+        comments_df = CommentsReportSearchFilter(
+            search_text, comments_df
+        ).filter()
         comments_df = ReportOrderByFilter(
             order_by, comments_df, ascending, "comment"
         ).filter()
         comments_df = comments_df.reset_index()
 
-        context["page"] = self.paginate(comments_df, self.request.GET.get("page") or 1)
+        context["page"] = self.paginate(
+            comments_df, self.request.GET.get("page") or 1
+        )
         context["comments"] = json.dumps(comments_df.to_json(orient="records"))
         return context
 
@@ -111,6 +123,9 @@ class CommentReportDetailView(ReportsBaseView):
         conversation = context["object"]
         dataframe = self.get_dataframe(conversation)
         context["comments"] = json.dumps(dataframe.to_json(orient="records"))
+        context["page"] = self.paginate(
+            dataframe, self.request.GET.get("page") or 1
+        )
         return context
 
 
@@ -173,6 +188,10 @@ class UsersReportFilterView(ReportsBaseView):
         cluster_ids = self.request.GET.getlist("clusters")
         users_df = UsersReportClustersFilter(cluster_ids, conversation).filter()
         users_df = UsersReportSearchFilter(search_text, users_df).filter()
-        users_df = ReportOrderByFilter(order_by, users_df, ascending, "name").filter()
-        context["page"] = self.paginate(users_df, self.request.GET.get("page") or 1)
+        users_df = ReportOrderByFilter(
+            order_by, users_df, ascending, "name"
+        ).filter()
+        context["page"] = self.paginate(
+            users_df, self.request.GET.get("page") or 1
+        )
         return context

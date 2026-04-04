@@ -15,7 +15,11 @@ from ej import views
 from ej.fixes import unregister_admin
 from ej_boards.api import BoardViewSet
 from ej_clusters.api import ClusterizationViewSet
-from ej_conversations.api import CommentViewSet, ConversationViewSet, VoteViewSet
+from ej_conversations.api import (
+    CommentViewSet,
+    ConversationViewSet,
+    VoteViewSet,
+)
 from ej_profiles.api import ProfileViewSet
 from ej_integrations.api import OpinionComponentViewSet, RasaConversationViewSet
 from ej_users.api import TokenViewSet, UsersViewSet
@@ -27,12 +31,18 @@ unregister_admin.unregister_apps()
 
 api_router = DefaultRouter()
 api_router.register(
-    r"rasa-conversations", RasaConversationViewSet, basename="v1-rasa-conversations"
+    r"rasa-conversations",
+    RasaConversationViewSet,
+    basename="v1-rasa-conversations",
 )
 api_router.register(
-    r"opinion-component", OpinionComponentViewSet, basename="v1-opinion-component"
+    r"opinion-component",
+    OpinionComponentViewSet,
+    basename="v1-opinion-component",
 )
-api_router.register(r"conversations", ConversationViewSet, basename="v1-conversations")
+api_router.register(
+    r"conversations", ConversationViewSet, basename="v1-conversations"
+)
 api_router.register(r"comments", CommentViewSet, basename="v1-comments")
 api_router.register(r"votes", VoteViewSet, basename="v1-votes")
 api_router.register(
@@ -66,7 +76,9 @@ def get_apps_dynamic_urls():
         try:
             get_app_urls = getattr(apps.app_configs[app_config], "get_app_urls")
             apps_urls += [get_app_urls()]
-            log.info(f"Including {app_config} URLs using get_apps_dynamic_urls()")
+            log.info(
+                f"Including {app_config} URLs using get_apps_dynamic_urls()"
+            )
         except Exception:
             pass
     return apps_urls
@@ -110,11 +122,13 @@ def get_urlpatterns():
         path(
             "conversations/",
             include(
-                "ej_conversations.urls.public_conversations", namespace="conversation"
+                "ej_conversations.urls.public_conversations",
+                namespace="conversation",
             ),
         ),
         path(
-            "comments/", include("ej_conversations.urls.comments", namespace="comments")
+            "comments/",
+            include("ej_conversations.urls.comments", namespace="comments"),
         ),
         #
         #  Profile URLS
@@ -124,13 +138,22 @@ def get_urlpatterns():
         path("conversations/", include("ej_dataviz.urls", namespace="dataviz")),
         #
         # Administration Routes
-        path("administration/", include("ej_admin.urls", namespace="administration")),
+        path(
+            "administration/",
+            include("ej_admin.urls", namespace="administration"),
+        ),
         #
         #  Global stereotype and cluster management
-        path("conversations/", include("ej_clusters.urls.clusters", namespace="cluster")),
         path(
             "conversations/",
-            include("ej_clusters.urls.stereotype_votes", namespace="stereotype-votes"),
+            include("ej_clusters.urls.clusters", namespace="cluster"),
+        ),
+        path(
+            "conversations/",
+            include(
+                "ej_clusters.urls.stereotype_votes",
+                namespace="stereotype-votes",
+            ),
         ),
         path(
             "stereotypes/",
@@ -138,8 +161,14 @@ def get_urlpatterns():
         ),
         #
         #  Documentation in development mode
-        re_path(r"^docs/$", serve, {"document_root": "build/docs", "path": "index.html"}),
-        re_path(r"^docs/(?P<path>.*)$", serve, {"document_root": "build/docs/"}),
+        re_path(
+            r"^docs/$",
+            serve,
+            {"document_root": "build/docs", "path": "index.html"},
+        ),
+        re_path(
+            r"^docs/(?P<path>.*)$", serve, {"document_root": "build/docs/"}
+        ),
         #
         #  Admin
         *(
@@ -147,7 +176,9 @@ def get_urlpatterns():
             if apps.is_installed("django.contrib.admin")
             else ()
         ),
-        path("usage", flat_views.flatpage, {"url": "usage"}, name="Terms of use"),
+        path(
+            "usage", flat_views.flatpage, {"url": "usage"}, name="Terms of use"
+        ),
         # Boards URLs
         path("boards/", include("ej_boards.urls", namespace="boards")),
         #
@@ -194,9 +225,10 @@ def get_urlpatterns():
         )
 
         if "debug_toolbar" in settings.INSTALLED_APPS:
-            import debug_toolbar
+            from debug_toolbar.toolbar import debug_toolbar_urls
 
-            patterns.append(path("__debug__/", include(debug_toolbar.urls)))
+            patterns.extend(debug_toolbar_urls())
+
     return patterns
 
 

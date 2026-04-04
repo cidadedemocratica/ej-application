@@ -10,6 +10,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import UpdateView
 from ej.decorators import can_edit_conversation
 from ej_clusters.models.clusterization import Clusterization
+from ej_clusters.tasks import update_clusterization
 from ej_conversations.models import Conversation
 from ej_conversations.utils import check_promoted
 from ej_dataviz.utils import get_conversation_biggest_cluster
@@ -24,14 +25,18 @@ class ClustersIndexView(ListView):
     template_name = "ej_clusters/index.jinja2"
 
     def get_queryset(self):
-        conversation = Conversation.objects.get(id=self.kwargs["conversation_id"])
+        conversation = Conversation.objects.get(
+            id=self.kwargs["conversation_id"]
+        )
         return getattr(conversation, "clusterization", None)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        conversation = Conversation.objects.get(id=self.kwargs["conversation_id"])
+        conversation = Conversation.objects.get(
+            id=self.kwargs["conversation_id"]
+        )
         user = self.request.user
         clusterization = self.get_queryset()
-        clusterization.update_clusterization(force=True)
+        update_clusterization.delay(clusterization.id)
         biggest_cluster_data = get_conversation_biggest_cluster(
             self.request, conversation
         )
@@ -61,22 +66,30 @@ class ClustersEditView(UpdateView):
             "edit": self.handle_edit_cluster,
         }
 
-    def get(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+    def get(
+        self, request: HttpRequest, *args: str, **kwargs: Any
+    ) -> HttpResponse:
         new_cluster_form = forms.ClusterFormNew(user=self.conversation.author)
         clusters = self.get_queryset()
         context_args = {"new_cluster_form": new_cluster_form}
 
         current_cluster_id = request.GET.get("cluster-select", None)
         if current_cluster_id:
-            selected_cluster = get_object_or_404(clusters, id=current_cluster_id)
+            selected_cluster = get_object_or_404(
+                clusters, id=current_cluster_id
+            )
             context_args = {"selected_cluster": selected_cluster}
 
         elif "delete-success" in request.GET:
             context_args["show_modal"] = "deleted_group"
 
-        return render(request, self.template_name, self.get_context_data(**context_args))
+        return render(
+            request, self.template_name, self.get_context_data(**context_args)
+        )
 
-    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+    def post(
+        self, request: HttpRequest, *args: str, **kwargs: Any
+    ) -> HttpResponse:
         clusters = self.get_queryset()
         action = request.POST.get("action")
         cluster_id = request.POST.get("cluster_id", None)
@@ -108,7 +121,9 @@ class ClustersEditView(UpdateView):
         cluster = get_object_or_404(clusters, id=cluster_id)
         cluster.delete()
         kwargs = self.conversation.get_url_kwargs()
-        return redirect(reverse("boards:cluster-edit", kwargs=kwargs) + "?delete-success")
+        return redirect(
+            reverse("boards:cluster-edit", kwargs=kwargs) + "?delete-success"
+        )
 
     def handle_edit_cluster(self, clusters, cluster_id):
         cluster = get_object_or_404(clusters, id=cluster_id)
@@ -161,7 +176,8 @@ class CtrlView(TemplateView):
     ) -> HttpResponse:
         return redirect(
             reverse(
-                "boards:stereotype-votes-list", kwargs=self.get_kwargs(conversation_id)
+                "boards:stereotype-votes-list",
+                kwargs=self.get_kwargs(conversation_id),
             )
         )
 
@@ -174,7 +190,8 @@ class CtrlView(TemplateView):
             conversation.clusterization.update_clusterization(force=True)
         return redirect(
             reverse(
-                "boards:stereotype-votes-list", kwargs=self.get_kwargs(conversation_id)
+                "boards:stereotype-votes-list",
+                kwargs=self.get_kwargs(conversation_id),
             )
         )
 

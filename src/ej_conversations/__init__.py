@@ -4,7 +4,15 @@ default_app_config = "ej_conversations.apps.EjConversationsConfig"
 
 
 def create_conversation(
-    text, title, author, board=None, *, is_promoted=False, tags=(), commit=True, **kwargs
+    text,
+    title,
+    author,
+    board=None,
+    *,
+    is_promoted=False,
+    tags=(),
+    commit=True,
+    **kwargs
 ):
     """
     Creates a new conversation object and saves it in the database.

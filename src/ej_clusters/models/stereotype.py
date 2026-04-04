@@ -18,10 +18,14 @@ class Stereotype(models.Model):
     """
 
     name = models.CharField(
-        _("Name"), max_length=64, help_text=_("Public identification of persona.")
+        _("Name"),
+        max_length=64,
+        help_text=_("Public identification of persona."),
     )
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name="stereotypes", on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        related_name="stereotypes",
+        on_delete=models.CASCADE,
     )
     description = models.TextField(
         _("Description"),

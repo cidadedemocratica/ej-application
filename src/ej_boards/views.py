@@ -31,7 +31,10 @@ class BoardListView(ListView):
     def get(self, *args):
         context = self.get_context_data()
         # Redirect to user's unique board, if that is the case
-        if not context["can_add_board"] and self.request.user.boards.count() == 1:
+        if (
+            not context["can_add_board"]
+            and self.request.user.boards.count() == 1
+        ):
             return redirect(f"{context['boards'][0].get_absolute_url()}")
         return render(self.request, self.template_name, context)
 

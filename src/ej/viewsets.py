@@ -9,7 +9,9 @@ class RestAPIBaseViewSet(viewsets.ModelViewSet):
             self.perform_destroy(instance)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except PermissionError as exc:
-            return Response({"error": str(exc)}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": str(exc)}, status=status.HTTP_403_FORBIDDEN
+            )
 
     def perform_destroy(self, instance):
         self.delete_hook(self.request, instance)

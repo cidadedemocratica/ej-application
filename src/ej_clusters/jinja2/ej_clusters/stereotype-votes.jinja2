@@ -1,50 +1,44 @@
 {% extends 'ej_conversations/base.jinja2' %}
-{% set main_class = 'measure-wide pad-x2 center margin-xauto' %}
-{% block menu %}{% include 'ej_conversations/includes/menu.jinja2' %}{% endblock %}
+{% set main_class = "measure-wide pad-x2 center margin-xauto" %}
+{% block menu %}
+    {% include 'ej_conversations/includes/menu.jinja2' %}
+{% endblock %}
 {% from "ej/includes/tabs.jinja2" import tabs %}
 {% from "ej_clusters/includes/conclusion-action-modal.jinja2" import conclusion_action_modal %}
 {% from "ej_clusters/stereotype-votes/pagination.jinja2" import pagination %}
-
 {% block content %}
-<section class="content-grid header-space manage-stereotypes">
-    <script src="/static/js/simplePagination.js"></script>
+    <section class="content-grid header-space manage-stereotypes">
+        <script src="/static/js/simplePagination.js"></script>
         <h1 class="text-accent">{{ _("Modeling") }}</h1>
         <div class="stereotypes-section">
             <section class="stereotypes-section__container">
-                <h2 class="bold">{{_("Personas")}}</h2>
-                    <legend>
-                        {{_("We use votes to rank users according to their opinions.
-                            Users who vote in a similar way tend to be in the same group.")}}
-                    </legend>
+                <h2 class="bold">{{ _("Personas") }}</h2>
+                <legend>
+                    {{ _("We use votes to rank users according to their opinions.
+                                        Users who vote in a similar way tend to be in the same group.") }}
+                </legend>
             </section>
         </div>
-
         {{ tabs({
-            _('See/Edit personas'): 'see-edit-personas',
-            _('Create persona'): 'create-persona'},
-            classes='tabs--smaller pointer-' ~ tab_index, selectedIndex=tab_index)}}
-
+                _('See/Edit personas') : 'see-edit-personas',
+        _('Create persona'): 'create-persona'},
+        classes='tabs--smaller pointer-' ~ tab_index, selectedIndex=tab_index)}}
         {% include 'ej_clusters/stereotype-votes/edit-tab.jinja2' %}
-
         {% include 'ej_clusters/stereotype-votes/create-tab.jinja2' %}
-
         <div id="groups-container" class="manage-stereotypes__grouping"></div>
-
         <div class="scroll-top scroll-top--full-width">
             <i class="fa">&#xf139;</i>
-            <a id="stereotype-scroll-top">{{_("Back to top")}}</a>
+            <a id="stereotype-scroll-top">{{ _("Back to top") }}</a>
         </div>
-
         <div id="confirm-create-stereotype" class="hide">
-            {{ conclusion_action_modal(static('/img/icons/circle-check-solid.svg'), _("Stereotype created"), conversation, True) }}
+            {{ conclusion_action_modal(static('/img/icons/circle-check-solid.svg') , _("Stereotype created"), conversation, True) }}
         </div>
         <div id="confirm-edit-stereotype" class="hide">
-            {{ conclusion_action_modal(static('/img/icons/circle-check-solid.svg'), _("Saved edits"), conversation, True) }}
+            {{ conclusion_action_modal(static('/img/icons/circle-check-solid.svg') , _("Saved edits"), conversation, True) }}
         </div>
         <div id="confirm-delete-stereotype" class="hide">
-            {{ conclusion_action_modal(static('/img/icons/circle-x.svg'), _("Excluded stereotype"), conversation) }}
+            {{ conclusion_action_modal(static('/img/icons/circle-x.svg') , _("Excluded stereotype"), conversation) }}
         </div>
-
         <script>
             function showModal(id){
                 const body = $("body").addClass('overflow-deactive');
@@ -76,5 +70,5 @@
                 $('html, body').animate({ scrollTop: 0 }, 'smooth');
             });
         </script>
-</section>
+    </section>
 {% endblock %}

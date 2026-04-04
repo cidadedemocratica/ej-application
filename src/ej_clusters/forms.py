@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import get_template
 
@@ -8,6 +9,7 @@ from ej_clusters.models.stereotype_vote import StereotypeVote
 from ej_conversations.enums import Choice
 from ej_conversations.models import Comment
 from .models import Stereotype, Cluster
+from django.utils.module_loading import import_string
 
 
 class StereotypeForm(EjModelForm):
@@ -22,7 +24,9 @@ class StereotypeForm(EjModelForm):
         model = Stereotype
         fields = ["name", "description", "owner"]
 
-    def __init__(self, *args, owner=None, instance=None, clusterization=None, **kwargs):
+    def __init__(
+        self, *args, owner=None, instance=None, clusterization=None, **kwargs
+    ):
         self.owner_instance = owner = owner or instance.owner
         self.clusterization = clusterization
         kwargs["instance"] = instance
@@ -68,15 +72,19 @@ class SelectWidget(forms.Select):
     renderer = get_template(template_name)
 
     def __init__(
-        self, stereotype_action, attrs=None, comment=None, initial_vote_value=None
+        self,
+        stereotype_action,
+        attrs=None,
+        comment=None,
+        initial_vote_value=None,
     ):
         super().__init__(attrs)
         self.comment = comment
         self.initial_vote_value = initial_vote_value
         self.stereotype_action = stereotype_action
 
-    def render(self, name, value, attrs=None, renderer=None):
-        context = self.get_context(name, value, attrs)
+    def get_context(self, name, value, attrs=None):
+        context = super().get_context(name, value, attrs)
         context["comment_id"] = self.comment.id
         context["comment_content"] = self.comment.content
         context["initial_vote_value"] = self.initial_vote_value
@@ -85,6 +93,12 @@ class SelectWidget(forms.Select):
         value = context["widget"]["value"][0]
         if value:
             context["widget"]["value"] = FORM_CHOICE_MAP.get(value, value)
+        return context
+
+    @mark_safe
+    def render(self, name, value, attrs=None, renderer=None):
+        """Render the widget as an HTML string."""
+        context = self.get_context(name, value, attrs)
         return self.renderer.render(context)
 
 
@@ -115,7 +129,9 @@ class StereotypeVoteForm(forms.ModelForm):
             required=False,
             choices=Choice.choices,
             widget=SelectWidget(
-                stereotype_action, comment=comment, initial_vote_value=initial_vote_value
+                stereotype_action,
+                comment=comment,
+                initial_vote_value=initial_vote_value,
             ),
             label="",
         )
@@ -167,7 +183,10 @@ class StereotypeVoteFormsetFactory:
                 "stereotype": stereotype or Stereotype.objects.first(),
                 "stereotype_action": action,
             },
-            initial=[{"comment": comment, "author": stereotype} for comment in comments],
+            initial=[
+                {"comment": comment, "author": stereotype}
+                for comment in comments
+            ],
             prefix=prefix,
         )
 
@@ -229,9 +248,13 @@ class ClusterFormNew(ClusterForm):
     )
 
     def clean(self):
-        if not self.cleaned_data["new_persona"] and not self.cleaned_data["stereotypes"]:
+        if (
+            not self.cleaned_data["new_persona"]
+            and not self.cleaned_data["stereotypes"]
+        ):
             self.add_error(
-                "stereotypes", _("You must select a persona or create a new one.")
+                "stereotypes",
+                _("You must select a persona or create a new one."),
             )
         if self.cleaned_data["new_persona"]:
             stereotype = Stereotype.objects.filter(
@@ -240,7 +263,9 @@ class ClusterFormNew(ClusterForm):
             if stereotype.exists():
                 self.add_error(
                     "name",
-                    _("A group with that name already exists. Choose a different name."),
+                    _(
+                        "A group with that name already exists. Choose a different name."
+                    ),
                 )
 
     def _save_m2m(self):

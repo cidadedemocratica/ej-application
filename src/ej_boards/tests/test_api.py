@@ -36,10 +36,12 @@ class TestGetBoards(ConversationRecipes):
             "slug": board.slug,
             "owner": board.owner.email,
             "description": board.description,
-            "links": {"self": "http://testserver/api/v1/boards/1/"},
+            "links": {"self": f"http://testserver/api/v1/boards/{board.id}/"},
         }
 
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
         path = API_V1_URL + "/boards/"
         result = api.get(path)
         assert result.data.get("results")[0] == BOARD
@@ -50,7 +52,7 @@ class TestGetBoards(ConversationRecipes):
             "slug": board.slug,
             "owner": board.owner.email,
             "description": board.description,
-            "links": {"self": "http://testserver/api/v1/boards/1/"},
+            "links": {"self": f"http://testserver/api/v1/boards/{board.id}/"},
         }
         path = API_V1_URL + "/boards/"
         assert ApiClient(client).get(path, BOARD).data == self.AUTH_ERROR
@@ -60,16 +62,21 @@ class TestGetBoards(ConversationRecipes):
         self, user, board, conversation_with_board
     ):
         BOARD = {
-            "title": "Title",
-            "slug": "board-slug",
-            "owner": "user@domain.com",
-            "description": "Description",
+            "title": board.title,
+            "slug": board.slug,
+            "owner": board.owner.email,
+            "description": board.description,
             "conversations": [
                 {
-                    "id": 1,
-                    "text": "foo",
+                    "id": conversation_with_board.id,
+                    "text": conversation_with_board.text,
                     "statistics": {
-                        "votes": {"agree": 0, "disagree": 0, "skip": 0, "total": 0},
+                        "votes": {
+                            "agree": 0,
+                            "disagree": 0,
+                            "skip": 0,
+                            "total": 0,
+                        },
                         "comments": {
                             "approved": 0,
                             "rejected": 0,
@@ -96,13 +103,17 @@ class TestGetBoards(ConversationRecipes):
                     },
                     "participants_can_add_comments": True,
                     "anonymous_votes": 0,
-                    "links": {"self": "/api/v1/boards/1/conversations/1/"},
+                    "links": {
+                        "self": f"/api/v1/boards/{board.id}/conversations/{conversation_with_board.id}/"
+                    },
                 }
             ],
         }
 
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
-        path = API_V1_URL + "/boards/1/"
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
+        path = API_V1_URL + f"/boards/{board.id}/"
         result = api.get(path)
         assert result.data == BOARD
 
@@ -111,8 +122,8 @@ class TestGetBoards(ConversationRecipes):
         self, user, board, conversation_with_board
     ):
         CONVERSATION_BOARD = {
-            "id": 1,
-            "text": "foo",
+            "id": conversation_with_board.id,
+            "text": conversation_with_board.text,
             "statistics": {
                 "votes": {"agree": 0, "disagree": 0, "skip": 0, "total": 0},
                 "comments": {
@@ -141,18 +152,32 @@ class TestGetBoards(ConversationRecipes):
             },
             "participants_can_add_comments": True,
             "anonymous_votes": 0,
-            "links": {"self": "/api/v1/boards/1/conversations/1/"},
+            "links": {
+                "self": f"/api/v1/boards/{board.id}/conversations/{conversation_with_board.id}/"
+            },
         }
 
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
-        path = API_V1_URL + "/boards/1/conversations/1/"
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
+        path = (
+            API_V1_URL
+            + f"/boards/{board.id}/conversations/{conversation_with_board.id}/"
+        )
         result = api.get(path)
         assert result.data == CONVERSATION_BOARD
 
     @pytest.mark.django_db
-    def test_boards_endpoint_with_invalid_conversations_id(self, user, board):
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
-        path = API_V1_URL + "/boards/1/conversations/112039012/"
+    def test_boards_endpoint_with_invalid_conversations_id(
+        self, user, conversation_with_board
+    ):
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
+        path = (
+            API_V1_URL
+            + f"/boards/{conversation_with_board.board.id}/conversations/112039012/"
+        )
         result = api.get(path)
         assert result.status_code == 404
 
@@ -160,7 +185,12 @@ class TestGetBoards(ConversationRecipes):
     def test_boards_endpoint_with_valid_conversation_id_invalid_board(
         self, user, board, conversation_with_board
     ):
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
-        path = API_V1_URL + "/boards/1123213/conversations/1/"
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
+        path = (
+            API_V1_URL
+            + f"/boards/1123213/conversations/{conversation_with_board.id}/"
+        )
         result = api.get(path)
         assert result.status_code == 404

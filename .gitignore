@@ -131,3 +131,6 @@ src/ej/tests/e2e/cypress/screenshots
 # Third party apps
 src/ej_signatures
 src/ej_activation
+
+# environment variables
+.env

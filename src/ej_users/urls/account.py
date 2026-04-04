@@ -34,7 +34,9 @@ urlpatterns = [
     path(
         f"{account_url}manage-email/",
         login_required(
-            allauth.EmailView.as_view(success_url=reverse_lazy("account:manage-email"))
+            allauth.EmailView.as_view(
+                success_url=reverse_lazy("account:manage-email")
+            )
         ),
         name="manage-email",
     ),

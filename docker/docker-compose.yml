@@ -1,15 +1,18 @@
 services:
     db:
-        image: postgres:12.2
+        image: postgres:16
         environment:
             - POSTGRES_PASSWORD=ej
             - POSTGRES_USER=ej
             - POSTGRES_DB=ej
         volumes:
             - "backups:/var/lib/postgresql/data"
-        container_name: docker_db_1
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ej -d ej"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
     server:
-        container_name: server
         build:
             context: ../
             dockerfile: docker/Dockerfile
@@ -17,10 +20,40 @@ services:
             - ../:/ej-application/
             - "statics:/ej-application/local/"
         env_file:
-            - variables.env
+            - ../.env
         ports:
             - 8000:8000
         entrypoint: ["/bin/bash", "docker/run_local_server.sh"]
+        depends_on:
+            - rabbitmq
+            - celery
+            - db
+    celery:
+        build:
+            context: ../
+            dockerfile: docker/Dockerfile
+        volumes:
+            - ../:/ej-application/
+        env_file:
+            - ../.env
+        entrypoint: ["/bin/bash", "-c", "poetry run inv celery"]
+        depends_on:
+            - rabbitmq
+            - db
+    rabbitmq:
+        image: rabbitmq:4
+        hostname: rabbitmq-server
+        environment:
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=password
+        ports:
+            - 15672:15672
+        healthcheck:
+            test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+
 volumes:
     backups:
     statics:

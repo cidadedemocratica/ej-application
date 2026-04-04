@@ -77,7 +77,9 @@ class ConversationViewSet(RestAPIBaseViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
     permission_classes = (
-        IsAuthenticatedOnlyGetView | IsViewRetrieve | IsRandomCommentAndNotAuthenticated,
+        IsAuthenticatedOnlyGetView
+        | IsViewRetrieve
+        | IsRandomCommentAndNotAuthenticated,
     )
 
     def retrieve(self, request, pk):
@@ -154,7 +156,9 @@ class ConversationViewSet(RestAPIBaseViewSet):
     def approved_comments(self, request, pk):
         conversation = self.get_object()
         comments = conversation.comments.approved()
-        serializer = CommentSerializer(comments, context={"request": request}, many=True)
+        serializer = CommentSerializer(
+            comments, context={"request": request}, many=True
+        )
 
         return Response(serializer.data)
 
@@ -162,15 +166,21 @@ class ConversationViewSet(RestAPIBaseViewSet):
     def user_comments(self, request, pk):
         conversation = self.get_object()
         comments = conversation.comments.filter(author=request.user)
-        serializer = CommentSerializer(comments, context={"request": request}, many=True)
+        serializer = CommentSerializer(
+            comments, context={"request": request}, many=True
+        )
 
         return Response(serializer.data)
 
     @action(detail=True, url_path="user-pending-comments")
     def user_pending_comments(self, request, pk):
         conversation = self.get_object()
-        comments = conversation.comments.filter(status="pending", author=request.user)
-        serializer = CommentSerializer(comments, context={"request": request}, many=True)
+        comments = conversation.comments.filter(
+            status="pending", author=request.user
+        )
+        serializer = CommentSerializer(
+            comments, context={"request": request}, many=True
+        )
 
         return Response(serializer.data)
 
@@ -193,7 +203,9 @@ class ConversationViewSet(RestAPIBaseViewSet):
         else:
             comment_id = request.GET.get("id")
             if comment_id:
-                comment = conversation.next_comment_with_id(request.user, comment_id)
+                comment = conversation.next_comment_with_id(
+                    request.user, comment_id
+                )
             else:
                 comment = conversation.next_comment(request.user)
 
@@ -213,14 +225,20 @@ class ConversationViewSet(RestAPIBaseViewSet):
         )
         return serializer.data
 
-    def get_promoted_conversations(self, request, is_promoted_queryset, search_text):
-        is_promoted_queryset = is_promoted_queryset.filter_by_text_and_tag(search_text)
+    def get_promoted_conversations(
+        self, request, is_promoted_queryset, search_text
+    ):
+        is_promoted_queryset = is_promoted_queryset.filter_by_text_and_tag(
+            search_text
+        )
         serializer = ConversationCardDataSerializer(
             is_promoted_queryset, many=True, context={"request": request}
         )
         return serializer.data
 
-    def filter_conversation_by_current_user(self, request, queryset, tags, search_text):
+    def filter_conversation_by_current_user(
+        self, request, queryset, tags, search_text
+    ):
         queryset = queryset.filter(author=request.user)
         if tags:
             queryset = queryset.filter(tags__name__in=tags).distinct()

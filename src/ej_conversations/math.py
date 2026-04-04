@@ -8,6 +8,7 @@ pd = import_later("pandas")
 # ==============================================================================
 # BASIC STATISTICAL FUNCTIONS
 
+
 # noinspection PyIncorrectDocstring
 def comment_statistics(
     votes,
@@ -50,7 +51,10 @@ def comment_statistics(
     if participation:
         participation = len(votes[author].unique())
     return _statistics(
-        table, convergence=convergence, participation=participation, ratios=ratios
+        table,
+        convergence=convergence,
+        participation=participation,
+        ratios=ratios,
     )
 
 
@@ -72,7 +76,10 @@ def votes_statistics(
     if participation:
         participation = len(votes[comment].unique())
     return _statistics(
-        table, convergence=convergence, participation=participation, ratios=ratios
+        table,
+        convergence=convergence,
+        participation=participation,
+        ratios=ratios,
     )
 
 
@@ -104,7 +111,9 @@ def _statistics(table, convergence=False, ratios=False, participation=False):
 
     # Adds additional columns
     if convergence:
-        table["convergence"] = compute_convergence(table["agree"], table["disagree"])
+        table["convergence"] = compute_convergence(
+            table["agree"], table["disagree"]
+        )
     if participation is not False:
         table["participation"] = compute_participation(table, participation)
 
@@ -112,7 +121,9 @@ def _statistics(table, convergence=False, ratios=False, participation=False):
         e = 1e-50
         data = table[["agree", "disagree", "skipped"]]
         norm = data.sum(axis=1).values
-        norm = norm[:, None][:, [0, 0, 0]]  # Adopts the same shape of the dataframe
+        norm = norm[:, None][
+            :, [0, 0, 0]
+        ]  # Adopts the same shape of the dataframe
         data /= norm + e
         table[["agree", "disagree", "skipped"]] = data
     return table

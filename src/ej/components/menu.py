@@ -82,7 +82,11 @@ def page_menu(*items, request=None, caller=None, **kwargs):
 def menu_from_sections(sections):
     # add role="menu" in the future?
     return div(
-        *sections, class_="page-menu", id="page-menu", is_menu="", is_component=True
+        *sections,
+        class_="page-menu",
+        id="page-menu",
+        is_menu="",
+        is_component=True,
     )
 
 
@@ -173,7 +177,9 @@ page_menu.ACCESSIBILITY = thunk(
 )
 
 #: Default menu
-page_menu.DEFAULT_MENU_SECTIONS = lambda request: Block([page_menu.ACCESSIBILITY()])
+page_menu.DEFAULT_MENU_SECTIONS = lambda request: Block(
+    [page_menu.ACCESSIBILITY()]
+)
 
 #: Links
 page_menu.links = menu_links

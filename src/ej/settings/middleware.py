@@ -14,7 +14,10 @@ class MiddlewareConf(Base):
             "django.middleware.locale.LocaleMiddleware",
         ]
         if "debug_toolbar" in self.INSTALLED_APPS:
-            middleware = ["debug_toolbar.middleware.DebugToolbarMiddleware", *middleware]
+            middleware = [
+                "debug_toolbar.middleware.DebugToolbarMiddleware",
+                *middleware,
+            ]
         if self.ENVIRONMENT == "testing":
             middleware.remove("django.middleware.locale.LocaleMiddleware")
         return middleware

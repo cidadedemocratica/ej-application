@@ -48,9 +48,14 @@ class PathsConf(Base):
         from glob import glob
 
         # get static dir for all EJ apps.
-        apps_absolute_path = glob(f"{str(self.BASE_DIR)}/src/ej*", recursive=True)
+        apps_absolute_path = glob(
+            f"{str(self.BASE_DIR)}/src/ej*", recursive=True
+        )
         dirs = list(
-            map(lambda app: f"{app}/static/{app.split('/')[-1]}", apps_absolute_path)
+            map(
+                lambda app: f"{app}/static/{app.split('/')[-1]}",
+                apps_absolute_path,
+            )
         )
         valid_dirs = [dir for dir in dirs if os.path.exists(dir)]
         return [f'{str(repo_dir) + "/src/ej/static/ej/assets"}', *valid_dirs]

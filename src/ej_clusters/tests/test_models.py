@@ -4,7 +4,9 @@ from ej_conversations.tests.test_views import ConversationSetup
 
 
 class TestClusterization(ClusterRecipes):
-    def test_inject_clusters_related_manager_on_conversation(self, conversation_db):
+    def test_inject_clusters_related_manager_on_conversation(
+        self, conversation_db
+    ):
         conversation_db.get_clusterization()
         assert hasattr(conversation_db.clusterization, "clusters")
         assert hasattr(conversation_db, "clusters")
@@ -42,7 +44,9 @@ class TestCluster(ConversationSetup):
         conversation.save()
         return conversation
 
-    def test_concat_statistics_to_dataframe(self, clusterization, cluster, vote):
+    def test_concat_statistics_to_dataframe(
+        self, clusterization, cluster, vote
+    ):
         clusterization.update_clusterization(force=True)
         cluster_df = cluster.concat_statistics_to_dataframe()
         assert cluster_df.iloc[0]["group"] == cluster.name

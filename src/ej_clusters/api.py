@@ -26,7 +26,9 @@ class ClusterizationViewSet(RestAPIBaseViewSet):
             queryset = Clusterization.objects.all()
         else:
             conversation = Conversation.objects.filter(author=request.user)
-            queryset = Clusterization.objects.filter(conversation__in=conversation)
+            queryset = Clusterization.objects.filter(
+                conversation__in=conversation
+            )
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -34,7 +36,9 @@ class ClusterizationViewSet(RestAPIBaseViewSet):
     def clusters(self, request, pk):
         clusterization = self.get_object()
         clusters = clusterization.clusters.all()
-        serializer = ClusterSerializer(clusters, context={"request": request}, many=True)
+        serializer = ClusterSerializer(
+            clusters, context={"request": request}, many=True
+        )
         return Response(serializer.data)
 
     @action(detail=True)
@@ -47,6 +51,8 @@ class ClusterizationViewSet(RestAPIBaseViewSet):
     def stereotypes(self, request, pk):
         clusterization = self.get_object()
         serializer = StereotypeSerializer(
-            clusterization.stereotypes.all(), context={"request": request}, many=True
+            clusterization.stereotypes.all(),
+            context={"request": request},
+            many=True,
         )
         return Response(serializer.data)

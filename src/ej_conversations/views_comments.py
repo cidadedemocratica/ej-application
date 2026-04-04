@@ -33,7 +33,9 @@ class CommentDetailView(DetailView):
         return render(request, self.template_name, self.get_context_data())
 
     def get_object(self) -> models.Comment:
-        comment = get_object_or_404(models.Comment, id=self.kwargs["comment_id"])
+        comment = get_object_or_404(
+            models.Comment, id=self.kwargs["comment_id"]
+        )
         if self.kwargs["hex_hash"] != comment.comment_url_hash():
             raise Http404
         return comment

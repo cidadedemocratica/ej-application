@@ -41,7 +41,7 @@ class UrlTester(EjRecipes):
     def test_urls_that_requires_user_login(self, client, user_db, caplog, data):
         urls = self.user_urls
         caplog.set_level(logging.CRITICAL, logger="django")
-        pprint(data)
+        print(urls)
 
         check_urls(client, urls, self.require_login_codes, "anonymous")
 
@@ -56,7 +56,10 @@ class UrlTester(EjRecipes):
         pprint(data)
 
         # Require login or present a failure code if user is anonymous
-        codes = {*as_code_set(self.redirect_codes), *as_code_set(self.failure_codes)}
+        codes = {
+            *as_code_set(self.redirect_codes),
+            *as_code_set(self.failure_codes),
+        }
         check_urls(client, urls, codes, "anonymous")
 
         # User has no permission
@@ -67,13 +70,18 @@ class UrlTester(EjRecipes):
         client.force_login(author_db)
         check_urls(client, urls, self.success_codes, "author")
 
-    def test_urls_accessible_only_by_admin(self, client, user_db, root_db, data, caplog):
+    def test_urls_accessible_only_by_admin(
+        self, client, user_db, root_db, data, caplog
+    ):
         urls = self.admin_urls
         caplog.set_level(logging.CRITICAL, logger="django")
         pprint(data)
 
         # Require login or present a failure code if user is anonymous
-        codes = {*as_code_set(self.redirect_codes), *as_code_set(self.failure_codes)}
+        codes = {
+            *as_code_set(self.redirect_codes),
+            *as_code_set(self.failure_codes),
+        }
         check_urls(client, urls, codes, "anonymous")
 
         # User has no permission

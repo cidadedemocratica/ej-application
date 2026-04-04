@@ -31,7 +31,9 @@ class TestOpinionComponent(ConversationRecipes):
         }
         response = client.post(url, data)
         assert response.status_code == 302
-        assert not OpinionComponent.objects.filter(conversation=conversation_db).exists()
+        assert not OpinionComponent.objects.filter(
+            conversation=conversation_db
+        ).exists()
 
     def test_get_conversation_component(self, conversation_db):
         client = Client()

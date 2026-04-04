@@ -12,7 +12,10 @@ class RejectionReason(models.IntegerChoices):
     OFF_TOPIC = (20, _("Off-topic"))
     OFFENSIVE_LANGUAGE = (30, _("Offensive content or language"))
     DUPLICATED_COMMENT = (40, _("Duplicated content"))
-    VIOLATE_TERMS_OF_SERVICE = (50, _("Violates terms of service of the platform"))
+    VIOLATE_TERMS_OF_SERVICE = (
+        50,
+        _("Violates terms of service of the platform"),
+    )
 
 
 class Choice(models.IntegerChoices):

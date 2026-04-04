@@ -23,9 +23,17 @@ def redirect_to_conversation_detail(view):
         user = request.user
         conversation = self.get_object()
         user_has_votes = conversation.votes.filter(author__id=user.id).exists()
-        user_has_comments = conversation.comments.filter(author__id=user.id).exists()
-        if user_has_votes or user_has_comments or not conversation.welcome_message:
-            return redirect("boards:conversation-detail", **conversation.get_url_kwargs())
+        user_has_comments = conversation.comments.filter(
+            author__id=user.id
+        ).exists()
+        if (
+            user_has_votes
+            or user_has_comments
+            or not conversation.welcome_message
+        ):
+            return redirect(
+                "boards:conversation-detail", **conversation.get_url_kwargs()
+            )
         return view(self, request, *args, **kwargs)
 
     return wrapper
@@ -37,7 +45,9 @@ def user_can_post_anonymously(func):
     anonymous votes.
     """
 
-    def wrapper(self, request, conversation_id, slug, board_slug, *args, **kwargs):
+    def wrapper(
+        self, request, conversation_id, slug, board_slug, *args, **kwargs
+    ):
         conversation: Conversation = self.get_object()
         request.user = User.get_or_create_from_session(conversation, request)
         redirect_url = ""
@@ -56,7 +66,9 @@ def user_can_post_anonymously(func):
         if redirect_url:
             return get_htmx_redirect_response(redirect_url)
 
-        return func(self, request, conversation_id, slug, board_slug, *args, **kwargs)
+        return func(
+            self, request, conversation_id, slug, board_slug, *args, **kwargs
+        )
 
     return wrapper
 

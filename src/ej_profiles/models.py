@@ -30,7 +30,9 @@ class Profile(models.Model):
     User profile
     """
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile"
+    )
     race = models.IntegerField(
         choices=Race.choices, default=Race.NOT_FILLED, verbose_name=_("Race")
     )
@@ -44,11 +46,17 @@ class Profile(models.Model):
         default=Gender.NOT_FILLED,
         verbose_name=("Gender identity"),
     )
-    gender_other = models.CharField(_("User provided gender"), max_length=50, blank=True)
+    gender_other = models.CharField(
+        _("User provided gender"), max_length=50, blank=True
+    )
     birth_date = models.DateField(_("Birth Date"), null=True, blank=True)
-    age_range = models.IntegerField(choices=AgeRange.choices, default=AgeRange.NOT_FILLED)
+    age_range = models.IntegerField(
+        choices=AgeRange.choices, default=AgeRange.NOT_FILLED
+    )
     country = models.CharField(_("Country"), blank=True, max_length=50)
-    region = models.IntegerField(choices=Region.choices, default=Region.NOT_FILLED)
+    region = models.IntegerField(
+        choices=Region.choices, default=Region.NOT_FILLED
+    )
     state = models.CharField(_("State"), blank=True, max_length=3)
     city = models.CharField(_("City"), blank=True, max_length=140)
     biography = models.TextField(_("Biography"), blank=True)
@@ -57,9 +65,13 @@ class Profile(models.Model):
     profile_photo = models.ImageField(
         _("Profile Photo"), blank=True, null=True, upload_to="profile_images"
     )
-    phone_number = models.CharField(_("Phone number"), blank=True, max_length=16)
+    phone_number = models.CharField(
+        _("Phone number"), blank=True, max_length=16
+    )
     completed_tour = models.BooleanField(default=False, blank=True, null=True)
-    filtered_home_tag = models.BooleanField(default=False, blank=True, null=True)
+    filtered_home_tag = models.BooleanField(
+        default=False, blank=True, null=True
+    )
 
     # https://sidekick.readthedocs.io/en/latest/lib-properties.html?highlight=delegate_to#properties-and-descriptors
     name = delegate_to("user")
@@ -242,7 +254,9 @@ class Profile(models.Model):
         return _("Regular user")
 
     def get_state_display(self):
-        return STATE_CHOICES_MAP.get(self.state, self.state) or _("(Not Filled)")
+        return STATE_CHOICES_MAP.get(self.state, self.state) or _(
+            "(Not Filled)"
+        )
 
     def default_url(self):
         return reverse(("profile:home"))
@@ -253,7 +267,8 @@ class Profile(models.Model):
         """
         user = self.user
         return Conversation.objects.filter(
-            Q(comments__author=user) | Q(comments__votes__author=user), is_promoted=True
+            Q(comments__author=user) | Q(comments__votes__author=user),
+            is_promoted=True,
         ).distinct()
 
     def participated_public_tags(self):
@@ -274,8 +289,12 @@ class Profile(models.Model):
         # This code merges in python 2 querysets. The first is annotated with
         # tag and the number of user votes. The second is annotated with the total
         # number of comments in each conversation
-        voted = self.user.conversations_with_votes.exclude(id__in=[x.id for x in created])
-        voted = voted.cache_annotations("first_tag", "n_user_votes", user=self.user)
+        voted = self.user.conversations_with_votes.exclude(
+            id__in=[x.id for x in created]
+        )
+        voted = voted.cache_annotations(
+            "first_tag", "n_user_votes", user=self.user
+        )
         voted_extra = (
             Conversation.objects.filter(id__in=[x.id for x in voted])
             .cache_annotations("n_comments")
@@ -290,7 +309,9 @@ class Profile(models.Model):
         # Now we get the favorite conversations from user
         favorites = Conversation.objects.filter(
             favorites__user=self.user
-        ).cache_annotations("first_tag", "n_user_votes", "n_comments", user=self.user)
+        ).cache_annotations(
+            "first_tag", "n_user_votes", "n_comments", user=self.user
+        )
 
         comments = self.user.comments
         groups = toolz.groupby(lambda x: x.status, comments)

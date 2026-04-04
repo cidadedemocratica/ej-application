@@ -16,7 +16,9 @@ def npm_version():
 
 
 def user_can_add_new_domain(user, conversation):
-    return user.is_staff or user.is_superuser or conversation.author.id == user.id
+    return (
+        user.is_staff or user.is_superuser or conversation.author.id == user.id
+    )
 
 
 def get_host_with_schema(request):

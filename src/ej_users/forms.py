@@ -35,7 +35,9 @@ class PrivacyPolicyWidget(forms.CheckboxInput):
         from django.contrib.flatpages.models import FlatPage
 
         try:
-            privacy_policy = FlatPage.objects.get(url="/privacy-policy/").content
+            privacy_policy = FlatPage.objects.get(
+                url="/privacy-policy/"
+            ).content
         except Exception:
             privacy_policy = ""
         context = self.get_context(name, value, attrs)
@@ -52,7 +54,9 @@ class PasswordForm(EjForm):
         label=_("Password"), required=True, widget=forms.PasswordInput
     )
     password_confirm = forms.CharField(
-        label=_("Password confirmation"), required=True, widget=forms.PasswordInput
+        label=_("Password confirmation"),
+        required=True,
+        widget=forms.PasswordInput,
     )
 
     def _post_clean(self):

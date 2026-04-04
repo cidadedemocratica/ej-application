@@ -64,7 +64,10 @@ class Command(BaseCommand):
     ):
         users_created = 0
         fake = Factory.create("en-US")
-        blocked_usernames = {"admin", *User.objects.values_list("email", flat=True)}
+        blocked_usernames = {
+            "admin",
+            *User.objects.values_list("email", flat=True),
+        }
         usernames = set()
         while len(usernames) < staff + users:
             username = fake.user_name()
@@ -116,7 +119,9 @@ def create_admin(admin_password):
             is_staff=True,
             is_superuser=True,
         )
-        user.set_password(admin_password or os.environ.get("ADMIN_PASSWORD", "admin"))
+        user.set_password(
+            admin_password or os.environ.get("ADMIN_PASSWORD", "admin")
+        )
         user.save()
         set_profile(user)
         return 1
@@ -134,7 +139,9 @@ def create_default_user(user_password):
             is_staff=False,
             is_superuser=False,
         )
-        user.set_password(user_password or os.environ.get("USER_PASSWORD", "user"))
+        user.set_password(
+            user_password or os.environ.get("USER_PASSWORD", "user")
+        )
         user.save()
         set_profile(user)
         return 1

@@ -67,7 +67,11 @@ class TestProfile(ConversationRecipes):
         assert str(profile) == _("name's profile")
         assert set(profile.profile_fields()) - expected == set()
         assert profile.is_filled
-        assert profile.statistics() == {"votes": 0, "comments": 0, "conversations": 0}
+        assert profile.statistics() == {
+            "votes": 0,
+            "comments": 0,
+            "conversations": 0,
+        }
         assert profile.role() == _("Regular user")
 
         # Remove a field
@@ -102,7 +106,9 @@ class TestProfile(ConversationRecipes):
         profile_url = profile.default_url()
         assert profile_url == reverse("profile:home")
 
-    def test_participated_on_promoted_conversation_vote(self, db, user, other_user):
+    def test_participated_on_promoted_conversation_vote(
+        self, db, user, other_user
+    ):
         user.save()
         other_user.save()
         conversation = create_conversation(
@@ -111,52 +117,76 @@ class TestProfile(ConversationRecipes):
         comment = Comment.objects.create(
             author=user, content="just a comment", conversation=conversation
         )
-        Vote.objects.create(author=other_user, comment=comment, choice=Choice.AGREE)
+        Vote.objects.create(
+            author=other_user, comment=comment, choice=Choice.AGREE
+        )
 
         profile = other_user.get_profile()
-        retrieved_conversation = profile.participated_public_conversations().first()
+        retrieved_conversation = (
+            profile.participated_public_conversations().first()
+        )
 
         assert retrieved_conversation == conversation
 
     def test_participated_private_conversation_vote(self, db, user, other_user):
         user.save()
         other_user.save()
-        conversation = create_conversation("this is the text", "this is the title", user)
+        conversation = create_conversation(
+            "this is the text", "this is the title", user
+        )
         comment = Comment.objects.create(
             author=user, content="just a comment", conversation=conversation
         )
-        Vote.objects.create(author=other_user, comment=comment, choice=Choice.AGREE)
+        Vote.objects.create(
+            author=other_user, comment=comment, choice=Choice.AGREE
+        )
 
         profile = other_user.get_profile()
-        retrieved_conversation = profile.participated_public_conversations().first()
+        retrieved_conversation = (
+            profile.participated_public_conversations().first()
+        )
 
         assert retrieved_conversation is None
 
-    def test_participated_promoted_conversation_comment(self, db, user, other_user):
+    def test_participated_promoted_conversation_comment(
+        self, db, user, other_user
+    ):
         user.save()
         other_user.save()
         conversation = create_conversation(
             "this is the text", "this is the title", user, is_promoted=True
         )
         Comment.objects.create(
-            author=other_user, content="just a comment", conversation=conversation
+            author=other_user,
+            content="just a comment",
+            conversation=conversation,
         )
 
         profile = other_user.get_profile()
-        retrieved_conversation = profile.participated_public_conversations().first()
+        retrieved_conversation = (
+            profile.participated_public_conversations().first()
+        )
 
         assert retrieved_conversation == conversation
 
-    def test_participated_private_conversation_comment(self, db, user, other_user):
+    def test_participated_private_conversation_comment(
+        self, db, user, other_user
+    ):
         user.save()
         other_user.save()
-        conversation = create_conversation("this is the text", "this is the title", user)
+        conversation = create_conversation(
+            "this is the text", "this is the title", user
+        )
         Comment.objects.create(
-            author=other_user, content="just a comment", conversation=conversation
+            author=other_user,
+            content="just a comment",
+            conversation=conversation,
         )
 
         profile = other_user.get_profile()
-        retrieved_conversation = profile.participated_public_conversations().first()
+        retrieved_conversation = (
+            profile.participated_public_conversations().first()
+        )
 
         assert retrieved_conversation is None
 
@@ -169,10 +199,15 @@ class TestProfile(ConversationRecipes):
         comment = Comment.objects.create(
             author=user, content="just a comment", conversation=conversation
         )
-        Vote.objects.create(author=other_user, comment=comment, choice=Choice.AGREE)
+        Vote.objects.create(
+            author=other_user, comment=comment, choice=Choice.AGREE
+        )
 
         other_conversation = create_conversation(
-            "this is another text", "this is another title", user, is_promoted=True
+            "this is another text",
+            "this is another title",
+            user,
+            is_promoted=True,
         )
         Comment.objects.create(
             author=other_user,
@@ -204,7 +239,9 @@ class TestProfile(ConversationRecipes):
         comment2.vote(user, "disagree")
         comment3.vote(user, "skip")
 
-        statistics_for_user_result = user.profile.conversation_statistics(conversation)
+        statistics_for_user_result = user.profile.conversation_statistics(
+            conversation
+        )
 
         assert "votes" in statistics_for_user_result
         assert statistics_for_user_result["votes"] == 2
@@ -218,7 +255,9 @@ class TestProfile(ConversationRecipes):
         assert "comments" in statistics_for_user_result
         assert statistics_for_user_result["comments"] == 2
 
-    def test_statistics_for_user_without_skiped_votes(self, db, mk_conversation, mk_user):
+    def test_statistics_for_user_without_skiped_votes(
+        self, db, mk_conversation, mk_user
+    ):
         conversation = mk_conversation()
         user = mk_user(email="user@domain.com")
         author = mk_user(email="anotherauthor@domain.com")
@@ -238,7 +277,9 @@ class TestProfile(ConversationRecipes):
         comment3.vote(user, "skip")
 
         config.RETURN_USER_SKIPED_COMMENTS = False
-        statistics_for_user_result = user.profile.conversation_statistics(conversation)
+        statistics_for_user_result = user.profile.conversation_statistics(
+            conversation
+        )
 
         assert "votes" in statistics_for_user_result
         assert statistics_for_user_result["votes"] == 3
