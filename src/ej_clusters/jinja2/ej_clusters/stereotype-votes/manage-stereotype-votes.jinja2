@@ -1,14 +1,14 @@
 {% from "ej_clusters/stereotype-votes/pagination.jinja2" import pagination %}
-<form id="edit-votes-formset" 
-    hx-post="{{ url('boards:stereotype-votes-manage',  pk=stereotype.id, **conversation.get_url_kwargs()) }}"
-    hx-swap="none"
-    hx-on::after-request='showModal("#confirm-edit-stereotype")'
->
+<form id="edit-votes-formset"
+      hx-post="{{ url('boards:stereotype-votes-manage',  pk=stereotype.id, **conversation.get_url_kwargs() ) }}"
+      hx-swap="none"
+      hx-on::after-request='showModal("#confirm-edit-stereotype")'>
     {{ csrf_input }}
-    <input id="edit-stereotype-id" type="hidden" name="stereotype_id" value="{{stereotype.id}}">
+    <input id="edit-stereotype-id"
+           type="hidden"
+           name="stereotype_id"
+           value="{{ stereotype.id }}">
     {{ voted_formset }}
     {{ non_voted_formset }}
 </form>
-
 {{ pagination("edit") }}
-

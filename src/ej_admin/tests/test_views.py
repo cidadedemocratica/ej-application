@@ -23,7 +23,9 @@ class TestAdministration(ConversationRecipes):
         url = "/administration/"
 
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         create_conversation("foo", "conv1", user, board=board)
 
         response = logged_admin.get(url)
@@ -37,8 +39,12 @@ class TestAdministration(ConversationRecipes):
 
     def test_get_active_recent_boards(self, db, logged_admin):
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
-        board_2 = Board.objects.create(slug="board2", owner=user, description="board2")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
+        board_2 = Board.objects.create(
+            slug="board2", owner=user, description="board2"
+        )
         Board.objects.create(slug="board3", owner=user, description="board3")
 
         create_conversation("foo", "conv1", user, board=board)
@@ -55,8 +61,12 @@ class TestAdministration(ConversationRecipes):
 
     def test_get_all_recent_boards(self, db, logged_admin):
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
-        board_2 = Board.objects.create(slug="board2", owner=user, description="board2")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
+        board_2 = Board.objects.create(
+            slug="board2", owner=user, description="board2"
+        )
         Board.objects.create(slug="board3", owner=user, description="board3")
 
         create_conversation("foo", "conv1", user, board=board)
@@ -76,14 +86,19 @@ class TestAdministration(ConversationRecipes):
     def test_get_searched_users_by_date(self, logged_admin, admin_user):
         base_url = "/administration/searched-users/"
         user = User.objects.create_user("user1@email.br", "password")
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString="
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString="
+        )
         response = logged_admin.get(url)
         searched_users = response.context["page_object"]
         assert len(searched_users) == 2
         assert searched_users[0].email == user.email
         assert searched_users[1].email == admin_user.email
 
-    def test_get_searched_users_by_conversations_count(self, logged_admin, admin_user):
+    def test_get_searched_users_by_conversations_count(
+        self, logged_admin, admin_user
+    ):
         base_url = "/administration/searched-users/"
         url = (
             base_url
@@ -91,13 +106,17 @@ class TestAdministration(ConversationRecipes):
         )
 
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         create_conversation("foo", "conv1", user, board=board)
         create_conversation("foo2", "conv2", user, board=board)
         create_conversation("foo3", "conv3", user, board=board)
 
         user_2 = User.objects.create_user("user2@email.br", "password")
-        board_2 = Board.objects.create(slug="board2", owner=user_2, description="board")
+        board_2 = Board.objects.create(
+            slug="board2", owner=user_2, description="board"
+        )
         create_conversation("foo4", "conv4", user_2, board=board_2)
         create_conversation("foo5", "conv5", user_2, board=board_2)
 
@@ -111,7 +130,9 @@ class TestAdministration(ConversationRecipes):
         assert searched_users[2].email == admin_user.email
         assert searched_users[2].conversations.count() == 0
 
-    def test_get_searched_users_by_comments_count(self, logged_admin, admin_user):
+    def test_get_searched_users_by_comments_count(
+        self, logged_admin, admin_user
+    ):
         base_url = "/administration/searched-users/"
         url = (
             base_url
@@ -119,10 +140,16 @@ class TestAdministration(ConversationRecipes):
         )
 
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         conversation_1 = create_conversation("foo", "conv1", user, board=board)
-        conversation_1.create_comment(user, "ad", status="approved", check_limits=False)
-        conversation_1.create_comment(user, "ad2", status="approved", check_limits=False)
+        conversation_1.create_comment(
+            user, "ad", status="approved", check_limits=False
+        )
+        conversation_1.create_comment(
+            user, "ad2", status="approved", check_limits=False
+        )
 
         response = logged_admin.get(url)
         searched_users = response.context["page_object"]
@@ -135,19 +162,32 @@ class TestAdministration(ConversationRecipes):
     def test_get_searched_boards(self, logged_admin, admin_user):
         base_url = "/administration/searched-boards/"
         # search by date
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString="
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString="
+        )
 
         user = User.objects.create_user("user1@email.br", "password")
         user_2 = User.objects.create_user("user2@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
-        board_2 = Board.objects.create(slug="board2", owner=user, description="board2")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
+        board_2 = Board.objects.create(
+            slug="board2", owner=user, description="board2"
+        )
         Board.objects.create(slug="board3", owner=user_2, description="board3")
 
         conversation_1 = create_conversation("foo", "conv1", user, board=board)
-        conversation_1.create_comment(user, "ad", status="approved", check_limits=False)
-        conversation_1.create_comment(user, "ad2", status="approved", check_limits=False)
+        conversation_1.create_comment(
+            user, "ad", status="approved", check_limits=False
+        )
+        conversation_1.create_comment(
+            user, "ad2", status="approved", check_limits=False
+        )
 
-        conversation_2 = create_conversation("foo2", "conv2", user_2, board=board_2)
+        conversation_2 = create_conversation(
+            "foo2", "conv2", user_2, board=board_2
+        )
         conversation_2.create_comment(
             user_2, "ad3", status="approved", check_limits=False
         )
@@ -203,13 +243,21 @@ class TestAdministration(ConversationRecipes):
         base_url = "/administration/searched-conversations/"
 
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         conversation_1 = create_conversation("foo", "conv1", user, board=board)
-        conversation_1.create_comment(user, "ad", status="approved", check_limits=False)
-        conversation_1.create_comment(user, "ad2", status="approved", check_limits=False)
+        conversation_1.create_comment(
+            user, "ad", status="approved", check_limits=False
+        )
+        conversation_1.create_comment(
+            user, "ad2", status="approved", check_limits=False
+        )
 
         conversation_2 = create_conversation("foo2", "conv2", user, board=board)
-        conversation_2.create_comment(user, "ad3", status="approved", check_limits=False)
+        conversation_2.create_comment(
+            user, "ad3", status="approved", check_limits=False
+        )
 
         board_2 = Board.objects.create(
             slug="board2", owner=admin_user, description="board"
@@ -217,7 +265,10 @@ class TestAdministration(ConversationRecipes):
         create_conversation("foo3", "conv3", user, board=board_2)
 
         # search by date
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString="
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString="
+        )
         response = logged_admin.get(url)
         searched_conversations = response.context["page_object"]
         assert len(searched_conversations) == 3
@@ -246,7 +297,10 @@ class TestAdministration(ConversationRecipes):
         user = User.objects.create_user("user1@email.br", "password")
         user_2 = User.objects.create_user("user2@email.br", "password")
 
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=user"
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=user"
+        )
 
         response = logged_admin.get(url)
         searched_users = response.context["page_object"]
@@ -254,7 +308,10 @@ class TestAdministration(ConversationRecipes):
         assert searched_users[0].email == user_2.email
         assert searched_users[1].email == user.email
 
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=user1"
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=user1"
+        )
 
         response = logged_admin.get(url)
         searched_users = response.context["page_object"]
@@ -269,7 +326,10 @@ class TestAdministration(ConversationRecipes):
         Board.objects.create(slug="test1", owner=user, description="board")
         Board.objects.create(slug="test2", owner=user, description="board2")
 
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=test"
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=test"
+        )
         response = logged_admin.get(url)
         searched_boards = response.context["page_object"]
         assert len(searched_boards) == 3
@@ -277,7 +337,10 @@ class TestAdministration(ConversationRecipes):
         assert searched_boards[1].slug == "test1"
         assert searched_boards[2].slug == "admintestcom"
 
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=test1"
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=test1"
+        )
         response = logged_admin.get(url)
         searched_boards = response.context["page_object"]
         assert len(searched_boards) == 1
@@ -287,16 +350,24 @@ class TestAdministration(ConversationRecipes):
         base_url = "/administration/searched-conversations/"
 
         user = User.objects.create_user("user1@email.br", "password")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         create_conversation("foo", "conv1", user, board=board)
         create_conversation("foo1", "conv2", user, board=board)
 
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=conv"
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=conv"
+        )
         response = logged_admin.get(url)
         searched_conversations = response.context["page_object"]
         assert len(searched_conversations) == 2
 
-        url = base_url + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=conv1"
+        url = (
+            base_url
+            + "?page=1&numEntries=6&orderBy=date&sort=desc&searchString=conv1"
+        )
         response = logged_admin.get(url)
         searched_conversations = response.context["page_object"]
         assert len(searched_conversations) == 1

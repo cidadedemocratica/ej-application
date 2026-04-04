@@ -164,7 +164,9 @@ def span_icon(text, icon=None, icon_description=None, **kwargs):
     """
     text = "" if text is None else str(text)
     kwargs["children"] = (
-        [_icon(icon, icon_description=icon_description), text] if icon else [text]
+        [_icon(icon, icon_description=icon_description), text]
+        if icon
+        else [text]
     )
     return a_or_span(**kwargs).add_class("span-icon")
 
@@ -217,7 +219,11 @@ def progress_bar(*args, **kwargs):
         div(
             class_="progress-bar__progress",
             children=[
-                div(" ", class_="color-brand-lighter", style=f"flex-grow: {pc + 3};"),
+                div(
+                    " ",
+                    class_="color-brand-lighter",
+                    style=f"flex-grow: {pc + 3};",
+                ),
                 div(" ", style=f"flex-grow: {100 - pc};"),
             ],
         ),
@@ -226,16 +232,16 @@ def progress_bar(*args, **kwargs):
     extended_text = kwargs.pop("extended_text", "/")
     if total is not None:
         children.append(
-            div([strong(n), extended_text, total, text], aria_hidden="true").add_class(
-                "progress-bar__text"
-            )
+            div(
+                [strong(n), extended_text, total, text], aria_hidden="true"
+            ).add_class("progress-bar__text")
         )
 
     # Return
     class_name = kwargs.pop("class_name", "")
-    progress_div = div(children, aria_label=aria_msg, role="img", **kwargs).add_class(
-        "progress-bar", first=True
-    )
+    progress_div = div(
+        children, aria_label=aria_msg, role="img", **kwargs
+    ).add_class("progress-bar", first=True)
     return progress_div.add_class(class_name)
 
 
@@ -252,9 +258,17 @@ def popup(title, content, action=None, **kwargs):
     """
     return div(
         [
-            icon("times-circle", class_="popup__close", is_component="popup:close"),
+            icon(
+                "times-circle",
+                class_="popup__close",
+                is_component="popup:close",
+            ),
             div(
-                [h1([title], class_="title"), p(content), action and div(action)],
+                [
+                    h1([title], class_="title"),
+                    p(content),
+                    action and div(action),
+                ],
                 class_="popup__contents",
             ),
         ],
@@ -278,7 +292,8 @@ def toast(icon, title, description=None, **kwargs):
     if description:
         body.append(p(description))
     return div(
-        [_icon(icon, class_="toast__icon"), div(body, class_="toast__content")], **kwargs
+        [_icon(icon, class_="toast__icon"), div(body, class_="toast__content")],
+        **kwargs,
     ).add_class("toast")
 
 

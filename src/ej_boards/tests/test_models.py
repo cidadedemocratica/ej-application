@@ -12,9 +12,13 @@ class TestBoardModel(ConversationRecipes):
         assert board.title == str(board)
 
     def test_get_board_absolute_url(self, db, board):
-        assert board.get_absolute_url() == f"/boards/{board.slug}/conversations/"
+        assert (
+            board.get_absolute_url() == f"/boards/{board.slug}/conversations/"
+        )
 
-    def test_get_board_palette_from_conversation(self, mk_conversation, mk_user):
+    def test_get_board_palette_from_conversation(
+        self, mk_conversation, mk_user
+    ):
         user = mk_user(email="someuser@mail.com")
         board = Board.objects.create(
             slug="board1", owner=user, palette="Orange", description="board"
@@ -24,13 +28,17 @@ class TestBoardModel(ConversationRecipes):
 
     def test_get_board_default_palette_from_conversation(self, mk_user):
         user = mk_user(email="someuser@mail.com")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         conversation = create_conversation("foo", "conv1", user, board=board)
         assert conversation.board.palette == "Blue"
 
     def test_conversation_belongs_to_a_board(self, mk_user):
         user = mk_user(email="someuser@mail.com")
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         conversation1 = create_conversation("foo", "conv1", user, board=board)
         conversation2 = create_conversation("bar", "conv2", user, board=board)
 
@@ -38,10 +46,16 @@ class TestBoardModel(ConversationRecipes):
         assert conversation1.board == board
         assert conversation2.board == board
 
-    def test_conversation_should_not_belong_to_more_than_one_board(self, mk_user):
+    def test_conversation_should_not_belong_to_more_than_one_board(
+        self, mk_user
+    ):
         user = mk_user(email="someuser@mail.com")
-        board1 = Board.objects.create(slug="board1", owner=user, description="board1")
-        board2 = Board.objects.create(slug="board2", owner=user, description="board2")
+        board1 = Board.objects.create(
+            slug="board1", owner=user, description="board1"
+        )
+        board2 = Board.objects.create(
+            slug="board2", owner=user, description="board2"
+        )
         conversation = create_conversation("foo", "conv1", user, board=board1)
         board2.add_conversation(conversation)
 
@@ -57,9 +71,13 @@ class TestBoardModel(ConversationRecipes):
             conversation = Conversation(text="foo", title="conv1", author=user)
             conversation.save()
 
-    def test_tags_should_return_all_the_conversation_tags_of_a_board(self, mk_user):
+    def test_tags_should_return_all_the_conversation_tags_of_a_board(
+        self, mk_user
+    ):
         user = mk_user(email="someuser@mail.com")
-        board = Board.objects.create(slug="board1", owner=user, description="board1")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board1"
+        )
         create_conversation("foo", "conv1", user, tags="tag1", board=board)
         create_conversation("bar", "conv2", user, tags="tag2", board=board)
 
@@ -69,7 +87,9 @@ class TestBoardModel(ConversationRecipes):
     def test_board_statistics(self, mk_user):
         user = mk_user(email="someuser@mail.com")
         user2 = mk_user(email="someuser2@mail.com")
-        board = Board.objects.create(slug="board", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board", owner=user, description="board"
+        )
         conversation1 = create_conversation("foo", "conv1", user, board=board)
         conversation2 = create_conversation("bar", "conv2", user, board=board)
 

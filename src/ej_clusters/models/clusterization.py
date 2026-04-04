@@ -47,7 +47,9 @@ class Clusterization(TimeStampedModel):
 
     @property
     def n_unprocessed_votes(self):
-        return self.conversation.votes.filter(created__gte=self.modified).count()
+        return self.conversation.votes.filter(
+            created__gte=self.modified
+        ).count()
 
     #
     # Statistics and annotated values
@@ -75,8 +77,15 @@ class Clusterization(TimeStampedModel):
         """
         Update clusters if necessary, unless force=True, in which it
         unconditionally updates the clusterization.
+
+        This method can be executed asynchronously using Celery by calling
+        the `update_clusterization` task with the clusterization id:
+            from ej_clusters.tasks import update_clusterization
+            update_clusterization.delay(clusterization_id)
         """
+
         if force or rules.test_rule("ej.must_update_clusterization", self):
+
             log.info(f"[clusters] updating cluster: {self.conversation}")
 
             if self.clusters.count() == 0:
@@ -89,7 +98,9 @@ class Clusterization(TimeStampedModel):
                 try:
                     self.clusters.find_clusters()
                 except ValueError as exc:
-                    log.error(f"[clusters] Error during clusterization: [{exc}]")
+                    log.error(
+                        f"[clusters] Error during clusterization: [{exc}]"
+                    )
                     raise
                 if self.cluster_status == ClusterStatus.PENDING_DATA:
                     self.cluster_status = ClusterStatus.ACTIVE
@@ -97,7 +108,8 @@ class Clusterization(TimeStampedModel):
 
     def get_stereotypes(self):
         return {
-            stereotype.name: str(stereotype.id) for stereotype in self.stereotypes.all()
+            stereotype.name: str(stereotype.id)
+            for stereotype in self.stereotypes.all()
         } or None
 
     @staticmethod
@@ -114,7 +126,9 @@ class Clusterization(TimeStampedModel):
         try:
             clusters = (
                 self.clusters.annotate(size=models.Count(models.F("users")))
-                .annotate_attr(separated_comments=lambda c: c.separate_comments())
+                .annotate_attr(
+                    separated_comments=lambda c: c.separate_comments()
+                )
                 .prefetch_related("stereotypes")
             )
             shapes = cluster_shapes(self, clusters, user)
@@ -124,14 +138,22 @@ class Clusterization(TimeStampedModel):
             log.error(f"Error found during clusterization: {exc} ({exc_name})")
             clusters = ()
             shapes_json = {
-                "shapes": [{"name": _("Error"), "size": 0, "intersections": [[0.0]]}]
+                "shapes": [
+                    {"name": _("Error"), "size": 0, "intersections": [[0.0]]}
+                ]
             }
         else:
             user_group = (
-                self.clusters.filter(users=user).values_list("name", flat=True).first()
+                self.clusters.filter(users=user)
+                .values_list("name", flat=True)
+                .first()
             )
 
-        return {"json_data": shapes_json, "user_group": user_group, "clusters": clusters}
+        return {
+            "json_data": shapes_json,
+            "user_group": user_group,
+            "clusters": clusters,
+        }
 
     @staticmethod
     def get_shape_data_by_groups(instance, user):
@@ -145,6 +167,8 @@ class Clusterization(TimeStampedModel):
 
     def get_biggest_cluster(self):
         if self.get_clusters_count() > 0:
-            clusters = self.clusters.annotate(size=models.Count(models.F("users")))
+            clusters = self.clusters.annotate(
+                size=models.Count(models.F("users"))
+            )
             return clusters.order_by("-size").first()
         return None

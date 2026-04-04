@@ -45,7 +45,9 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
     title = models.CharField(
         _("Title"),
         max_length=255,
-        help_text=_("Short description used to create URL slugs (e.g. School system)."),
+        help_text=_(
+            "Short description used to create URL slugs (e.g. School system)."
+        ),
     )
     text = models.TextField(
         _("Question"),
@@ -68,12 +70,15 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         help_text=_("Moderators can accept and reject comments."),
     )
     slug = AutoSlugField(unique=False, populate_from="title")
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, null=False, blank=False)
+    board = models.ForeignKey(
+        Board, on_delete=models.CASCADE, null=False, blank=False
+    )
     is_promoted = models.BooleanField(
         _("Promote conversation?"),
         default=False,
         help_text=_(
-            "Promoted conversations appears in the main /conversations/ " "endpoint."
+            "Promoted conversations appears in the main /conversations/ "
+            "endpoint."
         ),
     )
     is_hidden = models.BooleanField(
@@ -106,7 +111,9 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         default=False,
         blank=True,
         verbose_name=_("Send profile question?"),
-        help_text=_("Send a question to participants to complete their profile."),
+        help_text=_(
+            "Send a question to participants to complete their profile."
+        ),
     )
     votes_to_send_profile_question = models.IntegerField(
         default=0,
@@ -133,22 +140,30 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
     welcome_message = RichTextField(
         blank=True,
         null=True,
-        help_text=_("A message to be presented to participants before starting voting."),
+        help_text=_(
+            "A message to be presented to participants before starting voting."
+        ),
     )
     ending_message = RichTextField(
         blank=True,
         null=True,
-        help_text=_("Text to be presented to participants in the end of voting."),
+        help_text=_(
+            "Text to be presented to participants in the end of voting."
+        ),
     )
     participants_can_add_comments = models.BooleanField(
         _("Participants will be able to add comments to this conversation."),
         default=True,
-        help_text=_("Participants will be able to add comments to this conversation."),
+        help_text=_(
+            "Participants will be able to add comments to this conversation."
+        ),
     )
 
     objects = ConversationQuerySet.as_manager()
     tags = TaggableManager(through="ConversationTag", blank=True)
-    votes = property(lambda self: Vote.objects.filter(comment__conversation=self))
+    votes = property(
+        lambda self: Vote.objects.filter(comment__conversation=self)
+    )
 
     def set_overdue(self):
         """
@@ -164,7 +179,9 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
     @property
     def users(self):
         return (
-            get_user_model().objects.filter(votes__comment__conversation=self).distinct()
+            get_user_model()
+            .objects.filter(votes__comment__conversation=self)
+            .distinct()
         )
 
     # Comment managers
@@ -229,7 +246,9 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         this.user_comments.filter(status=Comment.STATUS.pending).count()
     )
     n_user_votes = lazy(this.user_votes.count())
-    n_user_final_votes = lazy(this.user_votes.exclude(choice=Choice.SKIP).count())
+    n_user_final_votes = lazy(
+        this.user_votes.exclude(choice=Choice.SKIP).count()
+    )
     is_user_favorite = lazy(this.is_favorite(this.for_user))
 
     # Statistical methods
@@ -300,7 +319,10 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
             and not self.author.has_perm(can_edit, self)
         ):
             raise ValidationError(
-                _("User does not have permission to create a promoted " "conversation.")
+                _(
+                    "User does not have permission to create a promoted "
+                    "conversation."
+                )
             )
 
     def get_absolute_url(self, board=None):
@@ -363,7 +385,14 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         return self.votes.filter(author=user)
 
     def create_comment(
-        self, author, content, commit=True, *, status=None, check_limits=True, **kwargs
+        self,
+        author,
+        content,
+        commit=True,
+        *,
+        status=None,
+        check_limits=True,
+        **kwargs,
     ):
         """
         Create a new comment object for the given user.
@@ -496,6 +525,15 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         if logo_image_url:
             return f"{host}/media/{logo_image_url}"
         return None
+
+    def update_clusterization(self, force=False, atomic=False):
+        """
+        Update clusters if necessary, unless force=True, in which it
+        unconditionally updates the clusterization.
+        """
+        if not getattr(self, "clusterization", None):
+            return
+        return self.clusterization.update_clusterization(force, atomic)
 
 
 #

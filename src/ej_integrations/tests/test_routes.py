@@ -47,6 +47,8 @@ class TestRoutes(ConversationRecipes):
     def test_200_for_webchat_preview_tool(self, conversation_db):
         client = Client()
         client.force_login(conversation_db.author)
-        tools_url = conversation_db.patch_url("conversation-tools:webchat-preview")
+        tools_url = conversation_db.patch_url(
+            "conversation-tools:webchat-preview"
+        )
         response = client.get(tools_url)
         assert response.context["rasa_domain"]

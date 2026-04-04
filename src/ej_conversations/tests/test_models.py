@@ -120,7 +120,9 @@ class TestVote:
         vote1 = comment_db.vote(mk_user(email="user1@domain.com"), "disagree")
         assert comment_db.disagree_count == 1
         assert comment_db.n_votes == 1
-        vote2 = comment_db.vote(mk_user(email="user2@domain.com"), Choice.DISAGREE)
+        vote2 = comment_db.vote(
+            mk_user(email="user2@domain.com"), Choice.DISAGREE
+        )
         assert comment_db.disagree_count == 2
         assert comment_db.n_votes == 2
         assert vote1.choice == vote2.choice
@@ -139,11 +141,15 @@ class TestVote:
         mk_comment = conversation.create_comment
         participant = mk_user(email="user1@domain.com")
         mk_comment(participant, "foo", status="approved", check_limits=False)
-        n_comments = participant.comments.filter(conversation=conversation).count()
+        n_comments = participant.comments.filter(
+            conversation=conversation
+        ).count()
         assert conversation.user_can_add_comment(participant, n_comments)
 
         mk_comment(participant, "bla", status="approved", check_limits=False)
-        n_comments = participant.comments.filter(conversation=conversation).count()
+        n_comments = participant.comments.filter(
+            conversation=conversation
+        ).count()
         assert not conversation.user_can_add_comment(participant, n_comments)
 
     def test_normalize_vote_using_labels(self):
@@ -200,7 +206,9 @@ class TestComment(ConversationRecipes):
         assert comment.next(index, comments) == next_comment.id
         assert not comment.previous(index, comments)
 
-    def test_previous_next_neighbour_comment(self, db, mk_conversation, mk_user):
+    def test_previous_next_neighbour_comment(
+        self, db, mk_conversation, mk_user
+    ):
         conversation = mk_conversation()
         user = mk_user(email="user@domain.com")
         mk_comment = conversation.create_comment
@@ -214,7 +222,9 @@ class TestComment(ConversationRecipes):
         assert comments[index].next(index, comments_id) == comments[2].id
         assert comments[index].previous(index, comments_id) == comments[0].id
 
-    def test_only_previous_neighbour_comment(self, db, mk_conversation, mk_user):
+    def test_only_previous_neighbour_comment(
+        self, db, mk_conversation, mk_user
+    ):
         conversation = mk_conversation()
         user = mk_user(email="user@domain.com")
         mk_comment = conversation.create_comment
@@ -379,7 +389,9 @@ class TestConversartionStatistics(ConversationRecipes):
         assert statistics["channel_votes"]["unknown"] == 1
         assert statistics["channel_votes"]["ej"] == 1
 
-    def test_statistics_for_channel_participants(self, db, mk_conversation, mk_user):
+    def test_statistics_for_channel_participants(
+        self, db, mk_conversation, mk_user
+    ):
         conversation = mk_conversation()
         user1 = mk_user(email="user1@domain.com")
         user2 = mk_user(email="user2@domain.com")

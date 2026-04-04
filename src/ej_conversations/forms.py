@@ -19,8 +19,12 @@ class CommentForm(EjModelForm):
         self.conversation = conversation
         super().__init__(*args, **kwargs)
 
-        self.fields["content"].widget.attrs["placeholder"] = _("Give your opinion here")
-        self.fields["content"].widget.attrs["title"] = _("Suggest a new comment")
+        self.fields["content"].widget.attrs["placeholder"] = _(
+            "Give your opinion here"
+        )
+        self.fields["content"].widget.attrs["title"] = _(
+            "Suggest a new comment"
+        )
 
     def clean_content(self):
         super().clean()
@@ -71,7 +75,9 @@ class ConversationForm(forms.ModelForm):
 
     comments_count = forms.IntegerField(initial=3, required=False)
     tags = forms.CharField(
-        label=_("Tags"), help_text=_("Tags, separated by commas."), required=False
+        label=_("Tags"),
+        help_text=_("Tags, separated by commas."),
+        required=False,
     )
     background_image = forms.ImageField(
         widget=CustomImageInputWidget(
@@ -81,7 +87,9 @@ class ConversationForm(forms.ModelForm):
         label=_("Background image"),
     )
     logo_image = forms.ImageField(
-        widget=CustomImageInputWidget(attrs={"id": "logo_input", "title": _("Logo")}),
+        widget=CustomImageInputWidget(
+            attrs={"id": "logo_input", "title": _("Logo")}
+        ),
         required=False,
         label=_("Logo"),
     )
@@ -123,7 +131,9 @@ class ConversationForm(forms.ModelForm):
         if not edited:
             return title
         if Conversation.objects.filter(title=title).exists():
-            raise ValidationError(_("This title already exists!"), code="duplicate")
+            raise ValidationError(
+                _("This title already exists!"), code="duplicate"
+            )
         return title
 
     def set_placeholder(self, field, value):
@@ -151,7 +161,11 @@ class ConversationForm(forms.ModelForm):
         return conversation
 
     def save_comments(
-        self, author, check_limits=True, status=Comment.STATUS.approved, **kwargs
+        self,
+        author,
+        check_limits=True,
+        status=Comment.STATUS.approved,
+        **kwargs,
     ):
         """
         Save model, tags and comments.

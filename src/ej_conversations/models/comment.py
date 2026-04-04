@@ -36,7 +36,9 @@ class Comment(StatusModel, TimeStampedModel):
         "Conversation", related_name="comments", on_delete=models.CASCADE
     )
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name="comments", on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        related_name="comments",
+        on_delete=models.CASCADE,
     )
     content = models.TextField(
         _("Content"),
@@ -119,9 +121,16 @@ class Comment(StatusModel, TimeStampedModel):
 
     def clean(self):
         super().clean()
-        if self.status == self.STATUS.rejected and not self.has_rejection_explanation:
+        if (
+            self.status == self.STATUS.rejected
+            and not self.has_rejection_explanation
+        ):
             raise ValidationError(
-                {"rejection_reason": _("Must give a reason to reject a comment")}
+                {
+                    "rejection_reason": _(
+                        "Must give a reason to reject a comment"
+                    )
+                }
             )
 
     def vote(self, author, choice, channel="ej", commit=True):

@@ -10,14 +10,19 @@ __all__ = ["ClusterRecipes"]
 
 class ClusterRecipes(ConversationRecipes):
     clusterization = Recipe(
-        Clusterization, conversation=_foreign_key(ConversationRecipes.conversation)
+        Clusterization,
+        conversation=_foreign_key(ConversationRecipes.conversation),
     )
-    cluster = Recipe(Cluster, clusterization=_foreign_key(clusterization), name="cluster")
+    cluster = Recipe(
+        Cluster, clusterization=_foreign_key(clusterization), name="cluster"
+    )
     stereotype = Recipe(
         Stereotype,
         name="stereotype",
         owner=_foreign_key(
-            ConversationRecipes.author.extend(email="stereotype-author@domain.com")
+            ConversationRecipes.author.extend(
+                email="stereotype-author@domain.com"
+            )
         ),
     )
     stereotype_vote = Recipe(

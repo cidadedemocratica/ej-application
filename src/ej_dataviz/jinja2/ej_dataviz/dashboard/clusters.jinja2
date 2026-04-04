@@ -1,10 +1,11 @@
 {% from "ej_clusters/includes/clusters-generator.jinja2" import clustersGenerator %}
-
 <div class="clusters-section content-grid">
     <div class="conversation-dashboard-section__title clusters-section__title flex margin-y4">
-        <div><h1 class="text-accent">{{_('Opinion Groups')}}</h1></div>
+        <div>
+            <h1 class="text-accent">{{ _("Opinion Groups") }}</h1>
+        </div>
     </div>
-    <div class="clusters-section__container {% if not json_data%}clusters-section__detail--padding{%endif%}">
+    <div class="clusters-section__container {% if not json_data %}clusters-section__detail--padding{% endif %}">
         {% if json_data %}
             <div class="clusters-section__chart">
                 <div id="clusters-canvas-container">
@@ -13,38 +14,42 @@
             </div>
             <div class="clusters-section__detail clusters-section__detail--filled">
                 <div class="margin-y2">
-                    <span class="helptext">{{_("Click on the cluster for more information.")}}</span>
+                    <span class="helptext">{{ _("Click on the cluster for more information.") }}</span>
                 </div>
-                <h2> {{_("In the group")}} {{ biggest_cluster_data.get('name') }}</h2>
+                <h2>{{ _("In the group") }} {{ biggest_cluster_data.get("name") }}</h2>
                 <div>
-                    <p class="clusters-section__comment-percentage">{{ biggest_cluster_data.get('percentage') }}%
-                        {{_("agree with")}} </p>
-                    <p class="clusters-section__main-comment"> {{ biggest_cluster_data.get('content') }}</p>
+                    <p class="clusters-section__comment-percentage">
+                        {{ biggest_cluster_data.get("percentage") }}%
+                        {{ _("agree with") }}
+                    </p>
+                    <p class="clusters-section__main-comment">{{ biggest_cluster_data.get("content") }}</p>
                 </div>
                 <div class="conversation-dashboard__button">
-                    <a class="button is-primary" href="{{url('boards:stereotype-votes-list', **conversation.get_url_kwargs())}}">
-                        {{_("Manage groups")}}
+                    <a class="button is-primary"
+                       href="{{ url('boards:stereotype-votes-list', **conversation.get_url_kwargs() ) }}">
+                        {{ _("Manage groups") }}
                     </a>
                 </div>
             </div>
-            {% else %}
+        {% else %}
             <div class="clusters-section__detail clusters-section__detail--empty">
                 <div>
-                    <p class="cluster-section__detail--null clusters-section__detail--no-margin">{{_("Your conversation does not have personas.")}}</p>
-                    <p class="bold clusters-section__detail--no-margin">{{_("Without personas, it's not possible to create opinion groups.")}}</p>
-                    <p>{{_("After modeling groups, you can check then here.")}}</p>
+                    <p class="cluster-section__detail--null clusters-section__detail--no-margin">
+                        {{ _("Your conversation does not have personas.") }}
+                    </p>
+                    <p class="bold clusters-section__detail--no-margin">
+                        {{ _("Without personas, it's not possible to create opinion groups.") }}
+                    </p>
+                    <p>{{ _("After modeling groups, you can check then here.") }}</p>
                 </div>
                 <div class="conversation-dashboard__button">
                     <a class="button is-primary float-left"
-                        href="{{ url('boards:cluster-edit', **conversation.get_url_kwargs()) }}">{{_("Creates groups")}}</a>
+                       href="{{ url('boards:stereotype-votes-list', **conversation.get_url_kwargs() ) }}">{{ _("Creates groups") }}</a>
                 </div>
             </div>
         {% endif %}
     </div>
 </div>
-
 {% block javascript %}
-    {% if json_data %}
-        {{ clustersGenerator(json_data) }}
-    {% endif %}
+    {% if json_data %}{{ clustersGenerator(json_data) }}{% endif %}
 {% endblock %}

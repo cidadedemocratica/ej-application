@@ -30,11 +30,15 @@ def main():
     locales = set(all_locales)
 
     for basedir in basedirs:
-        dirs = [os.path.join(basedir, locale, "LC_MESSAGES") for locale in locales]
+        dirs = [
+            os.path.join(basedir, locale, "LC_MESSAGES") for locale in locales
+        ]
         locations = []
         for ldir in dirs:
             for dirpath, dirnames, filenames in os.walk(ldir):
-                locations.extend((dirpath, f) for f in filenames if f.endswith(".po"))
+                locations.extend(
+                    (dirpath, f) for f in filenames if f.endswith(".po")
+                )
         compile_messages(locations)
 
 

@@ -10,16 +10,6 @@ TEST_DOMAIN = "https://domain.com.br"
 
 
 class TestRoutes(UrlTester, ConversationRecipes):
-    public_urls = ["/conversations/"]
-    user_urls = [
-        "/boards/board-slug/conversations/1/conversation/",
-    ]
-    admin_urls = ["/boards/board-slug/conversations/add/"]
-    owner_urls = [
-        "/boards/board-slug/conversations/1/conversation/edit/",
-        "/boards/board-slug/conversations/1/conversation/moderate/",
-    ]
-
     def get_data(self, request):
         conversation = request.getfixturevalue("conversation")
         try:
@@ -35,8 +25,12 @@ class TestRoutes(UrlTester, ConversationRecipes):
 
     def test_add_favorite_board(self, admin_client, root_db):
         user = User.objects.create_user("user1@email.br", "password")
-        board_1 = Board.objects.create(slug="board1", owner=user, description="board")
-        board_2 = Board.objects.create(slug="board2", owner=root_db, description="board2")
+        board_1 = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
+        board_2 = Board.objects.create(
+            slug="board2", owner=root_db, description="board2"
+        )
 
         base_url = reverse(
             "boards:conversation-update-favorite-boards", args=[board_1.slug]
@@ -56,8 +50,12 @@ class TestRoutes(UrlTester, ConversationRecipes):
 
     def test_remove_favorite_board(self, admin_client, root_db):
         user = User.objects.create_user("user1@email.br", "password")
-        board_1 = Board.objects.create(slug="board1", owner=user, description="board")
-        board_2 = Board.objects.create(slug="board2", owner=root_db, description="board2")
+        board_1 = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
+        board_2 = Board.objects.create(
+            slug="board2", owner=root_db, description="board2"
+        )
 
         root_db.favorite_boards.add(board_1)
         root_db.favorite_boards.add(board_2)
@@ -80,17 +78,25 @@ class TestRoutes(UrlTester, ConversationRecipes):
 
     def test_board_is_favorite(self, admin_client, root_db):
         user = User.objects.create_user("user1@email.br", "password")
-        board_1 = Board.objects.create(slug="board1", owner=user, description="board")
-        board_2 = Board.objects.create(slug="board2", owner=root_db, description="board2")
+        board_1 = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
+        board_2 = Board.objects.create(
+            slug="board2", owner=root_db, description="board2"
+        )
 
         root_db.favorite_boards.add(board_1)
 
-        url = reverse("boards:conversation-is-favorite-board", args=[board_1.slug])
+        url = reverse(
+            "boards:conversation-is-favorite-board", args=[board_1.slug]
+        )
         response = admin_client.get(url)
         response_json = json.loads(response.content)
         assert response_json["is_favorite_board"]
 
-        url = reverse("boards:conversation-is-favorite-board", args=[board_2.slug])
+        url = reverse(
+            "boards:conversation-is-favorite-board", args=[board_2.slug]
+        )
         response = admin_client.get(url)
         response_json = json.loads(response.content)
         assert not response_json["is_favorite_board"]

@@ -45,14 +45,18 @@ class TestUserView(UserRecipes):
 
         # Fetch token url and go to token page saving new password
         token_url = response.context[0]["url"].partition("/testserver")[2]
-        client.post(token_url, data={"password": "12345", "password_confirm": "12345"})
+        client.post(
+            token_url, data={"password": "12345", "password_confirm": "12345"}
+        )
 
         client.login(email=user.email, password="12345")
         assert client.session["_auth_user_id"] == str(user.pk)
 
     def test_remove_account(self, user_client, user_db):
         client, user = user_client, user_db
-        client.post("/account/remove/", data={"confirm": "true", "email": user.email})
+        client.post(
+            "/account/remove/", data={"confirm": "true", "email": user.email}
+        )
         updated_user = User.objects.get(id=user.id)
         assert updated_user.email.endswith("@deleted-account")
 
@@ -72,7 +76,9 @@ class TestUserView(UserRecipes):
         )
 
         assert response.status_code == 200
-        assert b"User with this Email address already exists." in response.content
+        assert (
+            b"User with this Email address already exists." in response.content
+        )
 
     def test_register_unmatch_passwords(self, client, db):
         response = client.post(

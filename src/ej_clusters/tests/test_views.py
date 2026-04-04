@@ -22,10 +22,16 @@ def conversation_with_comments(conversation, base_board, base_user):
     conversation.board = base_board
     conversation.save()
 
-    conversation.create_comment(base_user, "aa", status="approved", check_limits=False)
+    conversation.create_comment(
+        base_user, "aa", status="approved", check_limits=False
+    )
 
-    conversation.create_comment(base_user, "aaa", status="approved", check_limits=False)
-    conversation.create_comment(base_user, "aaaa", status="approved", check_limits=False)
+    conversation.create_comment(
+        base_user, "aaa", status="approved", check_limits=False
+    )
+    conversation.create_comment(
+        base_user, "aaaa", status="approved", check_limits=False
+    )
 
     conversation.save()
     return conversation
@@ -33,7 +39,9 @@ def conversation_with_comments(conversation, base_board, base_user):
 
 @pytest.fixture
 def stereotype(base_user):
-    stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=base_user)
+    stereotype, _ = Stereotype.objects.get_or_create(
+        name="name", owner=base_user
+    )
     stereotype.save()
     return stereotype
 
@@ -41,10 +49,13 @@ def stereotype(base_user):
 @pytest.fixture
 def stereotype_with_clusterization(conversation_with_comments, base_user):
     clusterization = Clusterization.objects.create(
-        conversation=conversation_with_comments, cluster_status=ClusterStatus.ACTIVE
+        conversation=conversation_with_comments,
+        cluster_status=ClusterStatus.ACTIVE,
     )
     cluster = Cluster.objects.create(name="name", clusterization=clusterization)
-    stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=base_user)
+    stereotype, _ = Stereotype.objects.get_or_create(
+        name="name", owner=base_user
+    )
     cluster.stereotypes.add(stereotype)
 
     return stereotype
@@ -96,7 +107,8 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         self, conversation_with_board, user_db, rf
     ):
         Clusterization.objects.create(
-            conversation=conversation_with_board, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_board,
+            cluster_status=ClusterStatus.ACTIVE,
         )
 
         client = Client()
@@ -136,10 +148,15 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         self, conversation_with_board, user_db, rf
     ):
         clusterization = Clusterization.objects.create(
-            conversation=conversation_with_board, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_board,
+            cluster_status=ClusterStatus.ACTIVE,
         )
-        cluster = Cluster.objects.create(name="name", clusterization=clusterization)
-        stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=user_db)
+        cluster = Cluster.objects.create(
+            name="name", clusterization=clusterization
+        )
+        stereotype, _ = Stereotype.objects.get_or_create(
+            name="name", owner=user_db
+        )
         cluster.stereotypes.add(stereotype)
 
         client = Client()
@@ -161,11 +178,16 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         self, conversation_with_board, user_db, rf
     ):
         clusterization = Clusterization.objects.create(
-            conversation=conversation_with_board, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_board,
+            cluster_status=ClusterStatus.ACTIVE,
         )
 
-        cluster = Cluster.objects.create(name="name", clusterization=clusterization)
-        stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=user_db)
+        cluster = Cluster.objects.create(
+            name="name", clusterization=clusterization
+        )
+        stereotype, _ = Stereotype.objects.get_or_create(
+            name="name", owner=user_db
+        )
         second_stereotype, _ = Stereotype.objects.get_or_create(
             name="second stereotype", owner=user_db
         )
@@ -188,7 +210,10 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         assert response.status_code == 200
 
     def test_create_valid_stereotype_votes_admin(
-        self, conversation_with_comments, admin_user, stereotype_with_clusterization
+        self,
+        conversation_with_comments,
+        admin_user,
+        stereotype_with_clusterization,
     ):
         client = Client()
         client.force_login(admin_user)
@@ -208,14 +233,19 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         )
         response = client.post(path, data)
 
-        votes = StereotypeVote.objects.filter(author=stereotype_with_clusterization)
+        votes = StereotypeVote.objects.filter(
+            author=stereotype_with_clusterization
+        )
 
         assert response.status_code == 200
         assert votes.exists()
         assert votes.count() == 3
 
     def test_create_valid_stereotype_votes_conversation_author(
-        self, conversation_with_comments, base_user, stereotype_with_clusterization
+        self,
+        conversation_with_comments,
+        base_user,
+        stereotype_with_clusterization,
     ):
         client = Client()
         client.force_login(base_user)
@@ -235,14 +265,19 @@ class TestStereotypeVoteList(ClusterRecipes, ConversationSetup):
         )
         response = client.post(path, data)
 
-        votes = StereotypeVote.objects.filter(author=stereotype_with_clusterization)
+        votes = StereotypeVote.objects.filter(
+            author=stereotype_with_clusterization
+        )
 
         assert response.status_code == 200
         assert votes.exists()
         assert votes.count() == 3
 
     def test_if_data_was_saved_correctly(
-        self, conversation_with_comments, base_user, stereotype_with_clusterization
+        self,
+        conversation_with_comments,
+        base_user,
+        stereotype_with_clusterization,
     ):
         client = Client()
         client.force_login(base_user)
@@ -304,13 +339,17 @@ class TestStereotypeDelete(ConversationSetup):
         assert "/login/" in response.url
         assert Stereotype.objects.filter(id=stereotype.id).exists()
 
-    def test_delete_stereotype(self, base_user, stereotype, conversation_with_comments):
+    def test_delete_stereotype(
+        self, base_user, stereotype, conversation_with_comments
+    ):
         url = reverse("stereotypes:delete", kwargs={"pk": stereotype.id})
 
         client = Client()
         client.force_login(base_user)
         clusters = stereotype.clusters
-        response = client.post(url, {"conversation_id": conversation_with_comments.id})
+        response = client.post(
+            url, {"conversation_id": conversation_with_comments.id}
+        )
 
         assert response.status_code == 302
         assert response.url == reverse(
@@ -328,7 +367,9 @@ class TestStereotypeDelete(ConversationSetup):
         client = Client()
         client.force_login(admin_user)
         clusters = stereotype.clusters
-        response = client.post(url, {"conversation_id": conversation_with_comments.id})
+        response = client.post(
+            url, {"conversation_id": conversation_with_comments.id}
+        )
 
         assert response.status_code == 302
         assert response.url == reverse(
@@ -342,10 +383,13 @@ class TestStereotypeDelete(ConversationSetup):
 class TestStereotypeEdit(TestStereotypeVoteList):
     @pytest.fixture
     def conversation_stereotype(self, base_user, conversation_with_board):
-        stereotype, _ = Stereotype.objects.get_or_create(name="name", owner=base_user)
+        stereotype, _ = Stereotype.objects.get_or_create(
+            name="name", owner=base_user
+        )
         stereotype.save()
         clusterization = Clusterization.objects.create(
-            conversation=conversation_with_board, cluster_status=ClusterStatus.ACTIVE
+            conversation=conversation_with_board,
+            cluster_status=ClusterStatus.ACTIVE,
         )
         clusterization.save()
         group = Cluster.objects.create(
@@ -358,7 +402,9 @@ class TestStereotypeEdit(TestStereotypeVoteList):
         return stereotype
 
     def test_post_edit_stereotype(self, base_user, conversation_stereotype):
-        url = reverse("stereotypes:edit", kwargs={"pk": conversation_stereotype.id})
+        url = reverse(
+            "stereotypes:edit", kwargs={"pk": conversation_stereotype.id}
+        )
 
         client = Client()
         client.force_login(base_user)
@@ -379,7 +425,9 @@ class TestStereotypeEdit(TestStereotypeVoteList):
     def test_post_edit_stereotype_without_required_field(
         self, base_user, conversation_stereotype
     ):
-        url = reverse("stereotypes:edit", kwargs={"pk": conversation_stereotype.id})
+        url = reverse(
+            "stereotypes:edit", kwargs={"pk": conversation_stereotype.id}
+        )
 
         client = Client()
         client.force_login(base_user)
@@ -402,7 +450,8 @@ class TestStereotypeCreate(ConversationSetup):
 
     def test_post_create_stereotype(self, clusterization, base_user):
         url = reverse(
-            "stereotypes:create", kwargs={"clusterization_id": clusterization.id}
+            "stereotypes:create",
+            kwargs={"clusterization_id": clusterization.id},
         )
         client = Client()
         client.force_login(base_user)
@@ -420,13 +469,16 @@ class TestStereotypeCreate(ConversationSetup):
         assert "integrateData" in response["HX-Trigger"]
         assert response.status_code == 200
         assert Stereotype.objects.filter(owner=base_user, name=name).exists()
-        assert Cluster.objects.filter(name=name, description=description).exists()
+        assert Cluster.objects.filter(
+            name=name, description=description
+        ).exists()
 
     def test_post_create_stereotype_without_required_field(
         self, clusterization, base_user
     ):
         url = reverse(
-            "stereotypes:create", kwargs={"clusterization_id": clusterization.id}
+            "stereotypes:create",
+            kwargs={"clusterization_id": clusterization.id},
         )
         client = Client()
         client.force_login(base_user)
@@ -442,23 +494,32 @@ class TestStereotypeCreate(ConversationSetup):
         assert response.status_code == 200
         assert "HX-Trigger" not in response
         assert not Stereotype.objects.filter(owner=base_user, name="").exists()
-        assert not Cluster.objects.filter(name="", description="description").exists()
+        assert not Cluster.objects.filter(
+            name="", description="description"
+        ).exists()
 
 
 class TestClusterIndex(ConversationSetup, ClusterRecipes):
     def test_cluster_when_there_is_no_groups(self, conversation_db, admin_db):
         conversation_db.get_clusterization()
-        url = reverse("boards:cluster-index", kwargs=conversation_db.get_url_kwargs())
+        url = reverse(
+            "boards:cluster-index", kwargs=conversation_db.get_url_kwargs()
+        )
         client = Client()
         client.force_login(admin_db)
         response = client.get(url)
 
         assert response.status_code == 200
-        assert b"the graph will be generated and displayed here after" in response.content
+        assert (
+            b"the graph will be generated and displayed here after"
+            in response.content
+        )
 
     def test_cluster_without_permission(self, conversation_db, base_user):
         conversation_db.get_clusterization()
-        url = reverse("boards:cluster-index", kwargs=conversation_db.get_url_kwargs())
+        url = reverse(
+            "boards:cluster-index", kwargs=conversation_db.get_url_kwargs()
+        )
         client = Client()
         client.force_login(base_user)
         response = client.get(url)

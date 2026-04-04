@@ -11,7 +11,11 @@ from .utils import (
     NUM_ENTRIES_DEFAULT,
 )
 
-from .utils import apply_user_filters, apply_conversation_filters, apply_board_filters
+from .utils import (
+    apply_user_filters,
+    apply_conversation_filters,
+    apply_board_filters,
+)
 
 
 @permission_required("ej.can_access_environment_management")
@@ -42,7 +46,9 @@ def recent_boards(request):
 
     if board_is_active:
         recent_boards = (
-            Board.objects.filter(conversation__gte=1).distinct().order_by("-created")
+            Board.objects.filter(conversation__gte=1)
+            .distinct()
+            .order_by("-created")
         )
     else:
         recent_boards = Board.objects.order_by("-created")
@@ -122,7 +128,9 @@ def searched_conversations(request):
     search_string = request.GET.get("searchString", "")
     page = int(request.GET.get("page", PAGINATOR_START_PAGE))
 
-    searched_conversations = apply_conversation_filters(order_by, sort, search_string)
+    searched_conversations = apply_conversation_filters(
+        order_by, sort, search_string
+    )
 
     paginator = Paginator(searched_conversations, num_entries)
 

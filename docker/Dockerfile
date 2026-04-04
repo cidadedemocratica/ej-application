@@ -1,4 +1,4 @@
-FROM python:3.9.19-slim-bookworm
+FROM python:3.12-slim-bookworm
 RUN apt-get update \
     && apt-get install -y \
     curl \
@@ -19,7 +19,7 @@ RUN sed -i 's/^# *\(pt_BR.UTF-8\)/\1/' /etc/locale.gen
 RUN locale-gen
 RUN touch /etc/apt/preferences.d/nodejs && \
     echo "Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 1001" > /etc/apt/preferences.d/nodejs
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && apt install nodejs -y
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && apt install nodejs -y
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="${PATH}:/root/.local/bin"
 RUN poetry config virtualenvs.create false

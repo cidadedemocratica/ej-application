@@ -28,7 +28,9 @@ class TestRasaConversation(ConversationRecipes):
         )
         assert rasa_conversation.id is not None
         with pytest.raises(IntegrityError):
-            RasaConversation.objects.create(conversation=conversation, domain=TEST_DOMAIN)
+            RasaConversation.objects.create(
+                conversation=conversation, domain=TEST_DOMAIN
+            )
 
 
 class TestRasaConversationForm(ConversationRecipes):
@@ -47,13 +49,17 @@ class TestRasaConversationForm(ConversationRecipes):
 
     def test_rasa_conversation_form_exists(self, db, mk_conversation):
         conversation = mk_conversation()
-        RasaConversation.objects.create(conversation=conversation, domain=TEST_DOMAIN)
+        RasaConversation.objects.create(
+            conversation=conversation, domain=TEST_DOMAIN
+        )
         form = RasaConversationForm(
             {"domain": TEST_DOMAIN, "conversation": conversation.id}
         )
         assert not form.is_valid()
         assert (
-            _("Rasa conversation with this Conversation and Domain already exists.")
+            _(
+                "Rasa conversation with this Conversation and Domain already exists."
+            )
             == form.errors["domain"][0]
         )
 
@@ -63,16 +69,22 @@ class TestRasaConversationForm(ConversationRecipes):
         conversation1 = mk_conversation()
         user = mk_user(email="test@domain.com")
         conversation2 = mk_conversation(author=user)
-        RasaConversation.objects.create(conversation=conversation1, domain=TEST_DOMAIN)
+        RasaConversation.objects.create(
+            conversation=conversation1, domain=TEST_DOMAIN
+        )
         form = RasaConversationForm(
             {"domain": TEST_DOMAIN, "conversation": conversation2.id}
         )
         assert (
-            _("Site already integrated with conversation Conversation, try another url.")
+            _(
+                "Site already integrated with conversation Conversation, try another url."
+            )
             == form.errors["domain"][0]
         )
 
-    def test_rasa_conversation_invalid_number_of_domains(self, db, mk_conversation):
+    def test_rasa_conversation_invalid_number_of_domains(
+        self, db, mk_conversation
+    ):
         conversation = mk_conversation()
         RasaConversation.objects.create(
             conversation=conversation, domain="https://domain1.com.br/"
@@ -90,7 +102,10 @@ class TestRasaConversationForm(ConversationRecipes):
             conversation=conversation, domain="https://domain5.com.br/"
         )
         form = RasaConversationForm(
-            {"domain": "https://domain6.com.br/", "conversation": conversation.id}
+            {
+                "domain": "https://domain6.com.br/",
+                "conversation": conversation.id,
+            }
         )
         assert not form.is_valid()
         assert (
@@ -153,8 +168,13 @@ class TestRasaConversationIntegrationsAPI(ConversationRecipes):
         conversation = mk_conversation()
         TEST_DOMAIN = "https://domain.com.br"
 
-        RasaConversation.objects.create(conversation=conversation, domain=TEST_DOMAIN)
-        path = self.BASE_URL + f"/rasa-conversations/integrations/?domain={TEST_DOMAIN}"
+        RasaConversation.objects.create(
+            conversation=conversation, domain=TEST_DOMAIN
+        )
+        path = (
+            self.BASE_URL
+            + f"/rasa-conversations/integrations/?domain={TEST_DOMAIN}"
+        )
 
         user = User.objects.create_user("email2@server.com", "password")
         token = Token.objects.create(user=user)
@@ -163,12 +183,17 @@ class TestRasaConversationIntegrationsAPI(ConversationRecipes):
         response = api.get(path)
 
         assert response.status_code == 200
-        assert conversation.text == response.data.get("conversation").get("text")
+        assert conversation.text == response.data.get("conversation").get(
+            "text"
+        )
         assert conversation.id == response.data.get("conversation").get("id")
         assert TEST_DOMAIN == response.data.get("domain")
 
     def test_no_integration_api(self, db):
-        url = self.BASE_URL + f"/rasa-conversations/integrations/?domain={TEST_DOMAIN}"
+        url = (
+            self.BASE_URL
+            + f"/rasa-conversations/integrations/?domain={TEST_DOMAIN}"
+        )
 
         user = User.objects.create_user("email2@server.com", "password")
         token = Token.objects.create(user=user)
@@ -188,15 +213,21 @@ class TestWebchatHelper:
         }
 
     def test_local_webchat_integration(self):
-        rasa_environment = WebchatHelper.get_rasa_domain(self.environments["local"])
+        rasa_environment = WebchatHelper.get_rasa_domain(
+            self.environments["local"]
+        )
         assert rasa_environment
 
     def test_dev_webchat_integration(self):
-        rasa_environment = WebchatHelper.get_rasa_domain(self.environments["dev"])
+        rasa_environment = WebchatHelper.get_rasa_domain(
+            self.environments["dev"]
+        )
         assert rasa_environment
 
     def test_prod_webchat_integration(self):
-        rasa_environment = WebchatHelper.get_rasa_domain(self.environments["prod"])
+        rasa_environment = WebchatHelper.get_rasa_domain(
+            self.environments["prod"]
+        )
         assert rasa_environment
 
     def test_if_instance_not_available(self):

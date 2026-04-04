@@ -104,28 +104,24 @@ class Conf(
         "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     }
 
-    DB_HOST = os.getenv("DB_HOST", "db")
-    if DB_HOST != "db":
-        DB_NAME = os.getenv("DB_NAME", "ej")
-        DB_USER = os.getenv("DB_USER", "ej")
-        DB_PASSWORD = os.getenv("DB_PASSWORD", "ej")
-        DB_PORT = os.getenv("DB_PORT", 5432)
-        DISABLE_SERVER_SIDE_CURSORS = os.getenv("DISABLE_SERVER_SIDE_CURSORS", False)
-        CONN_MAX_AGE = os.getenv("CONN_MAX_AGE", 0)
-        ATOMIC_REQUESTS = os.getenv("ATOMIC_REQUESTS", False)
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": DB_NAME,
-                "USER": DB_USER,
-                "PASSWORD": DB_PASSWORD,
-                "HOST": DB_HOST,
-                "PORT": DB_PORT,
-                "DISABLE_SERVER_SIDE_CURSORS": DISABLE_SERVER_SIDE_CURSORS,
-                "CONN_MAX_AGE": CONN_MAX_AGE,
-                "ATOMIC_REQUESTS": ATOMIC_REQUESTS,
-            }
+    DISABLE_SERVER_SIDE_CURSORS = os.getenv(
+        "DISABLE_SERVER_SIDE_CURSORS", False
+    )
+    CONN_MAX_AGE = os.getenv("CONN_MAX_AGE", 0)
+    ATOMIC_REQUESTS = os.getenv("ATOMIC_REQUESTS", False)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME", "ej"),
+            "USER": os.getenv("DB_USER", "ej"),
+            "PASSWORD": os.getenv("DB_PASSWORD", "ej"),
+            "HOST": os.getenv("DB_HOST", "db"),
+            "PORT": os.getenv("DB_PORT", 5432),
+            "DISABLE_SERVER_SIDE_CURSORS": DISABLE_SERVER_SIDE_CURSORS,
+            "CONN_MAX_AGE": CONN_MAX_AGE,
+            "ATOMIC_REQUESTS": ATOMIC_REQUESTS,
         }
+    }
 
     # django-cors-headers
     CORS_ALLOWED_ORIGINS = (

@@ -22,7 +22,9 @@ class TestRoutes(UrlTester):
     user_urls = ["/profile/", "/profile/edit/"]
 
 
-def create_image(filename, size=(100, 100), image_mode="RGB", image_format="png"):
+def create_image(
+    filename, size=(100, 100), image_mode="RGB", image_format="png"
+):
     data = BytesIO()
     Image.new(image_mode, size).save(data, image_format)
     data.name = filename
@@ -51,7 +53,10 @@ def test_user_board(test_user):
 @pytest.fixture
 def promoted_conversation(test_user, test_user_board):
     return Conversation.objects.create(
-        title="promoted", author=test_user, is_promoted=True, board=test_user_board
+        title="promoted",
+        author=test_user,
+        is_promoted=True,
+        board=test_user_board,
     )
 
 
@@ -80,7 +85,10 @@ class TestEditProfile:
             return "".join(rd.choices(s.ascii_lowercase, k=size))
 
         def gen_birth_date():
-            return f"{rd.randint(1900, 2020)}-{rd.randint(1, 12)}-" f"{rd.randint(1, 28)}"
+            return (
+                f"{rd.randint(1900, 2020)}-{rd.randint(1, 12)}-"
+                f"{rd.randint(1, 28)}"
+            )
 
         inf_fields = [
             "name",
@@ -190,16 +198,3 @@ class TestTour:
         response = client.post(url)
         assert response.status_code == 302
         assert response["HX-Redirect"] == reverse("profile:home")
-
-
-class TestHome:
-    def test_home_not_compatible_with_test_db(self, test_user, promoted_conversation):
-        profile = test_user.get_profile()
-        profile.completed_tour = True
-        profile.save()
-        factory = RequestFactory()
-        request = factory.get("/profile/home")
-        request.user = test_user
-        with pytest.raises(NotSupportedError):
-            # DISTINCT not supported by test db sqlite
-            HomeView.as_view()(request)

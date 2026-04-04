@@ -34,7 +34,9 @@ class ConversationSerializer(BaseApiSerializer):
     def get_links(self, obj):
         links = {
             "self": reverse(
-                "v1-conversations-detail", args=[obj.id], request=self.context["request"]
+                "v1-conversations-detail",
+                args=[obj.id],
+                request=self.context["request"],
             ),
             "vote-dataset": reverse(
                 "v1-conversations-vote-dataset",
@@ -42,7 +44,9 @@ class ConversationSerializer(BaseApiSerializer):
                 request=self.context["request"],
             ),
             "votes": reverse(
-                "v1-conversations-votes", args=[obj.id], request=self.context["request"]
+                "v1-conversations-votes",
+                args=[obj.id],
+                request=self.context["request"],
             ),
             "user-statistics": reverse(
                 "v1-conversations-user-statistics",
@@ -81,14 +85,18 @@ class ConversationSerializer(BaseApiSerializer):
         )
         links["author"] = (
             reverse(
-                "v1-users-detail", args=[obj.author.id], request=self.context["request"]
+                "v1-users-detail",
+                args=[obj.author.id],
+                request=self.context["request"],
             )
             if hasattr(obj, "author")
             else None
         )
         links["board"] = (
             reverse(
-                "v1-boards-detail", args=[obj.board.id], request=self.context["request"]
+                "v1-boards-detail",
+                args=[obj.board.id],
+                request=self.context["request"],
             )
             if hasattr(obj, "board")
             else None
@@ -135,7 +143,9 @@ class BoardConversationSerializer(BaseApiSerializer):
 
     def get_links(self, obj):
         return {
-            "self": reverse("v1-boards-conversations", args=[obj.board.id, obj.id]),
+            "self": reverse(
+                "v1-boards-conversations", args=[obj.board.id, obj.id]
+            ),
         }
 
 
@@ -156,7 +166,9 @@ class CommentSerializer(BaseApiSerializer):
     def get_links(self, obj):
         return {
             "self": reverse(
-                "v1-comments-detail", args=[obj.id], request=self.context["request"]
+                "v1-comments-detail",
+                args=[obj.id],
+                request=self.context["request"],
             ),
         }
 
@@ -198,7 +210,9 @@ class VoteSerializer(BaseApiSerializer):
     def get_links(self, obj):
         return {
             "self": reverse(
-                "v1-votes-detail", args=[obj.id], request=self.context["request"]
+                "v1-votes-detail",
+                args=[obj.id],
+                request=self.context["request"],
             ),
             "comment": reverse(
                 "v1-comments-detail",
@@ -216,7 +230,9 @@ class VoteSerializer(BaseApiSerializer):
     def save_hook(self, request, vote):
         user = request.user
         try:
-            skipped_vote = Vote.objects.get(comment=vote.comment, choice=0, author=user)
+            skipped_vote = Vote.objects.get(
+                comment=vote.comment, choice=0, author=user
+            )
             skipped_vote.choice = vote.choice
             skipped_vote.save()
             return skipped_vote

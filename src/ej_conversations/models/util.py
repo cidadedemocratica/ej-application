@@ -27,7 +27,9 @@ def make_clean(cls, commit=True, **kwargs):
 
 def patch_user_model(model):
     def conversations_with_votes(user):
-        return models.Conversation.objects.filter(comments__votes__author=user).distinct()
+        return models.Conversation.objects.filter(
+            comments__votes__author=user
+        ).distinct()
 
     model.conversations_with_votes = property(conversations_with_votes)
 
@@ -66,9 +68,15 @@ def statistics(conversation, cache=True):
         ),
         # Comment counts
         "comments": conversation.comments.aggregate(
-            approved=Count("status", filter=Q(status=models.Comment.STATUS.approved)),
-            rejected=Count("status", filter=Q(status=models.Comment.STATUS.rejected)),
-            pending=Count("status", filter=Q(status=models.Comment.STATUS.pending)),
+            approved=Count(
+                "status", filter=Q(status=models.Comment.STATUS.approved)
+            ),
+            rejected=Count(
+                "status", filter=Q(status=models.Comment.STATUS.rejected)
+            ),
+            pending=Count(
+                "status", filter=Q(status=models.Comment.STATUS.pending)
+            ),
             total=Count("status"),
         ),
         # Participants count
@@ -90,7 +98,9 @@ def statistics(conversation, cache=True):
             ),
         },
         "channel_votes": conversation.votes.aggregate(
-            webchat=Count("channel", filter=Q(channel=VoteChannels.RASA_WEBCHAT)),
+            webchat=Count(
+                "channel", filter=Q(channel=VoteChannels.RASA_WEBCHAT)
+            ),
             telegram=Count("channel", filter=Q(channel=VoteChannels.TELEGRAM)),
             whatsapp=Count("channel", filter=Q(channel=VoteChannels.WHATSAPP)),
             opinion_component=Count(
@@ -125,7 +135,9 @@ def statistics(conversation, cache=True):
                 filter=Q(channel=VoteChannels.UNKNOWN),
                 distinct="author",
             ),
-            ej=Count("author", filter=Q(channel=VoteChannels.EJ), distinct="author"),
+            ej=Count(
+                "author", filter=Q(channel=VoteChannels.EJ), distinct="author"
+            ),
         ),
     }
 

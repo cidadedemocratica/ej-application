@@ -26,7 +26,9 @@ class ParticipantCanAddComment(permissions.BasePermission):
                     return False
                 return True
             except Exception:
-                self.message = f"could not find conversation with ID {conversation_id}"
+                self.message = (
+                    f"could not find conversation with ID {conversation_id}"
+                )
                 return False
         return True
 
@@ -39,11 +41,15 @@ class ParticipantCanAddVotesAnonymously(permissions.BasePermission):
             conversation_id = request.data.get("conversation")
             try:
                 conversation = Conversation.objects.get(id=conversation_id)
-                if conversation.reaches_anonymous_particiption_limit(request.user):
+                if conversation.reaches_anonymous_particiption_limit(
+                    request.user
+                ):
                     return False
                 return True
             except Exception:
-                self.message = f"could not find conversation with ID {conversation_id}"
+                self.message = (
+                    f"could not find conversation with ID {conversation_id}"
+                )
                 return False
         return True
 

@@ -2,7 +2,10 @@ import pytest
 from rest_framework.test import APIClient
 from ej_profiles.models import Profile
 from ej_users.models import User
-from ej_conversations.tests.conftest import get_authorized_api_client, API_V1_URL
+from ej_conversations.tests.conftest import (
+    get_authorized_api_client,
+    API_V1_URL,
+)
 
 PHONE_NUMBER = "61982734758"
 
@@ -24,7 +27,9 @@ class TestGetRoutesProfile:
         profile = user.get_profile()
         profile.phone_number = PHONE_NUMBER
         profile.save()
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
         path = API_V1_URL + "/profiles/phone-number/"
         response = api.get(path)
         assert response.status_code == 200
@@ -35,7 +40,9 @@ class TestGetRoutesProfile:
         profile = user.get_profile()
         profile.phone_number = PHONE_NUMBER
         profile.save()
-        api = get_authorized_api_client({"email": user.email, "password": "password"})
+        api = get_authorized_api_client(
+            {"email": user.email, "password": "password"}
+        )
         path = API_V1_URL + "/profiles/set-phone-number/"
         response = api.post(path, {"phone_number": "61981178174"})
         assert response.status_code == 200
@@ -84,7 +91,9 @@ class TestProfileViewSet:
             "birth_date": "2000-01-01",
             "region": 1,
         }
-        response = api_client.put(API_V1_URL + "/profiles/{}/".format(user.id), new_data)
+        response = api_client.put(
+            API_V1_URL + "/profiles/{}/".format(user.id), new_data
+        )
         assert response.status_code == 200
         assert response.data["phone_number"] == "1234567890"
         assert response.data["race"] == 1
@@ -95,7 +104,9 @@ class TestProfileViewSet:
     def test_update_profile_delete_number(self, db, user, api_client):
         api_client.force_authenticate(user=user)
         new_data = {"phone_number": ""}
-        response = api_client.put(API_V1_URL + "/profiles/{}/".format(user.id), new_data)
+        response = api_client.put(
+            API_V1_URL + "/profiles/{}/".format(user.id), new_data
+        )
         assert response.status_code == 200
 
     def test_update_profile_action(self, db, user, api_client):
@@ -107,7 +118,9 @@ class TestProfileViewSet:
             "birth_date": "2000-01-01",
             "region": 2,
         }
-        response = api_client.put(API_V1_URL + "/profiles/update_profile/", new_data)
+        response = api_client.put(
+            API_V1_URL + "/profiles/update_profile/", new_data
+        )
         assert response.status_code == 200
         assert response.data["phone_number"] == "0987654321"
         assert response.data["race"] == 1
@@ -119,13 +132,15 @@ class TestProfileViewSet:
         api_client.force_authenticate(user=user)
         new_phone_number = "1234567890"
         response = api_client.post(
-            API_V1_URL + "/profiles/set-phone-number/", {"phone_number": new_phone_number}
+            API_V1_URL + "/profiles/set-phone-number/",
+            {"phone_number": new_phone_number},
         )
         assert response.status_code == 200
 
     def test_set_phone_number_unauthenticated(self, db, api_client):
         response = api_client.post(
-            API_V1_URL + "/profiles/set-phone-number/", {"phone_number": "1234567890"}
+            API_V1_URL + "/profiles/set-phone-number/",
+            {"phone_number": "1234567890"},
         )
         assert response.status_code == 401
 

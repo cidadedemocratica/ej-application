@@ -8,7 +8,9 @@ from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 from django.utils.translation import gettext as __
 from django.utils.translation import gettext_lazy as _
+from ej_clusters.tasks import update_clusterization
 from sidekick import import_later
+import json
 
 from ej_clusters.models import Cluster
 from ej_conversations.utils import check_promoted
@@ -48,7 +50,9 @@ def get_comments_dataframe(conversation, cluster_name):
     return df
 
 
-def sort_comments_df(comments_df, sort_by=OrderByOptions.AGREEMENT, sort_order="desc"):
+def sort_comments_df(
+    comments_df, sort_by=OrderByOptions.AGREEMENT, sort_order="desc"
+):
     """
     Sort the comments dataframe by a column option (disagree, convergence, participation or agree).
     """
@@ -83,7 +87,7 @@ def get_clusters(conversation):
     """
     clusterization = getattr(conversation, "clusterization", None)
     if clusterization:
-        clusterization.update_clusterization()
+        update_clusterization.delay(clusterization.id)
         clusters = clusterization.clusters.all()
     else:
         clusters = ()
@@ -147,7 +151,9 @@ def get_user_dataframe(conversation: Conversation, page_number: int = 1):
 
 def comments_data_common(comments, votes, filename, fmt, clusters=None):
     df = comments.statistics_summary_dataframe(votes=votes)
-    df = comments.extend_dataframe(df, "id", "author__email", "author__id", "created")
+    df = comments.extend_dataframe(
+        df, "id", "author__email", "author__id", "created"
+    )
     if clusters:
         for cluster in clusters:
             df = cluster.concat_statistics_to_dataframe(df)
@@ -189,6 +195,7 @@ def votes_as_dataframe(votes):
         "comment__id",
         "comment__conversation",
         "choice",
+        "channel",
     )
     df = votes.dataframe(*columns)
     df.columns = (
@@ -199,12 +206,15 @@ def votes_as_dataframe(votes):
         "comment_id",
         "conversation_id",
         "choice",
+        "channel",
     )
     votes_timestamps = list(
         map(lambda x: x[0].timestamp(), list(votes.values_list("created")))
     )
     df["created"] = votes_timestamps
-    df.choice = list(map({-1: "disagree", 1: "agree", 0: "skip"}.get, df["choice"]))
+    df.choice = list(
+        map({-1: "disagree", 1: "agree", 0: "skip"}.get, df["choice"])
+    )
     return df
 
 
@@ -226,14 +236,18 @@ def get_stop_words():
 def create_stereotype_coords(
     conversation, table, comments: list, transformer: Callable, kwargs: dict
 ):
-    if apps.is_installed("ej_clusters") and getattr(conversation, "clusterization", None):
+    if apps.is_installed("ej_clusters") and getattr(
+        conversation, "clusterization", None
+    ):
         from ej_clusters.models import Stereotype
 
         labels = conversation.clusterization.clusters.all().dataframe(
             "name", index="users"
         )
         if labels.shape != (0, 0):
-            table["cluster"] = labels.loc[labels.index.values != None]  # noqa: E711
+            table["cluster"] = labels.loc[
+                labels.index.values != None
+            ]  # noqa: E711
             table["cluster"].fillna(__("*Unknown*"), inplace=True)
             kwargs["labels"] = labels
 
@@ -252,7 +266,11 @@ def create_stereotype_coords(
                     "name": names[pk],
                     "symbol": "circle",
                     "coord": [x, y, names[pk], None, None],
-                    "label": {"show": True, "formatter": names[pk], "color": "black"},
+                    "label": {
+                        "show": True,
+                        "formatter": names[pk],
+                        "color": "black",
+                    },
                     "itemStyle": {
                         "opacity": 0.75,
                         "color": "rgba(180, 180, 180, 0.33)",
@@ -305,8 +323,16 @@ def format_echarts_option(
                             "data": [
                                 {
                                     "name": _("You!"),
-                                    "coord": [*user_coords, _("You!"), None, None],
-                                    "label": {"show": True, "formatter": _("You!")},
+                                    "coord": [
+                                        *user_coords,
+                                        _("You!"),
+                                        None,
+                                        None,
+                                    ],
+                                    "label": {
+                                        "show": True,
+                                        "formatter": _("You!"),
+                                    },
                                     "itemStyle": {"color": "black"},
                                     "tooltip": {"formatter": _("You!")},
                                 },
@@ -331,7 +357,9 @@ def clusters(request, conversation):
     clusterization = getattr(conversation, "clusterization", None)
     if clusterization:
         clusters_data = clusterization.get_shape_data(request.user)
-        return clusters_data.get("json_data")
+        shapes = clusters_data.get("json_data")
+        if json.loads(shapes)["shapes"] != []:
+            return shapes
     return None
 
 
@@ -346,7 +374,9 @@ def get_biggest_cluster_data(cluster, cluster_as_dataframe):
             "agree", ascending=False
         ).iloc[0]["comment"]
         positive_comment_percent = math.trunc(
-            cluster_as_dataframe.sort_values("agree", ascending=False).iloc[0]["agree"]
+            cluster_as_dataframe.sort_values("agree", ascending=False).iloc[0][
+                "agree"
+            ]
             * 100
         )
         return {
@@ -360,6 +390,9 @@ def get_biggest_cluster_data(cluster, cluster_as_dataframe):
 
 
 def get_conversation_biggest_cluster(request, conversation):
+    """
+    returns the biggest cluster and the most positive comment from it.
+    """
     clusterization = getattr(conversation, "clusterization", None)
     if clusterization:
         biggest_cluster = clusterization.get_biggest_cluster()
@@ -375,4 +408,6 @@ def comments_data_cluster(request, conversation, fmt, cluster_id, **kwargs):
     check_promoted(conversation, request)
     cluster = get_cluster_or_404(cluster_id, conversation)
     filename = conversation.slug + f"-{slugify(cluster.name)}-comments"
-    return comments_data_common(conversation.comments, cluster.votes, filename, fmt)
+    return comments_data_common(
+        conversation.comments, cluster.votes, filename, fmt
+    )

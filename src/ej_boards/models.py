@@ -26,9 +26,13 @@ class Board(TimeStampedModel):
         ("orange", _("Orange")),
         ("purple", _("Purple")),
     )
-    slug = models.SlugField(_("Slug"), unique=True, validators=[validate_board_slug])
+    slug = models.SlugField(
+        _("Slug"), unique=True, validators=[validate_board_slug]
+    )
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="boards"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="boards",
     )
     title = models.CharField(_("Title"), max_length=50)
     description = models.TextField(_("Description"), blank=True)
@@ -75,7 +79,9 @@ class Board(TimeStampedModel):
             pass
 
     def get_absolute_url(self):
-        return reverse("boards:conversation-list", kwargs={"board_slug": self.slug})
+        return reverse(
+            "boards:conversation-list", kwargs={"board_slug": self.slug}
+        )
 
     def url(self, which, **kwargs):
         kwargs["board"] = self

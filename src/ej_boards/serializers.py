@@ -16,13 +16,17 @@ class BoardSerializer(serializers.ModelSerializer):
     def get_links(self, obj):
         return {
             "self": reverse(
-                "v1-boards-detail", args=[obj.id], request=self.context["request"]
+                "v1-boards-detail",
+                args=[obj.id],
+                request=self.context["request"],
             ),
         }
 
 
 class BoardDetailSerializer(BoardSerializer):
-    conversations = BoardConversationSerializer(source="conversation_set", many=True)
+    conversations = BoardConversationSerializer(
+        source="conversation_set", many=True
+    )
 
     class Meta:
         model = Board

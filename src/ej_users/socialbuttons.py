@@ -40,12 +40,17 @@ def register_button(provider_id, fa_class=None, query=None):
 
         try:
             Provider = list(
-                filter(lambda provider: provider.id == provider_id, providers_classes)
+                filter(
+                    lambda provider: provider.id == provider_id,
+                    providers_classes,
+                )
             )[0]
             app = SocialApp.objects.get(provider=provider_id)
             provider = Provider(request, app)
             url = provider.get_login_url(
-                request, next=request.GET.get("next", redirect_url), **(query or {})
+                request,
+                next=request.GET.get("next", redirect_url),
+                **(query or {}),
             )
             return {
                 "provider": provider_id,

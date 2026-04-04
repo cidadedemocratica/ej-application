@@ -66,7 +66,9 @@ def next_comment(conversation, user):
 
         # Regular comments
         try:
-            return conversation.approved_comments.exclude(votes__author=user).random()
+            return conversation.approved_comments.exclude(
+                votes__author=user
+            ).random()
         except Comment.DoesNotExist:
             pass
 
@@ -94,7 +96,9 @@ def remaining_comments(conversation, user):
 
     fn = rules.get_value("ej.max_comments_per_conversation")
     max_comments = fn()
-    minimum = 1 if user.has_perm("ej.can_edit_conversation", conversation) else 0
+    minimum = (
+        1 if user.has_perm("ej.can_edit_conversation", conversation) else 0
+    )
     comments = user.comments.filter(conversation=conversation).count()
     return max(max_comments - comments, minimum)
 
@@ -220,7 +224,9 @@ def can_access_tools_page(user, conversation):
     * OR user is an superuser
     * OR user is the conversation author
     """
-    return user.is_staff or user.is_superuser or conversation.author.id == user.id
+    return (
+        user.is_staff or user.is_superuser or conversation.author.id == user.id
+    )
 
 
 @rules.register_perm("ej.can_access_all_conversations")

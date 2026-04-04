@@ -57,7 +57,9 @@ class ClusterSerializer(BaseApiSerializer):
 
 
 class ClusterizationSerializer(BaseApiSerializer):
-    conversation = serializers.SlugRelatedField(read_only=True, slug_field="slug")
+    conversation = serializers.SlugRelatedField(
+        read_only=True, slug_field="slug"
+    )
     links = serializers.SerializerMethodField()
 
     class Meta:
@@ -105,6 +107,8 @@ class StereotypeSerializer(BaseApiSerializer):
     def get_links(self, obj):
         return {
             "owner": reverse(
-                "v1-users-detail", args=[obj.owner.id], request=self.context["request"]
+                "v1-users-detail",
+                args=[obj.owner.id],
+                request=self.context["request"],
             ),
         }

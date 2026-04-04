@@ -25,7 +25,9 @@ class TestConversationForm:
         assert form.is_valid()
 
     def test_conversation_form_save(self, db, user):
-        board = Board.objects.create(slug="board1", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board1", owner=user, description="board"
+        )
         form = ConversationForm(
             {
                 "title": "conversation",
@@ -38,7 +40,9 @@ class TestConversationForm:
         )
         assert form.is_valid()
         with transaction.atomic():
-            conversation = form.save_comments(author=user, is_promoted=True, board=board)
+            conversation = form.save_comments(
+                author=user, is_promoted=True, board=board
+            )
 
         assert conversation
         assert conversation.author == user
@@ -63,7 +67,12 @@ class TestConversationForm:
             form.save()
 
     def test_repeated_comments_error(self, conversation, db, user):
-        Comment.objects.create(content="comment", conversation=conversation, author=user)
+        Comment.objects.create(
+            content="comment", conversation=conversation, author=user
+        )
         form = CommentForm({"content": "comment"}, conversation=conversation)
         assert not form.is_valid()
-        assert _("You already submitted this comment.") == form.errors["content"][0]
+        assert (
+            _("You already submitted this comment.")
+            == form.errors["content"][0]
+        )

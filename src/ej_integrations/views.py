@@ -39,7 +39,11 @@ def index(request, board_slug, conversation_id, slug):
         OpinionComponentTool(conversation),
         BotsTool(conversation, exclude=["whatsapp"]),
     ]
-    context = {"tools": tools, "conversation": conversation, "current_page": "tools"}
+    context = {
+        "tools": tools,
+        "conversation": conversation,
+        "current_page": "tools",
+    }
     return render(request, "ej_integrations/index.jinja2", context)
 
 
@@ -56,7 +60,9 @@ def mailing(request, board_slug, conversation_id, slug):
         template = generator.get_template()
         if "download" in request.POST:
             response = HttpResponse(template, content_type="text/html")
-            response["Content-Disposition"] = "attachment; filename=template.html"
+            response["Content-Disposition"] = (
+                "attachment; filename=template.html"
+            )
             return response
         if "preview" in request.POST:
             template = json.dumps(template, ensure_ascii=False)
@@ -89,9 +95,12 @@ class OpinionComponentView(UpdateView):
 
         opinion_component = self.get_object()
         self.opinion_component_form = OpinionComponentForm(
-            initial={"conversation": self.conversation}, instance=opinion_component
+            initial={"conversation": self.conversation},
+            instance=opinion_component,
         )
-        return render(request, self.template_name, self.get_context_data(**kwargs))
+        return render(
+            request, self.template_name, self.get_context_data(**kwargs)
+        )
 
     def post(self, request, *args, **kwargs):
         conversation_id = self.kwargs.get("conversation_id", None)
@@ -109,7 +118,9 @@ class OpinionComponentView(UpdateView):
                 )
 
         return redirect(
-            self.conversation.patch_url("conversation-tools:opinion-component-preview")
+            self.conversation.patch_url(
+                "conversation-tools:opinion-component-preview"
+            )
         )
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -136,7 +147,9 @@ def opinion_component_preview(request, board_slug, conversation_id, slug):
         "host": host,
         "conversation_author_token": preview_token,
     }
-    return render(request, "ej_integrations/opinion-component-preview.jinja2", context)
+    return render(
+        request, "ej_integrations/opinion-component-preview.jinja2", context
+    )
 
 
 @can_access_tool_page
@@ -149,14 +162,20 @@ def chatbot(request, board_slug, conversation_id, slug):
 @can_access_tool_page
 def telegram(request, board_slug, conversation_id, slug):
     conversation = Conversation.objects.get(id=conversation_id)
-    context = {"conversation": conversation, "tool": BotsTelegramTool(conversation)}
+    context = {
+        "conversation": conversation,
+        "tool": BotsTelegramTool(conversation),
+    }
     return render(request, "ej_integrations/telegram.jinja2", context)
 
 
 @can_access_tool_page
 def whatsapp(request, board_slug, conversation_id, slug):
     conversation = Conversation.objects.get(id=conversation_id)
-    context = {"conversation": conversation, "tool": BotsWhatsappTool(conversation)}
+    context = {
+        "conversation": conversation,
+        "tool": BotsWhatsappTool(conversation),
+    }
     return render(request, "ej_integrations/whatsapp.jinja2", context)
 
 
@@ -174,7 +193,9 @@ def webchat(request, board_slug, conversation_id, slug):
         RasaConversation.objects.get_or_create(
             conversation=conversation, domain=webchat_preview_url
         )
-        return redirect(conversation.patch_url("conversation-tools:webchat-preview"))
+        return redirect(
+            conversation.patch_url("conversation-tools:webchat-preview")
+        )
 
     if request.method == "POST":
         form = RasaConversationForm(request.POST)
@@ -211,7 +232,9 @@ def webchat_preview(request, board_slug, conversation_id, slug):
     return render(request, "ej_integrations/webchat-preview.jinja2", context)
 
 
-def delete_connection(request, board_slug, conversation_id, slug, connection_id):
+def delete_connection(
+    request, board_slug, conversation_id, slug, connection_id
+):
     user = request.user
 
     rasa_connection = RasaConversation.objects.get(id=connection_id)

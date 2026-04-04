@@ -92,7 +92,9 @@ class EjUserForm(EjForm):
         elif "request" in kwargs:
             user = kwargs["request"].user
         else:
-            raise TypeError("User must be provided from request or user parameter")
+            raise TypeError(
+                "User must be provided from request or user parameter"
+            )
         super().__init__(*args, **kwargs)
         self.user = user
 
@@ -142,7 +144,9 @@ class FileInput(widgets.FileInput):
 
         return div(class_="FileInput")[
             div(class_="PickFileButton")[
-                input_(style="opacity: 0", type_=w_type, name=w_name, **w_attrs),
+                input_(
+                    style="opacity: 0", type_=w_type, name=w_name, **w_attrs
+                ),
                 _("Choose a file"),
             ],
             div(class_="FileStatus")[_("No file chosen")],

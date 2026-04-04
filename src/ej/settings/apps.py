@@ -38,6 +38,7 @@ class InstalledAppsConf(Base, EjOptions):
         "django.contrib.messages",
         "django.contrib.sites",
         "django.contrib.postgres",
+        "django.contrib.staticfiles",
         "constance",
         "constance.backends.database",
         "anymail",
@@ -60,7 +61,7 @@ class InstalledAppsConf(Base, EjOptions):
         It searches src subdirectories looking for apps with
         IS_SUBMODULE global variable and adds them to self.project_apps.
         """
-        apps = os.listdir(f"{os.getcwd()}/src")
+        apps = os.listdir(f"{os.getcwd()}")
         additional_apps = [app for app in apps if app not in self.project_apps]
         submodule_apps = []
         for app in additional_apps:

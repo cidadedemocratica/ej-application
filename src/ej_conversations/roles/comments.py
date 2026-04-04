@@ -45,7 +45,11 @@ def comment_summary(comment: Comment, **kwargs):
     """
     Show comment summary.
     """
-    status_icon = {"approved": "thumbtack", "rejected": "ban", "pending": "clock"}
+    status_icon = {
+        "approved": "thumbtack",
+        "rejected": "ban",
+        "pending": "clock",
+    }
 
     return {
         "created": comment.created,

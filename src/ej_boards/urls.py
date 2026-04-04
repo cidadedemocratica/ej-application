@@ -2,8 +2,12 @@ from django.urls import path
 
 from ej_boards.utils import patched_register_app_routes
 from ej_clusters.urls.clusters import urlpatterns as cluster_urlpatterns
-from ej_clusters.urls.stereotype_votes import urlpatterns as stereotype_votes_urlpatterns
-from ej_conversations.urls.conversations import urlpatterns as conversation_urlpatterns
+from ej_clusters.urls.stereotype_votes import (
+    urlpatterns as stereotype_votes_urlpatterns,
+)
+from ej_conversations.urls.conversations import (
+    urlpatterns as conversation_urlpatterns,
+)
 from ej_dataviz.urls import urlpatterns as dataviz_urlpatterns
 from ej_integrations.urls import urlpatterns as conversation_tools_urlpatterns
 
@@ -45,7 +49,11 @@ urlpatterns = [
 patched_register_app_routes(
     urlpatterns, conversation_tools_urlpatterns, "conversation-tools"
 )
-patched_register_app_routes(urlpatterns, conversation_urlpatterns, "conversation")
+patched_register_app_routes(
+    urlpatterns, conversation_urlpatterns, "conversation"
+)
 patched_register_app_routes(urlpatterns, cluster_urlpatterns, "cluster")
-patched_register_app_routes(urlpatterns, stereotype_votes_urlpatterns, "stereotype-votes")
+patched_register_app_routes(
+    urlpatterns, stereotype_votes_urlpatterns, "stereotype-votes"
+)
 patched_register_app_routes(urlpatterns, dataviz_urlpatterns, "dataviz")

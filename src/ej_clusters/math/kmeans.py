@@ -5,6 +5,7 @@ This module has no dependency on EJ and will stay here for a while.
 Once the API stabilizes, it will be implemented in Cython and will move to an
 external package.
 """
+
 import random
 
 from sidekick import import_later
@@ -47,7 +48,9 @@ def worker(nruns, objective, func, *args, **kwargs):
     return max(results, key=objective)
 
 
-def kmeans_stereotypes(data, stereotypes, max_iter=20, distance=None, aggregator=None):
+def kmeans_stereotypes(
+    data, stereotypes, max_iter=20, distance=None, aggregator=None
+):
     """
     Implements k-means clustering with defined stereotypes.
 
@@ -87,7 +90,12 @@ def kmeans_stereotypes(data, stereotypes, max_iter=20, distance=None, aggregator
 
 
 def kmeans_run(
-    data, k: int, max_iter=10, init_centroids=None, distance=None, aggregator=None
+    data,
+    k: int,
+    max_iter=10,
+    init_centroids=None,
+    distance=None,
+    aggregator=None,
 ):
     """
     Compute a single k-means run with at most max_iter iterations.
@@ -283,7 +291,10 @@ def vq(data, labels, centroids, distance=None, transform=squared):
     """
     distance = distance or euclidean_distance
     return sum(
-        sum(transform(distance(centroid, sample)) for sample in data[labels == k])
+        sum(
+            transform(distance(centroid, sample))
+            for sample in data[labels == k]
+        )
         for k, centroid in enumerate(centroids)
     )
 

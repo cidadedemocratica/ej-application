@@ -10,7 +10,9 @@ from django.shortcuts import reverse
 class TestBoardsView(ConversationRecipes):
     def test_owner_can_delete_board(self, db):
         user = User.objects.create_user("user@email.br", "password")
-        board = Board.objects.create(slug="board", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board", owner=user, description="board"
+        )
         create_conversation("foo", "conv1", user, board=board)
 
         client = Client()
@@ -28,7 +30,9 @@ class TestBoardsView(ConversationRecipes):
 
     def test_board_can_only_be_deleted_by_owner(self, db):
         user = User.objects.create_user("user@email.br", "password")
-        board = Board.objects.create(slug="board", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board", owner=user, description="board"
+        )
         create_conversation("foo", "conv1", user, board=board)
 
         user = User.objects.create_user("second_user@email.br", "password")
@@ -46,7 +50,9 @@ class TestBoardsView(ConversationRecipes):
 
     def test_board_should_not_be_deleted_when_there_is_only_one_board(self, db):
         user = User.objects.create_user("user_tester@email.br", "password")
-        board = Board.objects.create(slug="board", owner=user, description="board")
+        board = Board.objects.create(
+            slug="board", owner=user, description="board"
+        )
         create_conversation("foo", "conv1", user, board=board)
 
         client = Client()
@@ -63,7 +69,8 @@ class TestBoardsView(ConversationRecipes):
         assert user.boards.count() == 1
 
         delete_board_url = reverse(
-            "boards:board-delete", kwargs={"board_slug": user.boards.first().slug}
+            "boards:board-delete",
+            kwargs={"board_slug": user.boards.first().slug},
         )
 
         assert user.boards.count() == 1

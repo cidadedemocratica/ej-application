@@ -82,7 +82,9 @@ class ConversationAdmin(AuthorIsUserMixin, admin.ModelAdmin):
     def _delete_qs(self, request, qs, which):
         n = qs.count()
         qs.delete()
-        self.message_user(request, _("{n} {which} removed!").format(n=n, which=which))
+        self.message_user(
+            request, _("{n} {which} removed!").format(n=n, which=which)
+        )
 
     #
     #  Debug actions
@@ -107,7 +109,9 @@ class ConversationAdmin(AuthorIsUserMixin, admin.ModelAdmin):
     def random_comments_100(self, request, queryset):
         self._random_comments(request, queryset, 100)
 
-    @descr(_("Create 1000 random comments in each selected conversation (slow)"))
+    @descr(
+        _("Create 1000 random comments in each selected conversation (slow)")
+    )
     def random_comments_1000(self, request, queryset):
         self._random_comments(request, queryset, 1000)
 

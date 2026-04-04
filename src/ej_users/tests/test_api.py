@@ -129,7 +129,9 @@ class EJRequests:
 
 class TestUserAPI:
 
-    SECRET_ID = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"
+    SECRET_ID = (
+        "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"
+    )
 
     def test_generate_access_token(self, db, user):
         api = APIClient()
@@ -177,7 +179,9 @@ class TestUserAPI:
         assert user.name == "David Silva"
         assert user.email == "david@example.com"
 
-    def test_registration_rest_auth_incorrect_confirm_password(self, client, db):
+    def test_registration_rest_auth_incorrect_confirm_password(
+        self, client, db
+    ):
         response = client.post(
             API_V1_URL + "/users/",
             data={
@@ -216,10 +220,18 @@ class TestUserAPI:
     def test_merge_users_with_empty_votes(
         self, client, db, conversation, user, another_user
     ):
-        comment_1 = conversation.create_comment(another_user, "my comment 1", "approved")
-        comment_2 = conversation.create_comment(another_user, "my comment 2", "approved")
-        comment_3 = conversation.create_comment(another_user, "my comment 3", "approved")
-        comment_4 = conversation.create_comment(another_user, "my comment 4", "approved")
+        comment_1 = conversation.create_comment(
+            another_user, "my comment 1", "approved"
+        )
+        comment_2 = conversation.create_comment(
+            another_user, "my comment 2", "approved"
+        )
+        comment_3 = conversation.create_comment(
+            another_user, "my comment 3", "approved"
+        )
+        comment_4 = conversation.create_comment(
+            another_user, "my comment 4", "approved"
+        )
         comment_1.vote(author=another_user, choice=Choice.DISAGREE)
         comment_2.vote(author=another_user, choice=Choice.DISAGREE)
         comment_3.vote(author=another_user, choice=Choice.AGREE)
@@ -232,9 +244,15 @@ class TestUserAPI:
     def test_merge_users_with_equal_votes(
         self, client, db, conversation, user, another_user
     ):
-        comment_1 = conversation.create_comment(another_user, "my comment 1", "approved")
-        comment_2 = conversation.create_comment(another_user, "my comment 2", "approved")
-        comment_3 = conversation.create_comment(another_user, "my comment 3", "approved")
+        comment_1 = conversation.create_comment(
+            another_user, "my comment 1", "approved"
+        )
+        comment_2 = conversation.create_comment(
+            another_user, "my comment 2", "approved"
+        )
+        comment_3 = conversation.create_comment(
+            another_user, "my comment 3", "approved"
+        )
         comment_1.vote(author=another_user, choice=Choice.DISAGREE)
         comment_2.vote(author=another_user, choice=Choice.DISAGREE)
         comment_1.vote(author=user, choice=Choice.AGREE)
@@ -326,7 +344,9 @@ class TestUserAPI:
     def test_create_user_with_secret_id(self, client, db):
         ej_requests = EJRequests(client)
 
-        response = ej_requests.create_user(UserType.AUTH, secret_id=TestUserAPI.SECRET_ID)
+        response = ej_requests.create_user(
+            UserType.AUTH, secret_id=TestUserAPI.SECRET_ID
+        )
         assert response.status_code == 201
 
         user = User.objects.get(email=UserFake.USERS[UserType.AUTH]["email"])
@@ -352,14 +372,18 @@ class TestUserAPI:
         )
         assert response.status_code == 200
 
-        user = User.objects.get(secret_id=User.encode_secret_id(TestUserAPI.SECRET_ID))
+        user = User.objects.get(
+            secret_id=User.encode_secret_id(TestUserAPI.SECRET_ID)
+        )
         assert user.name == UserFake.USERS[UserType.AUTH]["name"]
         assert user.email == UserFake.USERS[UserType.AUTH]["email"]
         assert user.secret_id == User.encode_secret_id(TestUserAPI.SECRET_ID)
         assert user.has_completed_registration
 
         with pytest.raises(User.DoesNotExist):
-            user = User.objects.get(email=UserFake.USERS[UserType.ANONYMOUS]["email"])
+            user = User.objects.get(
+                email=UserFake.USERS[UserType.ANONYMOUS]["email"]
+            )
 
     def test_get_token_by_email_and_password(self, client, db):
         ej_requests = EJRequests(client)
@@ -436,10 +460,15 @@ class TestUserAPI:
         )
         assert response.status_code == 404
 
-    def test_external_service_try_to_request_token_for_nonexistent_user(self, client, db):
+    def test_external_service_try_to_request_token_for_nonexistent_user(
+        self, client, db
+    ):
         response = client.post(
             API_V1_URL + "/token/",
-            data={"email": "noexistentuser@mail.com", "password": "invalidpassword"},
+            data={
+                "email": "noexistentuser@mail.com",
+                "password": "invalidpassword",
+            },
             content_type="application/json",
         )
         assert response.status_code == 404

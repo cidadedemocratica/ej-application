@@ -38,7 +38,9 @@ class User(AbstractUser):
     )
     username = property(lambda self: self.name or self.email.replace("@", "__"))
     agree_with_terms = models.BooleanField(
-        default=True, help_text=_("Terms of use"), verbose_name=_("Terms of use")
+        default=True,
+        help_text=_("Terms of use"),
+        verbose_name=_("Terms of use"),
     )
     agree_with_privacy_policy = models.BooleanField(
         default=True,
@@ -109,7 +111,9 @@ class User(AbstractUser):
     def encode_secret_id(secret_id: Text) -> Any:
         if not secret_id:
             return None
-        return jwt.encode({"secret_id": secret_id}, JWT_SECRET, algorithm="HS256")
+        return jwt.encode(
+            {"secret_id": secret_id}, JWT_SECRET, algorithm="HS256"
+        )
 
 
 class UserSecretIdManager:
@@ -169,7 +173,7 @@ class PasswordResetToken(TimeStampedModel):
 
     @property
     def is_expired(self):
-        time_now = datetime.now(timezone.utc)
+        time_now = timezone.now()
         return (time_now - self.created).total_seconds() > 600
 
     def use(self, commit=True):
@@ -182,7 +186,7 @@ def clean_expired_tokens():
     """
     Clean up used and expired tokens.
     """
-    threshold = datetime.now(timezone.utc) - timedelta(seconds=600)
+    threshold = timezone.now() - timedelta(seconds=600)
     expired = PasswordResetToken.objects.filter(created__lte=threshold)
     used = PasswordResetToken.objects.filter(is_used=True)
     (used | expired).delete()

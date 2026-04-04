@@ -75,7 +75,9 @@ class ConversationMixin:
             comments = self.comments(conversation).filter(comments__in=comments)
         return self._votes_from_comments(comments)
 
-    def votes_table(self, data_imputation=None, conversation=None, comments=None):
+    def votes_table(
+        self, data_imputation=None, conversation=None, comments=None
+    ):
         """
         An alias to self.votes().table(), accepts parameters of both functions.
         """
@@ -129,7 +131,10 @@ class UserMixin(ConversationMixin):
 
         votes = votes.dataframe("comment", "author", "choice")
         votes_statistics_df = votes_statistics(
-            votes, participation=participation, convergence=convergence, ratios=True
+            votes,
+            participation=participation,
+            convergence=convergence,
+            ratios=True,
         )
         votes_statistics_df *= normalization
 
@@ -139,7 +144,11 @@ class UserMixin(ConversationMixin):
         # Save extended dataframe
         extend_fields = list(extend_fields)
         votes_statistics_df = self.extend_dataframe(
-            votes_statistics_df, "name", "email", "date_joined", *extend_full_fields
+            votes_statistics_df,
+            "name",
+            "email",
+            "date_joined",
+            *extend_full_fields,
         )
         if extend_fields:
             columns = list(votes_statistics_df.columns[: -len(extend_fields)])
@@ -161,16 +170,22 @@ class UserMixin(ConversationMixin):
         # Retrieve in a single queryset the conversation clusters and the clustered participants.
         # The queryset is converted to a list of tuples. Each tuple has the user email and his cluster.
         users_clusters = list(
-            db.ej_clusters.clusters.filter(clusterization__conversation=conversation)
+            db.ej_clusters.clusters.filter(
+                clusterization__conversation=conversation
+            )
             .prefetch_related("users")
             .values_list("users__email", "name")
         )
 
         # Convert the list of tuples to a Pandas Dataframe.
-        users_clusters_df = pd.DataFrame(users_clusters, columns=["email", "group"])
+        users_clusters_df = pd.DataFrame(
+            users_clusters, columns=["email", "group"]
+        )
 
         # Merge the votes Dataframe with the clusters Dataframe.
-        votes_statistics_df = votes_statistics_df.merge(users_clusters_df, how="outer")
+        votes_statistics_df = votes_statistics_df.merge(
+            users_clusters_df, how="outer"
+        )
 
         # Fix the Dataframe lines without a valid cluster.
         votes_statistics_df[["group"]] = votes_statistics_df[["group"]].fillna(

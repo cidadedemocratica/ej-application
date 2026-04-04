@@ -1,53 +1,57 @@
-<div class="stereotype-cards__card-comments tab-{{stereotype_action}}" id="comment-{{stereotype_action}}-{{ comment_id }}">
+<div class="stereotype-cards__card-comments tab-{{ stereotype_action }}"
+     id="comment-{{ stereotype_action }}-{{ comment_id }}">
     <p>{{ comment_content }}</p>
-
-    <div class="stereotype-cards__vote-buttons" id="vote-buttons-{{stereotype_action}}-{{ comment_id }}">
+    <div class="stereotype-cards__vote-buttons"
+         id="vote-buttons-{{ stereotype_action }}-{{ comment_id }}">
         <button type="button"
-                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
-                    class="is-clear agree-{{initial_vote_value}}"
+                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{ stereotype_action }}')"
+                class="is-clear agree-{{ initial_vote_value }}"
                 name="create"
                 value="1">
-            <i class="fa fa-check"></i> {{ _('Agree') }}
+            <i class="fa fa-check"></i> {{ _("Agree") }}
         </button>
         <button type="button"
-                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
-                class="is-clear skip-{{initial_vote_value}}"
+                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{ stereotype_action }}')"
+                class="is-clear skip-{{ initial_vote_value }}"
                 name="create"
                 value="0">
-            <i class="far fa-meh"></i> {{ _('Neutral') }}
+            <i class="far fa-meh"></i> {{ _("Neutral") }}
         </button>
         <button type="button"
-                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{stereotype_action}}')"
-                class="is-clear disagree-{{initial_vote_value}}"
+                onclick="updateButtonColors(this.value, '{{ comment_id }}', '{{ stereotype_action }}')"
+                class="is-clear disagree-{{ initial_vote_value }}"
                 name="create"
                 value="-1">
-            <i class="fa fa-times"></i> {{ _('Disagree') }}
+            <i class="fa fa-times"></i> {{ _("Disagree") }}
         </button>
         <button class="stereotype-cards__vote-buttons__delete {% if not widget.value.0 %}hide{% endif %}"
                 name="update"
                 type="button"
-                id="clear-button-{{stereotype_action}}-{{ comment_id }}"
-                onclick="clearVote('{{ comment_id }}', '{{stereotype_action}}')"
-        >
-                    {{ _('Clear vote') }}
-        </button>
-        <button class="is-clear stereotype-cards__vote-buttons__delete--icon-{{initial_vote_value}} {% if not widget.value.0 %}hide{% endif %}"
+                id="clear-button-{{ stereotype_action }}-{{ comment_id }}"
+                onclick="clearVote('{{ comment_id }}', '{{ stereotype_action }}')">{{ _("Clear vote") }}</button>
+        <button class="is-clear stereotype-cards__vote-buttons__delete--icon-{{ initial_vote_value }} {% if not widget.value.0 %}hide{% endif %}"
                 name="update"
                 type="button"
-                id="clear-icon-button-{{stereotype_action}}-{{ comment_id }}" onclick="clearVote('{{ comment_id }}', '{{stereotype_action}}')">
-                <img src="{{static('img/icons/circle-xmark-regular.svg')}}">
+                id="clear-icon-button-{{ stereotype_action }}-{{ comment_id }}"
+                onclick="clearVote('{{ comment_id }}', '{{ stereotype_action }}')">
+            <img src="{{ static("img/icons/circle-xmark-regular.svg") }}">
         </button>
     </div>
     <hr class="divider-section">
-
-    <select name="{{ widget.name }}" id="select-{{stereotype_action}}-{{comment_id}}" class="hide" {% for name, value in widget.attrs.items() %}{% if value is not sameas False %} {{ name }}{% if value is not sameas True %}="{{ value }}"{% endif %}{% endif %}{% endfor %}>
-        <option value="" {% if widget.value is sameas "" %} selected {% endif %}>--------</option>
-        <option value="1" {% if widget.value is sameas "agree" %} selected {% endif %}>agree</option>
-        <option value="-1" {% if widget.value is sameas "disagree" %} selected {% endif %}>disagree</option>
-        <option value="0" {% if widget.value is sameas "skip" %} selected {% endif %}>skip</option>
+    <select name="{{ widget.name }}"
+            id="select-{{ stereotype_action }}-{{ comment_id }}"
+            class="hide"
+            {% for name, value in widget.attrs.items() %}{% if value is not sameas False %} {{ name }}{% if value is not sameas True %}="{{ value }}"{% endif %}
+            {% endif %}
+            {% endfor %}>
+        <option value="" {% if widget.value is sameas "" %}selected{% endif %}>--------</option>
+        <option value="1"
+                {% if widget.value is sameas "agree" %}selected{% endif %}>agree</option>
+        <option value="-1"
+                {% if widget.value is sameas "disagree" %}selected{% endif %}>disagree</option>
+        <option value="0" {% if widget.value is sameas "skip" %}selected{% endif %}>skip</option>
     </select>
 </div>
-
 <script>
 function showClearButton(commentId, selectedButton, stereotypeAction){
     const icon = $(`#clear-icon-button-${stereotypeAction}-${commentId}`);

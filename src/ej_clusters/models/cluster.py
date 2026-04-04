@@ -27,9 +27,13 @@ class Cluster(TimeStampedModel):
     )
     name = models.CharField(_("Name"), max_length=64)
     description = models.TextField(
-        _("Description"), blank=True, help_text=_("How was this cluster conceived?")
+        _("Description"),
+        blank=True,
+        help_text=_("How was this cluster conceived?"),
     )
-    users = models.ManyToManyField(get_user_model(), related_name="clusters", blank=True)
+    users = models.ManyToManyField(
+        get_user_model(), related_name="clusters", blank=True
+    )
     stereotypes = models.ManyToManyField("Stereotype", related_name="clusters")
     conversation = delegate_to("clusterization")
     comments = delegate_to("clusterization")
@@ -100,7 +104,9 @@ class Cluster(TimeStampedModel):
         n_disagree = (table < 0).sum()
         total = n_agree + n_disagree + (table == 0).sum() + tol
 
-        d_agree = dict(((n_agree[n_agree >= n_disagree] + tol) / total).dropna().items())
+        d_agree = dict(
+            ((n_agree[n_agree >= n_disagree] + tol) / total).dropna().items()
+        )
         d_disagree = dict(
             ((n_disagree[n_disagree > n_agree] + tol) / total).dropna().items()
         )
@@ -134,7 +140,9 @@ class Cluster(TimeStampedModel):
         concat_results_to_dataframe adds cluster voting results to df argument.
         Useful for exporting comments raw data.
         """
-        cluster_df = self.comments.statistics_summary_dataframe(votes=self.votes)
+        cluster_df = self.comments.statistics_summary_dataframe(
+            votes=self.votes
+        )
         if not cluster_df.empty:
             cluster_df["group"] = self.name
             df = pd.concat([df, cluster_df])

@@ -107,13 +107,25 @@ class EjRecipes(metaclass=FixtureMeta):
     Base recipes for the site
     """
 
-    user = Recipe(User, is_superuser=False, email="user@domain.com", name="user")
-    author = Recipe(User, is_superuser=False, email="author@domain.com", name="author")
+    user = Recipe(
+        User, is_superuser=False, email="user@domain.com", name="user"
+    )
+    author = Recipe(
+        User, is_superuser=False, email="author@domain.com", name="author"
+    )
     root = Recipe(
-        User, is_superuser=True, email="root@domain.com", is_staff=True, name="root"
+        User,
+        is_superuser=True,
+        email="root@domain.com",
+        is_staff=True,
+        name="root",
     )
     admin = Recipe(
-        User, is_superuser=True, email="admin@domain.com", is_staff=True, name="admin"
+        User,
+        is_superuser=True,
+        email="admin@domain.com",
+        is_staff=True,
+        name="admin",
     )
 
     @pytest.fixture
@@ -164,7 +176,7 @@ class EjRecipes(metaclass=FixtureMeta):
     assert_contains = wraps(TestCase.assertContains)
     assert_not_contains = wraps(TestCase.assertNotContains)
     assert_form_error = wraps(TestCase.assertFormError)
-    assert_formset_error = wraps(TestCase.assertFormsetError)
+    assert_formset_error = wraps(TestCase.assertFormSetError)
     assert_template_used = wraps(TestCase.assertTemplateUsed)
     assert_template_not_used = wraps(TestCase.assertTemplateNotUsed)
     assert_raises_message = wraps(TestCase.assertRaisesMessage)

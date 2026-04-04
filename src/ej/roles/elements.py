@@ -6,7 +6,9 @@ def popup_content(title, text, action, **kwargs):
     """
     Content of a pop-up window.
     """
-    return div(**kwargs)[h1(title), p(text), action].add_class("PopupWindow", first=True)
+    return div(**kwargs)[h1(title), p(text), action].add_class(
+        "PopupWindow", first=True
+    )
 
 
 def paired_layout(left, right, **kwargs):

@@ -21,7 +21,9 @@ class BoardViewSet(viewsets.ModelViewSet):
     @action(detail=True, url_path="conversations/(?P<conversation_id>\d+)")
     def conversations(self, request, pk, conversation_id):
         try:
-            conversation = Conversation.objects.get(id=conversation_id, board__id=pk)
+            conversation = Conversation.objects.get(
+                id=conversation_id, board__id=pk
+            )
             serializer = BoardConversationSerializer(
                 conversation, context={"request": request}
             )

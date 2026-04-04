@@ -81,13 +81,19 @@ def docs(ctx, watch=False, orm=False):
         ]:
             print_green(f"Making ORM graph for {app}")
             manage(
-                ctx, "graph_models", app, env={}, output=f"docs/dev-docs/orm/{app}.svg"
+                ctx,
+                "graph_models",
+                app,
+                env={},
+                output=f"docs/dev-docs/orm/{app}.svg",
             )
     else:
         print_yellow("call inv docs --orm to update ORM graphs")
 
     if watch:
-        ctx.run("sphinx-autobuild --port 8080 -b html docs/ build/docs/", pty=True)
+        ctx.run(
+            "sphinx-autobuild --port 8080 -b html docs/ build/docs/", pty=True
+        )
 
     ctx.run("sphinx-build docs/ build/docs/", pty=True)
 
@@ -123,7 +129,9 @@ def i18n(ctx, compile=False, edit=False, lang="pt_BR", keep_pot=False):
         ctx.run(r"""sed -i '/"Language: \\n"/d' locale/join.pot""", pty=True)
 
         print_green(f"Update locale {lang} with Jinja2 messages")
-        ctx.run(f"msgmerge locale/{lang}/LC_MESSAGES/django.po locale/join.pot -U")
+        ctx.run(
+            f"msgmerge locale/{lang}/LC_MESSAGES/django.po locale/join.pot -U"
+        )
 
         if not keep_pot:
             print_yellow("Cleaning up")
@@ -209,7 +217,9 @@ def sass(ctx, watch=False, background=False, minify=False, app_name=None):
 
     if app_name:
         try:
-            exec_watch(app_name, run, name="sass", watch=watch, background=background)
+            exec_watch(
+                app_name, run, name="sass", watch=watch, background=background
+            )
         except Exception as exc:
             print_red(f"ERROR EXECUTING SASS COMPILATION: {exc}")
     else:
@@ -220,10 +230,16 @@ def sass(ctx, watch=False, background=False, minify=False, app_name=None):
 
                 def go(app_name, run, name, watch, background):
                     return exec_watch(
-                        app_name, run, name=name, watch=watch, background=background
+                        app_name,
+                        run,
+                        name=name,
+                        watch=watch,
+                        background=background,
                     )
 
-                thread = Thread(None, go, args=(app_name, run, "sass", watch, background))
+                thread = Thread(
+                    None, go, args=(app_name, run, "sass", watch, background)
+                )
                 thread.start()
 
     print_green("\nCompilation finished!")

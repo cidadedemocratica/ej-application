@@ -47,18 +47,24 @@ class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
 
         return self.create_user(email, password, **extra_fields)
 
-    def create_user_from_session(self, session_key, email, password, **extra_fields):
+    def create_user_from_session(
+        self, session_key, email, password, **extra_fields
+    ):
         """
         creates a regular user and converts votes and comments from anonymous participant, if it exists.
         This method implements part of the behavior of anonymous participation conversation option.
         """
         user = self.create_user(email, password, **extra_fields)
-        anonymous_user_query = self.filter(email=f"anonymoususer-{session_key}@mail.com")
+        anonymous_user_query = self.filter(
+            email=f"anonymoususer-{session_key}@mail.com"
+        )
         if anonymous_user_query.exists():
             try:
                 anonymous_user = anonymous_user_query.first()
                 self.merge_users(anonymous_user, user)
-                log.info(f"anonymous user participation converted to {email} user")
+                log.info(
+                    f"anonymous user participation converted to {email} user"
+                )
             except Exception as e:
                 log.error(f"Could not find anonymous user. Error: {e}")
         return user
@@ -75,7 +81,9 @@ class UserManager(BaseUserManager.from_queryset(UserQuerySet)):
         unique_comments_ids = user.votes.select_related("comment").values_list(
             "comment__id"
         )
-        temporary_user.votes.filter(comment__id__in=unique_comments_ids).delete()
+        temporary_user.votes.filter(
+            comment__id__in=unique_comments_ids
+        ).delete()
 
         temporary_user.votes.all().update(author=user)
         temporary_user.comments.all().update(author=user)

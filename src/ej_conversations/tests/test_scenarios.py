@@ -4,6 +4,7 @@ Those scenarios are difficult to test using unit tests.
 We describe simple scenarios with lots of asserts in the middle. This documents
 user stories and can protect us from bad refactorings.
 """
+
 import datetime
 from contextlib import contextmanager
 from types import SimpleNamespace
@@ -102,7 +103,12 @@ class TestStatistics(ConversationRecipes):
         # Now we check global statistics.
         stats = conversation.statistics()
         assert stats == {
-            "comments": {"approved": 5, "pending": 0, "rejected": 0, "total": 5},
+            "comments": {
+                "approved": 5,
+                "pending": 0,
+                "rejected": 0,
+                "total": 5,
+            },
             "votes": {"agree": 15, "disagree": 15, "skip": 5, "total": 35},
             "participants": {"commenters": 1, "voters": 8},
         }

@@ -20,7 +20,9 @@ class ConversationRecipes(BoardRecipes):
     )
     comment = Recipe(
         Comment,
-        author=_foreign_key(EjRecipes.author.extend(email="comment_author@domain.com")),
+        author=_foreign_key(
+            EjRecipes.author.extend(email="comment_author@domain.com")
+        ),
         content="comment",
         conversation=_foreign_key(conversation),
         status=Comment.STATUS.approved,
@@ -34,17 +36,24 @@ class ConversationRecipes(BoardRecipes):
 
     def get_data(self, request):
         data = super().get_data(request)
-        conversation = self.conversation.make(author=data.author, board=data.board)
+        conversation = self.conversation.make(
+            author=data.author, board=data.board
+        )
         comments = [
             self.comment.make(
-                author=data.author, conversation=conversation, content="comment-author"
+                author=data.author,
+                conversation=conversation,
+                content="comment-author",
             ),
             self.comment.make(author=data.user, conversation=conversation),
         ]
         votes = [
-            self.vote.make(comment=comment, author=data.user) for comment in comments
+            self.vote.make(comment=comment, author=data.user)
+            for comment in comments
         ]
-        return record(data, conversation=conversation, comments=comments, votes=votes)
+        return record(
+            data, conversation=conversation, comments=comments, votes=votes
+        )
 
 
 ConversationRecipes.update_globals(globals())

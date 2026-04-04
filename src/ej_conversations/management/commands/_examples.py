@@ -51,7 +51,11 @@ class ExampleData:
     def _comment_factory(self, conversation, **kwargs):
         create = conversation.create_comment
         return lambda comment, status="approved": create(
-            self.get_user(), comment, check_limits=False, status=status, **kwargs
+            self.get_user(),
+            comment,
+            check_limits=False,
+            status=status,
+            **kwargs,
         )
 
     def get_staff_user(self):
@@ -98,7 +102,9 @@ class ExampleData:
         return [
             new("Students should have a say on what they want to learn."),
             new("We need more arts and crafts lessons."),
-            new("We have to encourage the use technology and teach programming."),
+            new(
+                "We have to encourage the use technology and teach programming."
+            ),
             new("Our curriculum should be open and focused on real problems."),
             new(
                 "We don't need no education! We don't need no thought control!",

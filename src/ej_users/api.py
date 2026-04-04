@@ -79,7 +79,9 @@ class TokenViewSet(viewsets.ViewSet):
             return Response({"error": _("User was not found.")}, status=404)
 
         if not user.check_password(request.data.get("password")):
-            return Response({"error": _("The password is incorrect")}, status=400)
+            return Response(
+                {"error": _("The password is incorrect")}, status=400
+            )
 
         try:
             tokens = EJTokens(user)
@@ -104,13 +106,19 @@ class UsersViewSet(viewsets.ModelViewSet):
             return Response(status=501)
 
         try:
-            temporary_user: User = UserSecretIdManager.get_user({"secret_id": pk})
+            temporary_user: User = UserSecretIdManager.get_user(
+                {"secret_id": pk}
+            )
         except User.DoesNotExist as e:
             return Response({"error": str(e)}, status=404)
 
         if temporary_user.has_completed_registration:
             return Response(
-                {"error": _("User already has completed the registration process.")},
+                {
+                    "error": _(
+                        "User already has completed the registration process."
+                    )
+                },
                 status=403,
             )
 

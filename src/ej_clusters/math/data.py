@@ -11,7 +11,9 @@ models = import_later("..models", package=__name__)
 #
 # Cluster belonging fractions
 #
-def compute_cluster_affinities(votes, distance=lambda x, y: np.sum(np.abs(x - y))):
+def compute_cluster_affinities(
+    votes, distance=lambda x, y: np.sum(np.abs(x - y))
+):
     """
     Returns a dictionary mapping clusters to a list of affinities.
 
@@ -37,7 +39,9 @@ def compute_cluster_affinities(votes, distance=lambda x, y: np.sum(np.abs(x - y)
     clusters = votes.pop("cluster")
 
     tol = 1e-12
-    shapes = defaultdict(lambda: {"intersections": defaultdict(float), "size": 0})
+    shapes = defaultdict(
+        lambda: {"intersections": defaultdict(float), "size": 0}
+    )
 
     for k, x in zip(clusters.values, votes.values):
         centroid_k = centroids.loc[k].values
@@ -53,7 +57,9 @@ def compute_cluster_affinities(votes, distance=lambda x, y: np.sum(np.abs(x - y)
                 shape["size"] += 1
             elif np.sum(coords * centroid_k_) > 0:
                 distance_k_ = distance(coords, centroid_k_)
-                shape["intersections"][k_] += distance_k / (distance_k_ + tol) / 2
+                shape["intersections"][k_] += (
+                    distance_k / (distance_k_ + tol) / 2
+                )
 
     return dict(shapes)
 

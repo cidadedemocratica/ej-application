@@ -19,7 +19,9 @@ class TestIntegrationsRoutes(ConversationRecipes):
 
     def test_do_not_get_tools_routes(self, user_client, conversation_db):
         for route in self.ROUTES:
-            response = user_client.get(conversation_db.get_absolute_url() + route)
+            response = user_client.get(
+                conversation_db.get_absolute_url() + route
+            )
             assert response.status_code == 302
 
     def test_get_tools_routes(self, conversation_db):
@@ -59,14 +61,18 @@ class TestRemoveRasaConnection(ConversationRecipes):
         assert response.status_code == 302
         assert not RasaConversation.objects.filter(id=connection_id).exists()
 
-    def test_try_other_user_delete_connection(self, conversation_db, user_client):
+    def test_try_other_user_delete_connection(
+        self, conversation_db, user_client
+    ):
         connection = RasaConversation.objects.create(
             conversation=conversation_db, domain=TEST_DOMAIN
         )
         connection_id = connection.id
         with pytest.raises(Exception):
             user_client.get(
-                conversation_db.get_absolute_url() + self.PATH + str(connection_id)
+                conversation_db.get_absolute_url()
+                + self.PATH
+                + str(connection_id)
             )
 
     def test_try_unlogged_delete_connection(self, conversation_db, client):
@@ -77,5 +83,7 @@ class TestRemoveRasaConnection(ConversationRecipes):
 
         with pytest.raises(Exception):
             client.get(
-                conversation_db.get_absolute_url() + self.PATH + str(connection_id)
+                conversation_db.get_absolute_url()
+                + self.PATH
+                + str(connection_id)
             )

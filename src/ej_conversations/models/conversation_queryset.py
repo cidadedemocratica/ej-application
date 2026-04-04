@@ -78,7 +78,9 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
         # Count votes for user
         if kwargs.pop("n_user_votes", False):
             if user.is_authenticated:
-                data = Count("comments__votes", filter=Q(comments__votes__author=user))
+                data = Count(
+                    "comments__votes", filter=Q(comments__votes__author=user)
+                )
             else:
                 data = Value(0, IntegerField())
             annotations[prefix + "n_user_votes"] = data
@@ -114,13 +116,18 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
         probs = [p / vote_prob for p in probs]
         choices = list(map(Choice.normalize, ["disagree", "skip", "agree"]))
         comments = self.comments()
-        votes = set(map(tuple, comments.votes().values_list("comment_id", "author_id")))
+        votes = set(
+            map(tuple, comments.votes().values_list("comment_id", "author_id"))
+        )
 
         # Cast random votes
         new_votes = []
         for comment in comments:
             for user in users:
-                if (comment.id, user.id) not in votes and random.random() < vote_prob:
+                if (
+                    comment.id,
+                    user.id,
+                ) not in votes and random.random() < vote_prob:
                     choice = random.choices(choices, probs)[0]
                     vote = Vote(author=user, choice=choice, comment=comment)
                     new_votes.append(vote)
@@ -130,7 +137,8 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
     def filter_by_text_and_tag(self, search_text):
         if search_text:
             return self.filter(
-                Q(text__icontains=search_text) | Q(tags__name__icontains=search_text)
+                Q(text__icontains=search_text)
+                | Q(tags__name__icontains=search_text)
             ).distinct()
         return self
 

@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
-from src.ej_integrations.utils import get_host_with_schema
+from ej_integrations.utils import get_host_with_schema
 from .constants import MAX_CONVERSATION_DOMAINS
 
 
@@ -44,7 +44,9 @@ class RasaConversation(models.Model):
     def clean(self):
         super().clean()
         if self.reached_max_number_of_domains:
-            raise ValidationError(_("a conversation can have a maximum of five domains"))
+            raise ValidationError(
+                _("a conversation can have a maximum of five domains")
+            )
 
 
 class OpinionComponent(models.Model):

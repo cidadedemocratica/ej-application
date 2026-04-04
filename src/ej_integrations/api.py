@@ -23,7 +23,9 @@ class OpinionComponentViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk):
         try:
             conversation = Conversation.objects.get(id=pk)
-            opinion_component = OpinionComponent.objects.get(conversation=conversation)
+            opinion_component = OpinionComponent.objects.get(
+                conversation=conversation
+            )
             serializer = OpinionComponentSerializer(
                 opinion_component, context={"request": request}
             )
@@ -42,7 +44,9 @@ class RasaConversationViewSet(viewsets.ModelViewSet):
             queryset = RasaConversation.objects.all()
         else:
             conversation = Conversation.objects.filter(author=request.user)
-            queryset = RasaConversation.objects.filter(conversation__in=conversation)
+            queryset = RasaConversation.objects.filter(
+                conversation__in=conversation
+            )
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 

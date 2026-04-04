@@ -89,13 +89,17 @@ class ConstanceConf:
     # Auxiliary options
     EJ_MAX_BOARD_NUMBER = os.getenv("{attr}", 1)
 
-    EJ_LISTEN_TO_COMMUNITY_SIGNATURE_CONVERSATIONS_LIMIT = os.getenv("{attr}", 20)
+    EJ_LISTEN_TO_COMMUNITY_SIGNATURE_CONVERSATIONS_LIMIT = os.getenv(
+        "{attr}", 20
+    )
     EJ_LISTEN_TO_COMMUNITY_SIGNATURE_VOTE_LIMIT = os.getenv("{attr}", 100000)
 
     EJ_LISTEN_TO_CITY_SIGNATURE_CONVERSATIONS_LIMIT = os.getenv("{attr}", 21)
     EJ_LISTEN_TO_CITY_SIGNATURE_VOTE_LIMIT = os.getenv("{attr}", 100000)
 
-    EJ_LISTEN_TO_CITY_YEARLY_SIGNATURE_VOTE_LIMIT = os.getenv("{attr}", 1000000000)
+    EJ_LISTEN_TO_CITY_YEARLY_SIGNATURE_VOTE_LIMIT = os.getenv(
+        "{attr}", 1000000000
+    )
     EJ_LISTEN_TO_CITY_YEARLY_SIGNATURE_CONVERSATIONS_LIMIT = os.getenv(
         "{attr}", 1000000000
     )

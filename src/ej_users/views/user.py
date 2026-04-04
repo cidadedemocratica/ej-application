@@ -36,7 +36,9 @@ class LoginView(FormView):
 
     def post(self, request, *args: Any, **kwargs: Any):
         form = forms.LoginForm(request=request)
-        fast = request.GET.get("fast", "false") == "true" or "fast" in request.GET
+        fast = (
+            request.GET.get("fast", "false") == "true" or "fast" in request.GET
+        )
 
         if form.is_valid_post():
             data = form.cleaned_data
@@ -44,13 +46,17 @@ class LoginView(FormView):
 
             try:
                 user = User.objects.get_by_email(email)
-                user = auth.authenticate(request, email=user.email, password=password)
+                user = auth.authenticate(
+                    request, email=user.email, password=password
+                )
 
                 if user is None:
                     raise User.DoesNotExist
 
                 auth.login(request, user, backend=user.backend)
-                self.next_url = request.GET.get("next", user.profile.default_url())
+                self.next_url = request.GET.get(
+                    "next", user.profile.default_url()
+                )
                 log.info(f"user {user} ({email}) successfully authenticated")
             except User.DoesNotExist:
                 form.add_error(None, _("Invalid email or password"))
@@ -63,7 +69,9 @@ class LoginView(FormView):
             self.next_url = request.GET.get("next", user.profile.default_url())
             return redirect(self.next_url)
 
-        return render(request, self.template_name, self.get_context_data(form=form))
+        return render(
+            request, self.template_name, self.get_context_data(form=form)
+        )
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         return {
@@ -111,7 +119,9 @@ class RegisterView(CreateView):
                 form.add_error(None, str(ex))
                 log.info(f"invalid register attempt: {email}")
 
-        return render(request, self.template_name, self.get_context_data(form=form))
+        return render(
+            request, self.template_name, self.get_context_data(form=form)
+        )
 
     def create_user(self, request, email, password, **extra_fields):
         session_key = request.GET.get("sessionKey")
@@ -131,7 +141,9 @@ class RegisterView(CreateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         return {
             "user": self.request.user,
-            "form": kwargs.get("form", forms.RegistrationForm(request=self.request)),
+            "form": kwargs.get(
+                "form", forms.RegistrationForm(request=self.request)
+            ),
             "next": self.next_url,
             "social_js": social_js_template().render(request=self.request),
             "social_buttons": social_buttons(self.request),
@@ -154,7 +166,9 @@ class RecoverPasswordView(FormView):
                 self.send_recover_password_email(request, self.user, email)
                 self.success = True
 
-        return render(request, self.template_name, self.get_context_data(form=form))
+        return render(
+            request, self.template_name, self.get_context_data(form=form)
+        )
 
     def get_next_url(self):
         return self.request.GET.get("next", "/login/")
@@ -164,7 +178,9 @@ class RecoverPasswordView(FormView):
         from_email = settings.DEFAULT_FROM_EMAIL
         if settings.DEFAULT_FROM_NAME:
             from_email = f"{settings.DEFAULT_FROM_NAME} <{from_email}>"
-        path = reverse("auth:recover-password-token", kwargs={"token": token.url})
+        path = reverse(
+            "auth:recover-password-token", kwargs={"token": token.url}
+        )
         template = get_template("ej_users/recover-password-message.jinja2")
         email_body = template.render(
             {"url": self.raw_url(request, path)}, request=request
@@ -201,7 +217,9 @@ class RecoverPasswordToken(FormView):
         user = reset_token.user
         form = forms.PasswordForm(request=request)
 
-        if form.is_valid_post() and not (reset_token.is_expired or reset_token.is_used):
+        if form.is_valid_post() and not (
+            reset_token.is_expired or reset_token.is_used
+        ):
             password = form.cleaned_data["password"]
             user.set_password(password)
             user.save()

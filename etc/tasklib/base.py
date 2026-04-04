@@ -22,10 +22,14 @@ env = environ.Env(
 # Utility functions
 #
 def manage(ctx, cmd, *args, env=None, **kwargs):
-    kwargs = {k.replace("_", "-"): v for k, v in kwargs.items() if v is not False}
-    opts = " ".join(f'--{k} {"" if v is True else v}' for k, v in kwargs.items())
+    kwargs = {
+        k.replace("_", "-"): v for k, v in kwargs.items() if v is not False
+    }
+    opts = " ".join(
+        f'--{k} {"" if v is True else v}' for k, v in kwargs.items()
+    )
     opts = " ".join((*args, opts))
-    cmd = f"{python} manage.py {cmd} {opts}"
+    cmd = f"{python} src/manage.py {cmd} {opts}"
     env = {**os.environ, **(env or {})}
     path = env.get("PYTHONPATH", ":".join(sys.path))
     env.setdefault("PYTHONPATH", f"src:{path}")
@@ -63,7 +67,12 @@ def watch_path(app_name, func, poll_time=0.5, name=None, skip_first=False):
         FileMovedEvent,
     )
 
-    file_event = (FileCreatedEvent, FileDeletedEvent, FileModifiedEvent, FileMovedEvent)
+    file_event = (
+        FileCreatedEvent,
+        FileDeletedEvent,
+        FileModifiedEvent,
+        FileMovedEvent,
+    )
     last = time.time()
 
     def dispatch(ev):
@@ -104,7 +113,9 @@ def watch_path(app_name, func, poll_time=0.5, name=None, skip_first=False):
     observer.join()
 
 
-def exec_watch(app_name, func, name, watch=False, background=False, poll_time=0.5):
+def exec_watch(
+    app_name, func, name, watch=False, background=False, poll_time=0.5
+):
     if watch and background:
 
         def go(app_name):

@@ -11,7 +11,9 @@ class TestOpinionComponentViewSet:
         response_data = response.json()
         assert response_data["final_voting_message"] == ""
 
-    def test_request_configuration(self, db, client, custom_request, opinion_component):
+    def test_request_configuration(
+        self, db, client, custom_request, opinion_component
+    ):
         api = APIClient()
         final_voting_message = opinion_component.final_voting_message
         endpoint = reverse(

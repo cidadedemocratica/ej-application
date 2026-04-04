@@ -57,7 +57,8 @@ def clean_migrations(_ctx, all=False, yes=False):
         print(f"* {file}")
     if all:
         print(
-            "REMOVING ALL MIGRATIONS IS DANGEROUS AND SHOULD ONLY BE " "USED IN TESTING"
+            "REMOVING ALL MIGRATIONS IS DANGEROUS AND SHOULD ONLY BE "
+            "USED IN TESTING"
         )
     if yes or input("Remove those files? (y/N)").lower() == "y":
         for file in remove_files:
@@ -130,7 +131,9 @@ def gunicorn(
     threads = threads or os.getenv("GUNICORN_THREADS") or 1
     backlog = backlog or os.getenv("GUNICORN_BACKLOG") or 2048
     keep_alive = keep_alive or os.getenv("GUNICORN_KEEP_ALIVE") or 2
-    worker_class = worker_class or os.getenv("GUNICORN_WORKER_CLASS") or "gthread"
+    worker_class = (
+        worker_class or os.getenv("GUNICORN_WORKER_CLASS") or "gthread"
+    )
     worker_connections = (
         worker_connections or os.getenv("GUNICORN_WORKER_CONNECTIONS") or 1000
     )
@@ -216,3 +219,12 @@ def shell(ctx):
     Starts a Django shell
     """
     manage(ctx, "shell")
+
+
+@task
+def celery(ctx, dry_run=False):
+    """
+    Executes a Celery worker.
+    """
+    do = runner(ctx, dry_run, pty=True)
+    do(f"cd src && celery -A ej.celery worker --loglevel=INFO")

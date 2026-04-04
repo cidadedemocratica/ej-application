@@ -7,7 +7,9 @@ from model_mommy.recipe import Recipe
 __all__ = ["user", "root"]
 
 User = get_user_model()
-user = Recipe(User, is_superuser=False, email="user@domain.com", password="password")
+user = Recipe(
+    User, is_superuser=False, email="user@domain.com", password="password"
+)
 root = Recipe(User, is_superuser=True, email="root@domain.com", is_staff=True)
 
 
@@ -40,7 +42,11 @@ def make_fixture(recipe, name):
     __all__.extend(ns)
 
 
-[make_fixture(v, k) for k, v in list(globals().items()) if isinstance(v, Recipe)]
+[
+    make_fixture(v, k)
+    for k, v in list(globals().items())
+    if isinstance(v, Recipe)
+]
 
 
 #
@@ -52,7 +58,9 @@ def patch_jinja2():
     def context_render(self, *args, **kwargs):
         context = dict(*args, **kwargs)
         result = render(self, *args, **kwargs)
-        signals.template_rendered.send(sender=self, template=self, context=context)
+        signals.template_rendered.send(
+            sender=self, template=self, context=context
+        )
         return result
 
     if not getattr(Jinja2Template, "_render_patch", False):

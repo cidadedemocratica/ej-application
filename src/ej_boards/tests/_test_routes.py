@@ -73,7 +73,13 @@ class TestBoardConversationRoutes(ConversationRecipes):
 
     def test_create_invalid_conversation(self, rf, board):
         request = rf.post(
-            "", {"title": "", "tags": "tag", "text": "description", "comments_count": 0}
+            "",
+            {
+                "title": "",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 0,
+            },
         )
         request.user = board.owner
         response = routes.conversation_create(request, board)
@@ -103,7 +109,13 @@ class TestBoardConversationRoutes(ConversationRecipes):
         conversation.author = board.owner
         conversation.save()
         request = rf.post(
-            "", {"title": "", "tags": "tag", "text": "description", "comments_count": 0}
+            "",
+            {
+                "title": "",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 0,
+            },
         )
         request.user = conversation.author
         conversation.is_promoted = False
@@ -115,7 +127,13 @@ class TestBoardConversationRoutes(ConversationRecipes):
         conversation.author = board.owner
         conversation.save()
         request = rf.post(
-            "", {"title": "", "tags": "tag", "text": "description", "comments_count": 0}
+            "",
+            {
+                "title": "",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 0,
+            },
         )
         with pytest.raises(Http404):
             routes.conversation_edit(request, board, conversation)
@@ -132,7 +150,9 @@ class TestBoardConversationRoutes(ConversationRecipes):
         assert response["can_comment"]
         assert response["can_edit"]
 
-    def test_conversation_detail_post_comment(self, rf, db, board, conversation):
+    def test_conversation_detail_post_comment(
+        self, rf, db, board, conversation
+    ):
         user = board.owner
         conversation.author = user
         conversation.save()
@@ -146,7 +166,9 @@ class TestBoardConversationRoutes(ConversationRecipes):
         assert response["can_edit"]
         assert Comment.objects.filter(author=user)[0].content == "test comment"
 
-    def test_conversation_detail_vote_comment(self, rf, db, board, conversation):
+    def test_conversation_detail_vote_comment(
+        self, rf, db, board, conversation
+    ):
         user = board.owner
         conversation.author = user
         conversation.save()
@@ -163,7 +185,9 @@ class TestBoardConversationRoutes(ConversationRecipes):
         assert response["can_edit"]
         assert votes_counter(comment) == 1
 
-    def test_conversation_detail_not_in_board(self, rf, db, board, conversation):
+    def test_conversation_detail_not_in_board(
+        self, rf, db, board, conversation
+    ):
         conversation.author = board.owner
         conversation.save()
         request = rf.post("", {"action": "comment", "content": "test comment"})
@@ -171,7 +195,9 @@ class TestBoardConversationRoutes(ConversationRecipes):
         with pytest.raises(Http404):
             routes.conversation_detail(request, board, conversation)
 
-    def test_get_moderate_conversation_not_in_board(self, rf, db, board, conversation):
+    def test_get_moderate_conversation_not_in_board(
+        self, rf, db, board, conversation
+    ):
         conversation.author = board.owner
         conversation.save()
         request = rf.get("", {})
@@ -201,7 +227,11 @@ class TestBoardViewRoutest:
         assert response.url == "/slug/"
         assert response.status_code == 302
 
-        data = {"slug": "slug2", "title": "new title", "description": "description"}
+        data = {
+            "slug": "slug2",
+            "title": "new title",
+            "description": "description",
+        }
         request = rf.post("", data)
         request.user = user
         with pytest.raises(Http404):
@@ -226,7 +256,9 @@ class TestBoardViewRoutest:
 
 class TestBoardRoutes(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user("name@server.com", "1234", name="name")
+        self.user = User.objects.create_user(
+            "name@server.com", "1234", name="name"
+        )
         client = Client()
         client.force_login(self.user)
         self.logged_client = client
@@ -239,7 +271,9 @@ class TestBoardRoutes(TestCase):
     def test_list_profile_board_anonymous_user(self):
         client = Client()
         response = client.get("/profile/boards/")
-        self.assertRedirects(response, "/login/?next=/profile/boards/", 302, 200)
+        self.assertRedirects(
+            response, "/login/?next=/profile/boards/", 302, 200
+        )
 
     def test_create_board(self):
         client = self.logged_client
@@ -266,7 +300,9 @@ class TestBoardRoutes(TestCase):
     def test_create_board_anonymous_user(self):
         client = Client()
         response = client.get("/profile/boards/add/")
-        self.assertRedirects(response, "/login/?next=/profile/boards/add/", 302, 200)
+        self.assertRedirects(
+            response, "/login/?next=/profile/boards/add/", 302, 200
+        )
 
     def test_edit_board_anonymous_user(self):
         client = Client()

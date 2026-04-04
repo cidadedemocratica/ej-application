@@ -48,7 +48,9 @@ class MailingToolForm(forms.Form):
         label=_("Template type"),
         choices=MailingTool.MAILING_TOOL_CHOICES,
         required=False,
-        widget=CustomTemplateChoiceWidget(attrs=MailingTool.MAILING_TOOLTIP_TEXTS),
+        widget=CustomTemplateChoiceWidget(
+            attrs=MailingTool.MAILING_TOOLTIP_TEXTS
+        ),
     )
     theme = forms.ChoiceField(
         label=_("Theme"),
@@ -60,7 +62,8 @@ class MailingToolForm(forms.Form):
         required=False, label=_("Redirect user to a custom domain (optional)")
     )
     custom_title = forms.CharField(
-        required=False, label=_("Adds a custom title to the template (optional).")
+        required=False,
+        label=_("Adds a custom title to the template (optional)."),
     )
     custom_comment = forms.ModelChoiceField(
         queryset=None,
@@ -88,7 +91,9 @@ class RasaConversationForm(EjModelForm):
             return self.cleaned_data["domain"]
         if domain.conversation == self.cleaned_data["conversation"]:
             raise ValidationError(
-                _("Rasa conversation with this Conversation and Domain already exists.")
+                _(
+                    "Rasa conversation with this Conversation and Domain already exists."
+                )
             )
         raise ValidationError(
             _(

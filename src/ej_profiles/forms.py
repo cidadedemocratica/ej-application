@@ -22,7 +22,9 @@ FULL_EDITABLE_FIELDS = [
     "profile_photo",
 ]
 EXCLUDE_EDITABLE_FIELDS = settings.EJ_PROFILE_EXCLUDE_FIELDS
-EDITABLE_FIELDS = [f for f in FULL_EDITABLE_FIELDS if f not in EXCLUDE_EDITABLE_FIELDS]
+EDITABLE_FIELDS = [
+    f for f in FULL_EDITABLE_FIELDS if f not in EXCLUDE_EDITABLE_FIELDS
+]
 
 
 class UsernameForm(EjModelForm):
@@ -48,7 +50,9 @@ class ProfileForm(EjModelForm):
     class Meta:
         model = models.Profile
         fields = [
-            field for field in EDITABLE_FIELDS if field not in EXCLUDE_EDITABLE_FIELDS
+            field
+            for field in EDITABLE_FIELDS
+            if field not in EXCLUDE_EDITABLE_FIELDS
         ]
         widgets = {
             # DateInput seems to not convert data in the database to a proper

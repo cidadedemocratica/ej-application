@@ -45,7 +45,9 @@ def register_route(router, route, base_path, prefix):
 
 def make_view(view):
     if "request" in Signature.from_callable(view).parameters:
-        return lambda request, board, **kwargs: view(request, board=board, **kwargs)
+        return lambda request, board, **kwargs: view(
+            request, board=board, **kwargs
+        )
     else:
         return lambda **kwargs: view(**kwargs)
 
@@ -111,20 +113,24 @@ def statistics(board):
         participants += stats["participants"]["voters"]
         conversations += 1
 
-    return {"votes": votes, "participants": participants, "conversations": conversations}
+    return {
+        "votes": votes,
+        "participants": participants,
+        "conversations": conversations,
+    }
 
 
 def apply_user_filters(order_by, sort, search_string):
     sort_order = "-" if sort == "desc" else ""
 
     if order_by == OrderByOptions.CONVERSATION:
-        searched_users = User.objects.annotate(count=Count("conversations")).order_by(
-            f"{sort_order}count"
-        )
+        searched_users = User.objects.annotate(
+            count=Count("conversations")
+        ).order_by(f"{sort_order}count")
     elif order_by == OrderByOptions.COMMENT:
-        searched_users = User.objects.annotate(count=Count("comments")).order_by(
-            f"{sort_order}count"
-        )
+        searched_users = User.objects.annotate(
+            count=Count("comments")
+        ).order_by(f"{sort_order}count")
     else:
         searched_users = User.objects.order_by(f"{sort_order}date_joined")
 
@@ -149,7 +155,9 @@ def apply_conversation_filters(order_by, sort, search_string):
             count=Count("comments")
         ).order_by(f"{sort_order}count")
     else:
-        searched_conversations = Conversation.objects.order_by(f"{sort_order}created")
+        searched_conversations = Conversation.objects.order_by(
+            f"{sort_order}created"
+        )
 
     if search_string:
         searched_conversations = searched_conversations.filter(
@@ -167,9 +175,9 @@ def apply_board_filters(order_by, sort, search_string):
     sort_order = "-" if sort == "desc" else ""
 
     if order_by == OrderByOptions.CONVERSATION:
-        searched_boards = Board.objects.annotate(count=Count("conversation")).order_by(
-            f"{sort_order}count"
-        )
+        searched_boards = Board.objects.annotate(
+            count=Count("conversation")
+        ).order_by(f"{sort_order}count")
     elif order_by == OrderByOptions.COMMENT:
         searched_boards = Board.objects.annotate(
             count=Count("conversation__comments")

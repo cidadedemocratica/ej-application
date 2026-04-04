@@ -31,14 +31,18 @@ class StereotypeKMeans(KMeans):
     _fit_parameters = ("labels_", "cluster_centers_")
 
     # noinspection PyMissingConstructor
-    def __init__(self, n_clusters=None, max_iter=20, distance=None, aggregator=None):
+    def __init__(
+        self, n_clusters=None, max_iter=20, distance=None, aggregator=None
+    ):
         distance = normalize_distance(distance)
         aggregator = normalize_aggregator(aggregator)
         self.n_clusters = n_clusters
         self.max_iter = max_iter
         self.distance = distance
         self.aggregator = aggregator
-        self._args = dict(max_iter=max_iter, distance=distance, aggregator=aggregator)
+        self._args = dict(
+            max_iter=max_iter, distance=distance, aggregator=aggregator
+        )
 
     # noinspection PyIncorrectDocstring
     def fit(self, X, y=None, sample_weight=None):  # noqa: N803
@@ -54,7 +58,9 @@ class StereotypeKMeans(KMeans):
         data = X[: -self.n_clusters]
         stereotypes = X[-self.n_clusters :]
         labels, centroids = kmeans_stereotypes(data, stereotypes, **self._args)
-        stereotype_labels = compute_labels(stereotypes, centroids, distance=self.distance)
+        stereotype_labels = compute_labels(
+            stereotypes, centroids, distance=self.distance
+        )
         self.labels_ = np.hstack([labels, stereotype_labels])  # noqa: N803
         self.cluster_centers_ = centroids  # noqa: N803
         return self
@@ -110,5 +116,9 @@ class StereotypeKMeans(KMeans):
         labels = self.predict(X)
         transform = (lambda x: x * x) if squared else (lambda x: x)
         return -vq(
-            X, labels, self.cluster_centers_, distance=self.distance, transform=transform
+            X,
+            labels,
+            self.cluster_centers_,
+            distance=self.distance,
+            transform=transform,
         )
