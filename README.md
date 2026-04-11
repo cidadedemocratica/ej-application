@@ -21,12 +21,13 @@ For contributions, issues or feature requests join us on [https://github.com/cid
 
 **3. Create a virtual environment**
 
-> **The current supported python version is 3.12.**
+> **The current supported Python version is 3.12.**
 
 ```shell
 mkdir ../virtualenvs # if it does not exist
 python -m venv ../virtualenvs/ej/
 source ../virtualenvs/ej/bin/activate
+pip install poetry
 poetry install
 cp .env.sample .env
 inv up
