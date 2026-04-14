@@ -91,7 +91,9 @@ class ConversationDashboardView(DetailView):
         conversation = self.get_object()
         statistics = conversation.statistics()
         names = getattr(settings, "EJ_PROFILE_FIELD_NAMES", {})
-        update_clusterization.delay(conversation.clusterization.id)
+        clusterization = getattr(conversation, "clusterization", None)
+        if clusterization:
+            update_clusterization.delay(clusterization.id)
         biggest_cluster_data = get_conversation_biggest_cluster(
             self.request, conversation
         )

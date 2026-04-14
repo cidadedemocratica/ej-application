@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-03 21:56-0300\n"
+"POT-Creation-Date: 2026-04-14 20:35-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -699,13 +699,13 @@ msgstr ""
 msgid "Visualization"
 msgstr "Visualização"
 
-#: src/ej_dataviz/constants.py:187 src/ej_dataviz/views/dataviz.py:103
-#: src/ej_dataviz/views/dataviz.py:117
+#: src/ej_dataviz/constants.py:187 src/ej_dataviz/views/dataviz.py:105
+#: src/ej_dataviz/views/dataviz.py:119
 msgid "Gender"
 msgstr "Gênero"
 
-#: src/ej_dataviz/constants.py:199 src/ej_dataviz/views/dataviz.py:104
-#: src/ej_dataviz/views/dataviz.py:118 src/ej_profiles/models.py:37
+#: src/ej_dataviz/constants.py:199 src/ej_dataviz/views/dataviz.py:106
+#: src/ej_dataviz/views/dataviz.py:120 src/ej_profiles/models.py:37
 #: src/ej_profiles/tests/test_models.py:62
 msgid "Race"
 msgstr "Raça"
@@ -732,78 +732,78 @@ msgstr "Dados do PCA"
 msgid "You!"
 msgstr "Você!"
 
-#: src/ej_dataviz/views/dataviz.py:106 src/ej_dataviz/views/dataviz.py:121
+#: src/ej_dataviz/views/dataviz.py:108 src/ej_dataviz/views/dataviz.py:123
 msgid "https://en.wikipedia.org/wiki/Principal_component_analysis"
 msgstr "https://pt.wikipedia.org/wiki/An%C3%A1lise_de_componentes_principais"
 
-#: src/ej_dataviz/views/dataviz.py:140
+#: src/ej_dataviz/views/dataviz.py:142
 msgid "Not enough data"
 msgstr "Não há dados suficientes"
 
-#: src/ej_dataviz/views/dataviz.py:321
+#: src/ej_dataviz/views/dataviz.py:323
 msgid "agree"
 msgstr "concorda"
 
-#: src/ej_dataviz/views/dataviz.py:322
+#: src/ej_dataviz/views/dataviz.py:324
 msgid "author"
 msgstr "autor"
 
-#: src/ej_dataviz/views/dataviz.py:323
+#: src/ej_dataviz/views/dataviz.py:325
 msgid "author_id"
 msgstr "autor_id"
 
-#: src/ej_dataviz/views/dataviz.py:324
+#: src/ej_dataviz/views/dataviz.py:326
 msgid "choice"
 msgstr "escolha"
 
-#: src/ej_dataviz/views/dataviz.py:325
+#: src/ej_dataviz/views/dataviz.py:327
 #, fuzzy
 msgid "cluster"
 msgstr "Grupos"
 
-#: src/ej_dataviz/views/dataviz.py:326
+#: src/ej_dataviz/views/dataviz.py:328
 #, fuzzy
 msgid "cluster_id"
 msgstr "Grupo_id"
 
-#: src/ej_dataviz/views/dataviz.py:327
+#: src/ej_dataviz/views/dataviz.py:329
 #, fuzzy
 msgid "comment"
 msgstr "comentário"
 
-#: src/ej_dataviz/views/dataviz.py:328
+#: src/ej_dataviz/views/dataviz.py:330
 msgid "comment_id"
 msgstr "comentário_id"
 
-#: src/ej_dataviz/views/dataviz.py:329
+#: src/ej_dataviz/views/dataviz.py:331
 msgid "convergence"
 msgstr "convergência"
 
-#: src/ej_dataviz/views/dataviz.py:330
+#: src/ej_dataviz/views/dataviz.py:332
 msgid "disagree"
 msgstr "discorda"
 
-#: src/ej_dataviz/views/dataviz.py:331 src/ej_profiles/enums.py:132
+#: src/ej_dataviz/views/dataviz.py:333 src/ej_profiles/enums.py:132
 msgid "email"
 msgstr "email"
 
-#: src/ej_dataviz/views/dataviz.py:332
+#: src/ej_dataviz/views/dataviz.py:334
 msgid "id"
 msgstr "id"
 
-#: src/ej_dataviz/views/dataviz.py:333 src/ej_profiles/enums.py:131
+#: src/ej_dataviz/views/dataviz.py:335 src/ej_profiles/enums.py:131
 msgid "name"
 msgstr "nome"
 
-#: src/ej_dataviz/views/dataviz.py:334
+#: src/ej_dataviz/views/dataviz.py:336
 msgid "participation"
 msgstr "participação"
 
-#: src/ej_dataviz/views/dataviz.py:335
+#: src/ej_dataviz/views/dataviz.py:337
 msgid "skipped"
 msgstr "pulados"
 
-#: src/ej_dataviz/views/dataviz.py:336
+#: src/ej_dataviz/views/dataviz.py:338
 #, fuzzy
 msgid "channel"
 msgstr "canal"

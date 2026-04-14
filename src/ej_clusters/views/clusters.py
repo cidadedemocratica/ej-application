@@ -36,7 +36,8 @@ class ClustersIndexView(ListView):
         )
         user = self.request.user
         clusterization = self.get_queryset()
-        update_clusterization.delay(clusterization.id)
+        if clusterization:
+            update_clusterization.delay(clusterization.id)
         biggest_cluster_data = get_conversation_biggest_cluster(
             self.request, conversation
         )
