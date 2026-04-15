@@ -3,7 +3,7 @@ import sys
 
 from invoke import task
 
-from .base import set_theme, manage, directory
+from .base import set_theme, manage, directory, runner
 
 __all__ = [
     "clean_migrations",
@@ -13,6 +13,7 @@ __all__ = [
     "notebook",
     "run",
     "shell",
+    "celery"
 ]
 
 
