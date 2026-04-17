@@ -24,7 +24,7 @@ For contributions, issues or feature requests join us on [https://github.com/cid
 > **The current supported Python version is 3.12.**
 
 ```shell
-mkdir ../virtualenvs # if it does not exist
+mkdir ../virtualenvs # if it does not exists
 python -m venv ../virtualenvs/ej/
 source ../virtualenvs/ej/bin/activate
 pip install poetry
@@ -76,7 +76,7 @@ inv build --no-cache
 inv up
 ```
 
-# Celery
+# Celery and RabbitMQ
 
 EJ uses [Celery](https://docs.celeryproject.org/) for asynchronous task processing, with RabbitMQ as the message broker.
 
