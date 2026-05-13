@@ -25,6 +25,7 @@ class ConversationSerializer(BaseApiSerializer):
             "created",
             "id",
             "board",
+            "first_tag",
             "statistics",
             "participants_can_add_comments",
             "send_profile_question",
