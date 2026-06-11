@@ -1,2 +1,23 @@
 {% extends 'base.jinja2' %}
+{% from 'ej_conversations/includes/breadcrumb.jinja2' import breadcrumb %}
 {% block menu %}{% include 'ej_conversations/includes/menu.jinja2' %}{% endblock %}
+
+{% block message_area %}
+    {{ super() }}
+    {% block page_header %}
+        {# Templates may set ``breadcrumb_items`` explicitly; otherwise
+           fall back to the path-based breadcrumb (see ej.breadcrumbs). #}
+        {% set _items = breadcrumb_items if breadcrumb_items is defined
+                        else get_breadcrumbs() %}
+        {% if _items %}
+            <header class="page-header content-grid">
+                <div>
+                    {% if page_heading is defined %}
+                        <h1 class="page-header__title">{{ page_heading }}</h1>
+                    {% endif %}
+                    {{ breadcrumb(_items) }}
+                </div>
+            </header>
+        {% endif %}
+    {% endblock %}
+{% endblock %}

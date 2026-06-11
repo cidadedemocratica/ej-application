@@ -1,10 +1,10 @@
 <div>
     {% if widget.name == "start_date" %}
-        <label for="start_date">{{_("Start Date")}}</label>
+        <label class="mt-20 mb-16" for="start_date">{{_("Start Date")}}</label>
         <input id="start_date" type="date" name={{widget.name}} value={{widget.value}}>
     {% endif %}
     {% if widget.name == "end_date" %}
-        <label for="end_date">{{_("End Date")}}</label>
+        <label class="mt-20 mb-16" for="end_date">{{_("End Date")}}</label>
         <input id="end_date" type="date" name={{widget.name}} value={{widget.value}}>
     {% endif %}
 </div>

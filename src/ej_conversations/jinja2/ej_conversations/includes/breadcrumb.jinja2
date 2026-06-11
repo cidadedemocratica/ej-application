@@ -1,0 +1,39 @@
+{#
+    Renders a breadcrumb navigation.
+
+    Usage:
+        {% from 'ej_conversations/includes/breadcrumb.jinja2' import breadcrumb %}
+        {{ breadcrumb([
+            {'label': _('Home'), 'url': url('profile:home')},
+            {'label': _('Mural'), 'url': board.get_absolute_url()},
+            {'label': _('Nova Conversa')},
+        ]) }}
+
+    Each item is a dict with:
+        - label: text displayed
+        - url:   (optional) link target. The last item should omit `url`
+                 to be rendered as the current page.
+#}
+{% macro breadcrumb(items) %}
+    <nav class="breadcrumb" aria-label="{{ _('Breadcrumb') }}">
+        <ol class="breadcrumb__list">
+            {% for item in items %}
+                {% set is_last = loop.last %}
+                {% set item_url = item.get('url') %}
+                {% set item_label = item.get('label') %}
+                <li class="breadcrumb__item{% if is_last %} breadcrumb__item--current{% endif %}">
+                    {% if is_last %}
+                        <span class="breadcrumb__current" aria-current="page">{{ item_label|truncate(35, True) }}</span>
+                    {% elif item_url %}
+                        <a class="breadcrumb__link" href="{{ item_url }}">{{ item_label|truncate(35, True) }}</a>
+                    {% else %}
+                        <span class="breadcrumb__link">{{ item_label|truncate(35, True) }}</span>
+                    {% endif %}
+                    {% if not is_last %}
+                        <span class="breadcrumb__separator" aria-hidden="true">&gt;</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </nav>
+{% endmacro %}

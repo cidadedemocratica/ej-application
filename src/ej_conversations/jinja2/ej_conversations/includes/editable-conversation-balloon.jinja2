@@ -1,13 +1,5 @@
 <div class="conversation-balloon">
     <article class="content-grid content-grid--padding">
-        {% if create_mode %}
-            <h1 class="text-accent">{{_("Basic settings")}}</h1>
-        {% else %}
-            <h1 class="text-accent">{{_("Edit Conversation")}}</h1>
-        {% endif %}
-        <p class="helptext">
-            {{_("Required fields:")}}
-        </p>
         <label class="conversation-balloon__question">
             {{ _('Question') }}{{ form.text }}
         </label>

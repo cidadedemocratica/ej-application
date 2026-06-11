@@ -46,7 +46,7 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         _("Title"),
         max_length=255,
         help_text=_(
-            "Short description used to create URL slugs (e.g. School system)."
+            "A brief description about this conversation. It will be used internally to create URL identifiers."
         ),
     )
     text = models.TextField(
@@ -90,35 +90,34 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         ),
     )
     anonymous_votes_enabled = models.BooleanField(
+        _("Enable anonymous votes"),
         default=False,
         blank=True,
         help_text=_(
             "Check this option if you want your audience to vote without registering. "
             "All users will be created with a random and unique ID."
         ),
-        verbose_name=_("Enable anonymous votes"),
     )
     anonymous_votes = models.IntegerField(
+        _("Number of anonymous votes"),
         default=0,
         blank=True,
         help_text=_(
-            "Configures how many anonymous votes the participants can give before "
-            "asking him to register"
+            "Define how many anonymous votes each participant can cast."
         ),
-        verbose_name=_("Number of anonymous votes"),
     )
     send_profile_question = models.BooleanField(
+        _("Send profile question?"),
         default=False,
         blank=True,
-        verbose_name=_("Send profile question?"),
         help_text=_(
             "Send a question to participants to complete their profile."
         ),
     )
     votes_to_send_profile_question = models.IntegerField(
+        _("Votes to send profile question"),
         default=0,
         blank=True,
-        verbose_name=_("Votes to send profile question"),
         help_text=_("Number of votes to send profile question."),
     )
     start_date = models.DateField(blank=True, null=True)

@@ -6,14 +6,12 @@ from django.urls import reverse
 from django.utils.translation import gettext
 import pytest
 
-from ej.testing import UrlTester
 from ej_clusters.enums import ClusterStatus
 from ej_clusters.models.cluster import Cluster
 from ej_clusters.models.clusterization import Clusterization
 from ej_clusters.models.stereotype import Stereotype
 from ej_clusters.models.stereotype_vote import StereotypeVote
 from ej_conversations.enums import Choice
-from ej_conversations.mommy_recipes import ConversationRecipes
 from ej_dataviz.utils import get_comments_dataframe, get_user_dataframe
 from ej_dataviz.views.filters import (
     CommentsReportClustersFilter,

@@ -1,0 +1,31 @@
+{% set active_tab = request.POST.get('active_tab', 'basic') if request is defined else 'basic' %}
+<input type="hidden" name="active_tab" id="conversation-form-active-tab" value="{{ active_tab }}">
+
+<nav class="conversation-form-tabs" aria-label="{{ _('Conversation form sections') }}">
+    <div class="conversation-form-tabs__list" role="tablist">
+        <button
+            type="button"
+            id="conversation-form-tab-basic"
+            class="conversation-form-tabs__tab{% if active_tab == 'basic' %} conversation-form-tabs__tab--active{% endif %}"
+            role="tab"
+            aria-selected="{{ 'true' if active_tab == 'basic' else 'false' }}"
+            aria-controls="conversation-form-panel-basic"
+            tabindex="{{ '0' if active_tab == 'basic' else '-1' }}"
+            data-tab-target="basic"
+        >
+            {{ _('Essentials') }}
+        </button>
+        <button
+            type="button"
+            id="conversation-form-tab-advanced"
+            class="conversation-form-tabs__tab{% if active_tab == 'advanced' %} conversation-form-tabs__tab--active{% endif %}"
+            role="tab"
+            aria-selected="{{ 'true' if active_tab == 'advanced' else 'false' }}"
+            aria-controls="conversation-form-panel-advanced"
+            tabindex="{{ '0' if active_tab == 'advanced' else '-1' }}"
+            data-tab-target="advanced"
+        >
+            {{ _('Advanced') }}
+        </button>
+    </div>
+</nav>

@@ -13,7 +13,7 @@ __all__ = [
     "notebook",
     "run",
     "shell",
-    "celery"
+    "celery",
 ]
 
 
@@ -228,4 +228,4 @@ def celery(ctx, dry_run=False):
     Executes a Celery worker.
     """
     do = runner(ctx, dry_run, pty=True)
-    do(f"cd src && celery -A ej.celery worker --loglevel=INFO")
+    do("cd src && celery -A ej.celery worker --loglevel=INFO")

@@ -1,19 +1,21 @@
-{% if create_mode %}
-    {% block initial_comments %}
+        {% if create_mode %}
         <h4 class="conversation-form__h4">{{_("Initial comments")}}</h4>
-        <p class="helptext">
+        <p class="helptext helptext--comments-form">
             {{ _('You can include as many as you want,') }}{{ ' ' }}
             {{ _('but they help engage your audience and expand the discussion.') }}{{ ' ' }}
             {{ _('Remember to provide minimal context and something for other users to explore.') }}{{ ' ' }}
             {{ _('You can add new comments at any time.') }}
         </p>
+        {% endif %}
+        {% if create_mode %}
         <input type="hidden" name="comments_count" value="3">
         <div id="comment-list">
             {% for i in range(1, 4) %}
                 <label>
                     {% trans %}Comment {{ i }}{% endtrans %}
-                    <textarea maxlength="252" name="comment-{{ i }}"
-                            placeholder="{{ _('Type your comment here') }} #{{ i }}"></textarea>
+                    <textarea class="comment__textarea"
+                              maxlength="252" name="comment-{{ i }}"
+                              placeholder="{{ _('Type your comment here') }} #{{ i }}"></textarea>
                 </label>
             {% endfor %}
         </div>
@@ -33,15 +35,14 @@
                             template = (
                                 '<label>' +
                                 `{{ gettext(" Comment ") }} ${index}` +
-                                '<textarea name="comment-%i%" placeholder="{{ _('Type your comment here') }} #%i%"></textarea>' +
+                                '<textarea class="comment__textarea" name="comment-%i%" placeholder="{{ _('Type your comment here') }} #%i%"></textarea>' +
                                 '</label>');
                         $input.val(index);
                         $('#comment-list').append(template.replace(/%i%/g, index));
                     });
             });
         </script>
-    {% endblock %}
-{% endif %}
+        {% endif %}
 
 <h4 class="conversation-form__h4">{{_("Comments added by participants")}}</h4>
 <label class="margin-y3">

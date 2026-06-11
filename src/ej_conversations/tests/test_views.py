@@ -751,6 +751,26 @@ class TestConversationCreate(ConversationSetup):
         response = anonymous_client.get(welcome_url, follow=True)
         assert b".png" in response.content
 
+    def test_create_view_renders_breadcrumb_and_tabs(
+        self, base_board, base_user
+    ):
+        url = reverse(
+            "boards:conversation-create", kwargs={"board_slug": base_board.slug}
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.get(url)
+        assert response.status_code == 200
+        # Breadcrumb nav is rendered
+        assert b'class="breadcrumb"' in response.content
+        # Current page item is marked with aria-current
+        assert b'aria-current="page"' in response.content
+        # Form tabs are rendered with the Essentials tab active
+        assert b"conversation-form-tabs__tab--active" in response.content
+        # Sticky form actions bar is present
+        assert b"conversation-form-actions__primary" in response.content
+
 
 class TestConversationComments(ConversationSetup):
     def test_user_can_create_comments(self, logged_admin):
@@ -1132,6 +1152,24 @@ class TestConversationEdit(ConversationSetup):
         )
         assert new_conversation.title == "bar"
         assert new_conversation.text == "description"
+
+    def test_edit_view_renders_breadcrumb_and_save_action(
+        self, base_user, new_conversation
+    ):
+        url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.get(url)
+        assert response.status_code == 200
+        # Breadcrumb nav is rendered
+        assert b'class="breadcrumb"' in response.content
+        # Current page item is marked with aria-current
+        assert b'aria-current="page"' in response.content
+        # Save icon is referenced in the form actions
+        assert b"icon_save.svg" in response.content
 
 
 class TestConversationDelete(ConversationSetup):
