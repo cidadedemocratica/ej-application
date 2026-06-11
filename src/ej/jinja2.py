@@ -15,6 +15,7 @@ from sidekick import record
 
 from . import components
 from . import roles
+from .breadcrumbs import get_breadcrumbs as _get_breadcrumbs
 from .roles import tags
 from .utils.url import SafeUrl
 
@@ -49,6 +50,7 @@ def environment(autoescape=True, **options):
         # Platform functions
         generic_context=generic_context,
         get_messages=messages,
+        get_breadcrumbs=breadcrumbs,
         # Available tags and components
         render=html,
         tag=roles,
@@ -135,6 +137,20 @@ def messages(ctx):
         return []
     else:
         return get_messages(request)
+
+
+@contextfunction
+def breadcrumbs(ctx):
+    """
+    Builds the breadcrumb chain for the current request by matching the
+    URL path against known patterns (see :mod:`ej.breadcrumbs`). Templates
+    can override the auto-generated value by setting ``breadcrumb_items``
+    themselves.
+    """
+    request = ctx.get("request")
+    if request is None:
+        return []
+    return _get_breadcrumbs(request)
 
 
 @contextfunction

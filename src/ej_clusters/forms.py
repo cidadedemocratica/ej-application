@@ -9,7 +9,6 @@ from ej_clusters.models.stereotype_vote import StereotypeVote
 from ej_conversations.enums import Choice
 from ej_conversations.models import Comment
 from .models import Stereotype, Cluster
-from django.utils.module_loading import import_string
 
 
 class StereotypeForm(EjModelForm):

@@ -7,13 +7,11 @@ from PIL import Image
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db.utils import NotSupportedError
-from django.test import Client, RequestFactory
+from django.test import Client
 from django.urls import reverse
 from ej.testing import UrlTester
 from ej_conversations.models import Conversation
 from ej_profiles import enums
-from ej_profiles.views import HomeView
 from ej_users.models import User
 import pytest
 

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from logging import getLogger
 import os
 from typing import Dict, Text, Any

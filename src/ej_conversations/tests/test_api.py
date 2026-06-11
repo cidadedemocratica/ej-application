@@ -4,7 +4,7 @@ from rest_framework.viewsets import reverse
 
 from ej_boards.models import Board
 from ej_conversations.enums import Choice
-from ej_conversations.models import Comment, Vote, Conversation
+from ej_conversations.models import Comment, Vote
 from ej_conversations.roles.comments import comment_summary
 from ej_conversations.tests.conftest import (
     API_V1_URL,
@@ -12,7 +12,7 @@ from ej_conversations.tests.conftest import (
 )
 from ej_users.models import User
 
-from .examples import COMMENT, CONVERSATION, VOTE, VOTES
+from .examples import COMMENT, CONVERSATION
 
 
 @pytest.fixture

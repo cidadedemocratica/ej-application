@@ -409,7 +409,8 @@ class ConversationEditView(UpdateView):
         )
 
         if form.is_valid():
-            form.save(board=board, **kwargs)
+            with transaction.atomic():
+                form.save(board=board, **kwargs)
             page = request.POST.get("next")
             url = self.get_redirect_url(conversation, page)
             return redirect(url)

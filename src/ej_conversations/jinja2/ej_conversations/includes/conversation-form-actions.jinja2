@@ -1,0 +1,10 @@
+{% set _actions_label = conversation_form_actions_label if conversation_form_actions_label is defined else _('Create conversation') %}
+{% set _actions_icon = conversation_form_actions_icon if conversation_form_actions_icon is defined else '/img/icons/user-plus.svg' %}
+<div class="conversation-form-actions" role="group" aria-label="{{ _('Conversation form actions') }}">
+    <div class="conversation-form-actions__inner">
+        <button type="submit" class="conversation-form-actions__primary">
+            <img class="conversation-form-actions__icon" src="{{ static(_actions_icon) }}" alt="" aria-hidden="true">
+            <span>{{ _actions_label }}</span>
+        </button>
+    </div>
+</div>

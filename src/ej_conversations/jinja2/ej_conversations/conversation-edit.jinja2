@@ -1,18 +1,6 @@
-{% extends 'ej_conversations/conversation-create.jinja2' %}
-{% block menu %}{% include 'ej_conversations/includes/menu.jinja2' %}{% endblock %}
-
-{% block balloon %}
-    {% with create_mode=false %}
-        {% include 'ej_conversations/includes/editable-conversation-balloon.jinja2' %}
-    {% endwith %}
-{% endblock %}
-
-{% block form_content %}{{super()}}{% endblock %}
-
-{% block initial_comments %}{% endblock %}
-
-{% block conversation_form_button %}
-    <div class="margin-xauto margin-y4 conversation-form__create-button">
-        <input class="is-primary button" type="submit" value="{{ _('Save') }}">
-    </div>
-{% endblock %}
+{% extends 'ej_conversations/_conversation-form.jinja2' %}
+{% set create_mode = false %}
+{% set page_heading = _('Conversation editing') %}
+{% set conversation_form_actions_label = _('Save settings') %}
+{% set conversation_form_actions_icon = '/img/icons/icon_save.svg' %}
+{# Side menu stays hidden on edit, mirroring the create page (hide_menu defaults to true). #}

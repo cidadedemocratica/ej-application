@@ -34,6 +34,7 @@ $color-brand-conversation-form: rgba(48, 191, 215 , .15);
         }
     }
 
+
     article {
         @include themed('background', light);
 
@@ -70,8 +71,13 @@ $color-brand-conversation-form: rgba(48, 191, 215 , .15);
         height: 4.5rem;
         font-size: 1.5rem;
     }
+    input::placeholder,
     textarea::placeholder {
-        @extend legend;
+        font-family: "Work Sans", sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 0;
     }
 
     &__tags {
@@ -662,7 +668,6 @@ $color-brand-conversation-form: rgba(48, 191, 215 , .15);
 
     }
 }
-
 .comment-card {
     max-height: 529px;
 
@@ -724,5 +729,74 @@ $color-brand-conversation-form: rgba(48, 191, 215 , .15);
 @media (max-width: 875px) {
     .body {
         margin: unset !important;
+    }
+}
+
+.page-header {
+    margin-top: 2rem;
+    margin-bottom: 2.8rem;
+
+    @media only screen and (max-width: 900px) {
+        margin-bottom: 2.3rem;
+    }
+
+    > div {
+        grid-column: 2 / 3;
+    }
+
+    &__title {
+        color: $color-accent;
+        font-family: 'Work Sans', sans-serif;
+        margin: 0 0 0.75rem;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0;
+    }
+}
+
+.breadcrumb {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0;
+
+    &__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 0.85rem;
+        row-gap: 0.4rem;
+    }
+
+    &__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        margin-bottom: 0;
+    }
+
+    &__link {
+        color: $color-theme-dark-blue;
+        font-weight: 700;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    &__separator {
+        color: $color-theme-dark-blue;
+        font-weight: 700;
+    }
+
+    &__current {
+        color: $color-theme-dark-blue;
+        font-weight: 400;
     }
 }

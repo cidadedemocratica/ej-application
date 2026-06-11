@@ -1,0 +1,235 @@
+{% extends 'ej_conversations/base.jinja2' %}
+{# Abstract base for conversation create/edit. Not rendered directly.
+   Wrapper templates must set ``page_heading`` and ``create_mode``; all other
+   variables below have sensible defaults that match the create-page layout. #}
+{% set main_class = main_class|default('pad-x0') %}
+{% set hide_menu = hide_menu|default(true) %}
+{% set body_class = body_class|default('body conversation-create-page') %}
+{% set create_mode = create_mode|default(false) %}
+{% set conversation_form_tabs_enabled = conversation_form_tabs_enabled|default(true) %}
+{% set conversation_form_sticky_actions = conversation_form_sticky_actions|default(true) %}
+{% set conversation_form_actions_label = conversation_form_actions_label|default(_('Create conversation')) %}
+{% set conversation_form_actions_icon = conversation_form_actions_icon|default('/img/icons/user-plus.svg') %}
+
+
+{% block content %}
+    <form method="POST" class="width-full" enctype="multipart/form-data">
+        {{ csrf_input }}
+        {% set active_tab = request.POST.get('active_tab', 'basic') if request is defined else 'basic' %}
+        {% if conversation_form_tabs_enabled %}
+            {% include 'ej_conversations/includes/conversation-form-tabs.jinja2' %}
+            <section
+                id="conversation-form-panel-basic"
+                class="conversation-form-panel"
+                role="tabpanel"
+                aria-labelledby="conversation-form-tab-basic"
+                {% if active_tab != 'basic' %}hidden{% endif %}
+            >
+        {% endif %}
+        {% block balloon %}
+            {% include 'ej_conversations/includes/editable-conversation-balloon.jinja2' %}
+        {% endblock %}
+        {% if conversation_form_tabs_enabled %}
+            </section>
+            <section
+                id="conversation-form-panel-advanced"
+                class="conversation-form-panel"
+                role="tabpanel"
+                aria-labelledby="conversation-form-tab-advanced"
+                {% if active_tab != 'advanced' %}hidden{% endif %}
+            >
+        {% endif %}
+
+        {% block form_content %}
+            {{ form.media }}
+            <div class="conversation-form conversation-form--full-width content-grid">
+                <div>
+                    <h4 class="conversation-form__h4">{{_("Anonymous participation")}}</h4>
+                    <div class="block">
+                        <label style="text-transform: unset">
+                            {{form.anonymous_votes_enabled}}
+                            <span class="margin-x1">{{form.anonymous_votes_enabled.label}}</span>
+                        </label>
+                    </div>
+                    <div id="anonymous_votes" class="block">
+                        <label style="text-transform: unset" class="mt-14">
+                            {{form.anonymous_votes.label}}
+                        </label>
+                        {{form.anonymous_votes}}
+                        <legend>{{form.anonymous_votes.help_text}}</legend>
+                    </div>
+
+                    <h4 class="conversation-form__h4">{{_("Demographic questions")}}</h4>
+                    <div class="block">
+                        <label style="text-transform: unset">
+                            {{form.send_profile_question}}
+                            <span class="margin-x1">{{form.send_profile_question.label}}</span>
+                        </label>
+                    </div>
+                    <div id="demographic_questions" class="block">
+                        <label style="text-transform: unset" class="mt-14">
+                            {{form.votes_to_send_profile_question.label}}
+                        </label>
+                        {{form.votes_to_send_profile_question}}
+                        <legend>
+                            {{form.votes_to_send_profile_question.help_text}}
+                            <b>{{_("This configuration only affects EJ API.")}}</b>
+                        </legend>
+                    </div>
+
+                    <h4 class="conversation-form__h4">{{_("Conversation duration")}}</h4>
+                    <div class="conversation-form__duration">
+                        <div>{{form.start_date}}</div>
+                        <div>{{form.end_date}}</div>
+                    </div>
+
+                    <h4 class="conversation-form__h4">{{_("Customize")}}</h4>
+                    <div class="block">
+                        <label class="mt-20 mb-16">{{form.background_image.label}}</label>
+                            {{form.background_image}}
+                    </div>
+
+                    {% if "background_image" in form.errors %}
+                        {{ form.errors["background_image"] }}
+                    {% endif %}
+
+                    <div class="block">
+                        <label for="" class="mt-32 mb-16">{{form.logo_image.label}}</label>
+                            {{form.logo_image}}
+                    </div>
+                    {% if "logo_image" in form.errors %}
+                        {{ form.errors["logo_image"] }}
+                    {% endif %}
+
+                    <div class="conversation-form__custom-richtext">
+                        <label class="mt-32 mb-16">{{_("Text to be displayed as welcome")}}</label>
+                        <div class="conversation-form__custom-richtext__text">
+                            {{form.welcome_message}}
+                        </div>
+                    </div>
+
+                    <div class="conversation-form__custom-richtext">
+                        <label class="mt-32 mb-16">{{_("Text to be presented at the end of the collection")}}</label>
+                        <div class="conversation-form__custom-richtext__text">
+                            {{form.ending_message}}
+                        </div>
+                    </div>
+
+                    {% if not conversation_form_sticky_actions %}
+                        {% block conversation_form_button %}
+                            <div class="margin-xauto margin-y4 conversation-form__create-button">
+                                <input class="is-primary button" type="submit" value="{{ conversation_form_actions_label }}">
+                            </div>
+                        {% endblock %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}
+        {% if conversation_form_tabs_enabled %}
+            </section>
+        {% endif %}
+        {% if conversation_form_sticky_actions %}
+            {% include 'ej_conversations/includes/conversation-form-actions.jinja2' %}
+        {% endif %}
+    </form>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ super() }}
+    <!--suppress SpellCheckingInspection -->
+    <script>
+        function toggleConversationOption(checkboxOptionID, optionID) {
+            const $checkbox = $(checkboxOptionID)
+            const $option = $(optionID);
+            const $optionInput = $option.children('input');
+
+            function toggleOption() {
+                if ($checkbox.is(':checked')) {
+                    $option.css('opacity', 1);
+                    $optionInput[0].disabled = false;
+                } else {
+                    $option.css('opacity', 0.5);
+                    $optionInput[0].value = 0;
+                    $optionInput[0].disabled = true;
+                }
+            }
+            $checkbox.on('change', toggleOption);
+            toggleOption();
+        }
+
+        function initializeConversationFormTabs() {
+            const tabs = Array.from(document.querySelectorAll('[role="tab"][data-tab-target]'));
+            const activeTabInput = document.getElementById('conversation-form-active-tab');
+
+            if (!tabs.length || !activeTabInput) return;
+
+            function activateTab(tab, focusTab) {
+                const target = tab.dataset.tabTarget;
+                const panels = Array.from(document.querySelectorAll('.conversation-form-panel'));
+
+                tabs.forEach(function (currentTab) {
+                    const isActive = currentTab === tab;
+                    currentTab.classList.toggle('conversation-form-tabs__tab--active', isActive);
+                    currentTab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+                    currentTab.setAttribute('tabindex', isActive ? '0' : '-1');
+                });
+
+                panels.forEach(function (panel) {
+                    panel.hidden = panel.id !== `conversation-form-panel-${target}`;
+                });
+
+                activeTabInput.value = target;
+                if (focusTab) tab.focus();
+            }
+
+            tabs.forEach(function (tab, index) {
+                tab.addEventListener('click', function () {
+                    activateTab(tab, false);
+                });
+                tab.addEventListener('keydown', function (ev) {
+                    const lastIndex = tabs.length - 1;
+                    let nextIndex = null;
+
+                    if (ev.key === 'ArrowLeft') nextIndex = index === 0 ? lastIndex : index - 1;
+                    if (ev.key === 'ArrowRight') nextIndex = index === lastIndex ? 0 : index + 1;
+                    if (ev.key === 'Home') nextIndex = 0;
+                    if (ev.key === 'End') nextIndex = lastIndex;
+
+                    if (nextIndex !== null) {
+                        ev.preventDefault();
+                        activateTab(tabs[nextIndex], true);
+                    }
+                });
+            });
+
+            const initialTab = tabs.find(function (tab) {
+                return tab.dataset.tabTarget === activeTabInput.value;
+            }) || tabs[0];
+            activateTab(initialTab, false);
+        }
+
+        $(document).ready(function() {
+            initializeConversationFormTabs()
+            toggleConversationOption("#id_send_profile_question", "#demographic_questions")
+            toggleConversationOption("#id_anonymous_votes_enabled", "#anonymous_votes")
+        });
+
+        $(window).on('load', function () {
+            $('#add-more-comments')
+                .on('click keypress', function (ev) {
+                    // keycodes: 13 = return; 32 = space
+                    if (ev.type === "keypress" && (![13, 32].includes(ev.keyCode))) return;
+                    var $input = $('input[name="comments_count"]'),
+                        index = parseInt($input.val(), 10) + 1,
+                        template = (
+                            '<label>' +
+                            `{{ gettext(" Comment ") }} ${index}` +
+                            '<textarea name="comment-%i%" placeholder="{{ _('Type your comment here') }} #%i%"></textarea>' +
+                            '</label>');
+                    $input.val(index);
+                    $('#comment-list').append(template.replace(/%i%/g, index));
+                });
+        });
+    </script>
+{% endblock %}
