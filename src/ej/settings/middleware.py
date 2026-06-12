@@ -7,6 +7,7 @@ class MiddlewareConf(Base):
         middleware = [
             "django.middleware.csrf.CsrfViewMiddleware",
             "corsheaders.middleware.CorsMiddleware",
+            "whitenoise.middleware.WhiteNoiseMiddleware",
             "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
             "ej_boards.middleware.BoardFallbackMiddleware",
             *middleware,
