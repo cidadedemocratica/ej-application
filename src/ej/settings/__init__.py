@@ -38,6 +38,12 @@ class Conf(
     USING_DOCKER = env(False, name="USING_DOCKER")
     HOSTNAME = env("localhost")
 
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+
     #
     # Accounts
     #

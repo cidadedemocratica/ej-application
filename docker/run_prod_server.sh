@@ -3,26 +3,10 @@
 # includes poetry binary in $PATH
 export PATH="/root/.local/bin:$PATH"
 
-# prepare database
-inv db
+set -e
 
-if [ "$SERVER_MODE" != "api" ]; then
-    # install js dependencies
-    (cd src/$EJ_THEME/static/$EJ_THEME/ && npm i)
-
-    # prepare all assets (js, css)
-    inv build-assets
-
-    # generate translations
-    inv i18n
-    inv i18n --compile
-
-    # generates documentation
-    inv docs
-
-    # runs django collectstatic command
-    inv collect
+if [[ "$1" == "gunicorn" ]]; then
+    inv db
 fi
 
-# runs prod server
-inv gunicorn
+exec "$@"

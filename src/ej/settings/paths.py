@@ -58,7 +58,9 @@ class PathsConf(Base):
             )
         )
         valid_dirs = [dir for dir in dirs if os.path.exists(dir)]
-        return [f'{str(repo_dir) + "/src/ej/static/ej/assets"}', *valid_dirs]
+        assets_dir = f"{str(repo_dir)}/src/ej/static/ej/assets"
+        dirs = [assets_dir] if os.path.exists(assets_dir) else []
+        return [*dirs, *valid_dirs]
 
     def get_django_templates_dirs(self):
         dirs = [self.ROOT_TEMPLATE_DIR / "django"]

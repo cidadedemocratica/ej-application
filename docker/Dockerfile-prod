@@ -1,0 +1,78 @@
+FROM python:3.12-slim-bookworm AS builder
+
+ENV PATH="${PATH}:/root/.local/bin"
+
+WORKDIR /build
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    curl \
+    gcc \
+    libc6-dev \
+    make \
+    libpq-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    g++ \
+    gettext \
+    && rm -rf /var/lib/apt/lists/*
+RUN touch /etc/apt/preferences.d/nodejs && \
+    echo "Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 1001" > /etc/apt/preferences.d/nodejs
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs --no-install-recommends
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+COPY pyproject.toml poetry.lock package*.json ./
+
+RUN poetry config virtualenvs.create false \
+    && poetry install --only main --no-root --no-interaction --no-ansi
+    
+COPY . .
+
+ARG EJ_THEME
+
+WORKDIR /build/src/${EJ_THEME}/static/${EJ_THEME}
+
+RUN npm ci
+
+ENV PATH="/build/src/${EJ_THEME}/static/${EJ_THEME}/node_modules/.bin:${PATH}"
+ENV DJANGO_SETTINGS_MODULE="ej.settings"
+ENV PYTHONPATH="/build/src"
+
+WORKDIR /build
+
+RUN inv build-assets
+RUN inv i18n --compile
+RUN inv docs
+
+WORKDIR /build/src
+
+RUN RABBITMQ_DEFAULT_USER=build \
+    RABBITMQ_DEFAULT_PASS=build \
+    python manage.py collectstatic --noinput
+
+FROM python:3.12-slim-bookworm AS runner
+
+ENV PYTHONPATH="/ej-application/src"
+ENV DJANGO_SETTINGS_MODULE="ej.settings"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    libjpeg62-turbo \
+    gettext \
+    locales \
+    && rm -rf /var/lib/apt/lists/*
+RUN sed -i 's/^# *\(pt_BR.UTF-8\)/\1/' /etc/locale.gen && locale-gen
+
+WORKDIR /ej-application
+
+COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /build/docker/run_prod_server.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+COPY --from=builder /build/ /ej-application/
+
+EXPOSE 8000
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "ej.wsgi:application", "--bind", "0.0.0.0:8000"]

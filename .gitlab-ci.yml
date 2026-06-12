@@ -1,121 +1,198 @@
 stages:
-    - style
-    - linter
-    - unit tests
-    - build
-    - deploy
-    - e2e tests
+  - style
+  - linter
+  - unit tests
+  - build
+    # - deploy
+    # - e2e tests
+
+.pipeline-rules:
+  r1: &push_dev $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH == 'develop'
+  r2: &job_build $JOB == 'build'
+  r3: &merge_request $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 variables:
-    GITLAB_EJ_TOKEN: "gitlab+deploy-token-533883:51xTbvyHGmEfeZZUxUct"
+  GITLAB_EJ_TOKEN: "gitlab+deploy-token-533883:51xTbvyHGmEfeZZUxUct"
+  EJ_THEME: "ej"
+  SERVICE: "ej"
+  ENVIRONMENT: 
+    value: "production"
+    description: "Ambiente no qual o JOB será executado."
+    options:
+      - "none"
+      - "production"
+  JOB:
+    value: "none"
+    description: "JOB desejado."
+    options:
+      - "build"
+      - "none"
+      - "unit tests"
+  #   - "deploy"
+
+.kaniko-build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.14.0-debug
+    entrypoint: [""]
+  script:
+    - test -n "$CONTEXT" || { echo "CONTEXT não definido"; exit 1; }
+    - test -n "$EJ_THEME" || { echo "EJ_THEME não definido"; exit 1; }
+    - test -n "$DOCKERFILE" || { echo "DOCKERFILE não definido"; exit 1; }
+    - test -f "$DOCKERFILE" || { echo "Dockerfile não encontrado - $DOCKERFILE"; exit 1; }
+    - export IMAGE_NAME="$CI_REGISTRY_IMAGE/$SERVICE:$IMAGE_TAG"
+    - export CI_REGISTRY_IMAGE="$CI_REGISTRY_IMAGE"
+    - export CI_REGISTRY_USER="$CI_REGISTRY_USER"
+    - export CI_REGISTRY_PASSWORD="$CI_REGISTRY_PASSWORD"
+    - echo "Autenticando"
+    - mkdir -p /kaniko/.docker
+    - |
+      cat > /kaniko/.docker/config.json <<EOF
+      {
+        "auths": {
+          "$CI_REGISTRY": {
+            "auth": "$(printf '%s:%s' "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 -w0)"
+          }
+        }
+      }
+      EOF
+    - echo "Building and pushing $IMAGE_NAME"
+    - |
+      /kaniko/executor \
+        --context "$CONTEXT" \
+        --dockerfile "$DOCKERFILE" \
+        --destination "$IMAGE_NAME" \
+        --build-arg VERSION="$IMAGE_TAG" --build-arg EJ_THEME="$EJ_THEME" \
+        --log-timestamp
+
+docker-build:
+  extends: .kaniko-build
+  environment:
+    name: "$ENVIRONMENT"
+    action: prepare
+  variables:
+    CONTEXT: .
+    DOCKERFILE: docker/Dockerfile-prod
+    IMAGE_TAG: $CI_COMMIT_SHORT_SHA # TODO: Taggear imagem baseado na release
+    FF_TIMESTAMPS: "1"
+  rules:
+    - if: *push_dev
+    - if: *job_build
 
 black:
-    stage: style
-    image:
-        name: python:3.9.19-slim-bookworm
-        pull_policy: if-not-present
-    before_script:
-        - /bin/bash -c "pip install black==22.12.0"
-    script:
-        - /bin/bash -c "black --check ."
-    tags:
-        - k8s
+  stage: style
+  image:
+    name: python:3.9.19-slim-bookworm
+    pull_policy: if-not-present
+  before_script:
+    - /bin/bash -c "pip install black==22.12.0"
+  script:
+    - /bin/bash -c "black --check ."
+  tags:
+    - k8s
+  rules:
+    - if: *merge_request
 
 ruff:
-    stage: linter
-    image:
-        name: python:3.9.19-slim-bookworm
-        pull_policy: if-not-present
-    before_script:
-        - /bin/bash -c "pip install ruff==0.3.7"
-    script:
-        - /bin/bash -c "ruff check"
-    tags:
-        - k8s
+  stage: linter
+  image:
+    name: python:3.9.19-slim-bookworm
+    pull_policy: if-not-present
+  before_script:
+    - /bin/bash -c "pip install ruff==0.3.7"
+  script:
+    - /bin/bash -c "ruff check"
+  tags:
+    - k8s
+  rules:
+    - if: *merge_request
 
 pytest:
-    stage: unit tests
-    image:
-        name: python:3.9.19-slim-bookworm
-        pull_policy: if-not-present
-    before_script:
-        - apt-get update && apt-get install curl libpq-dev gcc g++ libjpeg-dev zlib1g-dev git -y
-    script:
-        - cd /builds/pencillabs/ej/ej-application
-        - curl -sSL https://install.python-poetry.org | python3 -
-        - export PATH="/root/.local/bin:$PATH"
-        - poetry install --with main,dev --no-root
-        - poetry run inv docs
-        - poetry run inv test
-    tags:
-        - k8s
+  stage: unit tests
+  image:
+    name: python:3.9.19-slim-bookworm
+    pull_policy: if-not-present
+  before_script:
+    - apt-get update && apt-get install curl libpq-dev gcc g++ libjpeg-dev zlib1g-dev git -y
+  script:
+    - cd /builds/pencillabs/ej/ej-application
+    - curl -sSL https://install.python-poetry.org | python3 -
+    - export PATH="/root/.local/bin:$PATH"
+    - poetry install --with main,dev --no-root
+    - poetry run inv docs
+    - poetry run inv test
+  tags:
+    - k8s
+  rules:
+    - if: *merge_request
+    - if: *job_build
 
-build_dev_image:
-    stage: build
-    image:
-        name: docker
-        pull_policy: if-not-present
-    before_script:
-        - apk update && apk add bash py3-pip
-        - docker info
-    script:
-        - cd /builds/pencillabs/ej/ej-application
-        - python3 -m venv /tmp/venv &&  . /tmp/venv/bin/activate && pip install invoke django-environ
-        - . /tmp/venv/bin/activate && inv docker-build --tag ${CI_COMMIT_SHA} --registry registry.pencillabs.tec.br --no-cache
-        - . /tmp/venv/bin/activate && inv docker-push --tag ${CI_COMMIT_SHA} --registry registry.pencillabs.tec.br
-    only:
-        refs:
-            - develop
-    tags:
-        - k8s
+# build_dev_image:
+#     stage: build
+#     image:
+#         name: docker
+#         pull_policy: if-not-present
+#     before_script:
+#         - apk update && apk add bash py3-pip
+#         - docker info
+#     script:
+#         - cd /builds/pencillabs/ej/ej-application
+#         - python3 -m venv /tmp/venv &&  . /tmp/venv/bin/activate && pip install invoke django-environ
+#         - . /tmp/venv/bin/activate && inv docker-build --tag ${CI_COMMIT_SHA} --registry registry.pencillabs.tec.br --no-cache
+#         - . /tmp/venv/bin/activate && inv docker-push --tag ${CI_COMMIT_SHA} --registry registry.pencillabs.tec.br
+#     only:
+#         refs:
+#             - develop
+#     tags:
+#         - k8s
 
-deploy_dev_image:
-    stage: deploy
-    image:
-        name: python:3.9.19-slim-bookworm
-        pull_policy: if-not-present
-    before_script:
-        - apt-get update && apt-get install git curl -y
-        - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-    script:
-        - helm version
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/pencillabs/infraestructure/helm-charts.git
-        - cd helm-charts
-        - helm upgrade ej-homolog ej -f ej/values-homolog.yaml --set server.image.tag="${CI_COMMIT_SHA}" --install --kubeconfig $K8S_CONFIG
-    only:
-        refs:
-            - develop
-    tags:
-        - k8s
+# deploy_dev_image:
+#     stage: deploy
+#     image:
+#         name: python:3.9.19-slim-bookworm
+#         pull_policy: if-not-present
+#     before_script:
+#         - apt-get update && apt-get install git curl -y
+#         - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+#     script:
+#         - helm version
+#         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/pencillabs/infraestructure/helm-charts.git
+#         - cd helm-charts
+#         - helm upgrade ej-homolog ej -f ej/values-homolog.yaml --set server.image.tag="${CI_COMMIT_SHA}" --install --kubeconfig $K8S_CONFIG
+#     only:
+#         refs:
+#             - develop
+#     tags:
+#         - k8s
 
-e2e:
-    stage: e2e tests
-    when: manual
-    image: cypress/base:18.16.0
-    before_script:
-        - apt-get update && apt-get install curl -y
-    script:
-        - cd /builds/pencillabs/ej/ej-application/src/ej/tests/e2e
-        - ./run.sh https://ejplatform.pencillabs.tec.br
-    tags:
-        - k8s
-    only:
-        refs:
-            - develop
+# e2e:
+#     stage: e2e tests
+#     when: manual
+#     image: cypress/base:18.16.0
+#     before_script:
+#         - apt-get update && apt-get install curl -y
+#     script:
+#         - cd /builds/pencillabs/ej/ej-application/src/ej/tests/e2e
+#         - ./run.sh https://ejplatform.pencillabs.tec.br
+#     tags:
+#         - k8s
+#     only:
+#         refs:
+#             - develop
 
-build_prod_image:
-    stage: build
-    image:
-        name: docker
-        pull_policy: if-not-present
-    before_script:
-        - apk update && apk add git
-    script:
-        - git clone -b stable --depth=1 https://$GITLAB_INFRA_TOKEN@gitlab.com/pencillabs/infraestructure/core.git
-        - cd core
-        - bin/pencilctl build ej -e prod -b prod -c prod --no-cache --push
-    only:
-        refs:
-            - prod
-    tags:
-        - k8s
+# build_prod_image:
+#     stage: build
+#     image:
+#         name: docker
+#         pull_policy: if-not-present
+#     before_script:
+#         - apk update && apk add git
+#     script:
+#         - git clone -b stable --depth=1 https://$GITLAB_INFRA_TOKEN@gitlab.com/pencillabs/infraestructure/core.git
+#         - cd core
+#         - bin/pencilctl build ej -e prod -b prod -c prod --no-cache --push
+#     only:
+#         refs:
+#             - prod
+#     tags:
+#         - k8s
