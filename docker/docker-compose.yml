@@ -23,7 +23,7 @@ services:
             - ../.env
         ports:
             - 8000:8000
-        # entrypoint: ["/bin/bash", "docker/run_local_server.sh"]
+        entrypoint: ["/bin/bash", "docker/run_local_server.sh"]
         depends_on:
             - rabbitmq
             - celery
