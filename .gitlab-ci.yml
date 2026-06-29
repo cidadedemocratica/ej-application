@@ -15,7 +15,7 @@ variables:
   GITLAB_EJ_TOKEN: "gitlab+deploy-token-533883:51xTbvyHGmEfeZZUxUct"
   EJ_THEME: "ej"
   SERVICE: "ej"
-  ENVIRONMENT: 
+  ENVIRONMENT:
     value: "production"
     description: "Ambiente no qual o JOB será executado."
     options:
@@ -89,7 +89,7 @@ black:
   script:
     - /bin/bash -c "black --check ."
   tags:
-    - k8s
+    - av-ci-runner
   rules:
     - if: *merge_request
 
@@ -103,7 +103,7 @@ ruff:
   script:
     - /bin/bash -c "ruff check"
   tags:
-    - k8s
+    - av-ci-runner
   rules:
     - if: *merge_request
 
@@ -122,77 +122,7 @@ pytest:
     - poetry run inv docs
     - poetry run inv test
   tags:
-    - k8s
+    - av-ci-runner
   rules:
     - if: *merge_request
     - if: *job_build
-
-# build_dev_image:
-#     stage: build
-#     image:
-#         name: docker
-#         pull_policy: if-not-present
-#     before_script:
-#         - apk update && apk add bash py3-pip
-#         - docker info
-#     script:
-#         - cd /builds/pencillabs/ej/ej-application
-#         - python3 -m venv /tmp/venv &&  . /tmp/venv/bin/activate && pip install invoke django-environ
-#         - . /tmp/venv/bin/activate && inv docker-build --tag ${CI_COMMIT_SHA} --registry registry.pencillabs.tec.br --no-cache
-#         - . /tmp/venv/bin/activate && inv docker-push --tag ${CI_COMMIT_SHA} --registry registry.pencillabs.tec.br
-#     only:
-#         refs:
-#             - develop
-#     tags:
-#         - k8s
-
-# deploy_dev_image:
-#     stage: deploy
-#     image:
-#         name: python:3.9.19-slim-bookworm
-#         pull_policy: if-not-present
-#     before_script:
-#         - apt-get update && apt-get install git curl -y
-#         - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-#     script:
-#         - helm version
-#         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/pencillabs/infraestructure/helm-charts.git
-#         - cd helm-charts
-#         - helm upgrade ej-homolog ej -f ej/values-homolog.yaml --set server.image.tag="${CI_COMMIT_SHA}" --install --kubeconfig $K8S_CONFIG
-#     only:
-#         refs:
-#             - develop
-#     tags:
-#         - k8s
-
-# e2e:
-#     stage: e2e tests
-#     when: manual
-#     image: cypress/base:18.16.0
-#     before_script:
-#         - apt-get update && apt-get install curl -y
-#     script:
-#         - cd /builds/pencillabs/ej/ej-application/src/ej/tests/e2e
-#         - ./run.sh https://ejplatform.pencillabs.tec.br
-#     tags:
-#         - k8s
-#     only:
-#         refs:
-#             - develop
-
-# build_prod_image:
-#     stage: build
-#     image:
-#         name: docker
-#         pull_policy: if-not-present
-#     before_script:
-#         - apk update && apk add git
-#     script:
-#         - git clone -b stable --depth=1 https://$GITLAB_INFRA_TOKEN@gitlab.com/pencillabs/infraestructure/core.git
-#         - cd core
-#         - bin/pencilctl build ej -e prod -b prod -c prod --no-cache --push
-#     only:
-#         refs:
-#             - prod
-#     tags:
-#         - k8s
