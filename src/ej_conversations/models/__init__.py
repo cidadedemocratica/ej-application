@@ -4,7 +4,9 @@ from .comment import Comment
 from .comment_queryset import CommentQuerySet
 from .conversation import Conversation, ConversationTag
 from ej_conversations.models.favorites import FavoriteConversation
+from .conversation_manager import ConversationManager
 from .conversation_queryset import ConversationQuerySet
+from .manager_invitation import ConversationManagerInvitation
 from .vote import Vote
 from .vote_queryset import VoteQuerySet
 from ..enums import Choice

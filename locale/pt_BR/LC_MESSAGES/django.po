@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-11 16:55-0300\n"
+"POT-Creation-Date: 2026-07-06 11:35-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -592,6 +592,39 @@ msgstr "Pode moderar comentários em qualquer conversa"
 msgid "User does not have permission to create a promoted conversation."
 msgstr "Usuário não tem permissão para criar uma conversa promovida."
 
+#: src/ej_conversations/models/conversation_manager.py:43
+#, fuzzy
+msgid "Conversation manager"
+msgstr "Gestor da conversa"
+
+#: src/ej_conversations/models/conversation_manager.py:44
+#, fuzzy
+msgid "Conversation managers"
+msgstr "Gestores da conversa"
+
+#: src/ej_conversations/models/manager_invitation.py:32
+msgid "Pending"
+msgstr "Pendente"
+
+#: src/ej_conversations/models/manager_invitation.py:33
+msgid "Accepted"
+msgstr "Aceito"
+
+#: src/ej_conversations/models/manager_invitation.py:66
+#, fuzzy
+msgid "Conversation manager invitation"
+msgstr "Convite para gestor de conversa"
+
+#: src/ej_conversations/models/manager_invitation.py:67
+#, fuzzy
+msgid "Conversation manager invitations"
+msgstr "Convites para gestores de conversas"
+
+#: src/ej_conversations/models/manager_invitation.py:153
+#, fuzzy
+msgid "Inactive invitations cannot be accepted."
+msgstr "Convites inativos não podem ser aceitos."
+
 #: src/ej_conversations/models/vote.py:14
 #, python-brace-format
 msgid "vote should be one of 'agree', 'disagree' or 'skip', got {value}"
@@ -660,9 +693,26 @@ msgstr " comentários"
 msgid " of "
 msgstr " de "
 
-#: src/ej_conversations/serializers.py:276 src/ej_conversations/views.py:177
+#: src/ej_conversations/serializers.py:276 src/ej_conversations/views.py:180
 msgid "Participate"
 msgstr "Participar"
+
+#: src/ej_conversations/tests/test_views.py:1123
+#: src/ej_conversations/views.py:553
+#, fuzzy
+msgid "The conversation owner cannot be added as a manager."
+msgstr "O proprietário da conversa não pode ser adicionado como gestor."
+
+#: src/ej_conversations/tests/test_views.py:1143
+#: src/ej_conversations/views.py:541
+#, fuzzy
+msgid "Enter a valid email address."
+msgstr "Insira um endereço de e-mail válido."
+
+#: src/ej_conversations/tests/test_views.py:1167
+#: src/ej_conversations/views.py:568
+msgid "This member is already invited."
+msgstr "Este membro já foi convidado."
 
 #: src/ej_conversations/utils.py:110
 msgid "This conversation is now favorite."
@@ -681,12 +731,12 @@ msgstr "Campo não pode estar vazio!"
 msgid "The maximum file size must be 5MB"
 msgstr "O tamanho máximo do arquivo deve ser 5 MB"
 
-#: src/ej_conversations/views.py:198
+#: src/ej_conversations/views.py:201
 #, fuzzy
 msgid "Manage!"
 msgstr "Gerenciar!"
 
-#: src/ej_conversations/views.py:239
+#: src/ej_conversations/views.py:242
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -2317,10 +2367,6 @@ msgstr "sim, quero aprovar o(s) comentário(s)"
 #, fuzzy
 msgid "Yes, I want to change the comments"
 msgstr "Sim, eu quero alterar o(s) comentário(s)"
-
-#: src/ej_conversations/jinja2/ej_conversations/conversation-moderate.jinja2:95
-msgid "Pending"
-msgstr "Esperando"
 
 #: src/ej_conversations/jinja2/ej_conversations/conversation-moderate.jinja2:96
 msgid "Approved"
@@ -4321,10 +4367,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ msgid "It was not possible to generate token."
 #~ msgstr "Não foi possível gerar os tokens."
 
-#, fuzzy
-#~ msgid "Deleted personas cannot be recovered"
-#~ msgstr "Personas deletadas não podem ser recuperadas"
-
 #~ msgid "Force clusterization"
 #~ msgstr "Forçar agrupamento"
 
@@ -5149,9 +5191,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #~ msgid "... or opening the \"options\" menu."
 #~ msgstr "... ou abrindo o menu \"Opções\"."
-
-#~ msgid "Conversation Card"
-#~ msgstr "Cartão de Conversa"
 
 #~ msgid "But here is where the magic starts..."
 #~ msgstr "Mas aqui é onde a mágica começa ..."

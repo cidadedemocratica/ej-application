@@ -1,4 +1,5 @@
 import json
+from itertools import count
 
 import mock
 import pytest
@@ -8,9 +9,11 @@ from rest_framework.test import APIClient
 
 from ej_boards.models import Board
 from ej_conversations import create_conversation
+from ej_conversations.models import ConversationManagerInvitation
 from ej_users.models import User
 
 API_V1_URL = "/api/v1"
+INVITATION_EMAIL_SEQUENCE = count(1)
 
 
 def get_authorized_api_client(user_info):
@@ -120,6 +123,40 @@ def custom_request():
 @pytest.fixture
 def mk_user(db, email="default@user.com", is_staff=False):
     return User.objects.create_user(email, "1234", is_staff=is_staff)
+
+
+@pytest.fixture
+def mk_conversation_manager_invitation(db):
+    def make(
+        conversation,
+        *,
+        manager=None,
+        email=None,
+        invited_by=None,
+        status=None,
+        is_active=True,
+        accepted=False,
+    ):
+        if manager is not None:
+            email = manager.email
+        if email is None:
+            sequence = next(INVITATION_EMAIL_SEQUENCE)
+            email = f"manager-{sequence}@example.com"
+        if invited_by is None:
+            invited_by = conversation.author
+
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=email,
+            invited_by=invited_by,
+            is_active=is_active,
+            **({"status": status} if status is not None else {}),
+        )
+        if accepted:
+            invitation.accept()
+        return invitation
+
+    return make
 
 
 @pytest.fixture
