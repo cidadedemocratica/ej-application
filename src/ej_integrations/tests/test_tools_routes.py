@@ -1,6 +1,7 @@
 from ej_conversations.mommy_recipes import ConversationRecipes
 from django.test import Client
 from ej_integrations.models import RasaConversation
+from ej_users.models import User
 import pytest
 
 TEST_DOMAIN = "https://domain.com.br"
@@ -27,6 +28,20 @@ class TestIntegrationsRoutes(ConversationRecipes):
     def test_get_tools_routes(self, conversation_db):
         client = Client()
         client.force_login(conversation_db.author)
+        for route in self.ROUTES:
+            response = client.get(conversation_db.get_absolute_url() + route)
+            assert response.status_code == 200
+
+    def test_manager_gets_tools_routes(
+        self, conversation_db, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        mk_conversation_manager_invitation(
+            conversation_db, manager=manager, accepted=True
+        )
+        client = Client()
+        client.force_login(manager)
+
         for route in self.ROUTES:
             response = client.get(conversation_db.get_absolute_url() + route)
             assert response.status_code == 200

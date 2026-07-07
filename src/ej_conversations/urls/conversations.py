@@ -76,6 +76,16 @@ urlpatterns = [
         name="delete",
     ),
     path(
+        f"{conversation_url}/members/create/",
+        views.ConversationManagerInvitationView.as_view(),
+        name="create_manager_invitation",
+    ),
+    path(
+        f"{conversation_url}/members/<int:invitation_id>/delete/",
+        views.ConversationManagerInvitationView.as_view(),
+        name="delete_manager_invitation",
+    ),
+    path(
         "update-favorite-boards/",
         views.update_favorite_boards,
         name="update-favorite-boards",

@@ -3,11 +3,13 @@ from typing import Any, Dict
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.flatpages.models import FlatPage
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db import transaction
 from django.db.models import F
 from django.db.models.query import QuerySet
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -16,6 +18,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from ej.decorators import (
     can_acess_list_view,
+    can_delete_conversation,
     can_edit_conversation,
     can_moderate_conversation,
     check_conversation_overdue,
@@ -32,7 +35,7 @@ from .decorators import (
     user_can_post_anonymously,
 )
 from .forms import CommentForm, ConversationForm
-from .models import Comment, Conversation
+from .models import Comment, Conversation, ConversationManagerInvitation
 from .utils import (
     handle_detail_comment,
     handle_detail_favorite,
@@ -443,7 +446,7 @@ class ConversationEditView(UpdateView):
         }
 
 
-@method_decorator([login_required, can_edit_conversation], name="dispatch")
+@method_decorator([login_required, can_delete_conversation], name="dispatch")
 class ConversationDeleteView(DeleteView):
     model = Conversation
 
@@ -459,8 +462,114 @@ class ConversationDeleteView(DeleteView):
         )
 
 
+@method_decorator(login_required, name="dispatch")
+class ConversationManagerInvitationView(DetailView):
+    model = Conversation
+    http_method_names = ["post", "delete"]
+
+    def get_queryset(self):
+        return Conversation.objects.select_related("author")
+
+    def get_object(self, queryset=None) -> Conversation:
+        queryset = queryset or self.get_queryset()
+        return get_object_or_404(
+            queryset,
+            id=self.kwargs["conversation_id"],
+            slug=self.kwargs["slug"],
+            board__slug=self.kwargs["board_slug"],
+        )
+
+    def post(self, request, *args, **kwargs):
+        conversation = self.get_object()
+
+        if not self._has_permission(request, conversation):
+            return redirect("auth:login")
+
+        email, email_error = self._validate_email(request)
+        is_owner, owner_error = self._is_owner(email, conversation)
+        already_invited, invitation_error = self._already_invited(
+            email, conversation
+        )
+        error = email_error or owner_error or invitation_error
+        if email_error or is_owner or already_invited:
+            return JsonResponse({"error": error}, status=400)
+
+        user = User.objects.filter(email__iexact=email).first()
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=email,
+            user=user,
+            invited_by=request.user,
+        )
+        return JsonResponse(
+            {
+                "id": invitation.id,
+                "email": invitation.email,
+                "status": invitation.status,
+            },
+            status=201,
+        )
+
+    def delete(self, request, *args, **kwargs):
+        conversation = self.get_object()
+
+        if not self._has_permission(request, conversation):
+            return redirect("auth:login")
+
+        invitation = get_object_or_404(
+            ConversationManagerInvitation,
+            id=self.kwargs["invitation_id"],
+            conversation=conversation,
+        )
+        with transaction.atomic():
+            invitation.delete_manager()
+        return HttpResponse(status=204)
+
+    def _has_permission(self, request, conversation):
+        return request.user.has_perm(
+            "ej.can_manage_conversation_members", conversation
+        )
+
+    def _validate_email(self, request):
+        email = ConversationManagerInvitation.normalize_email(
+            request.POST.get("email")
+        )
+        try:
+            validate_email(email)
+            return email, None
+        except ValidationError:
+            return None, _("Enter a valid email address.")
+
+    def _is_owner(self, email, conversation):
+        if not email:
+            return False, None
+
+        is_owner = email.lower() == conversation.author.email.lower()
+        if not is_owner:
+            return False, None
+
+        return (
+            True,
+            _("The conversation owner cannot be added as a manager."),
+        )
+
+    def _already_invited(self, email, conversation):
+        if not email:
+            return False, None
+
+        already_invited = ConversationManagerInvitation.objects.filter(
+            conversation=conversation,
+            email__iexact=email,
+            is_active=True,
+        ).exists()
+        if not already_invited:
+            return False, None
+
+        return True, _("This member is already invited.")
+
+
 @method_decorator(
-    [login_required, can_edit_conversation, can_moderate_conversation],
+    [login_required, can_moderate_conversation],
     name="dispatch",
 )
 class ConversationModerateView(UpdateView):
@@ -514,7 +623,7 @@ class ConversationModerateView(UpdateView):
 
 
 @method_decorator(
-    [login_required, can_edit_conversation, can_moderate_conversation],
+    [login_required, can_moderate_conversation],
     name="dispatch",
 )
 class CommentModerationView(UpdateView):
@@ -560,7 +669,6 @@ class CommentModerationView(UpdateView):
 
 
 @login_required
-@can_edit_conversation
 @can_moderate_conversation
 def delete_comment(request, conversation_id, slug, board_slug):
     comment_id = request.POST.get("comment_id")
@@ -573,7 +681,6 @@ def delete_comment(request, conversation_id, slug, board_slug):
 
 
 @login_required
-@can_edit_conversation
 @can_moderate_conversation
 def check_comment(request, conversation_id, slug, board_slug):
     comment_content = request.POST.get("comment_content")

@@ -240,11 +240,7 @@ def delete_connection(
     rasa_connection = RasaConversation.objects.get(id=connection_id)
     conversation = Conversation.objects.get(id=conversation_id)
 
-    if (
-        user.is_staff
-        or user.is_superuser
-        or rasa_connection.conversation.author.id == user.id
-    ):
+    if user.has_perm("ej.can_delete_conversation", conversation):
         rasa_connection.delete()
     elif rasa_connection.conversation.author.id != user.id:
         raise PermissionError(

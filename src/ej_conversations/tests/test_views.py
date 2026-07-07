@@ -9,12 +9,15 @@ from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import reverse
 from django.test import Client
 from django.template.exceptions import TemplateDoesNotExist
+from django.utils.translation import gettext as _
 
 from ej_boards.models import Board
 from ej_conversations import create_conversation
 from ej_conversations.models import (
     Comment,
     Conversation,
+    ConversationManager,
+    ConversationManagerInvitation,
     FavoriteConversation,
     Vote,
 )
@@ -946,6 +949,65 @@ class TestConversationEdit(ConversationSetup):
         assert new_conversation.title == "bar updated"
         assert new_conversation.text == "description"
 
+    def test_manager_can_edit_dashboard_and_tools_but_not_delete_or_moderate(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+            accepted=True,
+        )
+        client = Client()
+        client.force_login(manager)
+
+        edit_url = reverse(
+            "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
+        )
+        response = client.post(
+            edit_url,
+            {
+                "title": "manager updated",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 0,
+                "anonymous_votes": 0,
+            },
+        )
+        new_conversation.refresh_from_db()
+        assert response.status_code == 302
+        assert new_conversation.title == "manager updated"
+
+        dashboard_url = reverse(
+            "boards:dataviz-dashboard",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        assert client.get(dashboard_url).status_code == 200
+
+        tools_url = reverse(
+            "boards:conversation-tools-index",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        assert client.get(tools_url).status_code == 200
+
+        delete_url = reverse(
+            "boards:conversation-delete",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        response = client.post(delete_url)
+        assert response.status_code == 302
+        assert response.url == "/login/"
+        assert Conversation.objects.filter(id=new_conversation.id).exists()
+
+        moderate_url = reverse(
+            "boards:conversation-moderate",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        response = client.get(moderate_url)
+        assert response.status_code == 302
+        assert response.url == "/login/"
+
     def test_edit_invalid_conversation(self, base_user, new_conversation):
         url = reverse(
             "boards:conversation-edit", kwargs=new_conversation.get_url_kwargs()
@@ -965,6 +1027,152 @@ class TestConversationEdit(ConversationSetup):
         )
 
         assert not response.context["form"].is_valid()
+
+    def test_delete_conversation_manager_invitation_removes_member(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+            accepted=True,
+        )
+        url = reverse(
+            "boards:conversation-delete_manager_invitation",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "invitation_id": invitation.id,
+            },
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.delete(url)
+        invitation.refresh_from_db()
+
+        assert response.status_code == 204
+        assert not invitation.is_active
+        assert not ConversationManager.objects.is_manager(
+            new_conversation, manager
+        )
+        assert not manager.has_perm(
+            "ej.can_edit_conversation", new_conversation
+        )
+
+    def test_create_conversation_manager_invitation(
+        self, base_user, new_conversation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": " Manager@Example.COM "})
+
+        invitation = ConversationManagerInvitation.objects.get(
+            conversation=new_conversation,
+            email="manager@example.com",
+        )
+        assert response.status_code == 201
+        assert response.json() == {
+            "id": invitation.id,
+            "email": "manager@example.com",
+            "status": ConversationManagerInvitation.Status.PENDING,
+        }
+        assert invitation.user == manager
+        assert invitation.invited_by == base_user
+
+    def test_create_conversation_manager_invitation_without_existing_user(
+        self, base_user, new_conversation
+    ):
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": "new-manager@example.com"})
+
+        invitation = ConversationManagerInvitation.objects.get(
+            conversation=new_conversation,
+            email="new-manager@example.com",
+        )
+        assert response.status_code == 201
+        assert invitation.user is None
+        assert invitation.invited_by == base_user
+
+    def test_create_conversation_manager_invitation_rejects_owner_email(
+        self, base_user, new_conversation
+    ):
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": base_user.email})
+
+        assert response.status_code == 400
+        assert response.json() == {
+            "error": _("The conversation owner cannot be added as a manager.")
+        }
+        assert not ConversationManagerInvitation.objects.filter(
+            conversation=new_conversation,
+            email=base_user.email,
+        ).exists()
+
+    def test_create_conversation_manager_invitation_rejects_invalid_email(
+        self, base_user, new_conversation
+    ):
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": "invalid-email"})
+
+        assert response.status_code == 400
+        assert response.json() == {"error": _("Enter a valid email address.")}
+        assert not ConversationManagerInvitation.objects.filter(
+            conversation=new_conversation
+        ).exists()
+
+    def test_create_conversation_manager_invitation_rejects_duplicate_active(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        mk_conversation_manager_invitation(
+            new_conversation,
+            email="manager@example.com",
+            invited_by=base_user,
+        )
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": "manager@example.com"})
+
+        assert response.status_code == 400
+        assert response.json() == {
+            "error": _("This member is already invited.")
+        }
+        assert (
+            ConversationManagerInvitation.objects.filter(
+                conversation=new_conversation,
+                email="manager@example.com",
+            ).count()
+            == 1
+        )
 
     def test_author_can_edit_not_promoted_conversation(
         self, base_user, new_conversation

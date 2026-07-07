@@ -9,14 +9,25 @@ def can_edit_conversation(view_func):
         try:
             conversation_id = kwargs.get("conversation_id")
             conversation = Conversation.objects.get(id=conversation_id)
-        except AttributeError:
+        except (AttributeError, Conversation.DoesNotExist):
             return redirect("auth:login")
 
-        if request.user.id == conversation.author_id:
+        if request.user.has_perm("ej.can_edit_conversation", conversation):
             return view_func(request, *args, **kwargs)
-        elif conversation.is_promoted and request.user.has_perm(
-            "ej_conversations.can_publish_promoted"
-        ):
+        return redirect("auth:login")
+
+    return wrapper_func
+
+
+def can_delete_conversation(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        try:
+            conversation_id = kwargs.get("conversation_id")
+            conversation = Conversation.objects.get(id=conversation_id)
+        except (AttributeError, Conversation.DoesNotExist):
+            return redirect("auth:login")
+
+        if request.user.has_perm("ej.can_delete_conversation", conversation):
             return view_func(request, *args, **kwargs)
         return redirect("auth:login")
 
@@ -30,19 +41,16 @@ def can_access_tool_page(view_func):
     * User is staff
     * OR user is an superuser
     * OR user is the conversation author
+    * OR user is an invited conversation manager
     """
 
     def wrapper_func(request, *args, **kwargs):
         try:
             conversation_id = kwargs.get("conversation_id")
             conversation = Conversation.objects.get(id=conversation_id)
-        except AttributeError:
+        except (AttributeError, Conversation.DoesNotExist):
             return redirect("auth:login")
-        if (
-            request.user.is_staff
-            or request.user.is_superuser
-            or conversation.author.id == request.user.id
-        ):
+        if request.user.has_perm("ej.can_access_tools_page", conversation):
             return view_func(request, *args, **kwargs)
         return redirect("auth:login")
 
@@ -54,14 +62,10 @@ def can_moderate_conversation(view_func):
         try:
             conversation_id = kwargs.get("conversation_id")
             conversation = Conversation.objects.get(id=conversation_id)
-        except AttributeError:
+        except (AttributeError, Conversation.DoesNotExist):
             return redirect("auth:login")
 
-        if request.user.id == conversation.author_id:
-            return view_func(request, *args, **kwargs)
-        elif conversation.is_promoted and request.user.has_perm(
-            "ej_conversations.can_moderate_conversation"
-        ):
+        if request.user.has_perm("ej.can_moderate_conversation", conversation):
             return view_func(request, *args, **kwargs)
         return redirect("auth:login")
 
@@ -94,16 +98,10 @@ def can_access_dataviz_class_view(view_func):
         try:
             conversation_id = kwargs.get("conversation_id")
             conversation = Conversation.objects.get(id=conversation_id)
-        except AttributeError:
+        except (AttributeError, Conversation.DoesNotExist):
             return redirect("auth:login")
 
-        is_superuser = request.user.is_staff or request.user.is_superuser
-        is_author = request.user.id == conversation.author_id
-        is_promoted = conversation.is_promoted and request.user.has_perm(
-            "ej_conversations.can_publish_promoted"
-        )
-
-        if is_superuser or is_author or is_promoted:
+        if request.user.has_perm("ej.can_access_dataviz", conversation):
             return view_func(self, request, *args, **kwargs)
         return redirect("auth:login")
 
@@ -115,16 +113,10 @@ def can_access_dataviz(view_func):
         try:
             conversation_id = kwargs.get("conversation_id")
             conversation = Conversation.objects.get(id=conversation_id)
-        except AttributeError:
+        except (AttributeError, Conversation.DoesNotExist):
             return redirect("auth:login")
 
-        is_superuser = request.user.is_staff or request.user.is_superuser
-        is_author = request.user.id == conversation.author_id
-        is_promoted = conversation.is_promoted and request.user.has_perm(
-            "ej_conversations.can_publish_promoted"
-        )
-
-        if is_superuser or is_author or is_promoted:
+        if request.user.has_perm("ej.can_access_dataviz", conversation):
             return view_func(request, *args, **kwargs)
         return redirect("auth:login")
 

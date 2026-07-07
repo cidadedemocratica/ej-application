@@ -1,10 +1,16 @@
 from constance import config
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
+from django.urls import reverse
 import pytest
 
 from ej_conversations import create_conversation
 from ej_conversations.enums import Choice, RejectionReason
-from ej_conversations.models import Vote
+from ej_conversations.models import (
+    ConversationManager,
+    ConversationManagerInvitation,
+    Vote,
+)
 from ej_conversations.models.util import statistics, vote_count
 from ej_conversations.models.vote import VoteChannels
 from ej_conversations.mommy_recipes import ConversationRecipes
@@ -88,6 +94,259 @@ class TestConversation(ConversationRecipes):
 
         conversation.toggle_favorite(user)
         assert conversation.is_favorite(user)
+
+
+class TestConversationManagerInvitation(ConversationRecipes):
+    def accept_invitation(self, invitation):
+        return invitation.accept()
+
+    def test_normalizes_email_before_save(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=" Manager@Example.COM ",
+            invited_by=invited_by,
+        )
+
+        assert invitation.email == "manager@example.com"
+
+    def test_prevents_duplicate_active_invitation_for_same_email(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+
+        with pytest.raises(IntegrityError):
+            ConversationManagerInvitation.objects.create(
+                conversation=conversation,
+                email="MANAGER@example.com",
+                invited_by=invited_by,
+            )
+
+    def test_allows_inactive_duplicate_invitation(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+            is_active=False,
+        )
+
+        assert invitation.id is not None
+
+    def test_get_dashboard_url(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+
+        assert invitation.get_dashboard_url() == reverse(
+            "boards:dataviz-dashboard",
+            kwargs=conversation.get_url_kwargs(),
+        )
+
+    def test_accepted_invitation_grants_manager_edit_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(invitation)
+
+        assert ConversationManager.objects.is_manager(conversation, manager)
+        assert manager.has_perm("ej.is_conversation_manager", conversation)
+        assert manager.has_perm("ej.can_edit_conversation", conversation)
+
+    def test_accepted_invitation_grants_access_after_user_registers(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+        manager = mk_user(email="manager@example.com")
+        invitation.refresh_from_db()
+        self.accept_invitation(invitation)
+
+        assert manager.has_perm("ej.is_conversation_manager", conversation)
+        assert manager.has_perm("ej.can_edit_conversation", conversation)
+
+    def test_pending_invitation_does_not_create_manager_or_grant_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+
+        assert not ConversationManager.objects.is_manager(conversation, manager)
+        assert not manager.has_perm("ej.is_conversation_manager", conversation)
+        assert not manager.has_perm("ej.can_edit_conversation", conversation)
+
+    def test_inactive_invitation_does_not_grant_manager_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+            is_active=False,
+        )
+
+        assert not manager.has_perm("ej.is_conversation_manager", conversation)
+        assert not manager.has_perm("ej.can_edit_conversation", conversation)
+
+    def test_inactive_invitation_cannot_be_accepted(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+            is_active=False,
+        )
+
+        with pytest.raises(ValidationError):
+            invitation.accept(manager)
+
+        invitation.refresh_from_db()
+        assert not invitation.is_active
+        assert invitation.status == ConversationManagerInvitation.Status.PENDING
+        assert not ConversationManager.objects.is_manager(conversation, manager)
+
+    def test_resaving_accepted_invitation_does_not_duplicate_managers(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+
+        self.accept_invitation(invitation)
+        invitation.save()
+
+        assert (
+            ConversationManager.objects.filter(
+                conversation=conversation,
+                user=manager,
+            ).count()
+            == 1
+        )
+
+    def test_accepting_new_invitation_invalidates_previous_manager_invitation(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        previous_invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(previous_invitation)
+        new_invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager-alias@example.com",
+            user=manager,
+            invited_by=invited_by,
+        )
+
+        self.accept_invitation(new_invitation)
+        previous_invitation.refresh_from_db()
+
+        manager_membership = ConversationManager.objects.get(
+            conversation=conversation,
+            user=manager,
+        )
+        assert manager_membership.invitation == new_invitation
+        assert not previous_invitation.is_active
+        assert new_invitation.is_active
+
+    def test_delete_manager_removes_manager_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(invitation)
+
+        invitation.delete_manager()
+        invitation.refresh_from_db()
+
+        assert not invitation.is_active
+        assert not ConversationManager.objects.is_manager(conversation, manager)
+        assert not manager.has_perm("ej.is_conversation_manager", conversation)
+        assert not manager.has_perm("ej.can_edit_conversation", conversation)
+
+    def test_manager_invitation_does_not_grant_moderation_or_delete_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(invitation)
+
+        assert manager.has_perm("ej.can_edit_conversation", conversation)
+        assert manager.has_perm("ej.can_access_tools_page", conversation)
+        assert not manager.has_perm(
+            "ej.can_moderate_conversation", conversation
+        )
+        assert not manager.has_perm(
+            "ej.can_manage_conversation_members", conversation
+        )
+        assert not manager.has_perm("ej.can_delete_conversation", conversation)
 
 
 class TestVote:

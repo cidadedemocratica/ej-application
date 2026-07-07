@@ -179,6 +179,7 @@ def can_edit_conversation(user, conversation):
 
     * User is conversation author
     * OR Conversation is promoted and user can create/edit promoted conversations
+    * OR User is a manager for the conversation
     """
     if user.id == conversation.author_id:
         return True
@@ -186,7 +187,16 @@ def can_edit_conversation(user, conversation):
         "ej_conversations.can_publish_promoted"
     ):
         return True
+    elif user.has_perm("ej.is_conversation_manager", conversation):
+        return True
     return False
+
+
+@rules.register_perm("ej.is_conversation_manager")
+def is_conversation_manager(user, conversation):
+    if not getattr(user, "is_authenticated", False) or user.id is None:
+        return False
+    return conversation.managers.filter(user=user).exists()
 
 
 @rules.register_perm("ej.can_moderate_conversation")
@@ -194,12 +204,17 @@ def can_moderate_conversation(user, conversation):
     """
     Can moderate a given conversation.
 
-    * User can edit conversation
-    * OR user is an explict moderator (explicit permission)
-    * OR user is an moderator in conversation
+    * User is conversation author
+    * OR Conversation is promoted and user can create/edit promoted conversations
+    * OR user is an explicit moderator (explicit permission)
+    * OR user is a moderator in conversation
     """
     return (
-        can_edit_conversation(user, conversation)
+        user.id == conversation.author_id
+        or (
+            conversation.is_promoted
+            and user.has_perm("ej_conversations.can_publish_promoted")
+        )
         or user.has_perm("ej_conversations.is_moderator")
         or user in conversation.moderators.all()
     )
@@ -223,9 +238,27 @@ def can_access_tools_page(user, conversation):
     * User is staff
     * OR user is an superuser
     * OR user is the conversation author
+    * OR user is an invited conversation manager
     """
     return (
-        user.is_staff or user.is_superuser or conversation.author.id == user.id
+        user.is_staff
+        or user.is_superuser
+        or user.id == conversation.author_id
+        or user.has_perm("ej.is_conversation_manager", conversation)
+    )
+
+
+@rules.register_perm("ej.can_manage_conversation_members")
+def can_manage_conversation_members(user, conversation):
+    return (
+        user.is_staff or user.is_superuser or user.id == conversation.author_id
+    )
+
+
+@rules.register_perm("ej.can_delete_conversation")
+def can_delete_conversation(user, conversation):
+    return (
+        user.is_staff or user.is_superuser or user.id == conversation.author_id
     )
 
 
