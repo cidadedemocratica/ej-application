@@ -1,0 +1,21 @@
+<div id="conversation-save-modal" class="modal__overlay conversation-form-confirm-modal hide" aria-hidden="true">
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="conversation-save-title">
+        <h4 id="conversation-save-title" class="modal__title">{{ _('Confirmation') }}</h4>
+        <p class="modal__subtitle">
+            {% if create_mode %}
+                {{ _('Do you want to create this conversation?') }}
+            {% else %}
+                {{ _('Do you want to save the changes to the conversation?') }}
+            {% endif %}
+        </p>
+
+        <div class="modal__buttons">
+            <button type="button" id="conversation-save-back" class="conversation-form-members__modal-btn conversation-form-members__modal-btn--secondary">
+                {{ _('Back') }}
+            </button>
+            <button type="button" id="conversation-save-yes" class="conversation-form-members__modal-btn conversation-form-members__modal-btn--primary">
+                {{ _('Yes') }}
+            </button>
+        </div>
+    </div>
+</div>

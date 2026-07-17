@@ -902,6 +902,15 @@ class TestConversationComments(ConversationSetup):
 
 
 class TestConversationEdit(ConversationSetup):
+    def assert_member_toast(self, content, message):
+        assert 'id="message-area"' in content
+        assert 'hx-swap-oob="innerHTML"' in content
+        assert 'class="toast toast--member"' in content
+        assert 'class="toast__close"' in content
+        assert f'aria-label="{_("Close")}"' in content
+        assert "toast-check.svg" in content
+        assert str(message) in content
+
     @pytest.fixture
     def another_logged_user(self, db):
         user = User.objects.create_user("user1@email.br", "password")
@@ -983,18 +992,41 @@ class TestConversationEdit(ConversationSetup):
             "boards:dataviz-dashboard",
             kwargs=new_conversation.get_url_kwargs(),
         )
-        assert client.get(dashboard_url).status_code == 200
+        response = client.get(dashboard_url)
+        board_url = reverse(
+            "boards:conversation-list",
+            kwargs={"board_slug": new_conversation.board.slug},
+        )
+        assert response.status_code == 200
+        assert f'href="{board_url}"' not in response.content.decode()
 
+        detail_url = reverse(
+            "boards:conversation-detail",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
         tools_url = reverse(
             "boards:conversation-tools-index",
             kwargs=new_conversation.get_url_kwargs(),
         )
-        assert client.get(tools_url).status_code == 200
-
         delete_url = reverse(
             "boards:conversation-delete",
             kwargs=new_conversation.get_url_kwargs(),
         )
+        response = client.get(detail_url)
+        content = response.content.decode()
+        assert response.status_code == 200
+        assert dashboard_url in content
+        assert tools_url in content
+        assert "conversation-menu__conversation-info" not in content
+        assert delete_url not in content
+
+        owner_client = Client()
+        owner_client.force_login(base_user)
+        response = owner_client.get(dashboard_url)
+        assert response.status_code == 200
+        assert f'href="{board_url}"' in response.content.decode()
+        assert client.get(tools_url).status_code == 200
+
         response = client.post(delete_url)
         assert response.status_code == 302
         assert response.url == "/login/"
@@ -1051,11 +1083,14 @@ class TestConversationEdit(ConversationSetup):
         response = client.delete(url)
         invitation.refresh_from_db()
 
-        assert response.status_code == 204
+        assert response.status_code == 200
+        content = response.content.decode()
+        self.assert_member_toast(content, _("Removed member"))
         assert not invitation.is_active
-        assert not ConversationManager.objects.is_manager(
-            new_conversation, manager
-        )
+        assert not ConversationManager.objects.filter(
+            conversation=new_conversation,
+            user=manager,
+        ).exists()
         assert not manager.has_perm(
             "ej.can_edit_conversation", new_conversation
         )
@@ -1078,13 +1113,38 @@ class TestConversationEdit(ConversationSetup):
             email="manager@example.com",
         )
         assert response.status_code == 201
-        assert response.json() == {
-            "id": invitation.id,
-            "email": "manager@example.com",
-            "status": ConversationManagerInvitation.Status.PENDING,
-        }
+        content = response.content.decode()
+        delete_url = reverse(
+            "boards:conversation-delete_manager_invitation",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "invitation_id": invitation.id,
+            },
+        )
+        assert f'id="conversation-member-{invitation.id}"' in content
+        assert 'id="members-table"' in content
+        assert 'id="members-list"' in content
+        assert 'class="conversation-form-members__list"' in content
+        assert "<table" in content
+        assert "<tr" in content
+        assert 'class="conversation-form-members__email-cell"' in content
+        assert 'class="conversation-form-members__status-cell"' in content
+        assert 'class="conversation-form-members__actions-cell"' in content
+        assert 'id="member-email-error"' in content
+        assert 'hx-swap-oob="outerHTML"' in content
+        assert "manager@example.com" in content
+        assert (
+            str(ConversationManagerInvitation.Status.ACCEPTED.label) in content
+        )
+        assert f'hx-delete="{delete_url}"' in content
+        assert f'hx-target="#conversation-member-{invitation.id}"' in content
+        self.assert_member_toast(content, _("Member added"))
         assert invitation.user == manager
         assert invitation.invited_by == base_user
+        assert (
+            invitation.status == ConversationManagerInvitation.Status.ACCEPTED
+        )
+        assert manager.has_perm("ej.can_edit_conversation", new_conversation)
 
     def test_create_conversation_manager_invitation_without_existing_user(
         self, base_user, new_conversation
@@ -1103,8 +1163,23 @@ class TestConversationEdit(ConversationSetup):
             email="new-manager@example.com",
         )
         assert response.status_code == 201
+        content = response.content.decode()
+        assert f'id="conversation-member-{invitation.id}"' in content
+        assert 'id="members-table"' in content
+        assert 'id="members-list"' in content
+        assert "<table" in content
+        assert "<tr" in content
+        assert 'class="conversation-form-members__email-cell"' in content
+        assert "new-manager@example.com" in content
+        assert (
+            str(ConversationManagerInvitation.Status.ACCEPTED.label) in content
+        )
+        self.assert_member_toast(content, _("Member added"))
         assert invitation.user is None
         assert invitation.invited_by == base_user
+        assert (
+            invitation.status == ConversationManagerInvitation.Status.ACCEPTED
+        )
 
     def test_create_conversation_manager_invitation_rejects_owner_email(
         self, base_user, new_conversation
@@ -1119,9 +1194,16 @@ class TestConversationEdit(ConversationSetup):
         response = client.post(url, {"email": base_user.email})
 
         assert response.status_code == 400
-        assert response.json() == {
-            "error": _("The conversation owner cannot be added as a manager.")
-        }
+        assert response["HX-Retarget"] == "#member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        content = response.content.decode()
+        assert 'id="member-email-error"' in content
+        assert "show-error" in content
+        assert (
+            str(_("The conversation owner cannot be added as a manager."))
+            in content
+        )
+        assert 'class="toast toast--member"' not in content
         assert not ConversationManagerInvitation.objects.filter(
             conversation=new_conversation,
             email=base_user.email,
@@ -1140,7 +1222,13 @@ class TestConversationEdit(ConversationSetup):
         response = client.post(url, {"email": "invalid-email"})
 
         assert response.status_code == 400
-        assert response.json() == {"error": _("Enter a valid email address.")}
+        assert response["HX-Retarget"] == "#member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        content = response.content.decode()
+        assert 'id="member-email-error"' in content
+        assert "show-error" in content
+        assert str(_("Enter a valid email address.")) in content
+        assert 'class="toast toast--member"' not in content
         assert not ConversationManagerInvitation.objects.filter(
             conversation=new_conversation
         ).exists()
@@ -1163,9 +1251,13 @@ class TestConversationEdit(ConversationSetup):
         response = client.post(url, {"email": "manager@example.com"})
 
         assert response.status_code == 400
-        assert response.json() == {
-            "error": _("This member is already invited.")
-        }
+        assert response["HX-Retarget"] == "#member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        content = response.content.decode()
+        assert 'id="member-email-error"' in content
+        assert "show-error" in content
+        assert str(_("This member is already invited.")) in content
+        assert 'class="toast toast--member"' not in content
         assert (
             ConversationManagerInvitation.objects.filter(
                 conversation=new_conversation,
@@ -1944,6 +2036,42 @@ class TestFilterConversationByTag(TestPublicConversations):
 
         assert response.status_code == 200
         assert promoted_conversation.text.encode() in response.content
+
+    def test_authenticated_manager_filter_links_managed_conversation_to_dashboard(
+        self, mk_user, mk_conversation_manager_invitation
+    ):
+        author = mk_user(email="filter-author@example.com")
+        manager = mk_user(email="filter-manager@example.com")
+        board = Board.objects.create(
+            slug="filter-author-board",
+            owner=author,
+            description="board",
+        )
+        conversation = create_conversation(
+            "question?",
+            "Filtered managed conversation",
+            author,
+            board=board,
+        )
+        mk_conversation_manager_invitation(
+            conversation,
+            manager=manager,
+            invited_by=author,
+            accepted=True,
+        )
+        client = Client()
+        client.force_login(manager)
+        dashboard_url = reverse(
+            "boards:dataviz-dashboard",
+            kwargs=conversation.get_url_kwargs(),
+        )
+
+        response = client.get(reverse("conversation:filter-tags-user"))
+        content = response.content.decode()
+
+        assert response.status_code == 200
+        assert f'href="{dashboard_url}"' in content
+        assert f'href="{conversation.get_absolute_url()}"' not in content
 
     def test_anonymous_user_cannot_access_authored_conversations(
         self,

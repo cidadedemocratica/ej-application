@@ -10,6 +10,7 @@ from django.db.models import F
 from django.db.models.query import QuerySet
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
@@ -30,6 +31,7 @@ from ej_integrations.utils import get_host_with_schema
 from ej_users.models import User
 
 from . import forms
+from .components import member_toast
 from .decorators import (
     redirect_to_conversation_detail,
     user_can_post_anonymously,
@@ -179,6 +181,9 @@ class ConversationsFilterByTag(ListView):
     def get_button_text(self):
         return _("Participate")
 
+    def get_card_url_name(self):
+        return "boards:conversation-detail"
+
     def initial_queryset(self, queryset):
         return Conversation.objects.all()
 
@@ -186,6 +191,7 @@ class ConversationsFilterByTag(ListView):
         return {
             "conversations": self.get_queryset(),
             "button_text": self.get_button_text(),
+            "card_url_name": self.get_card_url_name(),
         }
 
 
@@ -200,8 +206,11 @@ class UserConversationsFilterByTag(ConversationsFilterByTag):
     def get_button_text(self):
         return _("Manage!")
 
+    def get_card_url_name(self):
+        return "boards:dataviz-dashboard"
+
     def initial_queryset(self, queryset):
-        return queryset.filter(author=self.request.user)
+        return queryset.managed_by(self.request.user)
 
 
 @method_decorator([login_required, can_acess_list_view], name="dispatch")
@@ -391,6 +400,8 @@ class ConversationCreateView(CreateView):
             "form": form or self.form_class(),
             "board": self.get_board(),
             "user_boards": user_boards,
+            "can_manage_members": True,
+            "existing_members": [],
         }
 
     def get_board(self) -> Board:
@@ -436,6 +447,9 @@ class ConversationEditView(UpdateView):
     def get_context_data(self, form=None, **kwargs: Any):
         conversation = self.get_object()
         user = self.request.user
+        can_manage_members = user.has_perm(
+            "ej.can_manage_conversation_members", conversation
+        )
         return {
             "conversation": conversation,
             "form": form or self.form_class(instance=conversation),
@@ -443,6 +457,12 @@ class ConversationEditView(UpdateView):
                 "ej_conversations.can_publish_promoted"
             ),
             "board": conversation.board,
+            "can_manage_members": can_manage_members,
+            "existing_members": (
+                conversation.manager_invitations.active()
+                if can_manage_members
+                else []
+            ),
         }
 
 
@@ -466,6 +486,21 @@ class ConversationDeleteView(DeleteView):
 class ConversationManagerInvitationView(DetailView):
     model = Conversation
     http_method_names = ["post", "delete"]
+    member_row_template_name = (
+        "ej_conversations/includes/conversation-form-member-row.jinja2"
+    )
+    member_table_template_name = (
+        "ej_conversations/includes/conversation-form-members-table.jinja2"
+    )
+    member_error_template_name = (
+        "ej_conversations/includes/conversation-form-member-error.jinja2"
+    )
+    member_error_clear_template_name = (
+        "ej_conversations/includes/conversation-form-member-error-clear.jinja2"
+    )
+    member_toast_template_name = (
+        "ej_conversations/includes/member-toast-message-area.jinja2"
+    )
 
     def get_queryset(self):
         return Conversation.objects.select_related("author")
@@ -492,22 +527,40 @@ class ConversationManagerInvitationView(DetailView):
         )
         error = email_error or owner_error or invitation_error
         if email_error or is_owner or already_invited:
-            return JsonResponse({"error": error}, status=400)
+            response = render(
+                request,
+                self.member_error_template_name,
+                {"error": error},
+                status=400,
+            )
+            response["HX-Retarget"] = "#member-email-error"
+            response["HX-Reswap"] = "outerHTML"
+            return response
 
         user = User.objects.filter(email__iexact=email).first()
-        invitation = ConversationManagerInvitation.objects.create(
+        ConversationManagerInvitation.objects.create(
             conversation=conversation,
             email=email,
             user=user,
             invited_by=request.user,
+            status=ConversationManagerInvitation.Status.ACCEPTED,
         )
-        return JsonResponse(
+        member_toast(request, _("Member added"))
+        member_table = render_to_string(
+            self.member_table_template_name,
             {
-                "id": invitation.id,
-                "email": invitation.email,
-                "status": invitation.status,
+                "conversation": conversation,
+                "members_form_disabled": False,
+                "existing_members": conversation.manager_invitations.active(),
             },
-            status=201,
+            request=request,
+        )
+        member_error_clear = render_to_string(
+            self.member_error_clear_template_name,
+            request=request,
+        )
+        return self._member_success_response(
+            request, f"{member_table}{member_error_clear}", status=201
         )
 
     def delete(self, request, *args, **kwargs):
@@ -523,7 +576,15 @@ class ConversationManagerInvitationView(DetailView):
         )
         with transaction.atomic():
             invitation.delete_manager()
-        return HttpResponse(status=204)
+        member_toast(request, _("Removed member"))
+        return self._member_success_response(request, status=200)
+
+    def _member_success_response(self, request, content="", status=200):
+        toast_area = render_to_string(
+            self.member_toast_template_name,
+            request=request,
+        )
+        return HttpResponse(f"{content}{toast_area}", status=status)
 
     def _has_permission(self, request, conversation):
         return request.user.has_perm(

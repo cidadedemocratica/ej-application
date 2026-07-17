@@ -177,7 +177,10 @@ class TestConversationManagerInvitation(ConversationRecipes):
         )
         self.accept_invitation(invitation)
 
-        assert ConversationManager.objects.is_manager(conversation, manager)
+        assert ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
         assert manager.has_perm("ej.is_conversation_manager", conversation)
         assert manager.has_perm("ej.can_edit_conversation", conversation)
 
@@ -210,7 +213,10 @@ class TestConversationManagerInvitation(ConversationRecipes):
             invited_by=invited_by,
         )
 
-        assert not ConversationManager.objects.is_manager(conversation, manager)
+        assert not ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
         assert not manager.has_perm("ej.is_conversation_manager", conversation)
         assert not manager.has_perm("ej.can_edit_conversation", conversation)
 
@@ -249,7 +255,10 @@ class TestConversationManagerInvitation(ConversationRecipes):
         invitation.refresh_from_db()
         assert not invitation.is_active
         assert invitation.status == ConversationManagerInvitation.Status.PENDING
-        assert not ConversationManager.objects.is_manager(conversation, manager)
+        assert not ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
 
     def test_resaving_accepted_invitation_does_not_duplicate_managers(
         self, db, mk_conversation, mk_user
@@ -321,7 +330,10 @@ class TestConversationManagerInvitation(ConversationRecipes):
         invitation.refresh_from_db()
 
         assert not invitation.is_active
-        assert not ConversationManager.objects.is_manager(conversation, manager)
+        assert not ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
         assert not manager.has_perm("ej.is_conversation_manager", conversation)
         assert not manager.has_perm("ej.can_edit_conversation", conversation)
 

@@ -4,13 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 
-class ConversationManagerQuerySet(models.QuerySet):
-    def is_manager(self, conversation, user):
-        if not getattr(user, "is_authenticated", False) or user.pk is None:
-            return False
-        return self.filter(conversation=conversation, user=user).exists()
-
-
 class ConversationManager(TimeStampedModel):
     conversation = models.ForeignKey(
         "Conversation",
@@ -29,8 +22,6 @@ class ConversationManager(TimeStampedModel):
         blank=True,
         related_name="managers",
     )
-
-    objects = ConversationManagerQuerySet.as_manager()
 
     class Meta:
         ordering = ["-created"]

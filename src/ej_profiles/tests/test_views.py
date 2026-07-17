@@ -10,7 +10,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
 from ej.testing import UrlTester
+from ej_conversations import create_conversation
 from ej_conversations.models import Conversation
+from ej_conversations.models import ConversationManagerInvitation
 from ej_profiles import enums
 from ej_users.models import User
 import pytest
@@ -168,6 +170,61 @@ class TestEditProfile:
         assert response.status_code == 200
         assert b"Passwords do not match" in response.content
         assert not response.wsgi_request.user.check_password("newpassword")
+
+
+class TestHome:
+    def test_my_conversations_tab_includes_managed_conversation(
+        self, test_user
+    ):
+        author = User.objects.create_user("author@email.br", "password")
+        author_board = User.create_user_default_board(author)
+        User.create_user_default_board(test_user)
+        test_user.profile.completed_tour = True
+        test_user.profile.save()
+        conversation = create_conversation(
+            "question?",
+            "Managed conversation",
+            author,
+            board=author_board,
+        )
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=test_user.email,
+            invited_by=author,
+        )
+        invitation.accept(test_user)
+
+        client = Client()
+        client.force_login(test_user)
+        response = client.get("/profile/home/")
+
+        assert response.status_code == 200
+        assert conversation in list(response.context["created_conversations"])
+
+    def test_user_conversation_filter_includes_managed_conversation(
+        self, test_user
+    ):
+        author = User.objects.create_user("filter-author@email.br", "password")
+        author_board = User.create_user_default_board(author)
+        conversation = create_conversation(
+            "question?",
+            "Filtered managed conversation",
+            author,
+            board=author_board,
+        )
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=test_user.email,
+            invited_by=author,
+        )
+        invitation.accept(test_user)
+
+        client = Client()
+        client.force_login(test_user)
+        response = client.get(reverse("conversation:filter-tags-user"))
+
+        assert response.status_code == 200
+        assert conversation in list(response.context["conversations"])
 
 
 class TestTour:

@@ -1,4 +1,6 @@
 {% from 'ej/includes/menu-item.jinja2' import menu_item %}
+{% set can_edit_conversation = request.user.has_perm('ej.can_edit_conversation', conversation) %}
+{% set can_delete_conversation = request.user.has_perm('ej.can_delete_conversation', conversation) %}
 
 
 <nav class="participant-menu">
@@ -9,10 +11,13 @@
                 {{ _('Home') }}
             </a>
 
-            <a href="{{ url('boards:conversation-list', board_slug=conversation.board.slug) }}">
-                <i class="fa fa-chevron-circle-left"></i>
-                {{ _('Board') }}
-            </a>
+            {# Temporary workaround while the manager system is not extended to work with boards. #}
+            {% if conversation.author == request.user or not request.user.has_perm('ej.is_conversation_manager', conversation) %}
+                <a href="{{ url('boards:conversation-list', board_slug=conversation.board.slug) }}">
+                    <i class="fa fa-chevron-circle-left"></i>
+                    {{ _('Board') }}
+                </a>
+            {% endif %}
         </div>
 
         <div class="menu-section__conversation-text">
@@ -20,17 +25,19 @@
         </div>
 
         <div class="conversation-menu__buttons flex">
-            {% if request.user.has_perm('ej.can_edit_conversation', conversation) %}
+            {% if can_edit_conversation %}
                     <div class="conversation-menu__edit-button">
                         <a href="{{ conversation.patch_url('conversation:edit') }}">
                             {{ _('Edit conversation') }}
                         </a>
                     </div>
+                {% if can_delete_conversation %}
                     <div class="conversation-menu__delete-button">
                         <a onclick="showConfirmationDelete()">
                             <i class="fa fa-trash"></i>
                         </a>
                     </div>
+                {% endif %}
             {% else %}
                 <li>
                     <a href="{{ url('conversation:list') }}">{{ _('Back to conversations') }}</a>
@@ -39,7 +46,9 @@
         </div>
     </div>
 
-    {% include 'ej_conversations/includes/delete-confimation-modal.jinja2' %}
+    {% if can_delete_conversation %}
+        {% include 'ej_conversations/includes/delete-confimation-modal.jinja2' %}
+    {% endif %}
     <h3 class="text-accent participant-menu__item participant-menu__item--column-2 participant-menu__item--margin">{{ _('Collect opinions') }}</h3>
     <ul class="participant-menu__item">
         {{ menu_item(current_page, "dashboard", url('boards:dataviz-dashboard', **conversation.get_url_kwargs()), _('Dashboard')) }}
@@ -54,7 +63,7 @@
 
     <h3 class="text-accent participant-menu__item participant-menu__item--column-2 participant-menu__item--margin">{{ _('Model and Analyze') }}</h3>
     <ul class="participant-menu__item">
-        {% if request.user.has_perm("ej.can_edit_conversation", conversation) %}
+        {% if can_edit_conversation %}
             {{ menu_item(current_page, "stereotypes", url("boards:stereotype-votes-list", **conversation.get_url_kwargs()), _("Manage personas")) }}
         {% endif %}
 

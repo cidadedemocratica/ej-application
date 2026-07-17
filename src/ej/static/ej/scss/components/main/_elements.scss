@@ -206,6 +206,28 @@ $toast-opacity: 0.75;
     }
 }
 
+@keyframes toast-member-show {
+    from {
+        opacity: 0;
+        transform: translateY(size(0.5));
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toast-member-hide {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(size(0.5));
+    }
+}
+
 .toast {
     @include utilities('color-brand-lighter pad-3 shadow-2 semi-bold');
     align-items: center;
@@ -242,6 +264,74 @@ $toast-opacity: 0.75;
         }
         h1 {
             @include utilities('text-4 uppercase bold text-brand');
+        }
+    }
+}
+.toast--member {
+    animation: toast-member-show 0.25s 0.25s backwards, toast-member-hide 0.5s 4s forwards;
+    background-color: $color-theme-report-blue;
+    bottom: $toast-height;
+    color: $color-white;
+    filter: none;
+    gap: 1rem;
+    justify-content: flex-start;
+    right: auto;
+    margin: 0;
+    max-width: 20rem;
+    opacity: 1;
+    left: $toast-height;
+    top: auto;
+
+    .toast__icon {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        font-size: 0;
+        height: 38px;
+        line-height: 0;
+        padding: 0;
+        width: 38px;
+
+        img {
+            display: block;
+            height: 38px;
+            width: 38px;
+        }
+    }
+
+    .toast__content {
+        flex: 1;
+    }
+
+    .toast__content h1 {
+        color: $color-white;
+        font-family: "Work Sans", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none;
+    }
+
+    .toast__close {
+        appearance: none;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        color: $color-white;
+        cursor: pointer;
+        flex-shrink: 0;
+        font-size: 20px;
+        height: auto;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+
+        &:hover,
+        &:focus-visible {
+            background: transparent;
+            box-shadow: none;
+            color: $color-white;
         }
     }
 }
