@@ -1,0 +1,17 @@
+<div id="member-remove-modal" class="modal__overlay conversation-form-confirm-modal hide" aria-hidden="true">
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="member-remove-title">
+        <h4 id="member-remove-title" class="modal__title">{{ _('Remove member') }}</h4>
+        <p class="modal__subtitle">
+            {{ _('Do you want to remove the member from the conversation management? This action will be applied immediately.') }}
+        </p>
+
+        <div class="modal__buttons">
+            <button type="button" id="member-remove-back" class="conversation-form-members__modal-btn conversation-form-members__modal-btn--secondary">
+                {{ _('Back') }}
+            </button>
+            <button type="button" id="member-remove-yes" class="conversation-form-members__modal-btn conversation-form-members__modal-btn--danger">
+                {{ _('Yes') }}
+            </button>
+        </div>
+    </div>
+</div>

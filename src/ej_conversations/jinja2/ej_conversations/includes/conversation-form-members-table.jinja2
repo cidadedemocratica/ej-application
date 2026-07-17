@@ -1,0 +1,14 @@
+<table id="members-table" class="conversation-form-members__table">
+    <thead>
+        <tr class="conversation-form-members__headings">
+            <th scope="col" class="conversation-form-members__email-heading">{{ _('E-mail') }}</th>
+            <th scope="col" class="conversation-form-members__status-heading">{{ _('Status') }}</th>
+            <th scope="col" class="conversation-form-members__actions-heading">{{ _('Actions') }}</th>
+        </tr>
+    </thead>
+    <tbody id="members-list" class="conversation-form-members__list">
+        {% for member in existing_members|default([]) %}
+            {% include 'ej_conversations/includes/conversation-form-member-row.jinja2' %}
+        {% endfor %}
+    </tbody>
+</table>

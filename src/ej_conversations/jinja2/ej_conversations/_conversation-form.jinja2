@@ -10,12 +10,28 @@
 {% set conversation_form_sticky_actions = conversation_form_sticky_actions|default(true) %}
 {% set conversation_form_actions_label = conversation_form_actions_label|default(_('Create conversation')) %}
 {% set conversation_form_actions_icon = conversation_form_actions_icon|default('/img/icons/user-plus.svg') %}
+{% set can_manage_members = can_manage_members|default(false) %}
 
 
 {% block content %}
-    <form method="POST" class="width-full" enctype="multipart/form-data">
+    <a id="page-top" class="conversation-form__page-top" tabindex="-1"></a>
+
+    <form
+        method="POST"
+        id="conversation-form"
+        class="width-full"
+        enctype="multipart/form-data"
+        data-comment-label="{{ _(' Comment ') }}"
+        data-comment-placeholder="{{ _('Type your comment here') }}"
+        data-member-email-required-message="{{ _('E-mail is required.') }}"
+        data-member-invalid-email-message="{{ _('Invalid e-mail.') }}"
+    >
+
         {{ csrf_input }}
         {% set active_tab = request.POST.get('active_tab', 'basic') if request is defined else 'basic' %}
+        {% if create_mode and active_tab == 'members' %}
+            {% set active_tab = 'basic' %}
+        {% endif %}
         {% if conversation_form_tabs_enabled %}
             {% include 'ej_conversations/includes/conversation-form-tabs.jinja2' %}
             <section
@@ -127,109 +143,35 @@
         {% endblock %}
         {% if conversation_form_tabs_enabled %}
             </section>
+            {% if can_manage_members and not create_mode %}
+                <section
+                    id="conversation-form-panel-members"
+                    class="conversation-form-panel"
+                    role="tabpanel"
+                    aria-labelledby="conversation-form-tab-members"
+                    {% if active_tab != 'members' %}hidden{% endif %}
+                >
+                    {% include 'ej_conversations/includes/conversation-form-members.jinja2' %}
+                </section>
+            {% endif %}
         {% endif %}
         {% if conversation_form_sticky_actions %}
             {% include 'ej_conversations/includes/conversation-form-actions.jinja2' %}
         {% endif %}
+        {% include 'ej_conversations/includes/conversation-form-save-modal.jinja2' %}
     </form>
+
+    <div class="back-to-top">
+        <a class="back-to-top__link" href="#page-top">
+            <img class="back-to-top__icon" src="{{ static('/img/icons/circle-arrow-up.svg') }}" alt="" aria-hidden="true">
+            <span>{{ _('Back to top') }}</span>
+        </a>
+    </div>
 {% endblock %}
 
 
 {% block javascript %}
     {{ super() }}
-    <!--suppress SpellCheckingInspection -->
-    <script>
-        function toggleConversationOption(checkboxOptionID, optionID) {
-            const $checkbox = $(checkboxOptionID)
-            const $option = $(optionID);
-            const $optionInput = $option.children('input');
-
-            function toggleOption() {
-                if ($checkbox.is(':checked')) {
-                    $option.css('opacity', 1);
-                    $optionInput[0].disabled = false;
-                } else {
-                    $option.css('opacity', 0.5);
-                    $optionInput[0].value = 0;
-                    $optionInput[0].disabled = true;
-                }
-            }
-            $checkbox.on('change', toggleOption);
-            toggleOption();
-        }
-
-        function initializeConversationFormTabs() {
-            const tabs = Array.from(document.querySelectorAll('[role="tab"][data-tab-target]'));
-            const activeTabInput = document.getElementById('conversation-form-active-tab');
-
-            if (!tabs.length || !activeTabInput) return;
-
-            function activateTab(tab, focusTab) {
-                const target = tab.dataset.tabTarget;
-                const panels = Array.from(document.querySelectorAll('.conversation-form-panel'));
-
-                tabs.forEach(function (currentTab) {
-                    const isActive = currentTab === tab;
-                    currentTab.classList.toggle('conversation-form-tabs__tab--active', isActive);
-                    currentTab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-                    currentTab.setAttribute('tabindex', isActive ? '0' : '-1');
-                });
-
-                panels.forEach(function (panel) {
-                    panel.hidden = panel.id !== `conversation-form-panel-${target}`;
-                });
-
-                activeTabInput.value = target;
-                if (focusTab) tab.focus();
-            }
-
-            tabs.forEach(function (tab, index) {
-                tab.addEventListener('click', function () {
-                    activateTab(tab, false);
-                });
-                tab.addEventListener('keydown', function (ev) {
-                    const lastIndex = tabs.length - 1;
-                    let nextIndex = null;
-
-                    if (ev.key === 'ArrowLeft') nextIndex = index === 0 ? lastIndex : index - 1;
-                    if (ev.key === 'ArrowRight') nextIndex = index === lastIndex ? 0 : index + 1;
-                    if (ev.key === 'Home') nextIndex = 0;
-                    if (ev.key === 'End') nextIndex = lastIndex;
-
-                    if (nextIndex !== null) {
-                        ev.preventDefault();
-                        activateTab(tabs[nextIndex], true);
-                    }
-                });
-            });
-
-            const initialTab = tabs.find(function (tab) {
-                return tab.dataset.tabTarget === activeTabInput.value;
-            }) || tabs[0];
-            activateTab(initialTab, false);
-        }
-
-        $(document).ready(function() {
-            initializeConversationFormTabs()
-            toggleConversationOption("#id_send_profile_question", "#demographic_questions")
-            toggleConversationOption("#id_anonymous_votes_enabled", "#anonymous_votes")
-        });
-
-        $(window).on('load', function () {
-            $('#add-more-comments')
-                .on('click keypress', function (ev) {
-                    // keycodes: 13 = return; 32 = space
-                    if (ev.type === "keypress" && (![13, 32].includes(ev.keyCode))) return;
-                    var $input = $('input[name="comments_count"]'),
-                        index = parseInt($input.val(), 10) + 1,
-                        template = (
-                            '<label>' +
-                            `{{ gettext(" Comment ") }} ${index}` +
-                            '<textarea name="comment-%i%" placeholder="{{ _('Type your comment here') }} #%i%"></textarea>' +
-                            '</label>');
-                    $input.val(index);
-                    $('#comment-list').append(template.replace(/%i%/g, index));
-                });
-        });
-    </script>
+    <script src="{{ static('/assets/js/conversation-form.js') }}" defer></script>
+    <script src="{{ static('/assets/js/member-toast.js') }}" defer></script>
 {% endblock %}

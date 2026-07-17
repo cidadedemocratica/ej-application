@@ -1,0 +1,27 @@
+<tr
+    id="conversation-member-{{ member.id }}"
+    class="conversation-form-members__row"
+    data-email="{{ member.email }}"
+    data-invitation-id="{{ member.id }}"
+>
+    <td class="conversation-form-members__email-cell">
+        <span class="conversation-form-members__email">{{ member.email }}</span>
+    </td>
+    <td class="conversation-form-members__status-cell">
+        <span class="conversation-form-members__status">{{ member.get_status_display() }}</span>
+    </td>
+    <td class="conversation-form-members__actions-cell">
+        <button
+            type="button"
+            class="conversation-form-members__remove-btn"
+            hx-delete="{{ url('boards:conversation-delete_manager_invitation', invitation_id=member.id, **conversation.get_url_kwargs()) }}"
+            hx-trigger="confirmed"
+            hx-target="#conversation-member-{{ member.id }}"
+            hx-swap="outerHTML"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            {% if members_form_disabled %}disabled aria-disabled="true"{% endif %}
+        >
+            {{ _('Remove') }}
+        </button>
+    </td>
+</tr>

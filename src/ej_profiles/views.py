@@ -126,7 +126,7 @@ class HomeView(ListView):
         )
         profile_selected_tags = list(
             ConversationTag.objects.filter(
-                content_object__author=self.request.user
+                content_object__in=profile.managed_conversations()
             )
             .distinct("tag")
             .values_list("tag__name", flat=True)

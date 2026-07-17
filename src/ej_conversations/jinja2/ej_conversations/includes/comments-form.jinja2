@@ -23,25 +23,6 @@
         <a class="uppercase semi-bold" id="add-more-comments" tabindex="0">
             <i class="fa fa-plus text-accent"></i> <span class="text-accent">{{ _('Add more comments') }}</span>
         </a>
-
-        <script>
-            window.addEventListener('load', function () {
-                $('#add-more-comments')
-                    .on('click keypress', function (ev) {
-                        // keycodes: 13 = return; 32 = space
-                        if (ev.type === "keypress" && (![13, 32].includes(ev.keyCode))) return;
-                        var $input = $('input[name="comments_count"]'),
-                            index = parseInt($input.val(), 10) + 1,
-                            template = (
-                                '<label>' +
-                                `{{ gettext(" Comment ") }} ${index}` +
-                                '<textarea class="comment__textarea" name="comment-%i%" placeholder="{{ _('Type your comment here') }} #%i%"></textarea>' +
-                                '</label>');
-                        $input.val(index);
-                        $('#comment-list').append(template.replace(/%i%/g, index));
-                    });
-            });
-        </script>
         {% endif %}
 
 <h4 class="conversation-form__h4">{{_("Comments added by participants")}}</h4>
@@ -49,4 +30,3 @@
     {{form.participants_can_add_comments}}
     <span>{{form.participants_can_add_comments.help_text}}</span>
 </label>
-

@@ -1,0 +1,5 @@
+<div id="message-area" hx-swap-oob="innerHTML">
+    {% for msg in get_messages() %}
+        {% include 'ej_conversations/includes/member-toast.jinja2' %}
+    {% endfor %}
+</div>

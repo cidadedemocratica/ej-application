@@ -279,11 +279,21 @@ class Profile(models.Model):
             content_object__in=self.participated_public_conversations()
         ).distinct("tag")
 
+    def managed_conversations(self):
+        """
+        Return conversations the user owns or can manage.
+        """
+        return Conversation.objects.managed_by(self.user)
+
     def get_contributions_data(self):
-        # Fetch all conversations the user created
-        created = self.user.conversations.cache_annotations(
-            "first_tag", "n_user_votes", "n_comments", user=self.user
-        ).order_by("-created")
+        # Fetch all conversations the user can manage
+        created = (
+            self.managed_conversations()
+            .cache_annotations(
+                "first_tag", "n_user_votes", "n_comments", user=self.user
+            )
+            .order_by("-created")
+        )
 
         # Fetch voted conversations
         # This code merges in python 2 querysets. The first is annotated with

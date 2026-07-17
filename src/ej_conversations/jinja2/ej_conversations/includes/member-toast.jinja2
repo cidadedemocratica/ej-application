@@ -1,0 +1,9 @@
+<div class="toast toast--member" tabindex="0">
+    <div class="toast__icon">
+        <img src="{{ static('/img/icons/toast-check.svg') }}" alt="" aria-hidden="true">
+    </div>
+    <div class="toast__content">
+        <h1>{{ msg|safe }}</h1>
+    </div>
+    <button type="button" class="toast__close" aria-label="{{ _('Close') }}">&times;</button>
+</div>

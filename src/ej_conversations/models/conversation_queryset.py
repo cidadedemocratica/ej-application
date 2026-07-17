@@ -34,6 +34,14 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
         """
         return self.filter(is_promoted=True, is_hidden=False)
 
+    def managed_by(self, user):
+        """
+        Return conversations the user owns or can manage.
+        """
+        if not user.is_authenticated:
+            return self.none()
+        return self.filter(Q(author=user) | Q(managers__user=user)).distinct()
+
     def cache_annotations(self, *values, user=None, prefix="", **kwargs):
         """
         Annotate each conversation with the progress made by the given user.

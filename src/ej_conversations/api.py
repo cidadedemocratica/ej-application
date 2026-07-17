@@ -239,7 +239,7 @@ class ConversationViewSet(RestAPIBaseViewSet):
     def filter_conversation_by_current_user(
         self, request, queryset, tags, search_text
     ):
-        queryset = queryset.filter(author=request.user)
+        queryset = queryset.managed_by(request.user)
         if tags:
             queryset = queryset.filter(tags__name__in=tags).distinct()
 

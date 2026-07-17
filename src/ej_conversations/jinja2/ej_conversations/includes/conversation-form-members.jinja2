@@ -1,0 +1,37 @@
+{% set members_form_disabled = create_mode|default(false) %}
+
+<div class="conversation-form-members">
+    <h4 class="conversation-form__h4 members-heading">{{ _('Add members') }}</h4>
+    <p class="conversation-form-members__description">{{ _('Add managers to your conversation') }}</p>
+
+    <div class="conversation-form-members__input-row">
+        <div class="conversation-form-members__input-wrap">
+            <input
+                type="email"
+                id="member-email-input"
+                class="conversation-form-members__input"
+                placeholder=""
+                aria-describedby="member-email-help"
+                {% if members_form_disabled %}disabled aria-disabled="true"{% endif %}
+            >
+            <p id="member-email-help" class="conversation-form-members__help">{{ _('Insert a valid e-mail for invite') }}</p>
+            {% include 'ej_conversations/includes/conversation-form-member-error.jinja2' %}
+        </div>
+        <button
+            type="button"
+            id="member-add-btn"
+            class="conversation-form-members__add-btn"
+            {% if members_form_disabled %}disabled aria-disabled="true"{% endif %}
+        >
+            <img src="{{ static('/img/icons/user-plus.svg') }}" alt="" aria-hidden="true">
+            {{ _('Add admin') }}
+        </button>
+    </div>
+
+    <h2 class="conversation-form-members__title">{{ _('Members') }}</h2>
+
+    {% include 'ej_conversations/includes/conversation-form-members-table.jinja2' %}
+</div>
+
+{% include 'ej_conversations/includes/conversation-form-member-modal.jinja2' %}
+{% include 'ej_conversations/includes/conversation-form-member-remove-modal.jinja2' %}

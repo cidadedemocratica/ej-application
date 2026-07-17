@@ -1,4 +1,9 @@
+{% set members_tab_disabled = create_mode|default(false) %}
+{% set members_tab_tooltip = _('Members can only be added after the conversation is created') %}
 {% set active_tab = request.POST.get('active_tab', 'basic') if request is defined else 'basic' %}
+{% if members_tab_disabled and active_tab == 'members' %}
+    {% set active_tab = 'basic' %}
+{% endif %}
 <input type="hidden" name="active_tab" id="conversation-form-active-tab" value="{{ active_tab }}">
 
 <nav class="conversation-form-tabs" aria-label="{{ _('Conversation form sections') }}">
@@ -27,5 +32,22 @@
         >
             {{ _('Advanced') }}
         </button>
+        {% if can_manage_members %}
+            <button
+                type="button"
+                id="conversation-form-tab-members"
+                class="conversation-form-tabs__tab{% if active_tab == 'members' and not members_tab_disabled %} conversation-form-tabs__tab--active{% endif %}{% if members_tab_disabled %} conversation-form-tabs__tab--disabled{% endif %}"
+                role="tab"
+                aria-selected="{{ 'true' if active_tab == 'members' and not members_tab_disabled else 'false' }}"
+                aria-disabled="{{ 'true' if members_tab_disabled else 'false' }}"
+                aria-controls="conversation-form-panel-members"
+                tabindex="{{ '0' if active_tab == 'members' and not members_tab_disabled else '-1' }}"
+                data-tab-target="members"
+                {% if members_tab_disabled %}data-tooltip="{{ members_tab_tooltip }}" {% endif %}
+                {% if members_tab_disabled %}disabled{% endif %}
+            >
+                {{ _('Members') }}
+            </button>
+        {% endif %}
     </div>
 </nav>

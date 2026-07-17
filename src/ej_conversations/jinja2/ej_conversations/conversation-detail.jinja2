@@ -14,7 +14,7 @@
     {% set hide_menu = true %}
 {% else %}
     {% block menu %}
-        {% if conversation.author.id == request.user.id or request.user.is_staff or request.user.is_superuser %}
+        {% if request.user.has_perm('ej.can_edit_conversation', conversation) or request.user.is_staff or request.user.is_superuser %}
             {% include 'ej_conversations/includes/menu.jinja2' %}
         {% else %}
             {% include 'ej_conversations/includes/conversation-menu.jinja2' %}
