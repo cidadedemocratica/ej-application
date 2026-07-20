@@ -139,10 +139,15 @@ class UserMixin(ConversationMixin):
         votes_statistics_df *= normalization
 
         # Extend fields with additional data
-        extend_full_fields = [EXTEND_FIELDS.get(x, x) for x in extend_fields]
+        extend_fields = list(extend_fields)
+        dataframe_extend_fields = [
+            field for field in extend_fields if field != "id"
+        ]
+        extend_full_fields = [
+            EXTEND_FIELDS.get(x, x) for x in dataframe_extend_fields
+        ]
 
         # Save extended dataframe
-        extend_fields = list(extend_fields)
         votes_statistics_df = self.extend_dataframe(
             votes_statistics_df,
             "name",
@@ -150,10 +155,14 @@ class UserMixin(ConversationMixin):
             "date_joined",
             *extend_full_fields,
         )
-        if extend_fields:
-            columns = list(votes_statistics_df.columns[: -len(extend_fields)])
-            columns.extend(extend_fields)
+        if dataframe_extend_fields:
+            columns = list(
+                votes_statistics_df.columns[: -len(dataframe_extend_fields)]
+            )
+            columns.extend(dataframe_extend_fields)
             votes_statistics_df.columns = columns
+        if "id" in extend_fields:
+            votes_statistics_df["id"] = votes_statistics_df.index
         cols = [
             "name",
             "email",

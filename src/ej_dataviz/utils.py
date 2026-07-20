@@ -132,6 +132,7 @@ def get_user_data(conversation):
         ]
     ]
     df.columns = ["email", "user_id", *df.columns[2:]]
+    df.index = df["user_id"]
     return df
 
 
