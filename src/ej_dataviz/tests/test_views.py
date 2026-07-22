@@ -12,7 +12,11 @@ from ej_clusters.models.clusterization import Clusterization
 from ej_clusters.models.stereotype import Stereotype
 from ej_clusters.models.stereotype_vote import StereotypeVote
 from ej_conversations.enums import Choice
-from ej_dataviz.utils import get_comments_dataframe, get_user_dataframe
+from ej_dataviz.utils import (
+    get_comments_dataframe,
+    get_user_data,
+    get_user_dataframe,
+)
 from ej_dataviz.views.filters import (
     CommentsReportClustersFilter,
     CommentsReportSearchFilter,
@@ -512,6 +516,16 @@ class TestUsersReport(TestReportRoutes):
             == TestUsersReport.no_group_text
         )
         assert len(users_df.index) == 3
+
+    def test_get_user_data_exports_user_id(self, conversation_with_comments):
+        users_df = get_user_data(conversation_with_comments)
+        user_ids = set(
+            conversation_with_comments.users.values_list("id", flat=True)
+        )
+
+        assert set(users_df["user_id"]) == user_ids
+        assert set(users_df.index) == user_ids
+        assert "id" not in users_df.columns
 
     def test_get_cluster_users_dataframe(
         self, conversation_with_comments, user_cluster
