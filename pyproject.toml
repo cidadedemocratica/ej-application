@@ -38,7 +38,7 @@ sphinx-rtd-theme = "<2.0.0"
 toml = "^0.10.0"
 gunicorn = "^23.0"
 jinja2 = "2.11.3"
-setuptools = "61.2.0"
+setuptools = "83.0.0"
 django-anymail = {extras = ["mailgun"], version = "^10.0"}
 django-ckeditor = "6.3.2"
 colorama = "^0.4.6"
