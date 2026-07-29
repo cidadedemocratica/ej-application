@@ -1,55 +1,59 @@
+name: homol-ej-community
+
+x-common-config:
+  &common
+  env_file:
+    - .env
+  restart: unless-stopped
+
 services:
     db:
+        <<: *common    
         image: postgres:16
-        environment:
-            - POSTGRES_PASSWORD=ej
-            - POSTGRES_USER=ej
-            - POSTGRES_DB=ej
         volumes:
-            - "backups:/var/lib/postgresql/data"
+            - "ej_db_data:/var/lib/postgresql/data"
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U ej -d ej"]
             interval: 30s
             timeout: 10s
             retries: 3
+    
     server:
+        <<: *common
         build:
             context: ../
             dockerfile: docker/Dockerfile
         volumes:
             - ../:/ej-application/
             - "statics:/ej-application/local/"
-        env_file:
-            - ../.env
         ports:
-            - 8000:8000
+          - "${SERVER_PORT:-8000}:8000"
         entrypoint: ["/bin/bash", "docker/run_local_server.sh"]
         depends_on:
             - rabbitmq
             - celery
             - db
+        healthcheck:
+            test: curl -sI --fail http://localhost:8000/api/health
+
     celery:
+        <<: *common
         build:
             context: ../
             dockerfile: docker/Dockerfile
         volumes:
             - ../:/ej-application/
-        env_file:
-            - ../.env
         entrypoint: ["/bin/bash", "-c", "poetry run inv celery"]
         depends_on:
             - rabbitmq
             - db
+
     rabbitmq:
+        <<: *common
         image: rabbitmq:4
         hostname: rabbitmq-server
-        environment:
-            - RABBITMQ_DEFAULT_USER=user
-            - RABBITMQ_DEFAULT_PASS=password
         volumes:
             - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
-        ports:
-            - 15672:15672
         healthcheck:
             test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
             interval: 30s
@@ -57,5 +61,5 @@ services:
             retries: 3
 
 volumes:
-    backups:
+    ej_db_data:
     statics:
