@@ -1,35 +1,36 @@
 stages:
-  - style
-  - linter
-  - unit tests
   - build
-    # - deploy
-    # - e2e tests
+  - deploy
 
 .pipeline-rules:
   r1: &push_dev $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH == 'develop'
   r2: &job_build $JOB == 'build'
   r3: &merge_request $CI_PIPELINE_SOURCE == 'merge_request_event'
+  r4: &job_deploy $JOB == 'deploy'
+  r5: &new_tag $CI_COMMIT_TAG
 
 variables:
   GITLAB_EJ_TOKEN: "gitlab+deploy-token-533883:51xTbvyHGmEfeZZUxUct"
   EJ_THEME: "ej"
   SERVICE: "ej"
   ENVIRONMENT:
-    value: "production"
+    value: "prod"
     description: "Ambiente no qual o JOB será executado."
     options:
-      - "none"
-      - "production"
+      - "homol"
+      - "prod"
   JOB:
     value: "none"
     description: "JOB desejado."
     options:
       - "build"
       - "none"
-      - "unit tests"
-  #   - "deploy"
+      - "deploy"
+  VERSION:
+    value: "$CI_COMMIT_SHORT_SHA"
+    description: "Versão a ser deployada, alterar."
 
+# Templates
 .kaniko-build:
   stage: build
   image:
@@ -65,64 +66,72 @@ variables:
         --build-arg VERSION="$IMAGE_TAG" --build-arg EJ_THEME="$EJ_THEME" \
         --log-timestamp
 
+.deploy-registry:
+  stage: deploy
+  script:
+    - if [ -z $PROJECT_PATH ]; then echo "Variável com valor inválido >>PROJECT_PATH. Erro! Finalizando a pipeline..."; exit 1; fi
+    - if [ -z "$VERSION" ] || [ "$VERSION" = "latest" ] ; then echo "Variável com valor inválido >>VERSION. Exiting! (VERSION=$VERSION)"; exit 1; fi
+    - echo "Fazendo o deploy da versão $VERSION."
+    - hostname -s
+    - mkdir -p ~/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(echo -n "${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD}" | base64 | tr -d "\n")\"}}}" > ~/.docker/config.json
+    - sed -E -i "s|(image:.*):([^\"']+)([\"']?)|\1:$VERSION\3|g" "$PROJECT_PATH/$IMAGES_FILE"
+    - docker compose --file $COMPOSE_FILE $ENV_OPT pull --ignore-pull-failures
+    - docker logout
+    - docker compose --file $COMPOSE_FILE up --build -d server celery
+    - rm ~/.docker/config.json -f
+  variables:
+    GIT_STRATEGY: none
+    COMPOSE_FILE: $PROJECT_PATH/docker-compose.yaml
+    IMAGES_FILE: ej.yaml
+
+.deploy-local:
+  stage: deploy
+  script:
+    - if [ -z $PROJECT_PATH ]; then echo "Variável com valor inválido >>PROJECT_PATH. Erro! Finalizando a pipeline..."; exit 1; fi
+    - echo "Iniciando deploy em $PROJECT_PATH"
+    - hostname -s
+    - cd $PROJECT_PATH
+    - git config --global --add safe.directory "$PROJECT_PATH"
+    - git fetch --all
+    - git checkout -f $CI_COMMIT_BRANCH
+    - git reset --hard origin/$CI_COMMIT_BRANCH
+    - docker compose --file $COMPOSE_FILE up --build -d server celery
+  variables:
+    GIT_STRATEGY: none
+    COMPOSE_FILE: $PROJECT_PATH/docker/docker-compose.yaml
+
+# Jobs
 docker-build:
   extends: .kaniko-build
-  environment:
-    name: "$ENVIRONMENT"
-    action: prepare
   variables:
     CONTEXT: .
     DOCKERFILE: docker/Dockerfile-prod
-    IMAGE_TAG: $CI_COMMIT_SHORT_SHA # TODO: Taggear imagem baseado na release
+    IMAGE_TAG: $CI_COMMIT_TAG
     FF_TIMESTAMPS: "1"
   rules:
+    - if: *job_build
+    - if: *new_tag
+
+deploy-registry:
+  extends: .deploy-registry
+  environment:
+    name: "$ENVIRONMENT"
+    action: start
+  variables:
+    PROJECT_PATH: /home/pencillabs/ej/${ENVIRONMENT}
+  tags:
+    - ej-shell-runner
+  rules:
+    - if: *job_deploy
+      needs: []
+
+deploy-local:
+  extends: .deploy-local
+  variables:
+    PROJECT_PATH: /home/pencillabs/ej-application
+  tags:
+    - ej-shell-runner
+  rules:
     - if: *push_dev
-    - if: *job_build
 
-black:
-  stage: style
-  image:
-    name: python:3.9.19-slim-bookworm
-    pull_policy: if-not-present
-  before_script:
-    - /bin/bash -c "pip install black==22.12.0"
-  script:
-    - /bin/bash -c "black --check ."
-  tags:
-    - av-ci-runner
-  rules:
-    - if: *merge_request
-
-ruff:
-  stage: linter
-  image:
-    name: python:3.9.19-slim-bookworm
-    pull_policy: if-not-present
-  before_script:
-    - /bin/bash -c "pip install ruff==0.3.7"
-  script:
-    - /bin/bash -c "ruff check"
-  tags:
-    - av-ci-runner
-  rules:
-    - if: *merge_request
-
-pytest:
-  stage: unit tests
-  image:
-    name: python:3.9.19-slim-bookworm
-    pull_policy: if-not-present
-  before_script:
-    - apt-get update && apt-get install curl libpq-dev gcc g++ libjpeg-dev zlib1g-dev git -y
-  script:
-    - cd /builds/pencillabs/ej/ej-application
-    - curl -sSL https://install.python-poetry.org | python3 -
-    - export PATH="/root/.local/bin:$PATH"
-    - poetry install --with main,dev --no-root
-    - poetry run inv docs
-    - poetry run inv test
-  tags:
-    - av-ci-runner
-  rules:
-    - if: *merge_request
-    - if: *job_build

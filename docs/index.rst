@@ -64,3 +64,4 @@ tamanhos à mapear as bolhas que compõe seu público-alvo e, a partir disso, tr
    development-guides/pt-br/translations
    development-guides/pt-br/social-login
    development-guides/pt-br/smtp
+   pipeline/pt-br/pipeline
