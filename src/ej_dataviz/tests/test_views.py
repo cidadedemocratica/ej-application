@@ -238,6 +238,7 @@ class TestReportRoutes:
 
     def test_get_page(self, conversation_with_comments, logged_client):
         conv = conversation_with_comments
+        comments = conversation_with_comments.comments.order_by("id")
         base_url = reverse(
             "boards:dataviz-comments", kwargs=conv.get_url_kwargs()
         )
@@ -245,18 +246,10 @@ class TestReportRoutes:
 
         response = logged_client.get(url)
         page = response.context["page"]
-        assert (
-            conversation_with_comments.comments.all()[0].content == page[0][1]
-        )
-        assert (
-            conversation_with_comments.comments.all()[1].content == page[1][1]
-        )
-        assert (
-            conversation_with_comments.comments.all()[2].content == page[2][1]
-        )
-        assert (
-            conversation_with_comments.comments.all()[3].content == page[3][1]
-        )
+        assert comments[0].content == page[0][1]
+        assert comments[1].content == page[1][1]
+        assert comments[2].content == page[2][1]
+        assert comments[3].content == page[3][1]
 
     def test_get_dashboard_with_clusters(
         self, cluster, stereotype_vote, comment, logged_client
@@ -475,7 +468,7 @@ class TestCommentsReport(TestReportRoutes):
         assert len(filtered_comments_df.index) == 1
 
     def test_get_modal(self, conversation_with_comments, logged_client):
-        comments = conversation_with_comments.comments.all()
+        comments = conversation_with_comments.comments.order_by("id")
         index = 0
         comment = comments[index]
         base_url = reverse("dataviz:comments-modal", kwargs={"pk": comment.id})
