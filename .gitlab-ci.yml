@@ -1,4 +1,7 @@
 stages:
+  - style
+  - linter
+  - unit tests
   - build
   - deploy
 
@@ -8,6 +11,7 @@ stages:
   r3: &merge_request $CI_PIPELINE_SOURCE == 'merge_request_event'
   r4: &job_deploy $JOB == 'deploy'
   r5: &new_tag $CI_COMMIT_TAG
+  r6: &push_any_branch $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH
 
 variables:
   GITLAB_EJ_TOKEN: "gitlab+deploy-token-533883:51xTbvyHGmEfeZZUxUct"
@@ -135,3 +139,60 @@ deploy-local:
   rules:
     - if: *push_dev
 
+black:
+  stage: style
+  image:
+    name: python:3.12-slim-bookworm
+  before_script:
+    - pip install --no-cache-dir poetry
+  script:
+    - poetry install --only dev --no-root
+    - poetry run black --check .
+  rules:
+    - if: *merge_request
+    - if: *push_any_branch
+
+ruff:
+  stage: linter
+  image:
+    name: python:3.12-slim-bookworm
+  before_script:
+    - pip install ruff==0.3.7
+  script:
+    - ruff check
+  rules:
+    - if: *merge_request
+    - if: *push_any_branch
+
+pytest:
+  stage: unit tests
+  image:
+    name: python:3.12-slim-bookworm
+  services:
+    - name: postgres:15
+      alias: db
+    - name: rabbitmq:3-management
+      alias: rabbitmq
+  variables:
+    POETRY_VIRTUALENVS_CREATE: "true"
+    POSTGRES_DB: ej
+    POSTGRES_USER: ej
+    POSTGRES_PASSWORD: ej
+    RABBITMQ_DEFAULT_USER: guest
+    RABBITMQ_DEFAULT_PASS: guest
+  before_script:
+    - apt-get update && apt-get install libpq-dev gcc g++ libjpeg-dev zlib1g-dev git -y
+    - pip install --no-cache-dir poetry
+  script:
+    - poetry install --with main,dev --no-root
+    - poetry run inv docs
+    - poetry run inv test
+  cache:
+    key:
+      files:
+        - ej-application/poetry.lock
+    paths:
+      - ej-application/.venv
+  rules:
+    - if: *merge_request
+    - if: *push_any_branch

@@ -3,7 +3,6 @@ from jinja2 import Environment, FileSystemLoader
 
 from .utils import get_host_with_schema
 
-
 """
  A class to generate an html template from conversations-detail page.
  This template serves for example to create marketing campaigns using

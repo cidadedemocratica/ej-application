@@ -37,6 +37,7 @@ class CommentViewSet(RestAPIBaseViewSet):
             queryset = Comment.objects.all()
         else:
             queryset = Comment.objects.filter(author=request.user)
+        queryset = queryset.order_by("id")
 
         if not is_author:
             serializer = self.get_serializer(queryset, many=True)
