@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -25,6 +27,11 @@ class ConversationManagerInvitation(TimeStampedModel):
         related_name="manager_invitations",
     )
     email = models.EmailField()
+    accept_token = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+    )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -70,6 +77,11 @@ class ConversationManagerInvitation(TimeStampedModel):
     @staticmethod
     def normalize_email(email):
         return (email or "").strip().lower()
+
+    def matches_user_email(self, user):
+        user_email = self.normalize_email(user.email)
+        invitation_email = self.normalize_email(self.email)
+        return user_email == invitation_email
 
     def save(self, *args, **kwargs):
         self.email = self.normalize_email(self.email)

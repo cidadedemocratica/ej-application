@@ -2,6 +2,7 @@ import datetime
 import json
 
 from django.core.exceptions import ValidationError
+from django.test import Client
 from django.urls import reverse
 from django.utils.translation import gettext
 import pytest
@@ -17,6 +18,8 @@ from ej_dataviz.utils import (
     get_user_data,
     get_user_dataframe,
 )
+from ej_conversations.models import ConversationManager
+from ej_users.models import User
 from ej_dataviz.views.filters import (
     CommentsReportClustersFilter,
     CommentsReportSearchFilter,
@@ -188,6 +191,50 @@ class TestReportRoutes:
             "Your conversation still does not have defined personas. Without personas, it is not possible to generate opinion groups."
             not in response.content.decode()
         )
+
+    def test_manager_can_view_dashboard_of_unpromoted_conversation(
+        self, conversation, board
+    ):
+        board.save()
+        conversation.board = board
+        conversation.is_promoted = False
+        conversation.save()
+
+        clusterization = Clusterization.objects.create(
+            conversation=conversation, cluster_status=ClusterStatus.ACTIVE
+        )
+        Cluster.objects.create(name="name", clusterization=clusterization)
+
+        manager = User.objects.create_user("manager@server.com", "password")
+        ConversationManager.objects.create(
+            conversation=conversation, user=manager
+        )
+
+        client = Client()
+        client.force_login(manager)
+        url = reverse(
+            "boards:dataviz-dashboard", kwargs=conversation.get_url_kwargs()
+        )
+        response = client.get(url)
+        assert response.status_code == 200
+
+    def test_dashboard_returns_404_when_board_slug_does_not_match(
+        self, conversation, board, logged_client
+    ):
+        board.save()
+        conversation.board = board
+        conversation.save()
+        url = reverse(
+            "boards:dataviz-dashboard",
+            kwargs={
+                **conversation.get_url_kwargs(),
+                "board_slug": "wrong-board",
+            },
+        )
+
+        response = logged_client.get(url)
+
+        assert response.status_code == 404
 
     def test_get_page(self, conversation_with_comments, logged_client):
         conv = conversation_with_comments

@@ -81,7 +81,26 @@ def _path_candidates(parts):
         yield path, part
 
 
-def _django_breadcrumb(app_slug, crumbs, breadcrumbs):
+def _can_access_board_link(request, kwargs):
+    """
+    Check whether the current request's user can access the board's
+    conversation list (``boards:conversation-list``). Falls back to True
+    when there is no user in the request (e.g. tests using RequestFactory).
+    """
+    user = getattr(request, "user", None)
+    if user is None:
+        return True
+
+    from ej_boards.models import Board
+
+    board = Board.objects.filter(slug=kwargs.get("board_slug")).first()
+    if board is None:
+        return True
+
+    return user.has_perm("ej.can_access_board", board)
+
+
+def _django_breadcrumb(app_slug, crumbs, breadcrumbs, request):
     app_config = breadcrumbs.apps_url.get(app_slug)
     if app_config is None:
         return []
@@ -101,10 +120,15 @@ def _django_breadcrumb(app_slug, crumbs, breadcrumbs):
                 continue
 
             current_view_name = view_name
+            item_url = f"/{app_slug}/{path}"
+            if view_name == "boards:conversation-list" and not (
+                _can_access_board_link(request, kwargs)
+            ):
+                item_url = None
             items.append(
                 BreadcrumbItem(
                     title=_route_label(view_name, crumb),
-                    url=f"/{app_slug}/{path}",
+                    url=item_url,
                     params=kwargs,
                 )
             )
@@ -130,5 +154,5 @@ def get_breadcrumbs(request):
 
     app_slug = crumbs[0]
     breadcrumbs = BreadcrumbItems(items=[])
-    items = _django_breadcrumb(app_slug, crumbs[1:], breadcrumbs)
+    items = _django_breadcrumb(app_slug, crumbs[1:], breadcrumbs, request)
     return [{"label": item.title, "url": item.url} for item in items]

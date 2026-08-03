@@ -55,8 +55,12 @@
                              aria-live="polite"
                              {% if aria_flowto is defined %}aria-flowto="{{ aria_flowto }}"{% endif %}>
                             {% for msg in get_messages() %}
-                                <div class="toast"{% if msg.tags %} {{ msg.tags }}{% endif %} tabindex="0">{{ msg|safe }}
-                                </div>
+                                {% if 'member-toast' in msg.tags %}
+                                    {% include 'ej_conversations/includes/member-toast.jinja2' %}
+                                {% else %}
+                                    <div class="toast"{% if msg.tags %} {{ msg.tags }}{% endif %} tabindex="0">{{ msg|safe }}
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     {% endblock %}

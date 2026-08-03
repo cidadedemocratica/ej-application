@@ -10,6 +10,9 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
 from ej.testing import UrlTester
+from ej_clusters.enums import ClusterStatus
+from ej_clusters.models.cluster import Cluster
+from ej_clusters.models.clusterization import Clusterization
 from ej_conversations import create_conversation
 from ej_conversations.models import Conversation
 from ej_conversations.models import ConversationManagerInvitation
@@ -193,13 +196,25 @@ class TestHome:
             invited_by=author,
         )
         invitation.accept(test_user)
+        clusterization = Clusterization.objects.create(
+            conversation=conversation,
+            cluster_status=ClusterStatus.ACTIVE,
+        )
+        Cluster.objects.create(name="name", clusterization=clusterization)
+        dashboard_url = reverse(
+            "boards:dataviz-dashboard",
+            kwargs=conversation.get_url_kwargs(),
+        )
 
         client = Client()
         client.force_login(test_user)
         response = client.get("/profile/home/")
+        dashboard_response = client.get(dashboard_url)
 
         assert response.status_code == 200
         assert conversation in list(response.context["created_conversations"])
+        assert f'href="{dashboard_url}"' in response.content.decode()
+        assert dashboard_response.status_code == 200
 
     def test_user_conversation_filter_includes_managed_conversation(
         self, test_user

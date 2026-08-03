@@ -77,7 +77,7 @@ class LoginView(FormView):
         return {
             "user": self.request.user,
             "form": kwargs.get("form", forms.LoginForm(request=self.request)),
-            "next": self.next_url,
+            "next": self.next_url or self.request.GET.get("next"),
             "social_js": social_js_template().render(request=self.request),
             "social_buttons": social_buttons(self.request),
         }
@@ -144,7 +144,7 @@ class RegisterView(CreateView):
             "form": kwargs.get(
                 "form", forms.RegistrationForm(request=self.request)
             ),
-            "next": self.next_url,
+            "next": self.next_url or self.request.GET.get("next"),
             "social_js": social_js_template().render(request=self.request),
             "social_buttons": social_buttons(self.request),
         }

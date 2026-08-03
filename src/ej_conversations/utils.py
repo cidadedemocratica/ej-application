@@ -34,6 +34,8 @@ def check_promoted(conversation, request):
     user = request.user
     if user.is_staff or user.is_superuser or user.id == conversation.author_id:
         return conversation
+    if user.has_perm("ej.is_conversation_manager", conversation):
+        return conversation
     if not conversation.is_promoted or conversation.is_hidden:
         raise Http404
     return conversation

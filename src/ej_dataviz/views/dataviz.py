@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.utils.text import slugify
 from django.utils.timezone import make_aware
@@ -83,6 +83,17 @@ class ClusterDetailView(DetailView):
 class ConversationDashboardView(DetailView):
     model = Conversation
     template_name = "ej_dataviz/dashboard.jinja2"
+
+    def get_object(self, queryset=None):
+        queryset = queryset or self.get_queryset()
+        filters = {
+            "id": self.kwargs["conversation_id"],
+            "slug": self.kwargs["slug"],
+        }
+        board_slug = self.kwargs.get("board_slug")
+        if board_slug:
+            filters["board__slug"] = board_slug
+        return get_object_or_404(queryset, **filters)
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, self.get_context_data())
