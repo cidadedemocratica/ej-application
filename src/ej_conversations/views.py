@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from logging import getLogger
 from typing import Any, Dict
 
@@ -38,6 +40,7 @@ from .decorators import (
 )
 from .forms import CommentForm, ConversationForm
 from .models import Comment, Conversation, ConversationManagerInvitation
+from .tasks import send_manager_invitation_email
 from .utils import (
     handle_detail_comment,
     handle_detail_favorite,
@@ -538,13 +541,13 @@ class ConversationManagerInvitationView(DetailView):
             return response
 
         user = User.objects.filter(email__iexact=email).first()
-        ConversationManagerInvitation.objects.create(
+        invitation = ConversationManagerInvitation.objects.create(
             conversation=conversation,
             email=email,
             user=user,
             invited_by=request.user,
-            status=ConversationManagerInvitation.Status.ACCEPTED,
         )
+        self._send_invitation(request, conversation, invitation)
         member_toast(request, _("Member added"))
         member_table = render_to_string(
             self.member_table_template_name,
@@ -562,6 +565,27 @@ class ConversationManagerInvitationView(DetailView):
         return self._member_success_response(
             request, f"{member_table}{member_error_clear}", status=201
         )
+
+    def _send_invitation(self, request, conversation, invitation):
+        accept_url = self._build_accept_url(request, conversation, invitation)
+
+        try:
+            send_manager_invitation_email.delay(invitation.id, accept_url)
+        except Exception:
+            log.exception(
+                "Could not enqueue manager invitation email %s.",
+                invitation.id,
+            )
+
+    def _build_accept_url(self, request, conversation, invitation):
+        path = reverse(
+            "boards:conversation-accept_manager_invitation",
+            kwargs={
+                **conversation.get_url_kwargs(),
+                "accept_token": invitation.accept_token,
+            },
+        )
+        return f"{get_host_with_schema(request)}{path}"
 
     def delete(self, request, *args, **kwargs):
         conversation = self.get_object()
@@ -627,6 +651,56 @@ class ConversationManagerInvitationView(DetailView):
             return False, None
 
         return True, _("This member is already invited.")
+
+
+class ConversationManagerInvitationAcceptView(DetailView):
+    model = ConversationManagerInvitation
+    http_method_names = ["get"]
+    slug_field = "accept_token"
+    slug_url_kwarg = "accept_token"
+
+    def get(self, request, *args, **kwargs):
+        invitation = self.get_object()
+
+        if not request.user.is_authenticated:
+            auth_route = self._auth_route_for_invitation(invitation)
+            return self._redirect_to_auth(auth_route)
+
+        if not invitation.matches_user_email(request.user):
+            # Valid token, but email does not match. Keep the invitation
+            # pending and send the user to their own dashboard instead of
+            # bouncing them back to the login screen.
+            member_toast(
+                request,
+                _("This invitation was sent to a different email address."),
+            )
+            return redirect(request.user.profile.default_url())
+
+        invitation.accept(request.user)
+        member_toast(request, _("Invitation accepted."))
+        return redirect(invitation.get_dashboard_url())
+
+    def get_queryset(self):
+        return (
+            ConversationManagerInvitation.objects.active()
+            .select_related("conversation", "conversation__board", "user")
+            .filter(
+                conversation_id=self.kwargs["conversation_id"],
+                conversation__slug=self.kwargs["slug"],
+                conversation__board__slug=self.kwargs["board_slug"],
+            )
+        )
+
+    def _auth_route_for_invitation(self, invitation):
+        user_exists = User.objects.filter(
+            email__iexact=invitation.email
+        ).exists()
+        return "auth:login" if user_exists else "auth:register"
+
+    def _redirect_to_auth(self, auth_route):
+        url = reverse(auth_route)
+        query = urlencode({"next": self.request.get_full_path()})
+        return redirect(f"{url}?{query}")
 
 
 @method_decorator(

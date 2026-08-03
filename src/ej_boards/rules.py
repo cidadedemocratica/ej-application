@@ -34,6 +34,14 @@ def can_edit_board(user, board):
     return user == board.owner
 
 
+@rules.register_perm("ej.can_access_board")
+def can_access_board(user, board):
+    """
+    Verify if a user can access a board's conversation list.
+    """
+    return user == board.owner or user.is_staff or user.is_superuser
+
+
 @rules.register_perm("ej.can_add_board")
 def can_add_board(user):
     """

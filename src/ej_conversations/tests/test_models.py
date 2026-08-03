@@ -1,3 +1,5 @@
+import uuid
+
 from constance import config
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -111,6 +113,50 @@ class TestConversationManagerInvitation(ConversationRecipes):
         )
 
         assert invitation.email == "manager@example.com"
+
+    def test_matches_user_email(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        manager = mk_user(email=" Manager@Example.COM ")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+
+        assert invitation.matches_user_email(manager)
+
+    def test_matches_user_email_rejects_different_email(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        manager = mk_user(email="other@example.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+
+        assert not invitation.matches_user_email(manager)
+
+    def test_generates_accept_token(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+        other_invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="other-manager@example.com",
+            invited_by=invited_by,
+        )
+
+        assert isinstance(invitation.accept_token, uuid.UUID)
+        assert invitation.accept_token != other_invitation.accept_token
 
     def test_prevents_duplicate_active_invitation_for_same_email(
         self, db, mk_conversation, mk_user

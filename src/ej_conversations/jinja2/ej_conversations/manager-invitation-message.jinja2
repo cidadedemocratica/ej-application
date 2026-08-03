@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <body>
+    <p>{% trans %}Hello, {{ person_name }},{% endtrans %}</p>
+
+    <p>{% trans %}You have been granted access to the conversation <strong>{{ conversation_title }}</strong> in the EJ located at {{ site_domain }}.{% endtrans %}</p>
+
+    <p>{% trans %}From now on, you will be able to view and manage this conversation according to the permissions granted to you.{% endtrans %}</p>
+
+    <p>{% trans %}To access it, click the link below:{% endtrans %}</p>
+
+    <p><a href="{{ accept_url }}">{{ accept_url }}</a></p>
+
+    <p>{% trans %}If you do not have an EJ account yet, you will need to create one first. After completing your registration, you will be automatically redirected to the conversation.{% endtrans %}</p>
+
+    <p>{% trans %}This email was sent automatically by the EJ Platform.{% endtrans %}</p>
+
+    <p>{% trans %}If you do not recognize this invitation, please ignore this email.{% endtrans %}</p>
+  </body>
+</html>

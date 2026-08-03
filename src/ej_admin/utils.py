@@ -177,11 +177,11 @@ def apply_board_filters(order_by, sort, search_string):
     if order_by == OrderByOptions.CONVERSATION:
         searched_boards = Board.objects.annotate(
             count=Count("conversation")
-        ).order_by(f"{sort_order}count")
+        ).order_by(f"{sort_order}count", "created")
     elif order_by == OrderByOptions.COMMENT:
         searched_boards = Board.objects.annotate(
             count=Count("conversation__comments")
-        ).order_by(f"{sort_order}count")
+        ).order_by(f"{sort_order}count", "created")
     else:
         searched_boards = Board.objects.order_by(f"{sort_order}created")
 

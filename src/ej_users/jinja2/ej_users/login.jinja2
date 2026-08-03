@@ -4,6 +4,7 @@
 {% block content %}
     {% block form_data %}
         <form method="post"
+              action="{{ request.get_full_path() }}"
               class="login-form pad-t3 form-narrow"
               aria-label="{{ _("Login form") }}"
               aria-live="assertive">

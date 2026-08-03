@@ -1,5 +1,7 @@
 from io import BytesIO
+import mock
 import re
+from urllib.parse import parse_qs, urlparse
 from PIL import Image
 from pytest import raises
 import pytest
@@ -902,9 +904,10 @@ class TestConversationComments(ConversationSetup):
 
 
 class TestConversationEdit(ConversationSetup):
-    def assert_member_toast(self, content, message):
+    def assert_member_toast(self, content, message, *, htmx=True):
         assert 'id="message-area"' in content
-        assert 'hx-swap-oob="innerHTML"' in content
+        if htmx:
+            assert 'hx-swap-oob="innerHTML"' in content
         assert 'class="toast toast--member"' in content
         assert 'class="toast__close"' in content
         assert f'aria-label="{_("Close")}"' in content
@@ -1134,17 +1137,78 @@ class TestConversationEdit(ConversationSetup):
         assert 'hx-swap-oob="outerHTML"' in content
         assert "manager@example.com" in content
         assert (
-            str(ConversationManagerInvitation.Status.ACCEPTED.label) in content
+            str(ConversationManagerInvitation.Status.PENDING.label) in content
         )
         assert f'hx-delete="{delete_url}"' in content
         assert f'hx-target="#conversation-member-{invitation.id}"' in content
         self.assert_member_toast(content, _("Member added"))
         assert invitation.user == manager
         assert invitation.invited_by == base_user
-        assert (
-            invitation.status == ConversationManagerInvitation.Status.ACCEPTED
+        assert invitation.status == ConversationManagerInvitation.Status.PENDING
+        assert not ConversationManager.objects.filter(
+            conversation=new_conversation,
+            user=manager,
+        ).exists()
+        assert not manager.has_perm(
+            "ej.can_edit_conversation", new_conversation
         )
-        assert manager.has_perm("ej.can_edit_conversation", new_conversation)
+
+    def test_create_conversation_manager_invitation_enqueues_email(
+        self,
+        base_user,
+        new_conversation,
+    ):
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        with mock.patch(
+            "ej_conversations.views.send_manager_invitation_email.delay"
+        ) as delay:
+            response = client.post(url, {"email": "manager@example.com"})
+
+        invitation = ConversationManagerInvitation.objects.get(
+            conversation=new_conversation,
+            email="manager@example.com",
+        )
+        accept_path = reverse(
+            "boards:conversation-accept_manager_invitation",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "accept_token": invitation.accept_token,
+            },
+        )
+        assert response.status_code == 201
+        delay.assert_called_once_with(
+            invitation.id, f"http://localhost:8000{accept_path}"
+        )
+
+    def test_create_conversation_manager_invitation_ignores_enqueue_error(
+        self,
+        base_user,
+        new_conversation,
+    ):
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        with mock.patch(
+            "ej_conversations.views.send_manager_invitation_email.delay",
+            side_effect=Exception("broker unavailable"),
+        ):
+            response = client.post(url, {"email": "manager@example.com"})
+
+        assert response.status_code == 201
+        assert ConversationManagerInvitation.objects.filter(
+            conversation=new_conversation,
+            email="manager@example.com",
+        ).exists()
 
     def test_create_conversation_manager_invitation_without_existing_user(
         self, base_user, new_conversation
@@ -1172,14 +1236,12 @@ class TestConversationEdit(ConversationSetup):
         assert 'class="conversation-form-members__email-cell"' in content
         assert "new-manager@example.com" in content
         assert (
-            str(ConversationManagerInvitation.Status.ACCEPTED.label) in content
+            str(ConversationManagerInvitation.Status.PENDING.label) in content
         )
         self.assert_member_toast(content, _("Member added"))
         assert invitation.user is None
         assert invitation.invited_by == base_user
-        assert (
-            invitation.status == ConversationManagerInvitation.Status.ACCEPTED
-        )
+        assert invitation.status == ConversationManagerInvitation.Status.PENDING
 
     def test_create_conversation_manager_invitation_rejects_owner_email(
         self, base_user, new_conversation
@@ -1265,6 +1327,157 @@ class TestConversationEdit(ConversationSetup):
             ).count()
             == 1
         )
+
+    def accept_invitation_url(self, conversation, invitation):
+        return reverse(
+            "boards:conversation-accept_manager_invitation",
+            kwargs={
+                **conversation.get_url_kwargs(),
+                "accept_token": invitation.accept_token,
+            },
+        )
+
+    def assert_redirects_with_next(self, response, auth_route, next_url):
+        assert response.status_code == 302
+        parsed_url = urlparse(response.url)
+        assert parsed_url.path == reverse(auth_route)
+        assert parse_qs(parsed_url.query)["next"] == [next_url]
+
+    def test_accept_conversation_manager_invitation(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+        client = Client()
+        client.force_login(manager)
+
+        response = client.get(url)
+
+        invitation.refresh_from_db()
+        assert response.status_code == 302
+        assert response.url == reverse(
+            "boards:dataviz-dashboard",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        assert (
+            invitation.status == ConversationManagerInvitation.Status.ACCEPTED
+        )
+        assert invitation.user == manager
+        assert ConversationManager.objects.filter(
+            conversation=new_conversation,
+            user=manager,
+        ).exists()
+
+    def test_accept_conversation_manager_invitation_uses_member_toast(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+        dashboard_url = reverse(
+            "boards:dataviz-dashboard",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(manager)
+
+        response = client.get(url, follow=True)
+
+        assert response.redirect_chain == [(dashboard_url, 302)]
+        self.assert_member_toast(
+            response.content.decode(),
+            _("Invitation accepted."),
+            htmx=False,
+        )
+
+    def test_accept_conversation_manager_invitation_redirects_existing_user_to_login(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+
+        response = Client().get(url)
+
+        self.assert_redirects_with_next(response, "auth:login", url)
+
+    def test_accept_conversation_manager_invitation_redirects_new_user_to_register(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            email="new-manager@example.com",
+            invited_by=base_user,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+
+        response = Client().get(url)
+
+        self.assert_redirects_with_next(response, "auth:register", url)
+
+    def test_accept_conversation_manager_invitation_rejects_email_mismatch(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        other_user = User.objects.create_user("other@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+        client = Client()
+        client.force_login(other_user)
+
+        response = client.get(url)
+
+        invitation.refresh_from_db()
+        assert response.status_code == 302
+        assert response.url == other_user.profile.default_url()
+
+        toast_response = client.get(response.url, follow=True)
+        self.assert_member_toast(
+            toast_response.content.decode(),
+            _("This invitation was sent to a different email address."),
+            htmx=False,
+        )
+        assert invitation.status == ConversationManagerInvitation.Status.PENDING
+        assert invitation.is_active
+        assert not ConversationManager.objects.filter(
+            conversation=new_conversation,
+            user=other_user,
+        ).exists()
+
+    def test_accept_conversation_manager_invitation_rejects_inactive_invitation(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+            is_active=False,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+        client = Client()
+        client.force_login(manager)
+
+        response = client.get(url)
+
+        assert response.status_code == 404
 
     def test_author_can_edit_not_promoted_conversation(
         self, base_user, new_conversation

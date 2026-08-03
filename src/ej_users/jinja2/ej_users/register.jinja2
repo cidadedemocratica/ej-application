@@ -4,7 +4,7 @@
 {% block content %}
     {% block form_data %}
         <div class="content-grid register-form">
-            <form method="post">
+            <form method="post" action="{{ request.get_full_path() }}">
                 <div class="register-form__title">
                     <h1 class="text-accent" aria-hidden="true">{{ _("Register new user") }}</h1>
                     <img class="register-form__image" src="{{ static("/img/login/login.svg") }}" style="left: 1rem" alt="">

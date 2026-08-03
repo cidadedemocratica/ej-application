@@ -9,6 +9,26 @@ def rf():
     return pytest.importorskip("django.test").RequestFactory()
 
 
+@pytest.fixture
+def board_request(rf, db):
+    from ej_boards.models import Board
+    from ej_users.models import User
+
+    owner = User.objects.create_user("owner@example.com", "password")
+    board = Board.objects.create(
+        slug="minha-pauta", owner=owner, description="board"
+    )
+
+    def make(user):
+        request = rf.get(
+            f"/boards/{board.slug}/conversations/42/minha-conversa/edit/"
+        )
+        request.user = user
+        return request
+
+    return board, owner, make
+
+
 def assert_all_labels_are_present(items):
     assert all(item["label"] for item in items)
 
@@ -59,6 +79,59 @@ class TestGetBreadcrumbs:
         )
 
         assert get_breadcrumbs(request) == []
+
+
+class TestBoardBreadcrumbAccess:
+    def test_owner_keeps_board_link(self, board_request):
+        board, owner, make_request = board_request
+        request = make_request(owner)
+
+        result = get_breadcrumbs(request)
+
+        assert result[1]["label"] == "Mural"
+        assert result[1]["url"] == f"/boards/{board.slug}/conversations/"
+
+    def test_staff_keeps_board_link(self, board_request):
+        from ej_users.models import User
+
+        board, _owner, make_request = board_request
+        staff = User.objects.create_user(
+            "staff@example.com", "password", is_staff=True
+        )
+        request = make_request(staff)
+
+        result = get_breadcrumbs(request)
+
+        assert result[1]["url"] == f"/boards/{board.slug}/conversations/"
+
+    def test_superuser_keeps_board_link(self, board_request):
+        from ej_users.models import User
+
+        board, _owner, make_request = board_request
+        superuser = User.objects.create_superuser(
+            "admin@example.com", "password"
+        )
+        request = make_request(superuser)
+
+        result = get_breadcrumbs(request)
+
+        assert result[1]["url"] == f"/boards/{board.slug}/conversations/"
+
+    def test_manager_hides_board_link(self, board_request):
+        from ej_users.models import User
+
+        _board, _owner, make_request = board_request
+        manager = User.objects.create_user("manager@example.com", "password")
+        request = make_request(manager)
+
+        result = get_breadcrumbs(request)
+
+        assert result[1]["label"] == "Mural"
+        assert result[1]["url"] is None
+        # remaining breadcrumb items are unaffected
+        assert result[0]["url"] == "/profile/home/"
+        assert result[2]["url"] is not None
+        assert result[3]["url"] is None
 
 
 class TestJinja2Breadcrumbs:

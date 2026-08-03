@@ -86,6 +86,11 @@ urlpatterns = [
         name="delete_manager_invitation",
     ),
     path(
+        f"{conversation_url}/members/<uuid:accept_token>/accept/",
+        views.ConversationManagerInvitationAcceptView.as_view(),
+        name="accept_manager_invitation",
+    ),
+    path(
         "update-favorite-boards/",
         views.update_favorite_boards,
         name="update-favorite-boards",

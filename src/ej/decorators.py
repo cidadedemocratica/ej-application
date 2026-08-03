@@ -75,9 +75,7 @@ def can_moderate_conversation(view_func):
 def can_acess_list_view(view_func):
     def wrapper_func(request, *args, **kwargs):
         board = Board.objects.get(slug=kwargs["board_slug"])
-        if request.user == board.owner:
-            return view_func(request, *args, **kwargs)
-        if request.user.is_staff or request.user.is_superuser:
+        if request.user.has_perm("ej.can_access_board", board):
             return view_func(request, *args, **kwargs)
         return redirect("auth:login")
 
