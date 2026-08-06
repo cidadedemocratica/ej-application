@@ -1,14 +1,12 @@
-name: homol-ej-community
-
 x-common-config:
-  &common
+  &env-common
   env_file:
-    - .env
+    - ../.env
   restart: unless-stopped
 
 services:
     db:
-        <<: *common    
+        <<: *env-common
         image: postgres:16
         volumes:
             - "ej_db_data:/var/lib/postgresql/data"
@@ -17,9 +15,8 @@ services:
             interval: 30s
             timeout: 10s
             retries: 3
-    
+
     server:
-        <<: *common
         build:
             context: ../
             dockerfile: docker/Dockerfile
@@ -33,11 +30,14 @@ services:
             - rabbitmq
             - celery
             - db
-        healthcheck:
-            test: curl -sI --fail http://localhost:8000/api/health
+        <<: *env-common
+        environment:
+            # Translations and internacionalization
+            - LC_ALL=pt_BR.UTF-8
+            - LANG=pt_BR.UTF-8
+            - LANGUAGE=pt_BR.UTF-8
 
     celery:
-        <<: *common
         build:
             context: ../
             dockerfile: docker/Dockerfile
@@ -47,9 +47,9 @@ services:
         depends_on:
             - rabbitmq
             - db
+        <<: *env-common
 
     rabbitmq:
-        <<: *common
         image: rabbitmq:4
         hostname: rabbitmq-server
         volumes:
@@ -59,6 +59,7 @@ services:
             interval: 30s
             timeout: 10s
             retries: 3
+        <<: *env-common
 
 volumes:
     ej_db_data:
