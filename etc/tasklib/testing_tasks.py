@@ -50,12 +50,14 @@ def lint(ctx, python=True, js=True):
     help={
         "verbose": "Detailed error messages",
         "lf": "Run only the last failed tests",
-        "path": "Informs a single test file",
+        "cov": "Run tests with coverage report",
+        "path": "Path to a specific test file or directory. If empty, runs the full test suite.",
     }
 )
 def test(ctx, verbose=False, lf=False, cov=False, path=""):
     """
-    Run all unittests.
+    Run unittests. Optionally pass a path to a specific test file or
+    directory to run only that subset instead of the full suite.
     """
     opts = ""
     if verbose:

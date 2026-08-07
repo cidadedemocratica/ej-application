@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import nh3
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -135,6 +136,25 @@ class ConversationForm(forms.ModelForm):
                 _("This title already exists!"), code="duplicate"
             )
         return title
+
+    def _clean_html_field(self, field_name):
+        data = self.cleaned_data.get(field_name, "")
+        return nh3.clean(
+            data,
+            attributes={"*": {"style", "href"}},
+            filter_style_properties={
+                "color",
+                "font-weight",
+                "text-align",
+                "background-color",
+            },
+        )
+
+    def clean_welcome_message(self):
+        return self._clean_html_field("welcome_message")
+
+    def clean_ending_message(self):
+        return self._clean_html_field("ending_message")
 
     def set_placeholder(self, field, value):
         self.fields[field].widget.attrs["placeholder"] = value

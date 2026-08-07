@@ -76,3 +76,37 @@ class TestConversationForm:
             _("You already submitted this comment.")
             == form.errors["content"][0]
         )
+
+    def test_xss_injection_is_cleaned(self, db):
+        xss_script = "<div><script>testing css</script></div>"
+        form = ConversationForm(
+            {
+                "title": "conversation-slug",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 1,
+                "comment-1": "comment",
+                "anonymous_votes": 0,
+                "welcome_message": xss_script,
+                "ending_message": xss_script,
+            }
+        )
+        assert form.is_valid()
+        assert form.cleaned_data["welcome_message"] == "<div></div>"
+
+    def test_xss_dont_clean_normal_html(self, db):
+        non_xss_script = "<div><b>Hello!</b></div>"
+        form = ConversationForm(
+            {
+                "title": "conversation-slug",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 1,
+                "comment-1": "comment",
+                "anonymous_votes": 0,
+                "welcome_message": non_xss_script,
+                "ending_message": non_xss_script,
+            }
+        )
+        assert form.is_valid()
+        assert form.cleaned_data["welcome_message"] == non_xss_script
