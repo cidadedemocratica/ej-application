@@ -42,6 +42,25 @@ class TestGetBreadcrumbs:
         request = rf.get("/unknown/path/")
         assert get_breadcrumbs(request) == []
 
+    def test_board_create_breadcrumb(self, rf):
+        request = rf.get("/boards/profile/boards/add/")
+        result = get_breadcrumbs(request)
+
+        assert len(result) == 3
+        assert_all_labels_are_present(result)
+        assert result[0]["url"] == "/profile/home/"
+        assert result[1]["url"] == "/boards/profile/boards/"
+        assert result[2]["url"] is None
+
+    def test_board_edit_breadcrumb(self, rf):
+        request = rf.get("/boards/minha-pauta/edit/")
+        result = get_breadcrumbs(request)
+
+        assert len(result) == 2
+        assert_all_labels_are_present(result)
+        assert result[0]["url"] == "/profile/home/"
+        assert result[1]["url"] is None
+
     def test_conversation_create_breadcrumb(self, rf):
         request = rf.get("/boards/minha-pauta/conversations/add/")
         result = get_breadcrumbs(request)
@@ -88,7 +107,7 @@ class TestBoardBreadcrumbAccess:
 
         result = get_breadcrumbs(request)
 
-        assert result[1]["label"] == "Mural"
+        assert result[1]["label"] == "Board"
         assert result[1]["url"] == f"/boards/{board.slug}/conversations/"
 
     def test_staff_keeps_board_link(self, board_request):
@@ -126,7 +145,7 @@ class TestBoardBreadcrumbAccess:
 
         result = get_breadcrumbs(request)
 
-        assert result[1]["label"] == "Mural"
+        assert result[1]["label"] == "Board"
         assert result[1]["url"] is None
         # remaining breadcrumb items are unaffected
         assert result[0]["url"] == "/profile/home/"

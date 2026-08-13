@@ -20,20 +20,33 @@ msgstr ""
 msgid "This string should be translated"
 msgstr ""
 
-#: src/ej/breadcrumbs.py:30
-msgid "Mural"
+#: src/ej/breadcrumbs.py:30 src/ej_boards/apps.py:7 src/ej_boards/models.py:63
+msgid "Boards"
+msgstr "Murais"
+
+#: src/ej/breadcrumbs.py:31
+#, fuzzy
+msgid "New Board"
+msgstr "Novo mural"
+
+#: src/ej/breadcrumbs.py:32
+msgid "Edit Board"
+msgstr "Editar mural"
+
+#: src/ej/breadcrumbs.py:33 src/ej_boards/models.py:62
+msgid "Board"
 msgstr "Mural"
 
-#: src/ej/breadcrumbs.py:31 src/ej_conversations/models/conversation.py:204
+#: src/ej/breadcrumbs.py:34 src/ej_conversations/models/conversation.py:204
 #: src/ej_conversations/roles/conversations.py:148
 msgid "Conversation"
 msgstr "Conversa"
 
-#: src/ej/breadcrumbs.py:32
+#: src/ej/breadcrumbs.py:35
 msgid "New Conversation"
 msgstr "Nova Conversa"
 
-#: src/ej/breadcrumbs.py:33
+#: src/ej/breadcrumbs.py:36
 msgid "Settings"
 msgstr "Configurações"
 
@@ -86,10 +99,6 @@ msgstr "Não faz parte da EJ ainda?"
 #, fuzzy
 msgid "Welcome!"
 msgstr "Boas vindas!"
-
-#: src/ej_boards/apps.py:7 src/ej_boards/models.py:63
-msgid "Boards"
-msgstr "Murais"
 
 #: src/ej_boards/forms.py:26
 msgid "You cannot change this value afterwards"
@@ -145,10 +154,6 @@ msgstr "Paleta"
 #: src/ej_boards/models.py:42
 msgid "Image"
 msgstr "Imagem"
-
-#: src/ej_boards/models.py:62
-msgid "Board"
-msgstr "Mural"
 
 #: src/ej_boards/models.py:77
 msgid "Slug already exists."
@@ -1917,17 +1922,23 @@ msgstr "Usuário"
 msgid "users"
 msgstr "usuários"
 
-#: src/ej_boards/jinja2/ej_boards/board-create.jinja2:7
-#: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:10
-msgid "Create board"
+#: src/ej_boards/jinja2/ej_boards/_board-form.jinja2:7
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-actions.jinja2:1
+msgid "Create Board"
 msgstr "Criar mural"
 
-#: src/ej_boards/jinja2/ej_boards/board-create.jinja2:8
-msgid "Fill up the form to create a new conversation board"
-msgstr "Preencha os campos para criar ou editar o mural de conversas"
+#: src/ej_boards/jinja2/ej_boards/board-create.jinja2:5
+#: src/ej_boards/jinja2/ej_boards/board-edit.jinja2:6
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-menu.jinja2:8
+#: src/ej_conversations/jinja2/ej_conversations/includes/menu.jinja2:11
+#: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:18
+#, fuzzy
+msgid "Home"
+msgstr "Início"
 
-#: src/ej_boards/jinja2/ej_boards/board-create.jinja2:13
-msgid "Create Board"
+#: src/ej_boards/jinja2/ej_boards/board-create.jinja2:6
+#: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:10
+msgid "Create board"
 msgstr "Criar mural"
 
 #: src/ej_boards/jinja2/ej_boards/board-edit.jinja2:2
@@ -1935,14 +1946,15 @@ msgid "Edit board"
 msgstr "Editar mural"
 
 #: src/ej_boards/jinja2/ej_boards/board-edit.jinja2:3
-#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-add-comments.jinja2:18
-#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:26
-#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:28
-#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:30
-#: src/ej_profiles/jinja2/ej_profiles/detail.jinja2:114
-#: src/ej_profiles/jinja2/ej_profiles/edit.jinja2:93
-msgid "Save"
-msgstr "Salvar"
+#: src/ej_conversations/jinja2/ej_conversations/conversation-edit.jinja2:4
+#, fuzzy
+msgid "Save settings"
+msgstr "Salvar configurações"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-actions.jinja2:3
+#, fuzzy
+msgid "Board form actions"
+msgstr "Ações de formulário do mural"
 
 #: src/ej_boards/jinja2/ej_boards/includes/menu.jinja2:4
 msgid "Manage boards"
@@ -1950,6 +1962,7 @@ msgstr "Gerenciar murais"
 
 #: src/ej_boards/jinja2/ej_boards/includes/menu.jinja2:6
 #: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:8
+#, fuzzy
 msgid "New board"
 msgstr "Novo mural"
 
@@ -2331,11 +2344,6 @@ msgstr "Conversa: \"{}\""
 #, fuzzy
 msgid "Conversation editing"
 msgstr "Edição de conversa"
-
-#: src/ej_conversations/jinja2/ej_conversations/conversation-edit.jinja2:4
-#, fuzzy
-msgid "Save settings"
-msgstr "Salvar configurações"
 
 #: src/ej_conversations/jinja2/ej_conversations/conversation-moderate.jinja2:8
 #: src/ej_dataviz/jinja2/ej_dataviz/dashboard/comments.jinja2:2
@@ -2796,13 +2804,6 @@ msgstr "Seções do formulário de conversa"
 msgid "Essentials"
 msgstr "Essenciais"
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-menu.jinja2:8
-#: src/ej_conversations/jinja2/ej_conversations/includes/menu.jinja2:11
-#: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:18
-#, fuzzy
-msgid "Home"
-msgstr "Início"
-
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-menu.jinja2:17
 #, fuzzy
 msgid "About the conversation"
@@ -2988,6 +2989,15 @@ msgid ""
 msgstr ""
 "Clique aqui para adicionar vários comentários ao mesmo tempo. Não se esqueça "
 "de salvar quando terminar de adicionar todos os comentários. "
+
+#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-add-comments.jinja2:18
+#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:26
+#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:28
+#: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-show-comments.jinja2:30
+#: src/ej_profiles/jinja2/ej_profiles/detail.jinja2:114
+#: src/ej_profiles/jinja2/ej_profiles/edit.jinja2:93
+msgid "Save"
+msgstr "Salvar"
 
 #: src/ej_conversations/jinja2/ej_conversations/includes/tab-moderate-add-comments.jinja2:21
 msgid "added comments"
@@ -4161,6 +4171,12 @@ msgstr "Logar com conta "
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
 
+#~ msgid "Fill up the form to create a new conversation board"
+#~ msgstr "Preencha os campos para criar ou editar o mural de conversas"
+
+#~ msgid "Board"
+#~ msgstr "Mural"
+
 #, python-format
 #~ msgid "Access conversation %(conversation_link)s"
 #~ msgstr "Acessar conversa %(conversation_link)s"
@@ -4252,10 +4268,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #, fuzzy
 #~ msgid "Agree with terms"
 #~ msgstr "Termos de uso"
-
-#, fuzzy
-#~ msgid "More informations"
-#~ msgstr "Mais informações"
 
 #, fuzzy
 #~ msgid "Comment added date"
@@ -6370,9 +6382,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ msgstr ""
 #~ "Com os poderes de Ativista de Minoria e Ponte de Diálogo, você ganhará "
 #~ "mais poder de fala, aumentando a visibilidade dos seus comentários!"
-
-#~ msgid "Edit Board"
-#~ msgstr "Editar mural"
 
 #~ msgid "Viewing board:"
 #~ msgstr "Visualizando mural:"

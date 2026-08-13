@@ -1,4 +1,9 @@
-{% extends 'ej_boards/board-create.jinja2' %}
-{% set title = _('Edit board') %}
-{% set action = _('Save') %}
-{% block menu %}{% include 'ej_conversations/includes/participant-menu.jinja2' %}{% endblock %}
+{% extends 'ej_boards/_board-form.jinja2' %}
+{% set page_heading = _('Edit board') %}
+{% set board_form_actions_label = _('Save settings') %}
+{% set board_form_actions_icon = '/img/icons/icon_save.svg' %}
+{% set breadcrumb_items = [
+    {'label': _('Home'), 'url': url('profile:home')},
+    {'label': _('Board'), 'url': board.get_absolute_url()},
+    {'label': _('Settings')},
+] %}

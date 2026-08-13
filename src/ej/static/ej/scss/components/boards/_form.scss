@@ -1,0 +1,118 @@
+.conversation-create-page {
+    .board-form-layout {
+        grid-template-columns: minmax(2rem, 1fr) minmax(0, 824px) minmax(2rem, 1fr);
+    }
+
+    .board-form {
+        &__description {
+            color: $color-theme-report-blue;
+            display: block;
+            font-family: "Work Sans", sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 20px;
+            margin-bottom: 0;
+            width: 100%;
+        }
+
+        &__fields {
+            margin-top: 3.625rem;
+        }
+
+        &__field {
+            margin-bottom: 32px;
+        }
+
+        &__label {
+            color: $color-theme-report-blue;
+            display: block;
+            font-family: "Work Sans", sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 100%;
+            margin-bottom: 16px;
+            text-transform: none;
+        }
+
+        input,
+        textarea {
+            border: 1px solid $color-theme-report-light-blue;
+            border-radius: 5px;
+            box-sizing: border-box;
+            color: $color-theme-report-blue;
+            font-family: "Work Sans", sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 20px;
+            margin: 0;
+            max-width: none;
+            min-height: 40px;
+            min-width: 0;
+            outline: none;
+            padding: 10px 14px;
+            width: 100%;
+
+            &:focus {
+                border-color: $color-theme-report-light-blue;
+                box-shadow: 0 0 0 2px rgba(48, 191, 209, 0.2);
+            }
+
+            &:disabled {
+                background-color: $color-theme-report-light-gray;
+                border-color: #09496D;
+                color: $color-theme-report-dark-gray;
+            }
+        }
+
+        input {
+            height: 40px;
+        }
+
+        textarea {
+            height: auto;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #777777;
+            font-family: "Work Sans", sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 20px;
+        }
+
+        &__help {
+            color: $color-theme-report-dark-gray;
+            font-family: "Work Sans", sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 100%;
+            margin-bottom: 0;
+            margin-top: 12px;
+        }
+
+        .errorlist {
+            margin-left: 0;
+            margin-top: 8px;
+        }
+    }
+
+    @media only screen and (max-width: 900px) {
+        .board-form-layout {
+            grid-template-columns: 1rem minmax(0, 1fr) 1rem;
+        }
+
+        .board-form__label {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 20px;
+        }
+    }
+}

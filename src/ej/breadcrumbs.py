@@ -27,7 +27,10 @@ class BreadcrumbItems:
 
 
 ROUTE_LABELS = {
-    "boards:conversation-list": _("Mural"),
+    "boards:board-list": _("Boards"),
+    "boards:board-create": _("New Board"),
+    "boards:board-edit": _("Edit Board"),
+    "boards:conversation-list": _("Board"),
     "boards:conversation-detail": _("Conversation"),
     "boards:conversation-create": _("New Conversation"),
     "boards:conversation-edit": _("Settings"),
@@ -38,6 +41,8 @@ SKIPPED_ROUTES = {
 }
 
 BREADCRUMB_CURRENT_ROUTES = {
+    "boards:board-create",
+    "boards:board-edit",
     "boards:conversation-create",
     "boards:conversation-edit",
 }
