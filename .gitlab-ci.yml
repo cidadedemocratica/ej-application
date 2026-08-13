@@ -103,7 +103,7 @@ variables:
     - docker compose --file $COMPOSE_FILE up --build -d server celery
   variables:
     GIT_STRATEGY: none
-    COMPOSE_FILE: $PROJECT_PATH/docker/docker-compose.yaml
+    COMPOSE_FILE: $PROJECT_PATH/docker/docker-compose.yml
 
 # Jobs
 docker-build:
