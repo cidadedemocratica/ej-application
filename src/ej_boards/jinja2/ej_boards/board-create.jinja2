@@ -1,17 +1,7 @@
-{% extends 'ej_conversations/base.jinja2' %}
-{% set main_class = 'pad-x0' %}
-{% block menu %}{% include 'ej_conversations/includes/participant-menu.jinja2' %}{% endblock %}
-
-{% block content %}
-    <section class="content-grid">
-        <h1 class="header-space text-accent">{{ title|default(_('Create board')) }}</h1>
-        <span class="helptext">{{ _('Fill up the form to create a new conversation board') }}</span>
-        <form class="board-form margin-y3" method="post" enctype="multipart/form-data">
-            {{ csrf_input }}
-            {{ form }}
-            <p class="margin-y3">
-                <input type="submit" value="{{ action|default(_('Create Board')) }}" name="create" class="is-primary">
-            </p>
-        </form>
-    </section>
-{% endblock %}
+{% extends 'ej_boards/_board-form.jinja2' %}
+{% set page_heading = _('New Board') %}
+{% set board_form_actions_icon = '/img/icons/icon_save.svg' %}
+{% set breadcrumb_items = [
+    {'label': _('Home'), 'url': url('profile:home')},
+    {'label': _('Create board')},
+] %}

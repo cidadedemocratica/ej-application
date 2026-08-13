@@ -1,0 +1,49 @@
+{% extends 'ej_conversations/base.jinja2' %}
+{# Abstract base for board create/edit. Wrapper templates set page_heading
+   and may override the submit label. #}
+{% set main_class = main_class|default('pad-x0') %}
+{% set hide_menu = hide_menu|default(true) %}
+{% set body_class = body_class|default('body conversation-create-page') %}
+{% set board_form_actions_label = board_form_actions_label|default(_('Create Board')) %}
+{% set board_form_actions_icon = board_form_actions_icon|default('/img/icons/user-plus.svg') %}
+
+{% block content %}
+    <form class="board-form width-full" method="post" enctype="multipart/form-data">
+        {{ csrf_input }}
+        <section class="board-form-layout content-grid">
+            <div>
+                <div class="board-form__fields">
+                    {{ form.non_field_errors() }}
+
+                    <div class="board-form__field">
+                        <label class="board-form__label" for="{{ form.title.id_for_label }}">
+                            {{ form.title.label }}
+                        </label>
+                        {{ form.title }}
+                        {{ form.title.errors }}
+                    </div>
+
+                    <div class="board-form__field">
+                        <label class="board-form__label" for="{{ form.description.id_for_label }}">
+                            {{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        {{ form.description.errors }}
+                    </div>
+
+                    <div class="board-form__field">
+                        <label class="board-form__label" for="{{ form.slug.id_for_label }}">
+                            {{ form.slug.label }}
+                        </label>
+                        {{ form.slug }}
+                        {% if form.slug.help_text %}
+                            <p class="board-form__help">{{ form.slug.help_text }}</p>
+                        {% endif %}
+                        {{ form.slug.errors }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% include 'ej_boards/includes/board-form-actions.jinja2' %}
+    </form>
+{% endblock %}

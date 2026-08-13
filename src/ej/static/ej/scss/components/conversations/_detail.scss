@@ -733,11 +733,10 @@ $color-brand-conversation-form: rgba(48, 191, 215 , .15);
 }
 
 .page-header {
-    margin-top: 2rem;
-    margin-bottom: 2.8rem;
+    margin-top: 3.625rem;
 
     @media only screen and (max-width: 900px) {
-        margin-bottom: 2.3rem;
+        margin-top: 1rem;
     }
 
     > div {

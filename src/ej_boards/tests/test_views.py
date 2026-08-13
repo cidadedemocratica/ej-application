@@ -8,6 +8,38 @@ from django.shortcuts import reverse
 
 
 class TestBoardsView(ConversationRecipes):
+    def test_create_view_renders_breadcrumb_without_side_menu(self, db):
+        user = User.objects.create_user("user@email.br", "password")
+        client = Client()
+        client.force_login(user)
+
+        response = client.get(reverse("boards:board-create"))
+
+        assert response.status_code == 200
+        assert b'class="breadcrumb"' in response.content
+        assert response.content.count(b'<li class="breadcrumb__item') == 2
+        assert b'aria-current="page">Create board' in response.content
+        assert b"participant-menu" not in response.content
+
+    def test_edit_view_renders_breadcrumb_without_side_menu(self, db):
+        user = User.objects.create_user("user@email.br", "password")
+        board = Board.objects.create(
+            slug="board", owner=user, description="board"
+        )
+        client = Client()
+        client.force_login(user)
+
+        response = client.get(
+            reverse("boards:board-edit", kwargs={"board_slug": board.slug})
+        )
+
+        assert response.status_code == 200
+        assert b'class="breadcrumb"' in response.content
+        assert response.content.count(b'<li class="breadcrumb__item') == 3
+        assert b">Board<" in response.content
+        assert b'aria-current="page">Settings' in response.content
+        assert b"participant-menu" not in response.content
+
     def test_owner_can_delete_board(self, db):
         user = User.objects.create_user("user@email.br", "password")
         board = Board.objects.create(

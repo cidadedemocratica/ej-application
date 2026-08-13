@@ -6,6 +6,11 @@
     .conversation-form-tabs {
         display: grid;
         grid-template-columns: minmax(2rem, 1fr) minmax(0, 824px) minmax(2rem, 1fr);
+        margin-top: 2.8rem;
+
+        @media only screen and (max-width: 900px) {
+            margin-top: 2.3rem;
+        }
 
         &__list {
             grid-column: 2;
