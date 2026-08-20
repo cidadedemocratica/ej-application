@@ -17,6 +17,7 @@ services:
             retries: 3
 
     server:
+        # The inv build command will create the ej-server image
         build:
             context: ../
             dockerfile: docker/Dockerfile
@@ -38,9 +39,7 @@ services:
             - LANGUAGE=pt_BR.UTF-8
 
     celery:
-        build:
-            context: ../
-            dockerfile: docker/Dockerfile
+        image: ej-server
         volumes:
             - ../:/ej-application/
         entrypoint: ["/bin/bash", "-c", "poetry run inv celery"]

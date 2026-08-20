@@ -20,24 +20,42 @@ COMPOSE_BINARY = "docker compose"
 COMPOSE_FILE = f"{COMPOSE_BINARY} -f docker/docker-compose.yml"
 
 
-@task
-def up(ctx, dry_run=False, d=False):
+@task(
+    help={
+        "dry_run": "Exibe o comando sem executá-lo",
+        "d": "Executa em background (detached)",
+        "build": "Reconstroi as imagens antes de subir",
+    }
+)
+def up(ctx, dry_run=False, d=False, build=False):
     """
     Executes EJ on url http://localhost:8000
     """
     do = runner(ctx, dry_run, pty=True)
-    compose = f"{COMPOSE_FILE} up -d" if d else f"{COMPOSE_FILE} up"
-    do(compose)
+    cmd = f"{COMPOSE_FILE} up"
+    if d:
+        cmd += " -d"
+    if build:
+        cmd += " --build"
+    do(cmd)
 
 
-@task
+@task(
+    help={
+        "dry_run": "Exibe o comando sem executá-lo",
+        "no_cache": "Ignora o cache durante o build",
+        "prod": "Build para ambiente de produção",
+        "registry": "Endereço do registry para a imagem",
+        "tag": "Tag aplicada à imagem",
+    }
+)
 def build(ctx, dry_run=False, no_cache=False, prod=False, registry="", tag=""):
     """
     Build EJ web server image.
     By default, this command will install all EJ dependencies.
     """
     do = runner(ctx, dry_run, pty=True)
-    image = f"{registry}/ej-server" if registry else "docker-server"
+    image = f"{registry}/ej-server" if registry else "ej-server"
     tagged_image = f"{image}:{tag}" if tag else image
     argsList = ["-f docker/Dockerfile", f"-t {tagged_image}"]
     argsList.append("--no-cache") if no_cache else False
@@ -45,7 +63,13 @@ def build(ctx, dry_run=False, no_cache=False, prod=False, registry="", tag=""):
     do(f"docker build {args} .")
 
 
-@task
+@task(
+    help={
+        "command": "Comando a ser executado dentro do container",
+        "dry_run": "Exibe o comando sem executá-lo",
+        "build": "Reconstroi o container antes de executar",
+    }
+)
 def exec(ctx, command, dry_run=False, build=False):
     """
     Executes a command inside EJ web server container;
@@ -56,7 +80,13 @@ def exec(ctx, command, dry_run=False, build=False):
     )
 
 
-@task
+@task(
+    help={
+        "dry_run": "Exibe o comando sem executá-lo",
+        "build": "Reconstroi o container antes de executar",
+        "path": "Caminho específico dos testes a executar",
+    }
+)
 def test(ctx, dry_run=False, build=False, path=None):
     """
     Runs EJ tests;

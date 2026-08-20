@@ -3,7 +3,7 @@
 <img width="128" src="https://gitlab.com/pencillabs/ej/ej-application/-/raw/develop/src/ej/static/ej/assets/img/logo/logo-dark.png?ref_type=heads" align="left" style="margin-right:15px"/>
 
 **Pushing Together** is an open-source web platform to manage participative opinion research,
-with built-in machine learning algorithm to generate opinion groups from participation data.
+with a built-in machine learning algorithm to generate opinion groups from participation data.
 You can visit EJ at [https://www.ejplatform.org](https://www.ejplatform.org).
 For detailed information on developing and using our system, please refer to the [documentation](https://www.ejplatform.org/docs/).
 For contributions, issues or feature requests join us on [https://github.com/cidadedemocratica/ej-application](https://github.com/cidadedemocratica/ej-application).
@@ -19,23 +19,28 @@ For contributions, issues or feature requests join us on [https://github.com/cid
 
 **2. Install [docker compose plugin](https://docs.docker.com/compose/install/linux/#install-using-the-repository)**
 
-**3. Create a virtual environment**
+**3. Check your Python version**
 
-> **The current supported Python version is 3.12.**
+    python -V
+
+If your Python version is higher than **3.12**, you will need to install version 3.12.
+We recommend the [pyenv](https://github.com/pyenv/pyenv) tool to install the 3.12 version without
+breaking the rest of your local environment. You can use the `pyenv local 3.12` command
+to set the Python version only for the EJ repository.
+
+**4. Install the application**
 
 ```shell
-mkdir ../virtualenvs # if it does not exists
-python -m venv ../virtualenvs/ej/
-source ../virtualenvs/ej/bin/activate
 pip install poetry
+eval $(poetry env activate)
 poetry install
 cp .env.sample .env
+inv build
 inv up
 ```
 
-
-This will deploy EJ using **docker/docker-compose.yml** file.
-Every code change will be synchronized with the `server` service. After `inv up`, you can access EJ on `http://localhost:8000` url.
+This will deploy EJ using the **docker/docker-compose.yml** file.
+Every code change will be synchronized with the `server` service. After `inv up`, you can access EJ at `http://localhost:8000`.
 
 > **From here, you can check our [guides](#documentation) to explore EJ participative features and more advanced development documentation.**
 
@@ -47,14 +52,14 @@ script, you'll need to remove the `docker_backups` volume. After that, run `inv 
 
 ## macOS
 
-If you are using a Mac with Intel chip the above process may work for you, if not you can follow the same steps as below.
+If you are using a Mac with an Intel chip, the above process may work for you. If not, you can follow the steps below.
 
-You will have to setup a virtual machine (Linux), preferably UTM for Apple silicon as VirtualBox for Apple silicon is still unstable and crashes every 15 min as of May 2024.
-If you want to set up a virtual machine on Intel chip Mac, even VirtualBox is a good choice.
-Follow [https://dev.to/ruanbekker/how-to-run-a-amd64-bit-linux-vm-on-a-mac-m1-51cp](https://dev.to/ruanbekker/how-to-run-a-amd64-bit-linux-vm-on-a-mac-m1-51cp), for VM setup. Then normally download all dependencies (git, python, pip, docker, code-editor) on virtual device.
+You will have to set up a virtual machine (Linux), preferably UTM for Apple silicon as VirtualBox for Apple silicon is still unstable and crashes every 15 min as of May 2024.
+If you want to set up a virtual machine on an Intel-based Mac, even VirtualBox is a good choice.
+Follow [https://dev.to/ruanbekker/how-to-run-a-amd64-bit-linux-vm-on-a-mac-m1-51cp](https://dev.to/ruanbekker/how-to-run-a-amd64-bit-linux-vm-on-a-mac-m1-51cp), for VM setup. Then normally download all dependencies (git, python, pip, docker, code-editor) on the virtual device.
 
-1. Set up Docker [Docker Compose plugin](https://docs.docker.com/engine/install/debian/#installation-methods)
-2. Install invoke and django environment
+1. Set up the [Docker Compose plugin](https://docs.docker.com/engine/install/debian/#installation-methods)
+2. Install invoke and the Django environment
 
 ```sh
 python -m venv ../virtualenvs/ej/
@@ -82,7 +87,7 @@ EJ uses [Celery](https://docs.celeryproject.org/) for asynchronous task processi
 
 ## Clustering
 
-The main use of Celery in EJ is for opinion clustering processing. When a conversation needs to update its opinion groups (clusters), this task is executed asynchronously to avoid blocking the application. The Docker `celery` service is responsible to run the Celery worker.
+The main use of Celery in EJ is for opinion clustering processing. When a conversation needs to update its opinion groups (clusters), this task is executed asynchronously to avoid blocking the application. The Docker `celery` service is responsible for running the Celery worker.
 
 ## Task Logs
 
@@ -100,7 +105,7 @@ inv celery-logs
 
 # Available commands
 
-Some useful commands to manage docker environment:
+Some useful commands to manage the Docker environment:
 
 | Command           | Description                                      |
 | ----------------- | ------------------------------------------------ |
@@ -114,13 +119,13 @@ Some useful commands to manage docker environment:
 | inv attach  | Connects to Django container                     |
 | inv exec    | Executes a shell command inside Django container |
 
-Some useful commands to manage the application **(run this inside django container)**:
+Some useful commands to manage the application **(run this inside the Django container)**:
 
 | Command          | Description                                                    |
 | ---------------- | -------------------------------------------------------------- |
 | inv i18n         | Extracts messages from Jinja templates for translation         |
 | inv i18n -c      | Compile .po files                                              |
-| inv sass         | Compile .sass files for all EJ apps.                           |
+| inv sass         | Compile .sass files for all EJ apps                              |
 | inv sass --watch | Watch changes on code, and compile .sass files for all EJ apps |
 | inv collect      | Moves compiled files (css, js) to Django static folder         |
 | inv db           | Prepare database and run migrations                            |
@@ -143,7 +148,7 @@ Check `src/ej/tests/e2e/README.md` for more information.
 
 # API
 
-EJ API autogenerated documentation and endpoints
+EJ API's auto-generated documentation and endpoints
 will be available at [http://localhost:8000/api/v1/swagger/](http://localhost:8000/api/v1/swagger/).
 
 # Guides
