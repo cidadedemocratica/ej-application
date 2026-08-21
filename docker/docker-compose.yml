@@ -18,6 +18,7 @@ services:
 
     server:
         # The inv build command will create the ej-server image
+        image: ej-server
         build:
             context: ../
             dockerfile: docker/Dockerfile
@@ -29,7 +30,6 @@ services:
         entrypoint: ["/bin/bash", "docker/run_local_server.sh"]
         depends_on:
             - rabbitmq
-            - celery
             - db
         <<: *env-common
         environment:
@@ -46,6 +46,7 @@ services:
         depends_on:
             - rabbitmq
             - db
+            - server
         <<: *env-common
 
     rabbitmq:
