@@ -1,5 +1,8 @@
 from django.shortcuts import redirect
 from ej_boards.models import Board
+from ej_boards.rules import (
+    can_add_conversation_to_board as can_add_to_board,
+)
 from ej_conversations.models.conversation import Conversation
 from django.http import JsonResponse
 
@@ -157,13 +160,42 @@ def check_conversation_overdue(view_func):
 def can_edit_board(view_func):
     def wrapper_func(request, *args, **kwargs):
         try:
-            user = request.user
             board_slug = kwargs.get("board_slug")
             board = Board.objects.get(slug=board_slug)
-        except AttributeError:
+        except (AttributeError, Board.DoesNotExist):
             return redirect("auth:login")
 
-        if user == board.owner:
+        if request.user.has_perm("ej.can_edit_board", board):
+            return view_func(request, *args, **kwargs)
+        return redirect("auth:login")
+
+    return wrapper_func
+
+
+def can_delete_board(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        try:
+            board_slug = kwargs.get("board_slug")
+            board = Board.objects.get(slug=board_slug)
+        except (AttributeError, Board.DoesNotExist):
+            return redirect("auth:login")
+
+        if request.user.has_perm("ej.can_delete_board", board):
+            return view_func(request, *args, **kwargs)
+        return redirect("auth:login")
+
+    return wrapper_func
+
+
+def can_add_conversation_to_board(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        try:
+            board_slug = kwargs.get("board_slug")
+            board = Board.objects.get(slug=board_slug)
+        except (AttributeError, Board.DoesNotExist):
+            return redirect("auth:login")
+
+        if can_add_to_board(request.user, board):
             return view_func(request, *args, **kwargs)
         return redirect("auth:login")
 

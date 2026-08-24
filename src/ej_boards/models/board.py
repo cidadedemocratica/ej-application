@@ -1,16 +1,22 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
-from .utils import statistics
 from model_utils.models import TimeStampedModel
-from ej_users.models import User
 
 from ej.utils.url import SafeUrl
+from ej_users.models import User
 
-from .validators import validate_board_slug
+from ..utils import statistics
+from ..validators import validate_board_slug
+
+
+class BoardQuerySet(models.QuerySet):
+    def accessible_by(self, user):
+        return self.filter(Q(owner=user) | Q(managers__user=user)).distinct()
 
 
 class Board(TimeStampedModel):
@@ -44,6 +50,7 @@ class Board(TimeStampedModel):
         User, default=[], related_name="favorite_boards"
     )
 
+    objects = BoardQuerySet.as_manager()
     statistics = statistics
 
     @property

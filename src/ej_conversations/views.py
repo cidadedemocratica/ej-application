@@ -7,10 +7,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.flatpages.models import FlatPage
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.db.models.query import QuerySet
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
@@ -21,6 +21,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from ej.decorators import (
     can_acess_list_view,
+    can_add_conversation_to_board,
     can_delete_conversation,
     can_edit_conversation,
     can_moderate_conversation,
@@ -28,7 +29,11 @@ from ej.decorators import (
     is_superuser,
 )
 from ej_boards.models import Board
-from ej_conversations.rules import max_comments_per_conversation
+from ej_boards.rules import can_add_conversation_to_board as can_add_to_board
+from ej_conversations.rules import (
+    can_manage_conversation_members,
+    max_comments_per_conversation,
+)
 from ej_integrations.utils import get_host_with_schema
 from ej_users.models import User
 
@@ -76,7 +81,7 @@ class ConversationCommonView:
         if not user.is_anonymous:
             n_comments = user.comments.filter(conversation=conversation).count()
             n_user_final_votes = conversation.current_comment_count(user)
-            user_boards = Board.objects.filter(owner=user)
+            user_boards = Board.objects.accessible_by(user)
             return [n_comments, n_user_final_votes, user_boards]
         else:
             return [0, 0, []]
@@ -153,7 +158,7 @@ class PublicConversationView(ConversationView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         user = self.request.user
         user_boards = (
-            Board.objects.filter(owner=user) if user.is_authenticated else []
+            Board.objects.accessible_by(user) if user.is_authenticated else []
         )
 
         return {
@@ -246,7 +251,7 @@ class BoardConversationsView(ConversationView):
         user = self.request.user
         board_slug = self.kwargs.get("board_slug", None)
         board = Board.objects.get(slug=board_slug)
-        user_boards = Board.objects.filter(owner=user)
+        user_boards = Board.objects.accessible_by(user)
 
         return {
             "conversations": self.get_queryset(),
@@ -255,7 +260,8 @@ class BoardConversationsView(ConversationView):
             "board": board,
             "user_boards": user_boards,
             "current_page": board.slug,
-            "can_delete_board": user.has_more_than_one_board(),
+            "can_delete_board": user.has_perm("ej.can_delete_board", board)
+            and user.has_more_than_one_board(),
         }
 
 
@@ -368,7 +374,10 @@ class ConversationVoteView(ConversationCommonView, DetailView):
         )
 
 
-@method_decorator([login_required, can_acess_list_view], name="dispatch")
+@method_decorator(
+    [login_required, can_acess_list_view, can_add_conversation_to_board],
+    name="dispatch",
+)
 class ConversationCreateView(CreateView):
     template_name = "ej_conversations/conversation-create.jinja2"
     form_class = ConversationForm
@@ -398,7 +407,7 @@ class ConversationCreateView(CreateView):
 
     def get_context_data(self, form=None, **kwargs):
         user = self.request.user
-        user_boards = Board.objects.filter(owner=user)
+        user_boards = Board.objects.accessible_by(user)
         return {
             "form": form or self.form_class(),
             "board": self.get_board(),
@@ -417,10 +426,17 @@ class ConversationEditView(UpdateView):
     model = Conversation
     template_name = "ej_conversations/conversation-edit.jinja2"
     form_class = ConversationForm
+    pk_url_kwarg = "conversation_id"
+    query_pk_and_slug = True
 
     def post(self, request, conversation_id, slug, board_slug, *args, **kwargs):
         conversation = self.get_object()
-        board = Board.objects.get(slug=board_slug)
+        board = get_object_or_404(Board, slug=board_slug)
+        if board != conversation.board and (
+            request.user.id != conversation.author_id
+            or not can_add_to_board(request.user, board)
+        ):
+            return redirect("auth:login")
         form = self.form_class(
             request.POST, request.FILES, instance=conversation
         )
@@ -450,9 +466,7 @@ class ConversationEditView(UpdateView):
     def get_context_data(self, form=None, **kwargs: Any):
         conversation = self.get_object()
         user = self.request.user
-        can_manage_members = user.has_perm(
-            "ej.can_manage_conversation_members", conversation
-        )
+        can_manage_members = can_manage_conversation_members(user, conversation)
         return {
             "conversation": conversation,
             "form": form or self.form_class(instance=conversation),
@@ -530,24 +544,22 @@ class ConversationManagerInvitationView(DetailView):
         )
         error = email_error or owner_error or invitation_error
         if email_error or is_owner or already_invited:
-            response = render(
-                request,
-                self.member_error_template_name,
-                {"error": error},
-                status=400,
-            )
-            response["HX-Retarget"] = "#member-email-error"
-            response["HX-Reswap"] = "outerHTML"
-            return response
+            return self._member_error_response(request, error)
 
         user = User.objects.filter(email__iexact=email).first()
-        invitation = ConversationManagerInvitation.objects.create(
-            conversation=conversation,
-            email=email,
-            user=user,
-            invited_by=request.user,
-        )
-        self._send_invitation(request, conversation, invitation)
+        try:
+            with transaction.atomic():
+                invitation = ConversationManagerInvitation.objects.create(
+                    conversation=conversation,
+                    email=email,
+                    user=user,
+                    invited_by=request.user,
+                )
+        except IntegrityError:
+            return self._member_error_response(
+                request, _("This member is already invited.")
+            )
+        self._send_invitation(request, invitation)
         member_toast(request, _("Member added"))
         member_table = render_to_string(
             self.member_table_template_name,
@@ -566,26 +578,17 @@ class ConversationManagerInvitationView(DetailView):
             request, f"{member_table}{member_error_clear}", status=201
         )
 
-    def _send_invitation(self, request, conversation, invitation):
-        accept_url = self._build_accept_url(request, conversation, invitation)
-
+    def _send_invitation(self, request, invitation):
         try:
-            send_manager_invitation_email.delay(invitation.id, accept_url)
+            send_manager_invitation_email.delay(
+                invitation.id,
+                get_host_with_schema(request),
+            )
         except Exception:
             log.exception(
                 "Could not enqueue manager invitation email %s.",
                 invitation.id,
             )
-
-    def _build_accept_url(self, request, conversation, invitation):
-        path = reverse(
-            "boards:conversation-accept_manager_invitation",
-            kwargs={
-                **conversation.get_url_kwargs(),
-                "accept_token": invitation.accept_token,
-            },
-        )
-        return f"{get_host_with_schema(request)}{path}"
 
     def delete(self, request, *args, **kwargs):
         conversation = self.get_object()
@@ -610,10 +613,19 @@ class ConversationManagerInvitationView(DetailView):
         )
         return HttpResponse(f"{content}{toast_area}", status=status)
 
-    def _has_permission(self, request, conversation):
-        return request.user.has_perm(
-            "ej.can_manage_conversation_members", conversation
+    def _member_error_response(self, request, error):
+        response = render(
+            request,
+            self.member_error_template_name,
+            {"error": error},
+            status=400,
         )
+        response["HX-Retarget"] = "#member-email-error"
+        response["HX-Reswap"] = "outerHTML"
+        return response
+
+    def _has_permission(self, request, conversation):
+        return can_manage_conversation_members(request.user, conversation)
 
     def _validate_email(self, request):
         email = ConversationManagerInvitation.normalize_email(
@@ -642,12 +654,15 @@ class ConversationManagerInvitationView(DetailView):
         if not email:
             return False, None
 
-        already_invited = ConversationManagerInvitation.objects.filter(
-            conversation=conversation,
-            email__iexact=email,
-            is_active=True,
+        user = User.objects.filter(email__iexact=email).first()
+        has_active_invitation = ConversationManagerInvitation.objects.filter(
+            conversation=conversation, email__iexact=email, is_active=True
         ).exists()
-        if not already_invited:
+        is_manager = (
+            user is not None
+            and conversation.managers.filter(user=user).exists()
+        )
+        if not has_active_invitation and not is_manager:
             return False, None
 
         return True, _("This member is already invited.")
@@ -676,13 +691,16 @@ class ConversationManagerInvitationAcceptView(DetailView):
             )
             return redirect(request.user.profile.default_url())
 
-        invitation.accept(request.user)
+        try:
+            invitation.accept(request.user)
+        except ValidationError:
+            raise Http404
         member_toast(request, _("Invitation accepted."))
         return redirect(invitation.get_dashboard_url())
 
     def get_queryset(self):
         return (
-            ConversationManagerInvitation.objects.active()
+            ConversationManagerInvitation.objects.pending()
             .select_related("conversation", "conversation__board", "user")
             .filter(
                 conversation_id=self.kwargs["conversation_id"],

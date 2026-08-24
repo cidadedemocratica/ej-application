@@ -8,12 +8,13 @@ import pytest
 
 from django.core.files.base import File
 from django.contrib.auth.models import AnonymousUser
+from django.db import IntegrityError
 from django.shortcuts import reverse
 from django.test import Client
 from django.template.exceptions import TemplateDoesNotExist
 from django.utils.translation import gettext as _
 
-from ej_boards.models import Board
+from ej_boards.models import Board, BoardManager
 from ej_conversations import create_conversation
 from ej_conversations.models import (
     Comment,
@@ -522,7 +523,7 @@ class TestConversationCreate(ConversationSetup):
         assert not response.context["form"].is_valid()
         assert not Conversation.objects.filter(author=base_user).exists()
 
-    def test_admin_can_create_conversations_on_another_users_board(
+    def test_admin_cannot_create_conversations_on_another_users_board(
         self, admin_user, logged_admin, base_board
     ):
         url = reverse(
@@ -538,14 +539,9 @@ class TestConversationCreate(ConversationSetup):
                 "anonymous_votes": 0,
             },
         )
-        conversation = Conversation.objects.last()
         assert response.status_code == 302
-        assert (
-            response.url
-            == f"/boards/userboard/conversations/{conversation.id}/whatever/"
-        )
-        assert conversation.board == base_board
-        assert conversation.author == admin_user
+        assert response.url == "/login/"
+        assert not Conversation.objects.filter(author=admin_user).exists()
 
     def test_custom_conversation_with_valid_form(self, base_board, base_user):
         url = reverse(
@@ -904,6 +900,15 @@ class TestConversationComments(ConversationSetup):
 
 
 class TestConversationEdit(ConversationSetup):
+    def edit_data(self, title="updated"):
+        return {
+            "title": title,
+            "tags": "tag",
+            "text": "description",
+            "comments_count": 0,
+            "anonymous_votes": 0,
+        }
+
     def assert_member_toast(self, content, message, *, htmx=True):
         assert 'id="message-area"' in content
         if htmx:
@@ -960,6 +965,162 @@ class TestConversationEdit(ConversationSetup):
         )
         assert new_conversation.title == "bar updated"
         assert new_conversation.text == "description"
+
+    def test_conversation_manager_cannot_transfer_conversation(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+            accepted=True,
+        )
+        target_board = Board.objects.create(
+            slug="target", owner=manager, description="target"
+        )
+        url = reverse(
+            "boards:conversation-edit",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "board_slug": target_board.slug,
+            },
+        )
+        client = Client()
+        client.force_login(manager)
+        original_board_id = new_conversation.board_id
+
+        response = client.post(url, self.edit_data())
+        new_conversation.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == "/login/"
+        assert new_conversation.board_id == original_board_id
+
+    def test_board_manager_cannot_transfer_conversation(
+        self, base_user, new_conversation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        BoardManager.objects.create(board=new_conversation.board, user=manager)
+        target_board = Board.objects.create(
+            slug="target", owner=manager, description="target"
+        )
+        url = reverse(
+            "boards:conversation-edit",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "board_slug": target_board.slug,
+            },
+        )
+        client = Client()
+        client.force_login(manager)
+        original_board_id = new_conversation.board_id
+
+        response = client.post(url, self.edit_data())
+        new_conversation.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == "/login/"
+        assert new_conversation.board_id == original_board_id
+
+    def test_board_manager_cannot_edit_another_conversation_with_mixed_url_ids(
+        self, base_user, new_conversation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        other_user = User.objects.create_user("other@example.com", "password")
+        other_board = Board.objects.create(
+            slug="other-board", owner=other_user, description="other"
+        )
+        other_conversation = create_conversation(
+            "Other conversation",
+            "Other conversation",
+            other_user,
+            board=other_board,
+        )
+        BoardManager.objects.create(board=new_conversation.board, user=manager)
+        url = reverse(
+            "boards:conversation-edit",
+            kwargs={
+                "board_slug": other_board.slug,
+                "conversation_id": new_conversation.id,
+                "slug": other_conversation.slug,
+            },
+        )
+        client = Client()
+        client.force_login(manager)
+
+        response = client.post(url, self.edit_data("illicit update"))
+        other_conversation.refresh_from_db()
+
+        assert response.status_code == 404
+        assert other_conversation.title == "Other conversation"
+
+    def test_author_can_transfer_conversation_to_authorized_board(
+        self, base_user, new_conversation
+    ):
+        target_board = Board.objects.create(
+            slug="target", owner=base_user, description="target"
+        )
+        url = reverse(
+            "boards:conversation-edit",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "board_slug": target_board.slug,
+            },
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, self.edit_data())
+        new_conversation.refresh_from_db()
+
+        assert response.status_code == 302
+        assert new_conversation.board == target_board
+
+    def test_author_cannot_transfer_conversation_to_unauthorized_board(
+        self, base_user, new_conversation
+    ):
+        other_user = User.objects.create_user("other@example.com", "password")
+        target_board = Board.objects.create(
+            slug="target", owner=other_user, description="target"
+        )
+        url = reverse(
+            "boards:conversation-edit",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "board_slug": target_board.slug,
+            },
+        )
+        client = Client()
+        client.force_login(base_user)
+        original_board_id = new_conversation.board_id
+
+        response = client.post(url, self.edit_data())
+        new_conversation.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response.url == "/login/"
+        assert new_conversation.board_id == original_board_id
+
+    def test_transfer_to_unknown_board_returns_404(
+        self, base_user, new_conversation
+    ):
+        url = reverse(
+            "boards:conversation-edit",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "board_slug": "unknown-board",
+            },
+        )
+        client = Client()
+        client.force_login(base_user)
+        original_board_id = new_conversation.board_id
+
+        response = client.post(url, self.edit_data())
+        new_conversation.refresh_from_db()
+
+        assert response.status_code == 404
+        assert new_conversation.board_id == original_board_id
 
     def test_manager_can_edit_dashboard_and_tools_but_not_delete_or_moderate(
         self, base_user, new_conversation, mk_conversation_manager_invitation
@@ -1098,6 +1259,77 @@ class TestConversationEdit(ConversationSetup):
             "ej.can_edit_conversation", new_conversation
         )
 
+    def test_board_owner_can_manage_conversation_invitations(
+        self, new_conversation
+    ):
+        board_owner = User.objects.create_user(
+            "board-owner@example.com", "password"
+        )
+        new_conversation.board.owner = board_owner
+        new_conversation.board.save()
+        client = Client()
+        client.force_login(board_owner)
+        create_url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+
+        response = client.post(create_url, {"email": "manager@example.com"})
+        invitation = ConversationManagerInvitation.objects.get(
+            conversation=new_conversation, email="manager@example.com"
+        )
+        delete_url = reverse(
+            "boards:conversation-delete_manager_invitation",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "invitation_id": invitation.id,
+            },
+        )
+
+        assert response.status_code == 201
+        assert client.delete(delete_url).status_code == 200
+
+    @pytest.mark.parametrize(
+        "is_staff, is_superuser", [(True, False), (False, True)]
+    )
+    def test_non_owner_admin_cannot_manage_conversation_invitations(
+        self, new_conversation, is_staff, is_superuser
+    ):
+        admin = User.objects.create_user(
+            "admin@example.com",
+            "password",
+            is_staff=is_staff,
+            is_superuser=is_superuser,
+        )
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=new_conversation,
+            email=manager.email,
+            user=manager,
+            invited_by=new_conversation.author,
+        )
+        client = Client()
+        client.force_login(admin)
+        create_url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        delete_url = reverse(
+            "boards:conversation-delete_manager_invitation",
+            kwargs={
+                **new_conversation.get_url_kwargs(),
+                "invitation_id": invitation.id,
+            },
+        )
+
+        response = client.post(create_url, {"email": "other@example.com"})
+        assert response.status_code == 302
+        assert response.url == "/login/"
+
+        response = client.delete(delete_url)
+        assert response.status_code == 302
+        assert response.url == "/login/"
+
     def test_create_conversation_manager_invitation(
         self, base_user, new_conversation
     ):
@@ -1174,17 +1406,8 @@ class TestConversationEdit(ConversationSetup):
             conversation=new_conversation,
             email="manager@example.com",
         )
-        accept_path = reverse(
-            "boards:conversation-accept_manager_invitation",
-            kwargs={
-                **new_conversation.get_url_kwargs(),
-                "accept_token": invitation.accept_token,
-            },
-        )
         assert response.status_code == 201
-        delay.assert_called_once_with(
-            invitation.id, f"http://localhost:8000{accept_path}"
-        )
+        delay.assert_called_once_with(invitation.id, "http://localhost:8000")
 
     def test_create_conversation_manager_invitation_ignores_enqueue_error(
         self,
@@ -1328,6 +1551,58 @@ class TestConversationEdit(ConversationSetup):
             == 1
         )
 
+    def test_create_conversation_manager_invitation_handles_duplicate_race(
+        self, base_user, new_conversation
+    ):
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        with mock.patch(
+            "ej_conversations.views.ConversationManagerInvitation.objects.create",
+            side_effect=IntegrityError,
+        ):
+            response = client.post(url, {"email": "manager@example.com"})
+
+        assert response.status_code == 400
+        assert response["HX-Retarget"] == "#member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        assert (
+            str(_("This member is already invited."))
+            in response.content.decode()
+        )
+
+    def test_create_conversation_manager_invitation_rejects_existing_manager(
+        self, base_user, new_conversation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        ConversationManager.objects.create(
+            conversation=new_conversation,
+            user=manager,
+        )
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": manager.email})
+
+        assert response.status_code == 400
+        assert response["HX-Retarget"] == "#member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        assert (
+            str(_("This member is already invited."))
+            in response.content.decode()
+        )
+        assert not ConversationManagerInvitation.objects.filter(
+            conversation=new_conversation
+        ).exists()
+
     def accept_invitation_url(self, conversation, invitation):
         return reverse(
             "boards:conversation-accept_manager_invitation",
@@ -1398,6 +1673,22 @@ class TestConversationEdit(ConversationSetup):
             _("Invitation accepted."),
             htmx=False,
         )
+
+    def test_accepted_conversation_manager_invitation_cannot_be_reused(
+        self, base_user, new_conversation, mk_conversation_manager_invitation
+    ):
+        manager = User.objects.create_user("manager@example.com", "password")
+        invitation = mk_conversation_manager_invitation(
+            new_conversation,
+            manager=manager,
+            invited_by=base_user,
+        )
+        url = self.accept_invitation_url(new_conversation, invitation)
+        client = Client()
+        client.force_login(manager)
+
+        assert client.get(url).status_code == 302
+        assert client.get(url).status_code == 404
 
     def test_accept_conversation_manager_invitation_redirects_existing_user_to_login(
         self, base_user, new_conversation, mk_conversation_manager_invitation

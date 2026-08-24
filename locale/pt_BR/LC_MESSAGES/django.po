@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-29 15:30-0300\n"
+"POT-Creation-Date: 2026-08-14 14:34-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -20,7 +20,8 @@ msgstr ""
 msgid "This string should be translated"
 msgstr ""
 
-#: src/ej/breadcrumbs.py:30 src/ej_boards/apps.py:7 src/ej_boards/models.py:63
+#: src/ej/breadcrumbs.py:30 src/ej_boards/apps.py:7
+#: src/ej_boards/models/board.py:70
 msgid "Boards"
 msgstr "Murais"
 
@@ -33,7 +34,7 @@ msgstr "Novo mural"
 msgid "Edit Board"
 msgstr "Editar mural"
 
-#: src/ej/breadcrumbs.py:33 src/ej_boards/models.py:62
+#: src/ej/breadcrumbs.py:33 src/ej_boards/models/board.py:69
 msgid "Board"
 msgstr "Mural"
 
@@ -79,6 +80,24 @@ msgstr "Nenhum arquivo selecionado"
 msgid "This template defines no extra variables"
 msgstr "Este template não define variáveis extras"
 
+#: src/ej/manager_invitation.py:23
+msgid "Pending"
+msgstr "Pendente"
+
+#: src/ej/manager_invitation.py:24
+msgid "Accepted"
+msgstr "Aceito"
+
+#: src/ej/manager_invitation.py:123
+#, fuzzy
+msgid "Inactive invitations cannot be accepted."
+msgstr "Convites inativos não podem ser aceitos."
+
+#: src/ej/manager_invitation.py:127
+#, fuzzy
+msgid "Only pending invitations can be accepted."
+msgstr "Convites inativos não podem ser aceitos."
+
 #: src/ej/roles/routes.py:55
 msgid "List of roles"
 msgstr "Lista de papéis"
@@ -110,59 +129,119 @@ msgstr "Você não pode alterar este valor depois"
 msgid "My Board"
 msgstr "Meu mural"
 
-#: src/ej_boards/models.py:22
+#: src/ej_boards/models/board.py:28
 msgid "Default"
 msgstr "Padrão"
 
-#: src/ej_boards/models.py:23
+#: src/ej_boards/models/board.py:29
 msgid "Alternative"
 msgstr "Alternativo"
 
-#: src/ej_boards/models.py:24
+#: src/ej_boards/models/board.py:30
 msgid "Grey"
 msgstr "Cinza"
 
-#: src/ej_boards/models.py:25
+#: src/ej_boards/models/board.py:31
 msgid "Green"
 msgstr "Verde"
 
-#: src/ej_boards/models.py:26
+#: src/ej_boards/models/board.py:32
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/ej_boards/models.py:27
+#: src/ej_boards/models/board.py:33
 msgid "Purple"
 msgstr "Roxa"
 
-#: src/ej_boards/models.py:30
+#: src/ej_boards/models/board.py:36
 msgid "Slug"
 msgstr "Identificador"
 
-#: src/ej_boards/models.py:37 src/ej_conversations/models/conversation.py:46
+#: src/ej_boards/models/board.py:43
+#: src/ej_conversations/models/conversation.py:46
 msgid "Title"
 msgstr "Título"
 
-#: src/ej_boards/models.py:38 src/ej_clusters/models/cluster.py:30
+#: src/ej_boards/models/board.py:44 src/ej_clusters/models/cluster.py:30
 #: src/ej_clusters/models/stereotype.py:31
 msgid "Description"
 msgstr "Descrição"
 
-#: src/ej_boards/models.py:40
+#: src/ej_boards/models/board.py:46
 msgid "Palette"
 msgstr "Paleta"
 
-#: src/ej_boards/models.py:42
+#: src/ej_boards/models/board.py:48
 msgid "Image"
 msgstr "Imagem"
 
-#: src/ej_boards/models.py:77
+#: src/ej_boards/models/board.py:84
 msgid "Slug already exists."
 msgstr "Identificador já existe."
+
+#: src/ej_boards/models/board_manager.py:28
+#, fuzzy
+msgid "Board manager"
+msgstr "Gestor da conversa"
+
+#: src/ej_boards/models/board_manager.py:29
+#, fuzzy
+msgid "Board managers"
+msgstr "Gestores da conversa"
+
+#: src/ej_boards/models/manager_invitation.py:29
+#, fuzzy
+msgid "Board manager invitation"
+msgstr "Convite para gestor de conversa"
+
+#: src/ej_boards/models/manager_invitation.py:30
+#, fuzzy
+msgid "Board manager invitations"
+msgstr "Convites para gestores de conversas"
+
+#: src/ej_boards/tasks.py:18
+#, fuzzy, python-format
+msgid "%(inviter)s shared access to an EJ board"
+msgstr "%(inviter)s compartilhou acesso a uma conversa EJ"
 
 #: src/ej_boards/tests/test_api.py:15
 #: src/ej_conversations/tests/test_api.py:371
 msgid "Authentication credentials were not provided."
 msgstr "Credenciais de autenticação não foram fornecidas."
+
+#: src/ej_boards/tests/test_views.py:299 src/ej_boards/views.py:188
+#, fuzzy
+msgid "The board owner cannot be added as a manager."
+msgstr "O proprietário da conversa não pode ser adicionado como gestor."
+
+#: src/ej_boards/tests/test_views.py:323 src/ej_boards/views.py:178
+#: src/ej_conversations/tests/test_views.py:1524
+#: src/ej_conversations/views.py:647
+#, fuzzy
+msgid "Enter a valid email address."
+msgstr "Insira um endereço de e-mail válido."
+
+#: src/ej_boards/tests/test_views.py:350 src/ej_boards/tests/test_views.py:381
+#: src/ej_boards/tests/test_views.py:403 src/ej_boards/views.py:147
+#: src/ej_boards/views.py:204 src/ej_conversations/tests/test_views.py:1553
+#: src/ej_conversations/tests/test_views.py:1583
+#: src/ej_conversations/tests/test_views.py:1608
+#: src/ej_conversations/views.py:560 src/ej_conversations/views.py:677
+msgid "This member is already invited."
+msgstr "Este membro já foi convidado."
+
+#: src/ej_boards/tests/test_views.py:555 src/ej_boards/views.py:252
+#: src/ej_conversations/tests/test_views.py:1682
+#: src/ej_conversations/views.py:707
+#, fuzzy
+msgid "Invitation accepted."
+msgstr "Convite aceito."
+
+#: src/ej_boards/tests/test_views.py:641 src/ej_boards/views.py:244
+#: src/ej_conversations/tests/test_views.py:1754
+#: src/ej_conversations/views.py:699
+msgid "This invitation was sent to a different email address."
+msgstr "Este convite foi enviado para um endereço de e-mail diferente."
 
 #: src/ej_boards/validators.py:9
 msgid "Invalid slug."
@@ -172,7 +251,7 @@ msgstr "Identificador inválido."
 msgid "Slug cannot contain a backslash character."
 msgstr "O identificador não pode conter uma barra."
 
-#: src/ej_boards/views.py:78
+#: src/ej_boards/views.py:92
 msgid "You cannot change this value"
 msgstr "Você não pode mudar este valor"
 
@@ -386,42 +465,42 @@ msgstr "Concorda"
 msgid "Disagree"
 msgstr "Discorda"
 
-#: src/ej_conversations/forms.py:23
+#: src/ej_conversations/forms.py:24
 msgid "Give your opinion here"
 msgstr "Dê a sua opinião aqui"
 
-#: src/ej_conversations/forms.py:26
+#: src/ej_conversations/forms.py:27
 msgid "Suggest a new comment"
 msgstr "Sugira um novo comentário"
 
-#: src/ej_conversations/forms.py:37 src/ej_conversations/tests/test_forms.py:76
+#: src/ej_conversations/forms.py:38 src/ej_conversations/tests/test_forms.py:76
 msgid "You already submitted this comment."
 msgstr "Você já enviou este comentário."
 
-#: src/ej_conversations/forms.py:78
+#: src/ej_conversations/forms.py:79
 msgid "Tags"
 msgstr "Temas"
 
-#: src/ej_conversations/forms.py:79
+#: src/ej_conversations/forms.py:80
 msgid "Tags, separated by commas."
 msgstr "Temas, separados por vírgula."
 
-#: src/ej_conversations/forms.py:84 src/ej_conversations/forms.py:87
+#: src/ej_conversations/forms.py:85 src/ej_conversations/forms.py:88
 #: src/ej_conversations/models/conversation.py:129
 #: src/ej_conversations/models/conversation.py:136
 msgid "Background image"
 msgstr "Imagem de fundo"
 
-#: src/ej_conversations/forms.py:91 src/ej_conversations/forms.py:94
+#: src/ej_conversations/forms.py:92 src/ej_conversations/forms.py:95
 msgid "Logo"
 msgstr "Logotipo"
 
-#: src/ej_conversations/forms.py:135
+#: src/ej_conversations/forms.py:136
 #, fuzzy
 msgid "This title already exists!"
 msgstr "Esse título já existe."
 
-#: src/ej_conversations/mixins.py:201 src/ej_dataviz/tests/test_views.py:519
+#: src/ej_conversations/mixins.py:201 src/ej_dataviz/tests/test_views.py:512
 #, fuzzy
 msgid "No group"
 msgstr "Sem grupo"
@@ -607,28 +686,15 @@ msgstr "Gestor da conversa"
 msgid "Conversation managers"
 msgstr "Gestores da conversa"
 
-#: src/ej_conversations/models/manager_invitation.py:21
-msgid "Pending"
-msgstr "Pendente"
-
-#: src/ej_conversations/models/manager_invitation.py:22
-msgid "Accepted"
-msgstr "Aceito"
-
-#: src/ej_conversations/models/manager_invitation.py:60
+#: src/ej_conversations/models/manager_invitation.py:30
 #, fuzzy
 msgid "Conversation manager invitation"
 msgstr "Convite para gestor de conversa"
 
-#: src/ej_conversations/models/manager_invitation.py:61
+#: src/ej_conversations/models/manager_invitation.py:31
 #, fuzzy
 msgid "Conversation manager invitations"
 msgstr "Convites para gestores de conversas"
-
-#: src/ej_conversations/models/manager_invitation.py:152
-#, fuzzy
-msgid "Inactive invitations cannot be accepted."
-msgstr "Convites inativos não podem ser aceitos."
 
 #: src/ej_conversations/models/vote.py:14
 #, python-brace-format
@@ -698,55 +764,33 @@ msgstr " comentários"
 msgid " of "
 msgstr " de "
 
-#: src/ej_conversations/serializers.py:276 src/ej_conversations/views.py:185
+#: src/ej_conversations/serializers.py:276 src/ej_conversations/views.py:190
 msgid "Participate"
 msgstr "Participar"
 
-#: src/ej_conversations/tasks.py:46
+#: src/ej_conversations/tasks.py:18
 #, python-format
 msgid "%(inviter)s shared access to an EJ conversation"
 msgstr "%(inviter)s compartilhou acesso a uma conversa EJ"
 
-#: src/ej_conversations/tests/test_views.py:1091
-#: src/ej_conversations/views.py:603
+#: src/ej_conversations/tests/test_views.py:1252
+#: src/ej_conversations/views.py:615
 #, fuzzy
 msgid "Removed member"
 msgstr "Membro removido"
 
-#: src/ej_conversations/tests/test_views.py:1144
-#: src/ej_conversations/tests/test_views.py:1241
-#: src/ej_conversations/views.py:551
+#: src/ej_conversations/tests/test_views.py:1376
+#: src/ej_conversations/tests/test_views.py:1473
+#: src/ej_conversations/views.py:563
 #, fuzzy
 msgid "Member added"
 msgstr "Membro adicionado"
 
-#: src/ej_conversations/tests/test_views.py:1265
-#: src/ej_conversations/views.py:638
+#: src/ej_conversations/tests/test_views.py:1497
+#: src/ej_conversations/views.py:659
 #, fuzzy
 msgid "The conversation owner cannot be added as a manager."
 msgstr "O proprietário da conversa não pode ser adicionado como gestor."
-
-#: src/ej_conversations/tests/test_views.py:1292
-#: src/ej_conversations/views.py:626
-#, fuzzy
-msgid "Enter a valid email address."
-msgstr "Insira um endereço de e-mail válido."
-
-#: src/ej_conversations/tests/test_views.py:1321
-#: src/ej_conversations/views.py:653
-msgid "This member is already invited."
-msgstr "Este membro já foi convidado."
-
-#: src/ej_conversations/tests/test_views.py:1398
-#: src/ej_conversations/views.py:680
-#, fuzzy
-msgid "Invitation accepted."
-msgstr "Convite aceito."
-
-#: src/ej_conversations/tests/test_views.py:1454
-#: src/ej_conversations/views.py:675
-msgid "This invitation was sent to a different email address."
-msgstr "Este convite foi enviado para um endereço de e-mail diferente."
 
 #: src/ej_conversations/utils.py:112
 msgid "This conversation is now favorite."
@@ -765,12 +809,12 @@ msgstr "Campo não pode estar vazio!"
 msgid "The maximum file size must be 5MB"
 msgstr "O tamanho máximo do arquivo deve ser 5 MB"
 
-#: src/ej_conversations/views.py:210
+#: src/ej_conversations/views.py:215
 #, fuzzy
 msgid "Manage!"
 msgstr "Gerenciar!"
 
-#: src/ej_conversations/views.py:254
+#: src/ej_conversations/views.py:259
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -1951,6 +1995,56 @@ msgstr "Editar mural"
 msgid "Save settings"
 msgstr "Salvar configurações"
 
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:4
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:4
+#, python-format
+msgid "Hello, %(person_name)s,"
+msgstr "Olá, %(person_name)s,"
+
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:6
+#, fuzzy, python-format
+msgid ""
+"You have been granted access to the board <strong>%(board_title)s</strong> "
+"in the EJ located at %(site_domain)s."
+msgstr ""
+"Você recebeu acesso ao mural <strong>%(board_title)s</strong> na EJ localizada "
+"em %(site_domain)s."
+
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:8
+#, fuzzy
+msgid ""
+"From now on, you will be able to view and manage this board according to the "
+"permissions granted to you."
+msgstr ""
+"A partir de agora, você poderá visualizar e gerenciar essa conversa, de "
+"acordo com as permissões concedidas."
+
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:10
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:10
+msgid "To access it, click the link below:"
+msgstr "Para acessar, clique no link abaixo:"
+
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:14
+#, fuzzy
+msgid ""
+"If you do not have an EJ account yet, you will need to create one first. "
+"After completing your registration, you will be automatically redirected to "
+"the board."
+msgstr ""
+"Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
+"primeiro. Após concluir o cadastro, você será direcionado automaticamente "
+"para a conversa."
+
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:16
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:16
+msgid "This email was sent automatically by the EJ Platform."
+msgstr "Este email foi enviado automaticamente pela Plataforma EJ."
+
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:18
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:18
+msgid "If you do not recognize this invitation, please ignore this email."
+msgstr "Se você não reconhece este convite, ignore este email."
+
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-actions.jinja2:3
 #, fuzzy
 msgid "Board form actions"
@@ -2464,11 +2558,6 @@ msgstr "Conversas públicas"
 msgid "Participate!"
 msgstr "Participar!"
 
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:4
-#, python-format
-msgid "Hello, %(person_name)s,"
-msgstr "Olá, %(person_name)s,"
-
 #: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:6
 #, fuzzy, python-format
 msgid ""
@@ -2486,10 +2575,6 @@ msgstr ""
 "A partir de agora, você poderá visualizar e gerenciar essa conversa, de "
 "acordo com as permissões concedidas."
 
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:10
-msgid "To access it, click the link below:"
-msgstr "Para acessar, clique no link abaixo:"
-
 #: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:14
 msgid ""
 "If you do not have an EJ account yet, you will need to create one first. "
@@ -2499,14 +2584,6 @@ msgstr ""
 "Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
 "primeiro. Após concluir o cadastro, você será direcionado automaticamente "
 "para a conversa."
-
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:16
-msgid "This email was sent automatically by the EJ Platform."
-msgstr "Este email foi enviado automaticamente pela Plataforma EJ."
-
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:18
-msgid "If you do not recognize this invitation, please ignore this email."
-msgstr "Se você não reconhece este convite, ignore este email."
 
 #: src/ej_conversations/jinja2/ej_conversations/comments/add-comment.jinja2:5
 msgid ""
@@ -4173,9 +4250,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #~ msgid "Fill up the form to create a new conversation board"
 #~ msgstr "Preencha os campos para criar ou editar o mural de conversas"
-
-#~ msgid "Board"
-#~ msgstr "Mural"
 
 #, python-format
 #~ msgid "Access conversation %(conversation_link)s"
