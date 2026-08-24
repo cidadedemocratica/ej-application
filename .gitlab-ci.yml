@@ -171,6 +171,8 @@ pytest:
     - name: rabbitmq:3-management
       alias: rabbitmq
   variables:
+    ENVIRONMENT: testing
+    DJANGO_SECRET_KEY: test-secret-key
     POETRY_VIRTUALENVS_CREATE: "true"
     POSTGRES_DB: ej
     POSTGRES_USER: ej

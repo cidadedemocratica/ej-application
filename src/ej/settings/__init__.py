@@ -178,6 +178,8 @@ class Conf(
     # This variable increases this limit.
     DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 
+    ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
+
 
 Conf.save_settings(globals())
 
