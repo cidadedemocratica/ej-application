@@ -196,7 +196,9 @@ def can_edit_conversation(user, conversation):
 def is_conversation_manager(user, conversation):
     if not getattr(user, "is_authenticated", False) or user.id is None:
         return False
-    return conversation.managers.filter(user=user).exists()
+    return conversation.managers.filter(user=user).exists() or user.has_perm(
+        "ej.is_board_manager", conversation.board
+    )
 
 
 @rules.register_perm("ej.can_moderate_conversation")
@@ -250,8 +252,13 @@ def can_access_tools_page(user, conversation):
 
 @rules.register_perm("ej.can_manage_conversation_members")
 def can_manage_conversation_members(user, conversation):
-    return (
-        user.is_staff or user.is_superuser or user.id == conversation.author_id
+    return bool(
+        getattr(user, "is_authenticated", False)
+        and user.id is not None
+        and (
+            user.id == conversation.author_id
+            or user.id == conversation.board.owner_id
+        )
     )
 
 

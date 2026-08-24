@@ -33,6 +33,21 @@ urlpatterns = [
         name="board-edit",
     ),
     path(
+        "<slug:board_slug>/members/create/",
+        views.BoardManagerInvitationView.as_view(),
+        name="board-create_manager_invitation",
+    ),
+    path(
+        "<slug:board_slug>/members/<int:invitation_id>/delete/",
+        views.BoardManagerInvitationView.as_view(),
+        name="board-delete_manager_invitation",
+    ),
+    path(
+        "<slug:board_slug>/members/<uuid:accept_token>/accept/",
+        views.BoardManagerInvitationAcceptView.as_view(),
+        name="board-accept_manager_invitation",
+    ),
+    path(
         "<slug:board_slug>/",
         views.BoardBaseView.as_view(),
         name="board-base",

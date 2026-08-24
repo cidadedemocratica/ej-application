@@ -1,14 +1,19 @@
 import uuid
 
+import mock
 from constance import config
+from django.core import mail
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.urls import reverse
+from django.utils.translation import override
 import pytest
 
+from ej_boards.models import Board, BoardManagerInvitation
 from ej_conversations import create_conversation
 from ej_conversations.enums import Choice, RejectionReason
 from ej_conversations.models import (
+    Conversation,
     ConversationManager,
     ConversationManagerInvitation,
     Vote,
@@ -210,6 +215,111 @@ class TestConversationManagerInvitation(ConversationRecipes):
             kwargs=conversation.get_url_kwargs(),
         )
 
+    def test_get_accept_url(self, db, mk_conversation, mk_user):
+        conversation = mk_conversation()
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email="manager@example.com",
+            invited_by=invited_by,
+        )
+
+        assert invitation.get_accept_url("https://example.com/") == (
+            "https://example.com"
+            + reverse(
+                "boards:conversation-accept_manager_invitation",
+                kwargs={
+                    **conversation.get_url_kwargs(),
+                    "accept_token": invitation.accept_token,
+                },
+            )
+        )
+
+    def test_send_invitation_email(
+        self, mk_conversation, mk_user, mk_conversation_manager_invitation
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invitation = mk_conversation_manager_invitation(
+            conversation,
+            manager=manager,
+            invited_by=conversation.author,
+        )
+        origin = "https://example.com"
+        accept_url = invitation.get_accept_url(origin)
+        invitation.send_error = "previous failure"
+        invitation.save(update_fields=["send_error"])
+
+        with override("en"):
+            invitation.send_invitation(origin)
+
+        invitation.refresh_from_db()
+        assert len(mail.outbox) == 1
+        message = mail.outbox[0]
+        assert message.to == [invitation.email]
+        assert message.subject.endswith("shared access to an EJ conversation")
+        assert message.content_subtype == "html"
+        assert "example.com" in message.body
+        assert f"<strong>{conversation.title}</strong>" in message.body
+        assert f'<a href="{accept_url}">{accept_url}</a>' in message.body
+        assert invitation.sent_at is not None
+        assert invitation.send_error == ""
+
+    def test_send_invitation_records_error(
+        self, mk_conversation, mk_conversation_manager_invitation
+    ):
+        conversation = mk_conversation()
+        invitation = mk_conversation_manager_invitation(conversation)
+
+        with mock.patch(
+            "ej.manager_invitation.EmailMessage.send",
+            side_effect=Exception("smtp failed"),
+        ):
+            invitation.send_invitation("https://example.com")
+
+        invitation.refresh_from_db()
+        assert invitation.sent_at is None
+        assert invitation.send_error == "smtp failed"
+
+    def test_send_invitation_skips_inactive_invitation(
+        self, mk_conversation, mk_conversation_manager_invitation
+    ):
+        conversation = mk_conversation()
+        invitation = mk_conversation_manager_invitation(
+            conversation,
+            is_active=False,
+        )
+        invitation.send_error = "previous failure"
+        invitation.save(update_fields=["send_error"])
+
+        with mock.patch(
+            "ej.manager_invitation.EmailMessage.send"
+        ) as email_send:
+            invitation.send_invitation("https://example.com")
+
+        invitation.refresh_from_db()
+        email_send.assert_not_called()
+        assert invitation.sent_at is None
+        assert invitation.send_error == "previous failure"
+
+    def test_send_invitation_skips_accepted_invitation(
+        self, mk_conversation, mk_user, mk_conversation_manager_invitation
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invitation = mk_conversation_manager_invitation(
+            conversation,
+            manager=manager,
+            accepted=True,
+        )
+
+        with mock.patch(
+            "ej.manager_invitation.EmailMessage.send"
+        ) as email_send:
+            invitation.send_invitation("https://example.com")
+
+        email_send.assert_not_called()
+
     def test_accepted_invitation_grants_manager_edit_access(
         self, db, mk_conversation, mk_user
     ):
@@ -229,6 +339,30 @@ class TestConversationManagerInvitation(ConversationRecipes):
         ).exists()
         assert manager.has_perm("ej.is_conversation_manager", conversation)
         assert manager.has_perm("ej.can_edit_conversation", conversation)
+
+    def test_accepted_invitation_cannot_be_accepted_twice(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(invitation)
+
+        with pytest.raises(ValidationError):
+            invitation.accept(manager)
+
+        assert (
+            ConversationManager.objects.filter(
+                conversation=conversation,
+                user=manager,
+            ).count()
+            == 1
+        )
 
     def test_accepted_invitation_grants_access_after_user_registers(
         self, db, mk_conversation, mk_user
@@ -383,6 +517,48 @@ class TestConversationManagerInvitation(ConversationRecipes):
         assert not manager.has_perm("ej.is_conversation_manager", conversation)
         assert not manager.has_perm("ej.can_edit_conversation", conversation)
 
+    def test_deactivating_accepted_invitation_removes_manager_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(invitation)
+
+        invitation.is_active = False
+        invitation.save(update_fields=["is_active"])
+
+        assert not ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
+        assert not manager.has_perm("ej.is_conversation_manager", conversation)
+
+    def test_deleting_invitation_removes_manager_access(
+        self, db, mk_conversation, mk_user
+    ):
+        conversation = mk_conversation()
+        manager = mk_user(email="manager@example.com")
+        invited_by = mk_user(email="inviter@domain.com")
+        invitation = ConversationManagerInvitation.objects.create(
+            conversation=conversation,
+            email=manager.email,
+            invited_by=invited_by,
+        )
+        self.accept_invitation(invitation)
+
+        invitation.delete()
+
+        assert not ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
+
     def test_manager_invitation_does_not_grant_moderation_or_delete_access(
         self, db, mk_conversation, mk_user
     ):
@@ -405,6 +581,103 @@ class TestConversationManagerInvitation(ConversationRecipes):
             "ej.can_manage_conversation_members", conversation
         )
         assert not manager.has_perm("ej.can_delete_conversation", conversation)
+
+
+class TestBoardManagerConversationPermissions(ConversationRecipes):
+    def accept_board_invitation(self, board, manager):
+        invitation = BoardManagerInvitation.objects.create(
+            board=board,
+            email=manager.email,
+            invited_by=board.owner,
+        )
+        invitation.accept(manager)
+        return invitation
+
+    def test_board_manager_can_edit_existing_and_future_conversations(
+        self, db, mk_user
+    ):
+        owner = mk_user(email="owner@example.com")
+        manager = mk_user(email="manager@example.com")
+        board = Board.objects.create(owner=owner, title="Board", slug="board")
+        existing_conversation = create_conversation(
+            "Existing conversation",
+            "Existing conversation",
+            owner,
+            board=board,
+        )
+
+        self.accept_board_invitation(board, manager)
+        future_conversation = create_conversation(
+            "Future conversation",
+            "Future conversation",
+            owner,
+            board=board,
+        )
+
+        assert manager.has_perm(
+            "ej.is_conversation_manager", existing_conversation
+        )
+        assert manager.has_perm(
+            "ej.can_edit_conversation", existing_conversation
+        )
+        assert manager.has_perm(
+            "ej.is_conversation_manager", future_conversation
+        )
+        assert manager.has_perm("ej.can_edit_conversation", future_conversation)
+
+    def test_board_manager_cannot_delete_or_manage_conversation_members(
+        self, db, mk_user
+    ):
+        owner = mk_user(email="owner@example.com")
+        manager = mk_user(email="manager@example.com")
+        board = Board.objects.create(owner=owner, title="Board", slug="board")
+        conversation = create_conversation(
+            "Board conversation",
+            "Board conversation",
+            owner,
+            board=board,
+        )
+        self.accept_board_invitation(board, manager)
+
+        assert manager.has_perm("ej.can_edit_conversation", conversation)
+        assert not manager.has_perm("ej.can_delete_conversation", conversation)
+        assert not manager.has_perm(
+            "ej.can_manage_conversation_members", conversation
+        )
+
+    def test_board_manager_does_not_materialize_conversation_manager_rows(
+        self, db, mk_user
+    ):
+        owner = mk_user(email="owner@example.com")
+        manager = mk_user(email="manager@example.com")
+        board = Board.objects.create(owner=owner, title="Board", slug="board")
+        conversation = create_conversation(
+            "Board conversation",
+            "Board conversation",
+            owner,
+            board=board,
+        )
+        self.accept_board_invitation(board, manager)
+
+        assert manager.has_perm("ej.is_conversation_manager", conversation)
+        assert not ConversationManager.objects.filter(
+            conversation=conversation,
+            user=manager,
+        ).exists()
+
+    def test_managed_by_includes_board_manager_conversations(self, db, mk_user):
+        owner = mk_user(email="owner@example.com")
+        manager = mk_user(email="manager@example.com")
+        board = Board.objects.create(owner=owner, title="Board", slug="board")
+        conversation = create_conversation(
+            "Board conversation",
+            "Board conversation",
+            owner,
+            board=board,
+        )
+        self.accept_board_invitation(board, manager)
+
+        assert list(Conversation.objects.managed_by(manager)) == [conversation]
 
 
 class TestVote:

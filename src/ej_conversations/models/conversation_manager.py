@@ -17,7 +17,7 @@ class ConversationManager(TimeStampedModel):
     )
     invitation = models.ForeignKey(
         "ConversationManagerInvitation",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name="managers",

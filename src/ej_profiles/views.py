@@ -36,7 +36,7 @@ class DetailView(DetailView):
             "n_comments": profile.user.comments.count(),
             "n_votes": profile.votes.count(),
             "achievements_href": None,
-            "user_boards": Board.objects.filter(owner=self.request.user),
+            "user_boards": Board.objects.accessible_by(self.request.user),
             "change_password_form": ChangePasswordForm(self.request.user),
             "go_to_password": False,
             "current_page": "detail-profile",
@@ -93,7 +93,7 @@ class EditView(UpdateView):
             "form": self.form_class(instance=profile, request=self.request),
             "profile": profile,
             "current_page": "edit-profile",
-            "user_boards": Board.objects.filter(owner=self.request.user),
+            "user_boards": Board.objects.accessible_by(self.request.user),
         }
 
 
@@ -134,7 +134,7 @@ class HomeView(ListView):
         contributions_data = profile.get_contributions_data()
 
         return {
-            "user_boards": Board.objects.filter(owner=self.request.user),
+            "user_boards": Board.objects.accessible_by(self.request.user),
             "public_conversations": list(public_conversations),
             "participated_tags": list(profile_conversations_tags),
             "all_tags": list(public_tags),

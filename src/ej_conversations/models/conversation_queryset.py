@@ -40,7 +40,11 @@ class ConversationQuerySet(ConversationMixin, WordCloudQuerySet):
         """
         if not user.is_authenticated:
             return self.none()
-        return self.filter(Q(author=user) | Q(managers__user=user)).distinct()
+        return self.filter(
+            Q(author=user)
+            | Q(managers__user=user)
+            | Q(board__managers__user=user)
+        ).distinct()
 
     def cache_annotations(self, *values, user=None, prefix="", **kwargs):
         """
