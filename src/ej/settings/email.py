@@ -30,10 +30,13 @@ class EmailConf(Conf):
     EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 
     def get_email_backend(self):
-        if self.ENVIRONMENT == "local":
-            return "django.core.mail.backends.console.EmailBackend"
+        if (
+            self.ANYMAIL["MAILGUN_API_KEY"]
+            and self.ANYMAIL["MAILGUN_SENDER_DOMAIN"]
+        ):
+            return "anymail.backends.mailgun.EmailBackend"
 
         if self.EMAIL_HOST and self.EMAIL_PORT:
             return "django.core.mail.backends.smtp.EmailBackend"
 
-        return "anymail.backends.mailgun.EmailBackend"
+        return "django.core.mail.backends.console.EmailBackend"
