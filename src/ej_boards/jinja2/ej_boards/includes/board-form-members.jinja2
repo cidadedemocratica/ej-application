@@ -1,0 +1,43 @@
+<section class="board-form-members" aria-labelledby="board-form-members-title">
+    <h4 id="board-form-members-title" class="board-form-members__title">
+        {{ _('Add managers') }}
+    </h4>
+    <p class="board-form-members__description">
+        {{ _('Add managers to your board') }}
+    </p>
+
+    <div class="board-form-members__input-row">
+        <div class="board-form-members__input-wrap">
+            <input
+                type="text"
+                id="board-member-email-input"
+                class="board-form-members__input"
+                inputmode="email"
+                autocomplete="email"
+                maxlength="254"
+                placeholder=""
+                aria-label="{{ _('Manager e-mail') }}"
+                aria-describedby="board-member-email-help board-member-email-error"
+            >
+            <p id="board-member-email-help" class="board-form-members__help">
+                {{ _('Insert a valid e-mail for invite') }}
+            </p>
+            {% include 'ej_boards/includes/board-form-member-error.jinja2' %}
+        </div>
+        <button
+            type="button"
+            id="board-member-add-btn"
+            class="board-form-members__add-btn"
+        >
+            <img src="{{ static('/img/icons/user-plus.svg') }}" alt="" aria-hidden="true">
+            {{ _('Add manager') }}
+        </button>
+    </div>
+
+    <h2 class="board-form-members__list-title">{{ _('Managers') }}</h2>
+
+    {% include 'ej_boards/includes/board-form-members-table.jinja2' %}
+</section>
+
+{% include 'ej_boards/includes/board-form-member-modal.jinja2' %}
+{% include 'ej_boards/includes/board-form-member-remove-modal.jinja2' %}

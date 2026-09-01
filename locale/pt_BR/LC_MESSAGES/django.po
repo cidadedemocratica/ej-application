@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-14 14:34-0300\n"
+"POT-Creation-Date: 2026-08-31 15:05-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -80,20 +80,20 @@ msgstr "Nenhum arquivo selecionado"
 msgid "This template defines no extra variables"
 msgstr "Este template não define variáveis extras"
 
-#: src/ej/manager_invitation.py:23
+#: src/ej/manager_invitation.py:34
 msgid "Pending"
 msgstr "Pendente"
 
-#: src/ej/manager_invitation.py:24
+#: src/ej/manager_invitation.py:35
 msgid "Accepted"
 msgstr "Aceito"
 
-#: src/ej/manager_invitation.py:123
+#: src/ej/manager_invitation.py:186
 #, fuzzy
 msgid "Inactive invitations cannot be accepted."
 msgstr "Convites inativos não podem ser aceitos."
 
-#: src/ej/manager_invitation.py:127
+#: src/ej/manager_invitation.py:190
 #, fuzzy
 msgid "Only pending invitations can be accepted."
 msgstr "Convites inativos não podem ser aceitos."
@@ -182,64 +182,73 @@ msgstr "Identificador já existe."
 #: src/ej_boards/models/board_manager.py:28
 #, fuzzy
 msgid "Board manager"
-msgstr "Gestor da conversa"
+msgstr "Administrador do mural"
 
 #: src/ej_boards/models/board_manager.py:29
 #, fuzzy
 msgid "Board managers"
-msgstr "Gestores da conversa"
+msgstr "Administradores do mural"
 
-#: src/ej_boards/models/manager_invitation.py:29
+#: src/ej_boards/models/manager_invitation.py:10
+#, fuzzy, python-format
+msgid "%(inviter)s shared access to an EJ board"
+msgstr "%(inviter)s compartilhou acesso a uma conversa EJ"
+
+#: src/ej_boards/models/manager_invitation.py:33
 #, fuzzy
 msgid "Board manager invitation"
 msgstr "Convite para gestor de conversa"
 
-#: src/ej_boards/models/manager_invitation.py:30
+#: src/ej_boards/models/manager_invitation.py:34
 #, fuzzy
 msgid "Board manager invitations"
 msgstr "Convites para gestores de conversas"
-
-#: src/ej_boards/tasks.py:18
-#, fuzzy, python-format
-msgid "%(inviter)s shared access to an EJ board"
-msgstr "%(inviter)s compartilhou acesso a uma conversa EJ"
 
 #: src/ej_boards/tests/test_api.py:15
 #: src/ej_conversations/tests/test_api.py:371
 msgid "Authentication credentials were not provided."
 msgstr "Credenciais de autenticação não foram fornecidas."
 
-#: src/ej_boards/tests/test_views.py:299 src/ej_boards/views.py:188
+#: src/ej_boards/tests/test_views.py:342 src/ej_boards/views.py:162
+#, fuzzy
+msgid "Manager added"
+msgstr "Membro adicionado"
+
+#: src/ej_boards/tests/test_views.py:413 src/ej_boards/views.py:235
 #, fuzzy
 msgid "The board owner cannot be added as a manager."
 msgstr "O proprietário da conversa não pode ser adicionado como gestor."
 
-#: src/ej_boards/tests/test_views.py:323 src/ej_boards/views.py:178
-#: src/ej_conversations/tests/test_views.py:1524
-#: src/ej_conversations/views.py:647
+#: src/ej_boards/tests/test_views.py:436 src/ej_boards/tests/test_views.py:465
+#: src/ej_boards/views.py:225 src/ej_conversations/tests/test_views.py:1515
+#: src/ej_conversations/tests/test_views.py:1544
+#: src/ej_conversations/views.py:638
 #, fuzzy
 msgid "Enter a valid email address."
 msgstr "Insira um endereço de e-mail válido."
 
-#: src/ej_boards/tests/test_views.py:350 src/ej_boards/tests/test_views.py:381
-#: src/ej_boards/tests/test_views.py:403 src/ej_boards/views.py:147
-#: src/ej_boards/views.py:204 src/ej_conversations/tests/test_views.py:1553
-#: src/ej_conversations/tests/test_views.py:1583
-#: src/ej_conversations/tests/test_views.py:1608
-#: src/ej_conversations/views.py:560 src/ej_conversations/views.py:677
-msgid "This member is already invited."
+#: src/ej_boards/tests/test_views.py:492 src/ej_boards/tests/test_views.py:522
+#: src/ej_boards/tests/test_views.py:543 src/ej_boards/views.py:159
+#: src/ej_boards/views.py:251
+#, fuzzy
+msgid "This manager is already invited."
 msgstr "Este membro já foi convidado."
 
-#: src/ej_boards/tests/test_views.py:555 src/ej_boards/views.py:252
-#: src/ej_conversations/tests/test_views.py:1682
-#: src/ej_conversations/views.py:707
+#: src/ej_boards/tests/test_views.py:573 src/ej_boards/views.py:194
+#, fuzzy
+msgid "Removed manager"
+msgstr "Membro removido"
+
+#: src/ej_boards/tests/test_views.py:731 src/ej_boards/views.py:290
+#: src/ej_conversations/tests/test_views.py:1702
+#: src/ej_conversations/views.py:698
 #, fuzzy
 msgid "Invitation accepted."
 msgstr "Convite aceito."
 
-#: src/ej_boards/tests/test_views.py:641 src/ej_boards/views.py:244
-#: src/ej_conversations/tests/test_views.py:1754
-#: src/ej_conversations/views.py:699
+#: src/ej_boards/tests/test_views.py:817 src/ej_boards/views.py:282
+#: src/ej_conversations/tests/test_views.py:1774
+#: src/ej_conversations/views.py:690
 msgid "This invitation was sent to a different email address."
 msgstr "Este convite foi enviado para um endereço de e-mail diferente."
 
@@ -679,19 +688,24 @@ msgstr "Usuário não tem permissão para criar uma conversa promovida."
 #: src/ej_conversations/models/conversation_manager.py:28
 #, fuzzy
 msgid "Conversation manager"
-msgstr "Gestor da conversa"
+msgstr "Administrador da conversa"
 
 #: src/ej_conversations/models/conversation_manager.py:29
 #, fuzzy
 msgid "Conversation managers"
-msgstr "Gestores da conversa"
+msgstr "Administradores da conversa"
 
-#: src/ej_conversations/models/manager_invitation.py:30
+#: src/ej_conversations/models/manager_invitation.py:11
+#, python-format
+msgid "%(inviter)s shared access to an EJ conversation"
+msgstr "%(inviter)s compartilhou acesso a uma conversa EJ"
+
+#: src/ej_conversations/models/manager_invitation.py:35
 #, fuzzy
 msgid "Conversation manager invitation"
 msgstr "Convite para gestor de conversa"
 
-#: src/ej_conversations/models/manager_invitation.py:31
+#: src/ej_conversations/models/manager_invitation.py:36
 #, fuzzy
 msgid "Conversation manager invitations"
 msgstr "Convites para gestores de conversas"
@@ -764,33 +778,35 @@ msgstr " comentários"
 msgid " of "
 msgstr " de "
 
-#: src/ej_conversations/serializers.py:276 src/ej_conversations/views.py:190
+#: src/ej_conversations/serializers.py:276 src/ej_conversations/views.py:189
 msgid "Participate"
 msgstr "Participar"
 
-#: src/ej_conversations/tasks.py:18
-#, python-format
-msgid "%(inviter)s shared access to an EJ conversation"
-msgstr "%(inviter)s compartilhou acesso a uma conversa EJ"
-
 #: src/ej_conversations/tests/test_views.py:1252
-#: src/ej_conversations/views.py:615
+#: src/ej_conversations/views.py:605
 #, fuzzy
 msgid "Removed member"
 msgstr "Membro removido"
 
 #: src/ej_conversations/tests/test_views.py:1376
-#: src/ej_conversations/tests/test_views.py:1473
-#: src/ej_conversations/views.py:563
+#: src/ej_conversations/tests/test_views.py:1464
+#: src/ej_conversations/views.py:562
 #, fuzzy
 msgid "Member added"
 msgstr "Membro adicionado"
 
-#: src/ej_conversations/tests/test_views.py:1497
-#: src/ej_conversations/views.py:659
+#: src/ej_conversations/tests/test_views.py:1488
+#: src/ej_conversations/views.py:650
 #, fuzzy
 msgid "The conversation owner cannot be added as a manager."
 msgstr "O proprietário da conversa não pode ser adicionado como gestor."
+
+#: src/ej_conversations/tests/test_views.py:1573
+#: src/ej_conversations/tests/test_views.py:1603
+#: src/ej_conversations/tests/test_views.py:1628
+#: src/ej_conversations/views.py:559 src/ej_conversations/views.py:668
+msgid "This member is already invited."
+msgstr "Este membro já foi convidado."
 
 #: src/ej_conversations/utils.py:112
 msgid "This conversation is now favorite."
@@ -809,12 +825,12 @@ msgstr "Campo não pode estar vazio!"
 msgid "The maximum file size must be 5MB"
 msgstr "O tamanho máximo do arquivo deve ser 5 MB"
 
-#: src/ej_conversations/views.py:215
+#: src/ej_conversations/views.py:214
 #, fuzzy
 msgid "Manage!"
 msgstr "Gerenciar!"
 
-#: src/ej_conversations/views.py:259
+#: src/ej_conversations/views.py:258
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -1971,6 +1987,18 @@ msgstr "usuários"
 msgid "Create Board"
 msgstr "Criar mural"
 
+#: src/ej_boards/jinja2/ej_boards/_board-form.jinja2:18
+#: src/ej_conversations/jinja2/ej_conversations/_conversation-form.jinja2:26
+#, fuzzy
+msgid "E-mail is required."
+msgstr "E-mail é obrigatório."
+
+#: src/ej_boards/jinja2/ej_boards/_board-form.jinja2:19
+#: src/ej_conversations/jinja2/ej_conversations/_conversation-form.jinja2:27
+#, fuzzy
+msgid "Invalid e-mail."
+msgstr "E-mail inválido."
+
 #: src/ej_boards/jinja2/ej_boards/board-create.jinja2:5
 #: src/ej_boards/jinja2/ej_boards/board-edit.jinja2:6
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-menu.jinja2:8
@@ -1995,60 +2023,143 @@ msgstr "Editar mural"
 msgid "Save settings"
 msgstr "Salvar configurações"
 
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:4
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:4
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:7
 #, python-format
-msgid "Hello, %(person_name)s,"
-msgstr "Olá, %(person_name)s,"
-
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:6
-#, fuzzy, python-format
 msgid ""
-"You have been granted access to the board <strong>%(board_title)s</strong> "
-"in the EJ located at %(site_domain)s."
+"%(owner_username)s invited you to collaborate on the board "
+"<strong>%(board_title)s</strong> on the Empurrando Juntos platform."
 msgstr ""
-"Você recebeu acesso ao mural <strong>%(board_title)s</strong> na EJ localizada "
-"em %(site_domain)s."
+"%(owner_username)s te convidou para colaborar no mural "
+"<strong>%(board_title)s</strong> na plataforma Empurrando Juntos."
 
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:8
-#, fuzzy
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:9
 msgid ""
-"From now on, you will be able to view and manage this board according to the "
-"permissions granted to you."
+"By accepting this invitation, you will have access to the board and will be "
+"able to manage its conversations, according to the permissions granted."
 msgstr ""
-"A partir de agora, você poderá visualizar e gerenciar essa conversa, de "
-"acordo com as permissões concedidas."
+"Ao aceitar o convite, você terá acesso ao mural e poderá gerenciar as "
+"conversas, de acordo com as permissões concedidas."
 
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:10
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:10
-msgid "To access it, click the link below:"
-msgstr "Para acessar, clique no link abaixo:"
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:11
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:11
+msgid "To accept the invitation, click the link below:"
+msgstr "Para aceitar o convite, clique no link abaixo:"
 
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:14
-#, fuzzy
+#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:17
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:17
 msgid ""
-"If you do not have an EJ account yet, you will need to create one first. "
-"After completing your registration, you will be automatically redirected to "
-"the board."
+"Run opinion polls with Empurrando Juntos and understand how your audience "
+"positions itself on a wide range of topics."
 msgstr ""
-"Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
-"primeiro. Após concluir o cadastro, você será direcionado automaticamente "
-"para a conversa."
-
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:16
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:16
-msgid "This email was sent automatically by the EJ Platform."
-msgstr "Este email foi enviado automaticamente pela Plataforma EJ."
-
-#: src/ej_boards/jinja2/ej_boards/manager-invitation-message.jinja2:18
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:18
-msgid "If you do not recognize this invitation, please ignore this email."
-msgstr "Se você não reconhece este convite, ignore este email."
+"Realize pesquisas de opinião com a Empurrando Juntos e entenda como o seu "
+"público se posiciona em relação aos mais diversos temas."
 
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-actions.jinja2:3
 #, fuzzy
 msgid "Board form actions"
 msgstr "Ações de formulário do mural"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:3
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:33
+#, fuzzy
+msgid "Add manager"
+msgstr "Adicionar admin"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:5
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:5
+msgid "By confirming, an invitation will be sent to"
+msgstr "Ao confirmar, um convite será enviado para"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:10
+#, fuzzy
+msgid ""
+"The manager will be allowed to manage the board and its conversations once "
+"the invitation is accepted."
+msgstr ""
+"O membro poderá visualizar e gerenciar o mural e suas conversas assim que o "
+"convite for aceito."
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:13
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:13
+#, fuzzy
+msgid "Do you want to send the invitation?"
+msgstr "Deseja enviar o convite?"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:18
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-remove-modal.jinja2:10
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:18
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-remove-modal.jinja2:10
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-save-modal.jinja2:14
+msgid "Back"
+msgstr "Voltar"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:30
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-remove-modal.jinja2:13
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:30
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-remove-modal.jinja2:13
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-save-modal.jinja2:17
+msgid "Yes"
+msgstr "Sim"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-remove-modal.jinja2:3
+#, fuzzy
+msgid "Remove manager"
+msgstr "Remover admin"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-remove-modal.jinja2:5
+#, fuzzy
+msgid ""
+"Do you want to remove the manager from the board? This action will be "
+"applied immediately."
+msgstr ""
+"Deseja remover o membro da gestão da conversa? Esta ação será aplicada "
+"imediatamente."
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-member-row.jinja2:23
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-row.jinja2:24
+#: src/ej_conversations/jinja2/ej_conversations/includes/image-input.jinja2:12
+#: src/ej_conversations/jinja2/ej_conversations/includes/image-input.jinja2:28
+#: src/ej_integrations/jinja2/ej_integrations/webchat/form-integration.jinja2:12
+msgid "Remove"
+msgstr "Excluir"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members-table.jinja2:5
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members-table.jinja2:5
+#, fuzzy
+msgid "Status"
+msgstr "Status"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members-table.jinja2:6
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members-table.jinja2:6
+#, fuzzy
+msgid "Actions"
+msgstr "Ações"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:3
+#, fuzzy
+msgid "Add managers"
+msgstr "Gestores da conversa"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:6
+#, fuzzy
+msgid "Add managers to your board"
+msgstr "Adicione pessoas gestoras na sua conversa"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:19
+#, fuzzy
+msgid "Manager e-mail"
+msgstr "E-mail do gestor"
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:23
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:17
+#, fuzzy
+msgid "Insert a valid e-mail for invite"
+msgstr "Insira um endereço de e-mail válido."
+
+#: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:37
+#, fuzzy
+msgid "Managers"
+msgstr "Gerenciar"
 
 #: src/ej_boards/jinja2/ej_boards/includes/menu.jinja2:4
 msgid "Manage boards"
@@ -2342,16 +2453,6 @@ msgstr "Comentário"
 msgid "Type your comment here"
 msgstr "Escreva seu comentário aqui"
 
-#: src/ej_conversations/jinja2/ej_conversations/_conversation-form.jinja2:26
-#, fuzzy
-msgid "E-mail is required."
-msgstr "E-mail é obrigatório."
-
-#: src/ej_conversations/jinja2/ej_conversations/_conversation-form.jinja2:27
-#, fuzzy
-msgid "Invalid e-mail."
-msgstr "E-mail inválido."
-
 #: src/ej_conversations/jinja2/ej_conversations/_conversation-form.jinja2:63
 #, fuzzy
 msgid "Anonymous participation"
@@ -2558,32 +2659,22 @@ msgstr "Conversas públicas"
 msgid "Participate!"
 msgstr "Participar!"
 
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:6
-#, fuzzy, python-format
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:7
+#, python-format
 msgid ""
-"You have been granted access to the conversation "
-"<strong>%(conversation_title)s</strong> in the EJ located at %(site_domain)s."
+"%(owner_username)s invited you to collaborate on the conversation "
+"<strong>%(conversation_title)s</strong> on the Empurrando Juntos platform."
 msgstr ""
-"Você recebeu acesso à conversa <strong>%(conversation_title)s</strong> na EJ "
-"localizada em %(site_domain)s."
+"%(owner_username)s te convidou para colaborar na conversa "
+"<strong>%(conversation_title)s</strong> na plataforma Empurrando Juntos."
 
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:8
+#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:9
 msgid ""
-"From now on, you will be able to view and manage this conversation according "
-"to the permissions granted to you."
+"By accepting this invitation, you will be able to manage the conversation "
+"and its reports, according to the permissions granted."
 msgstr ""
-"A partir de agora, você poderá visualizar e gerenciar essa conversa, de "
+"Ao aceitar o convite, você poderá gerenciar a conversa e seus relatórios, de "
 "acordo com as permissões concedidas."
-
-#: src/ej_conversations/jinja2/ej_conversations/manager-invitation-message.jinja2:14
-msgid ""
-"If you do not have an EJ account yet, you will need to create one first. "
-"After completing your registration, you will be automatically redirected to "
-"the conversation."
-msgstr ""
-"Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
-"primeiro. Após concluir o cadastro, você será direcionado automaticamente "
-"para a conversa."
 
 #: src/ej_conversations/jinja2/ej_conversations/comments/add-comment.jinja2:5
 msgid ""
@@ -2768,10 +2859,6 @@ msgstr "Ações do formulário de conversa"
 msgid "Add member"
 msgstr "Adicionar membro"
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:5
-msgid "By confirming, an invitation will be sent to"
-msgstr "Ao confirmar, um convite será enviado para"
-
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:10
 #, fuzzy
 msgid ""
@@ -2780,23 +2867,6 @@ msgid ""
 msgstr ""
 "O membro poderá visualizar e gerenciar o dashboard da conversa assim que o "
 "convite for aceito."
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:13
-#, fuzzy
-msgid "Do you want to send the invitation?"
-msgstr "Deseja enviar o convite?"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:18
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-remove-modal.jinja2:10
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-save-modal.jinja2:14
-msgid "Back"
-msgstr "Voltar"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:30
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-remove-modal.jinja2:13
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-save-modal.jinja2:17
-msgid "Yes"
-msgstr "Sim"
 
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-remove-modal.jinja2:3
 #, fuzzy
@@ -2811,23 +2881,6 @@ msgstr ""
 "Deseja remover o membro da gestão da conversa? Esta ação será aplicada "
 "imediatamente."
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-row.jinja2:24
-#: src/ej_conversations/jinja2/ej_conversations/includes/image-input.jinja2:12
-#: src/ej_conversations/jinja2/ej_conversations/includes/image-input.jinja2:28
-#: src/ej_integrations/jinja2/ej_integrations/webchat/form-integration.jinja2:12
-msgid "Remove"
-msgstr "Excluir"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members-table.jinja2:5
-#, fuzzy
-msgid "Status"
-msgstr "Status"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members-table.jinja2:6
-#, fuzzy
-msgid "Actions"
-msgstr "Ações"
-
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:4
 msgid "Add members"
 msgstr "Adicionar membros"
@@ -2836,11 +2889,6 @@ msgstr "Adicionar membros"
 #, fuzzy
 msgid "Add managers to your conversation"
 msgstr "Adicione pessoas gestoras na sua conversa"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:17
-#, fuzzy
-msgid "Insert a valid e-mail for invite"
-msgstr "Insira um endereço de e-mail válido."
 
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:27
 #, fuzzy
@@ -4247,6 +4295,43 @@ msgstr "Logar com conta "
 #: src/ej_users/jinja2/ej_users/includes/terms.jinja2:6
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
+
+#, python-format
+#~ msgid "Hello, %(person_name)s,"
+#~ msgstr "Olá, %(person_name)s,"
+
+#, fuzzy
+#~ msgid ""
+#~ "From now on, you will be able to view and manage this board according to "
+#~ "the permissions granted to you."
+#~ msgstr ""
+#~ "A partir de agora, você poderá visualizar e gerenciar essa conversa, de "
+#~ "acordo com as permissões concedidas."
+
+#, fuzzy
+#~ msgid ""
+#~ "If you do not have an EJ account yet, you will need to create one first. "
+#~ "After completing your registration, you will be automatically redirected "
+#~ "to the board."
+#~ msgstr ""
+#~ "Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
+#~ "primeiro. Após concluir o cadastro, você será direcionado automaticamente "
+#~ "para a conversa."
+
+#~ msgid "This email was sent automatically by the EJ Platform."
+#~ msgstr "Este email foi enviado automaticamente pela Plataforma EJ."
+
+#~ msgid "If you do not recognize this invitation, please ignore this email."
+#~ msgstr "Se você não reconhece este convite, ignore este email."
+
+#~ msgid ""
+#~ "If you do not have an EJ account yet, you will need to create one first. "
+#~ "After completing your registration, you will be automatically redirected "
+#~ "to the conversation."
+#~ msgstr ""
+#~ "Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
+#~ "primeiro. Após concluir o cadastro, você será direcionado automaticamente "
+#~ "para a conversa."
 
 #~ msgid "Fill up the form to create a new conversation board"
 #~ msgstr "Preencha os campos para criar ou editar o mural de conversas"

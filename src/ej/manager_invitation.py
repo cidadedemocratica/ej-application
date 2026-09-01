@@ -58,6 +58,11 @@ class AbstractManagerInvitation(TimeStampedModel):
     def normalize_email(email):
         return (email or "").strip().lower()
 
+    @classmethod
+    def clean_email(cls, email):
+        email = cls.normalize_email(email)
+        return cls._meta.get_field("email").clean(email, None)
+
     def matches_user_email(self, user):
         user_email = self.normalize_email(user.email)
         invitation_email = self.normalize_email(self.email)

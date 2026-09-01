@@ -65,7 +65,10 @@ class BoardManagerInvitation(AbstractManagerInvitation):
         return f"{origin.rstrip('/')}{path}"
 
     def get_email_context(self):
-        return {"board_title": self.board.title}
+        return {
+            "board_title": self.board.title,
+            "owner_username": self.board.owner.username,
+        }
 
     def get_board_url(self):
         return self.board.get_absolute_url()

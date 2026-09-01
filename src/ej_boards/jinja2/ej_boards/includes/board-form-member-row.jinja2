@@ -1,0 +1,26 @@
+<tr
+    id="board-member-{{ member.id }}"
+    class="board-form-members__row"
+    data-email="{{ member.email }}"
+    data-invitation-id="{{ member.id }}"
+>
+    <td class="board-form-members__email-cell">
+        <span class="board-form-members__email">{{ member.email }}</span>
+    </td>
+    <td class="board-form-members__status-cell">
+        <span class="board-form-members__status">{{ member.get_status_display() }}</span>
+    </td>
+    <td class="board-form-members__actions-cell">
+        <button
+            type="button"
+            class="board-form-members__remove-btn"
+            hx-delete="{{ url('boards:board-delete_manager_invitation', board_slug=board.slug, invitation_id=member.id) }}"
+            hx-trigger="confirmed"
+            hx-target="#board-member-{{ member.id }}"
+            hx-swap="outerHTML"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        >
+            {{ _('Remove') }}
+        </button>
+    </td>
+</tr>

@@ -1,0 +1,17 @@
+<div id="board-member-remove-modal" class="modal__overlay board-form-confirm-modal hide" aria-hidden="true">
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="board-member-remove-title">
+        <h4 id="board-member-remove-title" class="modal__title">{{ _('Remove manager') }}</h4>
+        <p class="modal__subtitle">
+            {{ _('Do you want to remove the manager from the board? This action will be applied immediately.') }}
+        </p>
+
+        <div class="modal__buttons">
+            <button type="button" id="board-member-remove-back" class="board-form-members__modal-btn board-form-members__modal-btn--secondary">
+                {{ _('Back') }}
+            </button>
+            <button type="button" id="board-member-remove-yes" class="board-form-members__modal-btn board-form-members__modal-btn--danger">
+                {{ _('Yes') }}
+            </button>
+        </div>
+    </div>
+</div>

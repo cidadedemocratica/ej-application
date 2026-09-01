@@ -1,0 +1,14 @@
+<table id="board-members-table" class="board-form-members__table">
+    <thead>
+        <tr class="board-form-members__headings">
+            <th scope="col" class="board-form-members__email-heading">{{ _('E-mail') }}</th>
+            <th scope="col" class="board-form-members__status-heading">{{ _('Status') }}</th>
+            <th scope="col" class="board-form-members__actions-heading">{{ _('Actions') }}</th>
+        </tr>
+    </thead>
+    <tbody id="board-members-list" class="board-form-members__list" aria-live="polite">
+        {% for member in existing_members|default([]) %}
+            {% include 'ej_boards/includes/board-form-member-row.jinja2' %}
+        {% endfor %}
+    </tbody>
+</table>

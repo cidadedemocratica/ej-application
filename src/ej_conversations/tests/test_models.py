@@ -238,12 +238,14 @@ class TestConversationManagerInvitation(ConversationRecipes):
     def test_send_invitation_email(
         self, mk_conversation, mk_user, mk_conversation_manager_invitation
     ):
-        conversation = mk_conversation()
+        author = mk_user(email="author@example.com", name="Author")
+        conversation = mk_conversation(author=author)
         manager = mk_user(email="manager@example.com")
+        inviter = mk_user(email="inviter@example.com", name="Inviter")
         invitation = mk_conversation_manager_invitation(
             conversation,
             manager=manager,
-            invited_by=conversation.author,
+            invited_by=inviter,
         )
         origin = "https://example.com"
         accept_url = invitation.get_accept_url(origin)
@@ -260,8 +262,22 @@ class TestConversationManagerInvitation(ConversationRecipes):
         assert message.subject.endswith("shared access to an EJ conversation")
         assert message.content_subtype == "html"
         assert "example.com" in message.body
-        assert f"<strong>{conversation.title}</strong>" in message.body
+        assert (
+            f"{author.username} invited you to collaborate on the conversation "
+            f"<strong>{conversation.title}</strong> on the Empurrando Juntos "
+            "platform."
+        ) in message.body
+        assert (
+            "By accepting this invitation, you will be able to manage the "
+            "conversation and its reports, according to the permissions granted."
+        ) in message.body
+        assert "To accept the invitation, click the link below:" in message.body
         assert f'<a href="{accept_url}">{accept_url}</a>' in message.body
+        assert "<hr />" in message.body
+        assert (
+            "Run opinion polls with Empurrando Juntos and understand how your "
+            "audience positions itself on a wide range of topics."
+        ) in message.body
         assert invitation.sent_at is not None
         assert invitation.send_error == ""
 
