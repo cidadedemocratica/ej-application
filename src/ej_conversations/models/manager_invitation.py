@@ -68,7 +68,10 @@ class ConversationManagerInvitation(AbstractManagerInvitation):
         return f"{origin.rstrip('/')}{path}"
 
     def get_email_context(self):
-        return {"conversation_title": self.conversation.title}
+        return {
+            "conversation_title": self.conversation.title,
+            "owner_username": self.conversation.author.username,
+        }
 
     def get_dashboard_url(self, request=None):
         url = reverse(

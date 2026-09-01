@@ -20,6 +20,16 @@ class TestBoardsView(ConversationRecipes):
         assert 'class="toast' in content
         assert str(message) in content
 
+    def assert_manager_error_response(self, response, message):
+        assert response.status_code == 400
+        assert response["HX-Retarget"] == "#board-member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        content = response.content.decode()
+        assert 'id="board-member-email-error"' in content
+        assert "show-error" in content
+        assert str(message) in content
+        assert 'class="toast toast--member"' not in content
+
     def accept_invitation_url(self, board, invitation):
         return reverse(
             "boards:board-accept_manager_invitation",
@@ -70,6 +80,7 @@ class TestBoardsView(ConversationRecipes):
             in response.content
         )
         assert b"participant-menu" not in response.content
+        assert b"board-form-members" not in response.content
 
     def test_edit_view_renders_breadcrumb_without_side_menu(self, db):
         user = User.objects.create_user("user@email.br", "password")
@@ -91,6 +102,93 @@ class TestBoardsView(ConversationRecipes):
             f'aria-current="page">{_("Settings")}'.encode() in response.content
         )
         assert b"participant-menu" not in response.content
+        assert b"board-form-members" in response.content
+        assert b'id="board-form"' in response.content
+        assert b"data-manager-email-required-message" in response.content
+        assert b"data-manager-invalid-email-message" in response.content
+        assert b"/static/assets/js/board-form.js" in response.content
+        content = response.content.decode()
+        input_end = content.index(
+            ">", content.index('id="board-member-email-input"')
+        )
+        input_start = content.rfind("<input", 0, input_end)
+        manager_email_input = content[input_start:input_end]
+        assert 'type="text"' in manager_email_input
+        assert 'inputmode="email"' in manager_email_input
+        assert 'autocomplete="email"' in manager_email_input
+        assert 'maxlength="254"' in manager_email_input
+
+    def test_edit_view_renders_board_manager_invitations(
+        self, db, mk_board_manager_invitation
+    ):
+        owner = User.objects.create_user("owner@email.br", "password")
+        pending_manager = User.objects.create_user(
+            "pending@email.br", "password"
+        )
+        accepted_manager = User.objects.create_user(
+            "accepted@email.br", "password"
+        )
+        board = Board.objects.create(
+            slug="board", owner=owner, description="board"
+        )
+        pending_invitation = mk_board_manager_invitation(
+            board,
+            manager=pending_manager,
+            invited_by=owner,
+        )
+        accepted_invitation = mk_board_manager_invitation(
+            board,
+            manager=accepted_manager,
+            invited_by=owner,
+            accepted=True,
+        )
+        inactive_invitation = mk_board_manager_invitation(
+            board,
+            email="inactive@email.br",
+            invited_by=owner,
+            is_active=False,
+        )
+        client = Client()
+        client.force_login(owner)
+
+        response = client.get(
+            reverse("boards:board-edit", kwargs={"board_slug": board.slug})
+        )
+
+        content = response.content.decode()
+        create_url = reverse(
+            "boards:board-create_manager_invitation",
+            kwargs={"board_slug": board.slug},
+        )
+        assert 'id="board-members-table"' in content
+        assert 'id="board-member-email-error"' in content
+        assert 'id="board-member-confirm-modal"' in content
+        assert 'id="board-member-remove-modal"' in content
+        assert f'hx-post="{create_url}"' in content
+        assert pending_invitation.email in content
+        assert accepted_invitation.email in content
+        assert str(BoardManagerInvitation.Status.PENDING.label) in content
+        assert str(BoardManagerInvitation.Status.ACCEPTED.label) in content
+        assert "ana.manager@example.com" not in content
+        assert "bruno.invited@example.com" not in content
+        assert inactive_invitation.email not in content
+
+        for invitation in [pending_invitation, accepted_invitation]:
+            delete_url = reverse(
+                "boards:board-delete_manager_invitation",
+                kwargs={
+                    "board_slug": board.slug,
+                    "invitation_id": invitation.id,
+                },
+            )
+            assert f'id="board-member-{invitation.id}"' in content
+            assert f'hx-delete="{delete_url}"' in content
+            assert f'hx-target="#board-member-{invitation.id}"' in content
+            row_start = content.index(f'id="board-member-{invitation.id}"')
+            row_end = content.index("</tr>", row_start)
+            row = content[row_start:row_end]
+            assert 'hx-trigger="confirmed"' in row
+            assert "hx-headers=" in row
 
     def test_owner_can_delete_board(self, db):
         user = User.objects.create_user("user@email.br", "password")
@@ -184,6 +282,7 @@ class TestBoardsView(ConversationRecipes):
 
         response = client.get(edit_url)
         assert response.status_code == 200
+        assert b"board-form-members" not in response.content
 
         response = client.get(board.get_absolute_url())
         create_button = (
@@ -222,8 +321,25 @@ class TestBoardsView(ConversationRecipes):
             board=board,
             email="manager@email.br",
         )
+        delete_url = reverse(
+            "boards:board-delete_manager_invitation",
+            kwargs={
+                "board_slug": board.slug,
+                "invitation_id": invitation.id,
+            },
+        )
         assert response.status_code == 201
-        assert response.content == b""
+        content = response.content.decode()
+        assert 'id="board-members-table"' in content
+        assert 'id="board-members-list"' in content
+        assert f'id="board-member-{invitation.id}"' in content
+        assert "manager@email.br" in content
+        assert str(BoardManagerInvitation.Status.PENDING.label) in content
+        assert f'hx-delete="{delete_url}"' in content
+        assert f'hx-target="#board-member-{invitation.id}"' in content
+        assert 'id="board-member-email-error"' in content
+        assert 'hx-swap-oob="outerHTML"' in content
+        self.assert_member_toast(content, _("Manager added"))
         assert invitation.user == manager
         assert invitation.invited_by == owner
         assert invitation.status == BoardManagerInvitation.Status.PENDING
@@ -292,9 +408,9 @@ class TestBoardsView(ConversationRecipes):
 
         response = client.post(url, {"email": owner.email})
 
-        assert response.status_code == 400
-        assert str(_("The board owner cannot be added as a manager.")) in (
-            response.content.decode()
+        self.assert_manager_error_response(
+            response,
+            _("The board owner cannot be added as a manager."),
         )
         assert not BoardManagerInvitation.objects.filter(
             board=board,
@@ -315,9 +431,38 @@ class TestBoardsView(ConversationRecipes):
 
         response = client.post(url, {"email": "invalid-email"})
 
-        assert response.status_code == 400
-        assert (
-            str(_("Enter a valid email address.")) in response.content.decode()
+        self.assert_manager_error_response(
+            response,
+            _("Enter a valid email address."),
+        )
+        assert not BoardManagerInvitation.objects.filter(board=board).exists()
+
+    def test_create_board_manager_invitation_rejects_email_over_model_limit(
+        self, db
+    ):
+        owner = User.objects.create_user("owner@email.br", "password")
+        board = Board.objects.create(
+            slug="board", owner=owner, description="board"
+        )
+        email = "{}@{}.{}.{}".format(
+            "a" * 64,
+            "b" * 63,
+            "c" * 63,
+            "d" * 62,
+        )
+        url = reverse(
+            "boards:board-create_manager_invitation",
+            kwargs={"board_slug": board.slug},
+        )
+        client = Client()
+        client.force_login(owner)
+
+        response = client.post(url, {"email": email})
+
+        assert len(email) == 255
+        self.assert_manager_error_response(
+            response,
+            _("Enter a valid email address."),
         )
         assert not BoardManagerInvitation.objects.filter(board=board).exists()
 
@@ -342,10 +487,9 @@ class TestBoardsView(ConversationRecipes):
 
         response = client.post(url, {"email": "manager@email.br"})
 
-        assert response.status_code == 400
-        assert (
-            str(_("This member is already invited."))
-            in response.content.decode()
+        self.assert_manager_error_response(
+            response,
+            _("This manager is already invited."),
         )
         assert (
             BoardManagerInvitation.objects.filter(
@@ -373,10 +517,9 @@ class TestBoardsView(ConversationRecipes):
         ):
             response = client.post(url, {"email": "manager@email.br"})
 
-        assert response.status_code == 400
-        assert (
-            str(_("This member is already invited."))
-            in response.content.decode()
+        self.assert_manager_error_response(
+            response,
+            _("This manager is already invited."),
         )
 
     def test_create_board_manager_invitation_rejects_existing_manager(self, db):
@@ -395,10 +538,9 @@ class TestBoardsView(ConversationRecipes):
 
         response = client.post(url, {"email": manager.email})
 
-        assert response.status_code == 400
-        assert (
-            str(_("This member is already invited."))
-            in response.content.decode()
+        self.assert_manager_error_response(
+            response,
+            _("This manager is already invited."),
         )
         assert not BoardManagerInvitation.objects.filter(board=board).exists()
 
@@ -426,13 +568,43 @@ class TestBoardsView(ConversationRecipes):
         response = client.delete(url)
         invitation.refresh_from_db()
 
-        assert response.status_code == 204
-        assert response.content == b""
+        assert response.status_code == 200
+        self.assert_member_toast(
+            response.content.decode(), _("Removed manager")
+        )
         assert not invitation.is_active
         assert not BoardManager.objects.filter(
             board=board, user=manager
         ).exists()
         assert not manager.has_perm("ej.can_edit_board", board)
+
+    def test_delete_board_manager_invitation_is_scoped_to_board(
+        self, db, mk_board_manager_invitation
+    ):
+        owner = User.objects.create_user("owner@email.br", "password")
+        board = Board.objects.create(
+            slug="board", owner=owner, description="board"
+        )
+        other_board = Board.objects.create(
+            slug="other-board", owner=owner, description="other board"
+        )
+        invitation = mk_board_manager_invitation(
+            other_board,
+            email="manager@email.br",
+            invited_by=owner,
+        )
+        url = reverse(
+            "boards:board-delete_manager_invitation",
+            kwargs={"board_slug": board.slug, "invitation_id": invitation.id},
+        )
+        client = Client()
+        client.force_login(owner)
+
+        response = client.delete(url)
+
+        invitation.refresh_from_db()
+        assert response.status_code == 404
+        assert invitation.is_active
 
     def test_non_owner_cannot_manage_board_invitations(self, db):
         owner = User.objects.create_user("owner@email.br", "password")
@@ -487,12 +659,19 @@ class TestBoardsView(ConversationRecipes):
             "boards:board-create_manager_invitation",
             kwargs={"board_slug": board.slug},
         )
+        edit_url = reverse(
+            "boards:board-edit", kwargs={"board_slug": board.slug}
+        )
         delete_url = reverse(
             "boards:board-delete_manager_invitation",
             kwargs={"board_slug": board.slug, "invitation_id": invitation.id},
         )
         client = Client()
         client.force_login(admin)
+
+        response = client.get(edit_url)
+        assert response.status_code == 200
+        assert b"board-form-members" not in response.content
 
         response = client.post(create_url, {"email": "other@email.br"})
         assert response.status_code == 302

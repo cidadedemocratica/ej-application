@@ -1,0 +1,34 @@
+<div id="board-member-confirm-modal" class="modal__overlay board-form-confirm-modal hide" aria-hidden="true">
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="board-member-modal-title">
+        <h4 id="board-member-modal-title" class="modal__title">{{ _('Add manager') }}</h4>
+        <p class="modal__subtitle">
+            {{ _('By confirming, an invitation will be sent to') }}
+        </p>
+        <p id="board-member-modal-email" class="modal__email"></p>
+        <input type="hidden" id="board-member-modal-email-input" name="email" value="">
+        <p class="modal__subtitle">
+            {{ _('The manager will be allowed to manage the board and its conversations once the invitation is accepted.') }}
+        </p>
+        <p class="modal__subtitle">
+            {{ _('Do you want to send the invitation?') }}
+        </p>
+
+        <div class="modal__buttons">
+            <button type="button" id="board-member-modal-back" class="board-form-members__modal-btn board-form-members__modal-btn--secondary">
+                {{ _('Back') }}
+            </button>
+            <button
+                type="button"
+                id="board-member-modal-yes"
+                class="board-form-members__modal-btn board-form-members__modal-btn--primary"
+                hx-post="{{ url('boards:board-create_manager_invitation', board_slug=board.slug) }}"
+                hx-target="#board-members-table"
+                hx-swap="outerHTML"
+                hx-include="#board-member-modal-email-input"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+            >
+                {{ _('Yes') }}
+            </button>
+        </div>
+    </div>
+</div>

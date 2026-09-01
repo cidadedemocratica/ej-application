@@ -1,20 +1,21 @@
 <!doctype html>
 <html>
+  <head>
+    <meta charset="utf-8">
+  </head>
   <body>
-    <p>{% trans %}Hello, {{ person_name }},{% endtrans %}</p>
+    <p>{% trans %}{{ owner_username }} invited you to collaborate on the conversation <strong>{{ conversation_title }}</strong> on the Empurrando Juntos platform.{% endtrans %}</p>
 
-    <p>{% trans %}You have been granted access to the conversation <strong>{{ conversation_title }}</strong> in the EJ located at {{ site_domain }}.{% endtrans %}</p>
+    <p>{% trans %}By accepting this invitation, you will be able to manage the conversation and its reports, according to the permissions granted.{% endtrans %}</p>
 
-    <p>{% trans %}From now on, you will be able to view and manage this conversation according to the permissions granted to you.{% endtrans %}</p>
-
-    <p>{% trans %}To access it, click the link below:{% endtrans %}</p>
+    <p>{% trans %}To accept the invitation, click the link below:{% endtrans %}</p>
 
     <p><a href="{{ accept_url }}">{{ accept_url }}</a></p>
 
-    <p>{% trans %}If you do not have an EJ account yet, you will need to create one first. After completing your registration, you will be automatically redirected to the conversation.{% endtrans %}</p>
+    <hr />
 
-    <p>{% trans %}This email was sent automatically by the EJ Platform.{% endtrans %}</p>
+    <p>{% trans %}Run opinion polls with Empurrando Juntos and understand how your audience positions itself on a wide range of topics.{% endtrans %}</p>
 
-    <p>{% trans %}If you do not recognize this invitation, please ignore this email.{% endtrans %}</p>
+    <p>{{ site_domain }}</p>
   </body>
 </html>

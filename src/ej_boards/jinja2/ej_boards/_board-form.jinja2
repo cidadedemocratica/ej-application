@@ -6,9 +6,18 @@
 {% set body_class = body_class|default('body conversation-create-page') %}
 {% set board_form_actions_label = board_form_actions_label|default(_('Create Board')) %}
 {% set board_form_actions_icon = board_form_actions_icon|default('/img/icons/user-plus.svg') %}
+{% set board_form_members_enabled = board_form_members_enabled|default(false) %}
+{% set can_manage_members = can_manage_members|default(false) %}
 
 {% block content %}
-    <form class="board-form width-full" method="post" enctype="multipart/form-data">
+    <form
+        id="board-form"
+        class="board-form width-full"
+        method="post"
+        enctype="multipart/form-data"
+        data-manager-email-required-message="{{ _('E-mail is required.') }}"
+        data-manager-invalid-email-message="{{ _('Invalid e-mail.') }}"
+    >
         {{ csrf_input }}
         <section class="board-form-layout content-grid">
             <div>
@@ -42,8 +51,17 @@
                         {{ form.slug.errors }}
                     </div>
                 </div>
+
+                {% if board_form_members_enabled and can_manage_members %}
+                    {% include 'ej_boards/includes/board-form-members.jinja2' %}
+                {% endif %}
             </div>
         </section>
         {% include 'ej_boards/includes/board-form-actions.jinja2' %}
     </form>
+{% endblock %}
+
+{% block javascript %}
+    {{ super() }}
+    <script src="{{ static('/assets/js/board-form.js') }}" defer></script>
 {% endblock %}

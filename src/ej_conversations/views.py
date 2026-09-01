@@ -6,7 +6,6 @@ from typing import Any, Dict
 from django.contrib.auth.decorators import login_required
 from django.contrib.flatpages.models import FlatPage
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.db.models import F
 from django.db.models.query import QuerySet
@@ -628,12 +627,13 @@ class ConversationManagerInvitationView(DetailView):
         return can_manage_conversation_members(request.user, conversation)
 
     def _validate_email(self, request):
-        email = ConversationManagerInvitation.normalize_email(
-            request.POST.get("email")
-        )
         try:
-            validate_email(email)
-            return email, None
+            return (
+                ConversationManagerInvitation.clean_email(
+                    request.POST.get("email")
+                ),
+                None,
+            )
         except ValidationError:
             return None, _("Enter a valid email address.")
 

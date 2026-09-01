@@ -11,10 +11,10 @@ from django.views.generic import (
 )
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 from django.db import IntegrityError, transaction
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -112,6 +112,18 @@ class BoardEditView(UpdateView):
 class BoardManagerInvitationView(DetailView):
     model = Board
     http_method_names = ["post", "delete"]
+    manager_table_template_name = (
+        "ej_boards/includes/board-form-members-table.jinja2"
+    )
+    manager_error_template_name = (
+        "ej_boards/includes/board-form-member-error.jinja2"
+    )
+    manager_error_clear_template_name = (
+        "ej_boards/includes/board-form-member-error-clear.jinja2"
+    )
+    manager_toast_template_name = (
+        "ej_conversations/includes/member-toast-message-area.jinja2"
+    )
 
     def get_queryset(self):
         return Board.objects.select_related("owner")
@@ -131,7 +143,7 @@ class BoardManagerInvitationView(DetailView):
         already_invited, invitation_error = self._already_invited(email, board)
         error = email_error or owner_error or invitation_error
         if email_error or is_owner or already_invited:
-            return HttpResponse(error, status=400)
+            return self._manager_error_response(request, error)
 
         user = User.objects.filter(email__iexact=email).first()
         try:
@@ -143,11 +155,28 @@ class BoardManagerInvitationView(DetailView):
                     invited_by=request.user,
                 )
         except IntegrityError:
-            return HttpResponse(
-                _("This member is already invited."), status=400
+            return self._manager_error_response(
+                request, _("This manager is already invited.")
             )
         self._send_invitation(request, invitation)
-        return HttpResponse(status=201)
+        member_toast(request, _("Manager added"))
+        manager_table = render_to_string(
+            self.manager_table_template_name,
+            {
+                "board": board,
+                "existing_members": board.manager_invitations.active(),
+            },
+            request=request,
+        )
+        manager_error_clear = render_to_string(
+            self.manager_error_clear_template_name,
+            request=request,
+        )
+        return self._manager_success_response(
+            request,
+            f"{manager_table}{manager_error_clear}",
+            status=201,
+        )
 
     def delete(self, request, *args, **kwargs):
         board = self.get_object()
@@ -162,18 +191,36 @@ class BoardManagerInvitationView(DetailView):
         )
         with transaction.atomic():
             invitation.delete_manager()
-        return HttpResponse(status=204)
+        member_toast(request, _("Removed manager"))
+        return self._manager_success_response(request)
+
+    def _manager_success_response(self, request, content="", status=200):
+        toast_area = render_to_string(
+            self.manager_toast_template_name,
+            request=request,
+        )
+        return HttpResponse(f"{content}{toast_area}", status=status)
+
+    def _manager_error_response(self, request, error):
+        response = render(
+            request,
+            self.manager_error_template_name,
+            {"error": error},
+            status=400,
+        )
+        response["HX-Retarget"] = "#board-member-email-error"
+        response["HX-Reswap"] = "outerHTML"
+        return response
 
     def _has_permission(self, request, board):
         return can_manage_board_members(request.user, board)
 
     def _validate_email(self, request):
-        email = BoardManagerInvitation.normalize_email(
-            request.POST.get("email")
-        )
         try:
-            validate_email(email)
-            return email, None
+            return (
+                BoardManagerInvitation.clean_email(request.POST.get("email")),
+                None,
+            )
         except ValidationError:
             return None, _("Enter a valid email address.")
 
@@ -201,7 +248,7 @@ class BoardManagerInvitationView(DetailView):
         if not has_active_invitation and not is_manager:
             return False, None
 
-        return True, _("This member is already invited.")
+        return True, _("This manager is already invited.")
 
     def _send_invitation(self, request, invitation):
         try:

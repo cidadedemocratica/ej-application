@@ -1518,6 +1518,35 @@ class TestConversationEdit(ConversationSetup):
             conversation=new_conversation
         ).exists()
 
+    def test_create_conversation_manager_invitation_rejects_email_over_model_limit(
+        self, base_user, new_conversation
+    ):
+        email = "{}@{}.{}.{}".format(
+            "a" * 64,
+            "b" * 63,
+            "c" * 63,
+            "d" * 62,
+        )
+        url = reverse(
+            "boards:conversation-create_manager_invitation",
+            kwargs=new_conversation.get_url_kwargs(),
+        )
+        client = Client()
+        client.force_login(base_user)
+
+        response = client.post(url, {"email": email})
+
+        assert len(email) == 255
+        assert response.status_code == 400
+        assert response["HX-Retarget"] == "#member-email-error"
+        assert response["HX-Reswap"] == "outerHTML"
+        assert (
+            str(_("Enter a valid email address.")) in response.content.decode()
+        )
+        assert not ConversationManagerInvitation.objects.filter(
+            conversation=new_conversation
+        ).exists()
+
     def test_create_conversation_manager_invitation_rejects_duplicate_active(
         self, base_user, new_conversation, mk_conversation_manager_invitation
     ):
