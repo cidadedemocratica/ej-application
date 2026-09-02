@@ -112,6 +112,8 @@ docker-build:
     DOCKERFILE: docker/Dockerfile-prod
     IMAGE_TAG: $CI_COMMIT_TAG
     FF_TIMESTAMPS: "1"
+  tags:
+    - ej-docker-runner
   rules:
     - if: *job_build
     - if: *new_tag
@@ -147,6 +149,8 @@ black:
   script:
     - poetry install --only dev --no-root
     - poetry run black --check .
+  tags:
+    - ej-docker-runner
   rules:
     - if: *merge_request
 
@@ -158,6 +162,8 @@ ruff:
     - pip install ruff==0.3.7
   script:
     - ruff check
+  tags:
+    - ej-docker-runner
   rules:
     - if: *merge_request
 
@@ -192,5 +198,7 @@ pytest:
         - ej-application/poetry.lock
     paths:
       - ej-application/.venv
+  tags:
+    - ej-docker-runner
   rules:
     - if: *merge_request
