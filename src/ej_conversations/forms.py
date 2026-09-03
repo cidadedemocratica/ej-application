@@ -1,12 +1,11 @@
 from datetime import date, datetime
-import nh3
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 
-from ej.forms import EjModelForm
+from ej.forms import EjModelForm, sanitize_rich_text
 from .models import Comment, Conversation
 
 
@@ -138,17 +137,7 @@ class ConversationForm(forms.ModelForm):
         return title
 
     def _clean_html_field(self, field_name):
-        data = self.cleaned_data.get(field_name, "")
-        return nh3.clean(
-            data,
-            attributes={"*": {"style", "href"}},
-            filter_style_properties={
-                "color",
-                "font-weight",
-                "text-align",
-                "background-color",
-            },
-        )
+        return sanitize_rich_text(self.cleaned_data.get(field_name))
 
     def clean_welcome_message(self):
         return self._clean_html_field("welcome_message")

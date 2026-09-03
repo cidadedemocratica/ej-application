@@ -184,6 +184,8 @@ def get_urlpatterns():
         #
         #  Allauth
         path("accounts/", include("allauth.urls")),
+        # CKEditor 5 upload endpoint
+        path("ckeditor5/", include("django_ckeditor_5.urls")),
         #
         #  REST API
         path("api/v1/", include(api_router.urls)),

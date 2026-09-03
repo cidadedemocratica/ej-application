@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 from ej_conversations.forms import CommentForm, ConversationForm
-from ej_conversations.models import Comment
+from ej_conversations.models import Comment, Conversation
 from ej_boards.models import Board
 
 from django.core.exceptions import ValidationError
@@ -93,9 +93,16 @@ class TestConversationForm:
         )
         assert form.is_valid()
         assert form.cleaned_data["welcome_message"] == "<div></div>"
+        assert form.cleaned_data["ending_message"] == "<div></div>"
 
-    def test_xss_dont_clean_normal_html(self, db):
-        non_xss_script = "<div><b>Hello!</b></div>"
+    def test_rich_text_formatting_is_preserved(self, db):
+        rich_text = (
+            "<p><strong>bold</strong> <u>underlined</u> <s>struck</s> "
+            '<span style="font-family:Arial;color:red;background-color:blue;'
+            'text-align:center;font-weight:bold">formatted</span></p>'
+            "<ol><li>first</li></ol>"
+            '<a href="https://example.com">link</a>'
+        )
         form = ConversationForm(
             {
                 "title": "conversation-slug",
@@ -104,9 +111,38 @@ class TestConversationForm:
                 "comments_count": 1,
                 "comment-1": "comment",
                 "anonymous_votes": 0,
-                "welcome_message": non_xss_script,
-                "ending_message": non_xss_script,
+                "welcome_message": rich_text,
+                "ending_message": rich_text,
             }
         )
         assert form.is_valid()
-        assert form.cleaned_data["welcome_message"] == non_xss_script
+        for field_name in ("welcome_message", "ending_message"):
+            cleaned = form.cleaned_data[field_name]
+            assert "<strong>bold</strong>" in cleaned
+            assert "<u>underlined</u>" in cleaned
+            assert "<s>struck</s>" in cleaned
+            assert "font-family:Arial" in cleaned
+            assert "color:red" in cleaned
+            assert "background-color:blue" in cleaned
+            assert "text-align:center" in cleaned
+            assert "font-weight:bold" in cleaned
+            assert "<ol><li>first</li></ol>" in cleaned
+            assert 'href="https://example.com"' in cleaned
+
+    def test_empty_rich_text_is_prepared_as_empty(self, db):
+        form = ConversationForm(
+            {
+                "title": "conversation-slug",
+                "tags": "tag",
+                "text": "description",
+                "comments_count": 1,
+                "comment-1": "comment",
+                "anonymous_votes": 0,
+                "welcome_message": "<p>&nbsp;</p>",
+                "ending_message": "<p>&nbsp;</p>",
+            }
+        )
+        assert form.is_valid()
+        for field_name in ("welcome_message", "ending_message"):
+            field = Conversation._meta.get_field(field_name)
+            assert field.get_prep_value(form.cleaned_data[field_name]) == ""

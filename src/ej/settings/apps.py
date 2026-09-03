@@ -42,7 +42,7 @@ class InstalledAppsConf(Base, EjOptions):
         "constance",
         "constance.backends.database",
         "anymail",
-        "ckeditor",
+        "django_ckeditor_5",
         "drf_spectacular",
         "jazzmin",
         "django.contrib.admin",

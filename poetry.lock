@@ -1146,19 +1146,23 @@ files = [
 Django = ">=1.8"
 
 [[package]]
-name = "django-ckeditor"
-version = "6.3.2"
-description = "Django admin CKEditor integration."
+name = "django-ckeditor-5"
+version = "0.2.20"
+description = "CKEditor 5 for Django."
 optional = false
-python-versions = "*"
+python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "django-ckeditor-6.3.2.tar.gz", hash = "sha256:ce0c806e40172dbea35330a207632701a6d418314ae8c8fa140fd277d9322c96"},
-    {file = "django_ckeditor-6.3.2-py2.py3-none-any.whl", hash = "sha256:e1580105c9ff6fcaca6345acda1dc01416733027c61c6387e02dd5960b8ade3c"},
+    {file = "django_ckeditor_5-0.2.20-py3-none-any.whl", hash = "sha256:dfff659822fb8d42f55b43265cb51bf8b1e0797dc850e0bf5547644daeaa3fff"},
+    {file = "django_ckeditor_5-0.2.20.tar.gz", hash = "sha256:7c3d67cc8bbce3564108578b8fafe8e752c6ad4fbf45b1ffee821045ba2c0e96"},
 ]
 
 [package.dependencies]
-django-js-asset = ">=1.2.2"
+Django = ">=4.2"
+Pillow = "*"
+
+[package.extras]
+dev = ["bandit[toml] (==1.8.2)", "black (==25.1.0)", "codespell (==2.4.1)", "coverage (==7.6.10)", "mypy (==1.15.0)", "mypy-extensions (==1.0.0)", "pytest (==8.3.4)", "pytest-cov (==6.0.0)", "pytest-django (==4.9.0)", "pytest-mock (==3.14.0)", "safety (==3.2.14)", "tox (==4.23.2)", "tox-gh-actions (==3.2.0)", "types-setuptools (==75.8.0.20250110)", "typing_extensions (==4.12.2)"]
 
 [[package]]
 name = "django-constance"
@@ -1244,24 +1248,6 @@ files = [
 
 [package.dependencies]
 django = ">=4.2"
-
-[[package]]
-name = "django-js-asset"
-version = "3.1.2"
-description = "script tag with additional attributes for django.forms.Media"
-optional = false
-python-versions = ">=3.10"
-groups = ["main"]
-files = [
-    {file = "django_js_asset-3.1.2-py3-none-any.whl", hash = "sha256:b5ffe376aebbd73b7af886d675ac9f43ca63b39540190fa8409c9f8e79145f68"},
-    {file = "django_js_asset-3.1.2.tar.gz", hash = "sha256:1fc7584199ed1941ed7c8e7b87ca5524bb0f2ba941561d2a104e88ee9f07bedd"},
-]
-
-[package.dependencies]
-django = ">=4.2"
-
-[package.extras]
-tests = ["coverage"]
 
 [[package]]
 name = "django-manager-utils"
@@ -5340,4 +5326,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "e3d74071f9cddfba0c0deee464c91153fb854006b5ed1adc59b63cd0563513a2"
+content-hash = "a3ecee8711877da7195a0f5648799b2afe5c8335536f6c50167a49b5c9aed52f"
