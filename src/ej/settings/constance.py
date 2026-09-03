@@ -1,5 +1,7 @@
 import os
 
+from django.utils.translation import gettext_lazy as _
+
 
 class ConstanceConf:
     """
@@ -138,37 +140,32 @@ class ConstanceConf:
 
     EJ_LANDING_PAGE_DOMAIN = os.getenv("{attr}", "/login")
 
-    CKEDITOR_CONFIGS = {
+    CKEDITOR_5_CONFIGS = {
         "default": {
-            "toolbar": "Custom",
-            "toolbar_Custom": [
-                [
-                    "Font",
-                    "Bold",
-                    "Italic",
-                    "Underline",
-                    "Strike",
-                    "TextColor",
-                    "BGColor",
-                    "SpecialChar",
-                    "Undo",
-                    "Redo",
-                ],
-                ["Link", "Unlink", "Smiley", "-"],
-                [
-                    "NumberedList",
-                    "BulletedList",
-                    "-",
-                    "JustifyLeft",
-                    "JustifyCenter",
-                    "JustifyRight",
-                ],
+            "toolbar": [
+                "fontFamily",
+                "|",
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "fontColor",
+                "fontBackgroundColor",
+                "specialCharacters",
+                "undo",
+                "redo",
+                "|",
+                "link",
+                "|",
+                "numberedList",
+                "bulletedList",
+                "alignment",
             ],
-            "width": "auto",
-            "allowedContent": False,
-            "extraPlugins": ",".join(["placeholder"]),
-            "editorplaceholder": "Insira sua mensagem aqui",
-            "removePlugins": "exportpdf",
-            "height": 140,
+            "alignment": {"options": ["left", "center", "right"]},
+            "placeholder": _("Enter your message here"),
+            "language": ["en", "pt-br"],
         },
     }
+
+    CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
+    CKEDITOR_5_MAX_FILE_SIZE = 5

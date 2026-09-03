@@ -3,11 +3,11 @@ import re
 
 from autoslug import AutoSlugField
 from boogie import models, rules
-from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Length
+from django_ckeditor_5.fields import CKEditor5Field
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from ej.components.menu import CustomizeMenuMixin
@@ -136,14 +136,14 @@ class Conversation(HasFavoriteMixin, CustomizeMenuMixin, TimeStampedModel):
         verbose_name=_("Background image"),
         validators=[validate_file_size],
     )
-    welcome_message = RichTextField(
+    welcome_message = CKEditor5Field(
         blank=True,
         null=True,
         help_text=_(
             "A message to be presented to participants before starting voting."
         ),
     )
-    ending_message = RichTextField(
+    ending_message = CKEditor5Field(
         blank=True,
         null=True,
         help_text=_(

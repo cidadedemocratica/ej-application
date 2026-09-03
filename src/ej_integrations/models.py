@@ -1,9 +1,8 @@
-from ckeditor.fields import RichTextField
-
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django_ckeditor_5.fields import CKEditor5Field
 
 from ej_integrations.utils import get_host_with_schema
 from .constants import MAX_CONVERSATION_DOMAINS
@@ -58,7 +57,7 @@ class OpinionComponent(models.Model):
     conversation = models.OneToOneField(
         "ej_conversations.Conversation", on_delete=models.CASCADE
     )
-    final_voting_message = RichTextField()
+    final_voting_message = CKEditor5Field()
 
     def get_upload_url(self, request, filename: str) -> str:
         """

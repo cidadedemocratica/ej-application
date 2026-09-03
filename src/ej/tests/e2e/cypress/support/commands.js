@@ -101,9 +101,11 @@ Cypress.Commands.add('login', () => {
 Cypress.Commands.add('typeCkeditor', {
   prevSubject: true,
 }, (prevSubject, html) => {
- cy.get(prevSubject).invoke('attr', 'id').as('ckeditorInstance');
-
- cy.get('@ckeditorInstance').then((id) => {
-   cy.state('window').CKEDITOR.instances[id].setData(html);
- });
+  return cy.wrap(prevSubject).invoke('attr', 'id').then((id) => {
+    return cy.window().should((window) => {
+      expect(window.editors).to.have.property(id);
+    }).then((window) => {
+      window.editors[id].setData(html);
+    });
+  });
 });

@@ -79,6 +79,21 @@
     }
 
     .form-component {
+        .ck-editor-container,
+        .ck-editor {
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .ck-editor__top {
+            padding: 0;
+        }
+
+        .ck-editor__editable {
+            min-height: 8.75rem;
+        }
+
         &__message {
             margin-top: 0.5rem;
             text-transform: capitalize;
@@ -172,8 +187,4 @@
     #copy-snippet-message {
         display: none;
     }
-}
-
-.cke_top {
-    padding: 0 !important;
 }

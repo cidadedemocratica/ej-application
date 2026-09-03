@@ -40,7 +40,6 @@ gunicorn = "^23.0"
 jinja2 = "2.11.3"
 setuptools = "61.2.0"
 django-anymail = {extras = ["mailgun"], version = "^10.0"}
-django-ckeditor = "6.3.2"
 colorama = "^0.4.6"
 django-boogie = {git = "https://gitlab.com/pencillabs/ej/django-boogie.git", rev = "8f2ec6d0302003d996dac3d0c74e6d3a7feb3764"}
 importlib-metadata = "^7.1.0"
@@ -54,6 +53,7 @@ django-jazzmin = "^3.0.0"
 celery = "^5.6.3"
 whitenoise = "6.12.0"
 nh3 = "^0.3.6"
+django-ckeditor-5 = "^0.2.20"
 
 [tool.poetry.group.dev.dependencies]
 bs4 = "^0.0.1"

@@ -7,7 +7,7 @@ from django.db.models import Q
 
 from ej_boards.forms import PaletteWidget
 from ej_conversations.models import Comment, Conversation
-from ej.forms import EjModelForm
+from ej.forms import EjModelForm, sanitize_rich_text
 from ej_integrations.models import (
     RasaConversation,
     OpinionComponent,
@@ -41,6 +41,9 @@ class OpinionComponentForm(forms.ModelForm):
     class Meta:
         model = OpinionComponent
         fields = "__all__"
+
+    def clean_final_voting_message(self):
+        return sanitize_rich_text(self.cleaned_data.get("final_voting_message"))
 
 
 class MailingToolForm(forms.Form):

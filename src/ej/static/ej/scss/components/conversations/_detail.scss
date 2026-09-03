@@ -166,8 +166,16 @@ $color-brand-conversation-form: rgba(48, 191, 215 , .15);
             margin-top: 0.375rem;
         }
         margin-top: 1.75rem;
-        .django-ckeditor-widget {
+
+        .ck-editor-container,
+        .ck-editor {
             width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .ck-editor__editable {
+            min-height: 8.75rem;
         }
     }
 

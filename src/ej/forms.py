@@ -1,10 +1,45 @@
 from operator import attrgetter
 
+import nh3
+
 from django.forms import Form, ModelForm, widgets
 from django.utils.translation import gettext_lazy as _
 from hyperpython import div, input_
 
 NOT_GIVEN = object()
+RICH_TEXT_TAGS = {
+    "a",
+    "b",
+    "br",
+    "div",
+    "em",
+    "i",
+    "li",
+    "ol",
+    "p",
+    "s",
+    "span",
+    "strong",
+    "u",
+    "ul",
+}
+RICH_TEXT_ATTRIBUTES = {"*": {"style"}, "a": {"href"}}
+RICH_TEXT_STYLE_PROPERTIES = {
+    "background-color",
+    "color",
+    "font-family",
+    "font-weight",
+    "text-align",
+}
+
+
+def sanitize_rich_text(value):
+    return nh3.clean(
+        value or "",
+        tags=RICH_TEXT_TAGS,
+        attributes=RICH_TEXT_ATTRIBUTES,
+        filter_style_properties=RICH_TEXT_STYLE_PROPERTIES,
+    )
 
 
 # TODO: move this functionality to Django-Boogie
