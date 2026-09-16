@@ -4,7 +4,7 @@
 Arquitetura de Software
 =======================
 
-A Empurrando Juntas (EJ), é uma plataforma de pesquisa de opinião que,
+O Empurrando Juntos (EJ), é uma plataforma de pesquisa de opinião que,
 a partir da modelagem de personas, permite agrupar participantes com opiniões
 similares. Este agrupamento (também chamado de *cluster*), permite identificar
 bolhas de opinião que não poderiam ser capturadas

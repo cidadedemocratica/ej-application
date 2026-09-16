@@ -4,7 +4,7 @@ from boogie.configurations import Conf
 
 env = environ.Env(
     DEFAULT_FROM_EMAIL=(str, "cd@cidadedemocratica.org.br"),
-    DEFAULT_FROM_NAME=(str, "Empurrando Juntas"),
+    DEFAULT_FROM_NAME=(str, "Empurrando Juntos"),
     MAILGUN_API_KEY=(str, ""),
     MAILGUN_SENDER_DOMAIN=(str, ""),
     EMAIL_HOST=(str, ""),

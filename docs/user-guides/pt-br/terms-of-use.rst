@@ -16,7 +16,7 @@ do registro.
 Texto base para LGPD
 --------------------
 
-Este documento contém os Termos de Uso da plataforma digital Empurrando Juntas (EJ), cuja aceitação plena e integral é requisito para todos os seus USUÁRIOS. Ele inclui, além de regras gerais de uso, política de moderação, política de responsabilidade, política de privacidade e confidencialidade, autorização de uso do conteúdo e contato para reportar violações, problemas no funcionamento e pleitos.
+Este documento contém os Termos de Uso da plataforma digital Empurrando Juntos (EJ), cuja aceitação plena e integral é requisito para todos os seus USUÁRIOS. Ele inclui, além de regras gerais de uso, política de moderação, política de responsabilidade, política de privacidade e confidencialidade, autorização de uso do conteúdo e contato para reportar violações, problemas no funcionamento e pleitos.
 
 O USUÁRIO deverá ler, certificar-se de haver entendido e aceitar todas as condições aqui estabelecidas antes de seu cadastro. Sua atuação na PLATAFORMA, cadastrado ou não, implica no reconhecimento e na plena aceitação das condições descritas nestes Termos de Uso, às quais estará submetido.
 

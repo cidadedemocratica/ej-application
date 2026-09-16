@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-31 15:05-0300\n"
+"POT-Creation-Date: 2026-09-16 19:25-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -68,11 +68,11 @@ msgstr "Tamanho da fonte"
 msgid "Toggle Contrast"
 msgstr "Alto contraste"
 
-#: src/ej/forms.py:150
+#: src/ej/forms.py:185
 msgid "Choose a file"
 msgstr "Escolha um arquivo"
 
-#: src/ej/forms.py:152
+#: src/ej/forms.py:187
 msgid "No file chosen"
 msgstr "Nenhum arquivo selecionado"
 
@@ -105,6 +105,11 @@ msgstr "Lista de papéis"
 #: src/ej/roles/tags.py:14
 msgid "hello"
 msgstr "olá"
+
+#: src/ej/settings/constance.py:165
+#, fuzzy
+msgid "Enter your message here"
+msgstr "Escreva seu comentário aqui"
 
 #: src/ej/settings/options.py:31
 msgid "EJ Platform"
@@ -474,37 +479,37 @@ msgstr "Concorda"
 msgid "Disagree"
 msgstr "Discorda"
 
-#: src/ej_conversations/forms.py:24
+#: src/ej_conversations/forms.py:23
 msgid "Give your opinion here"
 msgstr "Dê a sua opinião aqui"
 
-#: src/ej_conversations/forms.py:27
+#: src/ej_conversations/forms.py:26
 msgid "Suggest a new comment"
 msgstr "Sugira um novo comentário"
 
-#: src/ej_conversations/forms.py:38 src/ej_conversations/tests/test_forms.py:76
+#: src/ej_conversations/forms.py:37 src/ej_conversations/tests/test_forms.py:76
 msgid "You already submitted this comment."
 msgstr "Você já enviou este comentário."
 
-#: src/ej_conversations/forms.py:79
+#: src/ej_conversations/forms.py:78
 msgid "Tags"
 msgstr "Temas"
 
-#: src/ej_conversations/forms.py:80
+#: src/ej_conversations/forms.py:79
 msgid "Tags, separated by commas."
 msgstr "Temas, separados por vírgula."
 
-#: src/ej_conversations/forms.py:85 src/ej_conversations/forms.py:88
+#: src/ej_conversations/forms.py:84 src/ej_conversations/forms.py:87
 #: src/ej_conversations/models/conversation.py:129
 #: src/ej_conversations/models/conversation.py:136
 msgid "Background image"
 msgstr "Imagem de fundo"
 
-#: src/ej_conversations/forms.py:92 src/ej_conversations/forms.py:95
+#: src/ej_conversations/forms.py:91 src/ej_conversations/forms.py:94
 msgid "Logo"
 msgstr "Logotipo"
 
-#: src/ej_conversations/forms.py:136
+#: src/ej_conversations/forms.py:135
 #, fuzzy
 msgid "This title already exists!"
 msgstr "Esse título já existe."
@@ -965,49 +970,49 @@ msgstr "canal"
 msgid "Integrations"
 msgstr "Integrações"
 
-#: src/ej_integrations/forms.py:48
+#: src/ej_integrations/forms.py:51
 msgid "Template type"
 msgstr "Tipo de template"
 
-#: src/ej_integrations/forms.py:56
+#: src/ej_integrations/forms.py:59
 msgid "Theme"
 msgstr "Tema"
 
-#: src/ej_integrations/forms.py:62
+#: src/ej_integrations/forms.py:65
 #, fuzzy
 msgid "Redirect user to a custom domain (optional)"
 msgstr "URL para redirecionamento (opcional)."
 
-#: src/ej_integrations/forms.py:66
+#: src/ej_integrations/forms.py:69
 msgid "Adds a custom title to the template (optional)."
 msgstr "Adicione um título customizado ao template (opcional)."
 
-#: src/ej_integrations/forms.py:71
+#: src/ej_integrations/forms.py:74
 msgid "selects a specific comment for user to vote (optional)."
 msgstr "Selecione um comentário específico para o usuário votar (opcional)."
 
-#: src/ej_integrations/forms.py:95
+#: src/ej_integrations/forms.py:98
 #: src/ej_integrations/tests/test_rasa_integrations.py:61
 #, fuzzy
 msgid "Rasa conversation with this Conversation and Domain already exists."
 msgstr "Uma conexão com esse nome já existe nessa conversa."
 
-#: src/ej_integrations/forms.py:100
+#: src/ej_integrations/forms.py:103
 #, python-format
 msgid ""
 "Site already integrated with conversation %(conversation)s, try another url."
 msgstr ""
 "Esse site já está integrado com a conversa %(conversation)s, tente outra url."
 
-#: src/ej_integrations/models.py:25
+#: src/ej_integrations/models.py:24
 msgid "Domain"
 msgstr "Domínio"
 
-#: src/ej_integrations/models.py:27
+#: src/ej_integrations/models.py:26
 msgid "The domain that the rasa bot webchat is hosted."
 msgstr "O domínio do site que hospeda o webchat do rasa bot."
 
-#: src/ej_integrations/models.py:48
+#: src/ej_integrations/models.py:47
 #: src/ej_integrations/tests/test_rasa_integrations.py:112
 #, fuzzy
 msgid "a conversation can have a maximum of five domains"
@@ -1045,7 +1050,7 @@ msgid ""
 "Platform,is an opinion consultation platform focused on States and "
 "Organizations.We would like your participation in the following discussion:"
 msgstr ""
-"Eu sou a assistente virtual da plataforma EJ. A Empurrando Juntos, ou "
+"Eu sou a assistente virtual da plataforma EJ. O Empurrando Juntos, ou "
 "Platforma EJ, é uma plataforma de consultas de opinião com foco em Estado e "
 "Organizações. Gostaríamos da sua participação na seguinte discussão: "
 
@@ -1082,7 +1087,7 @@ msgid ""
 "Platform, is an opinion consultation platform focused on the State and "
 "Organizations. We would like your participation in the following discussion:"
 msgstr ""
-"Eu sou a assistente virtual da plataforma EJ. A Empurrando Juntos, ou "
+"Eu sou a assistente virtual da plataforma EJ. O Empurrando Juntos, ou "
 "Platforma EJ, é uma plataforma de consultas de opinião com foco em Estado e "
 "Organizações. Gostaríamos da sua participação na seguinte discussão: "
 
@@ -3643,8 +3648,8 @@ msgid ""
 "Something went wrong! Check if you are accessing an official Pushing "
 "Together URL."
 msgstr ""
-"Algo deu errado! Verifique se você está acessando uma URL oficial da "
-"Empurrando Juntas."
+"Algo deu errado! Verifique se você está acessando uma URL oficial do "
+"Empurrando Juntos."
 
 #: src/ej_integrations/jinja2/ej_integrations/webchat.jinja2:20
 #, fuzzy
@@ -3861,7 +3866,7 @@ msgstr "nova página"
 #: src/ej_integrations/jinja2/ej_integrations/webchat/webchat-preview-card.jinja2:4
 #, fuzzy
 msgid "Webchat in EJ"
-msgstr "Webchat na EJ"
+msgstr "Webchat no EJ"
 
 #: src/ej_integrations/jinja2/ej_integrations/webchat/webchat-preview-card.jinja2:5
 msgid ""
@@ -4314,7 +4319,7 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ "After completing your registration, you will be automatically redirected "
 #~ "to the board."
 #~ msgstr ""
-#~ "Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
+#~ "Caso você ainda não tenha cadastro no EJ, será necessário criar sua conta "
 #~ "primeiro. Após concluir o cadastro, você será direcionado automaticamente "
 #~ "para a conversa."
 
@@ -4329,7 +4334,7 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ "After completing your registration, you will be automatically redirected "
 #~ "to the conversation."
 #~ msgstr ""
-#~ "Caso você ainda não tenha cadastro na EJ, será necessário criar sua conta "
+#~ "Caso você ainda não tenha cadastro no EJ, será necessário criar sua conta "
 #~ "primeiro. Após concluir o cadastro, você será direcionado automaticamente "
 #~ "para a conversa."
 

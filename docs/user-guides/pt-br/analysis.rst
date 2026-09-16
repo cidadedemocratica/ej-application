@@ -2,7 +2,7 @@
 Analisando uma conversa
 ************************
 
-A Empurrando Juntas possui um conjunto de visualizações para analisar os
+O Empurrando Juntos possui um conjunto de visualizações para analisar os
 resultados de uma conversa. É importante ressaltar que o nível de confiabilidade
 dos resultados apresentados pela plataforma dependem do volume de opiniões
 coletadas. Quanto mais participantes votando e comentando, mais precisos

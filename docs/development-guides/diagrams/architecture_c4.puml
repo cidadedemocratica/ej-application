@@ -10,7 +10,7 @@ Person(admin, "Administrador", "Pessoa com total permissão sobre o ambiente de 
 Person(researcher, "Pesquisador", "Pessoa interessada em ouvir a opinião do público.")
 Person(users, "Participantes", "Votam e adicionam comentários em uma conversa.", $sprite="users")
 
-System_Boundary(c1, "Sistema Empurrando Juntas (EJ)") {
+System_Boundary(c1, "Sistema Empurrando Juntos (EJ)") {
     Container(django, "Aplicação Web", "Gunicorn (Django)", "Permite gerenciar conversas e demais recursos relacionados ao processo de pesquisa de opinião.")
     Container(drf, "API", "Gunicorn (Django)", "Permite consumir parte das funcionalidades da aplicação Web via uma interface REST")
     ContainerDb(django_db, "Banco de dados relacional", "Postgresql", "Permite armazenar e recuperar registros relacionados à aplicação web")

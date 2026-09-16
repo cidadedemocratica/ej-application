@@ -2,7 +2,7 @@
 Guia para contribuição
 =======================
 
-Para contribuir com o código da Empurrando Juntas, algumas boas práticas de programação
+Para contribuir com o código do Empurrando Juntos, algumas boas práticas de programação
 devem ser seguidas. Esse guia apresenta como abrir
 bons *merge requests*, além de sugestões de boas práticas de programação adotadas pelo projeto.
 
