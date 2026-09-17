@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-16 19:25-0300\n"
+"POT-Creation-Date: 2026-09-17 14:17-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -2066,9 +2066,11 @@ msgstr "Ações de formulário do mural"
 
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:3
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:33
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:3
+#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:27
 #, fuzzy
 msgid "Add manager"
-msgstr "Adicionar admin"
+msgstr "Adicionar gestor"
 
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-member-modal.jinja2:5
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:5
@@ -2109,7 +2111,7 @@ msgstr "Sim"
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-member-remove-modal.jinja2:3
 #, fuzzy
 msgid "Remove manager"
-msgstr "Remover admin"
+msgstr "Remover gestor"
 
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-member-remove-modal.jinja2:5
 #, fuzzy
@@ -2148,7 +2150,7 @@ msgstr "Gestores da conversa"
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:6
 #, fuzzy
 msgid "Add managers to your board"
-msgstr "Adicione pessoas gestoras na sua conversa"
+msgstr "Adicione pessoas gestoras ao seu mural"
 
 #: src/ej_boards/jinja2/ej_boards/includes/board-form-members.jinja2:19
 #, fuzzy
@@ -2859,11 +2861,6 @@ msgstr "Compartilhe essa conversa"
 msgid "Conversation form actions"
 msgstr "Ações do formulário de conversa"
 
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:3
-#, fuzzy
-msgid "Add member"
-msgstr "Adicionar membro"
-
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-member-modal.jinja2:10
 #, fuzzy
 msgid ""
@@ -2894,11 +2891,6 @@ msgstr "Adicionar membros"
 #, fuzzy
 msgid "Add managers to your conversation"
 msgstr "Adicione pessoas gestoras na sua conversa"
-
-#: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:27
-#, fuzzy
-msgid "Add admin"
-msgstr "Adicionar admin"
 
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-members.jinja2:31
 #: src/ej_conversations/jinja2/ej_conversations/includes/conversation-form-tabs.jinja2:49
@@ -4300,6 +4292,10 @@ msgstr "Logar com conta "
 #: src/ej_users/jinja2/ej_users/includes/terms.jinja2:6
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
+
+#, fuzzy
+#~ msgid "Add member"
+#~ msgstr "Adicionar membro"
 
 #, python-format
 #~ msgid "Hello, %(person_name)s,"
