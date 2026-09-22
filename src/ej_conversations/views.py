@@ -224,9 +224,13 @@ class UserConversationsFilterByTag(ConversationsFilterByTag):
 class BoardConversationsView(ConversationView):
     template_name = "ej_conversations/board-conversations-list.jinja2"
 
+    def get_board(self) -> Board:
+        if not hasattr(self, "_board"):
+            self._board = Board.objects.get(slug=self.kwargs.get("board_slug"))
+        return self._board
+
     def get_queryset(self) -> QuerySet[Any]:
         user = self.request.user
-        board_slug = self.kwargs.get("board_slug", None)
         annotations = (
             "n_votes",
             "n_comments",
@@ -236,8 +240,8 @@ class BoardConversationsView(ConversationView):
             "author_name",
         )
 
-        if board_slug:
-            board = Board.objects.get(slug=board_slug)
+        if self.kwargs.get("board_slug"):
+            board = self.get_board()
             queryset = board.conversations.annotate_attr(board=board)
         else:
             queryset = Conversation.objects.filter(is_promoted=True)
@@ -248,20 +252,32 @@ class BoardConversationsView(ConversationView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         user = self.request.user
-        board_slug = self.kwargs.get("board_slug", None)
-        board = Board.objects.get(slug=board_slug)
+        board = self.get_board()
+        conversations = getattr(self, "object_list", None)
+        if conversations is None:
+            conversations = self.get_queryset()
+
         user_boards = Board.objects.accessible_by(user)
 
         return {
-            "conversations": self.get_queryset(),
+            "conversations": conversations,
             "title": _(board.title),
             "subtitle": _("Participate voting and creating comments!"),
             "board": board,
             "user_boards": user_boards,
             "current_page": board.slug,
+            "board_was_just_created": False,
+            "board_is_empty": not conversations.exists(),
             "can_delete_board": user.has_perm("ej.can_delete_board", board)
             and user.has_more_than_one_board(),
         }
+
+
+class BoardCreatedView(BoardConversationsView):
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["board_was_just_created"] = True
+        return context
 
 
 class ConversationWelcomeView(ConversationCommonView, DetailView):
@@ -391,12 +407,7 @@ class ConversationCreateView(CreateView):
                     self.request.user, request.FILES, **kwargs
                 )
 
-            return redirect(
-                reverse(
-                    "boards:conversation-detail",
-                    kwargs=conversation.get_url_kwargs(),
-                )
-            )
+            return redirect(conversation.board.get_absolute_url())
 
         return render(
             request,

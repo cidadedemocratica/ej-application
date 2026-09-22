@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-17 14:17-0300\n"
+"POT-Creation-Date: 2026-09-21 22:12-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -214,46 +214,62 @@ msgstr "Convites para gestores de conversas"
 msgid "Authentication credentials were not provided."
 msgstr "Credenciais de autenticação não foram fornecidas."
 
-#: src/ej_boards/tests/test_views.py:342 src/ej_boards/views.py:162
+#: src/ej_boards/tests/test_views.py:115
+msgid "Congratulations! You have just created a board."
+msgstr "Parabéns! Você acabou de criar um mural."
+
+#: src/ej_boards/tests/test_views.py:117
+msgid "Ready to create your first conversation?"
+msgstr "Pronto para criar sua primeira conversa?"
+
+#: src/ej_boards/tests/test_views.py:118
+msgid "Let's go"
+msgstr "Vamos lá"
+
+#: src/ej_boards/tests/test_views.py:133
+msgid "This board has no conversations yet."
+msgstr "Este mural ainda não tem conversas."
+
+#: src/ej_boards/tests/test_views.py:394 src/ej_boards/views.py:168
 #, fuzzy
 msgid "Manager added"
 msgstr "Membro adicionado"
 
-#: src/ej_boards/tests/test_views.py:413 src/ej_boards/views.py:235
+#: src/ej_boards/tests/test_views.py:465 src/ej_boards/views.py:241
 #, fuzzy
 msgid "The board owner cannot be added as a manager."
 msgstr "O proprietário da conversa não pode ser adicionado como gestor."
 
-#: src/ej_boards/tests/test_views.py:436 src/ej_boards/tests/test_views.py:465
-#: src/ej_boards/views.py:225 src/ej_conversations/tests/test_views.py:1515
-#: src/ej_conversations/tests/test_views.py:1544
-#: src/ej_conversations/views.py:638
+#: src/ej_boards/tests/test_views.py:488 src/ej_boards/tests/test_views.py:517
+#: src/ej_boards/views.py:231 src/ej_conversations/tests/test_views.py:1508
+#: src/ej_conversations/tests/test_views.py:1537
+#: src/ej_conversations/views.py:649
 #, fuzzy
 msgid "Enter a valid email address."
 msgstr "Insira um endereço de e-mail válido."
 
-#: src/ej_boards/tests/test_views.py:492 src/ej_boards/tests/test_views.py:522
-#: src/ej_boards/tests/test_views.py:543 src/ej_boards/views.py:159
-#: src/ej_boards/views.py:251
+#: src/ej_boards/tests/test_views.py:544 src/ej_boards/tests/test_views.py:574
+#: src/ej_boards/tests/test_views.py:595 src/ej_boards/views.py:165
+#: src/ej_boards/views.py:257
 #, fuzzy
 msgid "This manager is already invited."
 msgstr "Este membro já foi convidado."
 
-#: src/ej_boards/tests/test_views.py:573 src/ej_boards/views.py:194
+#: src/ej_boards/tests/test_views.py:625 src/ej_boards/views.py:200
 #, fuzzy
 msgid "Removed manager"
 msgstr "Membro removido"
 
-#: src/ej_boards/tests/test_views.py:731 src/ej_boards/views.py:290
-#: src/ej_conversations/tests/test_views.py:1702
-#: src/ej_conversations/views.py:698
+#: src/ej_boards/tests/test_views.py:783 src/ej_boards/views.py:296
+#: src/ej_conversations/tests/test_views.py:1695
+#: src/ej_conversations/views.py:709
 #, fuzzy
 msgid "Invitation accepted."
 msgstr "Convite aceito."
 
-#: src/ej_boards/tests/test_views.py:817 src/ej_boards/views.py:282
-#: src/ej_conversations/tests/test_views.py:1774
-#: src/ej_conversations/views.py:690
+#: src/ej_boards/tests/test_views.py:869 src/ej_boards/views.py:288
+#: src/ej_conversations/tests/test_views.py:1767
+#: src/ej_conversations/views.py:701
 msgid "This invitation was sent to a different email address."
 msgstr "Este convite foi enviado para um endereço de e-mail diferente."
 
@@ -265,7 +281,7 @@ msgstr "Identificador inválido."
 msgid "Slug cannot contain a backslash character."
 msgstr "O identificador não pode conter uma barra."
 
-#: src/ej_boards/views.py:92
+#: src/ej_boards/views.py:98
 msgid "You cannot change this value"
 msgstr "Você não pode mudar este valor"
 
@@ -787,29 +803,29 @@ msgstr " de "
 msgid "Participate"
 msgstr "Participar"
 
-#: src/ej_conversations/tests/test_views.py:1252
-#: src/ej_conversations/views.py:605
+#: src/ej_conversations/tests/test_views.py:1245
+#: src/ej_conversations/views.py:616
 #, fuzzy
 msgid "Removed member"
 msgstr "Membro removido"
 
-#: src/ej_conversations/tests/test_views.py:1376
-#: src/ej_conversations/tests/test_views.py:1464
-#: src/ej_conversations/views.py:562
+#: src/ej_conversations/tests/test_views.py:1369
+#: src/ej_conversations/tests/test_views.py:1457
+#: src/ej_conversations/views.py:573
 #, fuzzy
 msgid "Member added"
 msgstr "Membro adicionado"
 
-#: src/ej_conversations/tests/test_views.py:1488
-#: src/ej_conversations/views.py:650
+#: src/ej_conversations/tests/test_views.py:1481
+#: src/ej_conversations/views.py:661
 #, fuzzy
 msgid "The conversation owner cannot be added as a manager."
 msgstr "O proprietário da conversa não pode ser adicionado como gestor."
 
-#: src/ej_conversations/tests/test_views.py:1573
-#: src/ej_conversations/tests/test_views.py:1603
-#: src/ej_conversations/tests/test_views.py:1628
-#: src/ej_conversations/views.py:559 src/ej_conversations/views.py:668
+#: src/ej_conversations/tests/test_views.py:1566
+#: src/ej_conversations/tests/test_views.py:1596
+#: src/ej_conversations/tests/test_views.py:1621
+#: src/ej_conversations/views.py:570 src/ej_conversations/views.py:679
 msgid "This member is already invited."
 msgstr "Este membro já foi convidado."
 
@@ -835,7 +851,7 @@ msgstr "O tamanho máximo do arquivo deve ser 5 MB"
 msgid "Manage!"
 msgstr "Gerenciar!"
 
-#: src/ej_conversations/views.py:258
+#: src/ej_conversations/views.py:265
 msgid "Participate voting and creating comments!"
 msgstr "Participe com votos e comentários!"
 
@@ -2327,6 +2343,7 @@ msgid "create persona"
 msgstr "Criar persona"
 
 #: src/ej_clusters/jinja2/ej_clusters/stereotype-votes/edit-stereotype-buttons.jinja2:4
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:45
 #, fuzzy
 msgid "delete"
 msgstr "Excluir"
@@ -2337,6 +2354,7 @@ msgid "delete persona"
 msgstr "Excluir persona"
 
 #: src/ej_clusters/jinja2/ej_clusters/stereotype-votes/edit-stereotype-buttons.jinja2:10
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:42
 msgid "edit"
 msgstr "editar"
 
@@ -2494,7 +2512,20 @@ msgstr "Texto adicional a ser apresentado na tela de boas-vindas."
 msgid "Text to be presented at the end of the collection"
 msgstr "Texto a ser apresentado no final da coleta"
 
-#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:27
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:41
+msgid "You can also "
+msgstr "Você também pode "
+
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:44
+#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/export-data.jinja2:21
+msgid "or"
+msgstr "ou"
+
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:47
+msgid "this board."
+msgstr "este mural."
+
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:65
 #, fuzzy
 msgid ""
 "Welcome to EJ. This is your personal board. Board is where your "
@@ -2505,27 +2536,27 @@ msgstr ""
 "disponíveis. Clique no botão “Nova conversa” para começar a ouvir a opinião "
 "da sua audiência."
 
-#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:38
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:76
 #, fuzzy
 msgid "Board statistics"
 msgstr "Estatísticas"
 
-#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:41
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:79
 #, fuzzy
 msgid "Total votes"
 msgstr "Total de votos"
 
-#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:44
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:82
 #, fuzzy
 msgid "Total participants"
 msgstr "Total de participantes"
 
-#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:47
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:85
 #, fuzzy
 msgid "Total conversations"
 msgstr "Conversas hospedadas"
 
-#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:54
+#: src/ej_conversations/jinja2/ej_conversations/board-conversations-list.jinja2:92
 #: src/ej_conversations/jinja2/ej_conversations/includes/participant-menu.jinja2:12
 #: src/ej_profiles/jinja2/ej_profiles/home.jinja2:17
 #, fuzzy
@@ -3313,10 +3344,6 @@ msgstr "Relatório de Participantes"
 #, fuzzy
 msgid "Export"
 msgstr "Exportar"
-
-#: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/export-data.jinja2:21
-msgid "or"
-msgstr "ou"
 
 #: src/ej_dataviz/jinja2/ej_dataviz/reports/includes/filters-macro.jinja2:10
 #, fuzzy
@@ -5939,9 +5966,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #~ msgid "Disagree: {pc}"
 #~ msgstr "Discordo: {pc}"
-
-#~ msgid "Congratulations! You have successfully logged in."
-#~ msgstr "Parabéns! Bem vindo ao EJ."
 
 #~ msgid "Text for your comment"
 #~ msgstr "Texto do seu comentário"

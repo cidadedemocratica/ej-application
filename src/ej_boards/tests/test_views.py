@@ -82,6 +82,57 @@ class TestBoardsView(ConversationRecipes):
         assert b"participant-menu" not in response.content
         assert b"board-form-members" not in response.content
 
+    def test_create_view_renders_created_board_onboarding(self, db):
+        user = User.objects.create_user("creator@email.br", "password")
+        client = Client()
+        client.force_login(user)
+
+        response = client.post(
+            reverse("boards:board-create"),
+            {
+                "title": "Created board",
+                "description": "Board created during the test",
+                "slug": "created-board",
+            },
+        )
+
+        board = Board.objects.get(slug="created-board")
+        created_url = reverse(
+            "boards:conversation-created", kwargs={"board_slug": board.slug}
+        )
+        assert response.status_code == 302
+        assert response.url == created_url
+
+        response = client.get(created_url)
+
+        content = response.content.decode()
+        assert response.context["board_is_empty"]
+        assert response.context["board_was_just_created"]
+        assert b"participant-menu" in response.content
+        assert "board-detail__onboarding--created" in content
+        assert "/img/icons/board-created.svg" in content
+        assert (
+            str(_("Congratulations! You have just created a board.")) in content
+        )
+        assert str(_("Ready to create your first conversation?")) in content
+        assert str(_("Let's go")) in content
+        assert "board-detail__onboarding-cta" in content
+        assert "board-detail__onboarding-action--edit" in content
+        assert "board-detail__onboarding-action--delete" in content
+        assert "/img/icons/board-is-empty.svg" not in content
+        assert "board-detail__statistics-container" not in content
+        assert "alternate-cards" not in content
+
+        response = client.get(board.get_absolute_url())
+
+        content = response.content.decode()
+        assert response.context["board_is_empty"]
+        assert not response.context["board_was_just_created"]
+        assert "board-detail__onboarding--empty" in content
+        assert "/img/icons/board-is-empty.svg" in content
+        assert str(_("This board has no conversations yet.")) in content
+        assert "/img/icons/board-created.svg" not in content
+
     def test_edit_view_renders_breadcrumb_without_side_menu(self, db):
         user = User.objects.create_user("user@email.br", "password")
         board = Board.objects.create(
@@ -285,10 +336,11 @@ class TestBoardsView(ConversationRecipes):
         assert b"board-form-members" not in response.content
 
         response = client.get(board.get_absolute_url())
-        create_button = (
-            f'<a class="is-primary button square" href="{create_url}">'.encode()
+        assert b"board-detail__onboarding-cta" not in response.content
+        assert b"board-detail__onboarding-action--edit" in response.content
+        assert (
+            b"board-detail__onboarding-action--delete" not in response.content
         )
-        assert create_button not in response.content
 
         response = client.post(delete_url)
         assert response.status_code == 302

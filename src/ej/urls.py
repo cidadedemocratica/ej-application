@@ -196,13 +196,19 @@ def get_urlpatterns():
             SpectacularSwaggerView.as_view(url_name="schema"),
             name="swagger",
         ),
-        # Static files for the dev server
-        *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-        *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
         *get_apps_dynamic_urls(),
     ]
 
     if settings.DEBUG:
+        # Static files for the development server.
+        patterns.extend(
+            [
+                *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+                *static(
+                    settings.STATIC_URL, document_root=settings.STATIC_ROOT
+                ),
+            ]
+        )
         # Pages for error codes
         patterns.extend(
             [

@@ -449,10 +449,7 @@ class TestConversationCreate(ConversationSetup):
         )
         assert response.status_code == 302
         conversation = Conversation.objects.last()
-        assert (
-            response.url
-            == f"/boards/userboard/conversations/{conversation.id}/whatever/"
-        )
+        assert response.url == conversation.board.get_absolute_url()
         assert not conversation.is_promoted
         assert conversation.board == base_board
 
@@ -568,9 +565,7 @@ class TestConversationCreate(ConversationSetup):
         )
         assert response.status_code == 302
         conversation = Conversation.objects.first()
-        assert response.url == reverse(
-            "boards:conversation-detail", kwargs=conversation.get_url_kwargs()
-        )
+        assert response.url == conversation.board.get_absolute_url()
         assert not conversation.is_promoted
         assert conversation.board == base_board
 
@@ -597,9 +592,7 @@ class TestConversationCreate(ConversationSetup):
         )
         assert response.status_code == 302
         conversation = Conversation.objects.first()
-        assert response.url == reverse(
-            "boards:conversation-detail", kwargs=conversation.get_url_kwargs()
-        )
+        assert response.url == conversation.board.get_absolute_url()
         assert not conversation.is_promoted
         assert conversation.board == base_board
 
@@ -2317,7 +2310,16 @@ class TestPrivateConversations(ConversationRecipes):
         client.login(email="tester@email.br", password="password")
         response = client.get(user_url)
 
+        content = response.content.decode()
         assert len(response.context["conversations"]) == 3
+        assert not response.context["board_is_empty"]
+        assert not response.context["board_was_just_created"]
+        assert "board-detail__onboarding" not in content
+        assert 'class="alternate-cards"' in content
+        assert (
+            f'href="{reverse("boards:dataviz-dashboard", kwargs=first_conversation.get_url_kwargs())}"'
+            in content
+        )
         assert first_conversation in response.context["conversations"]
         assert second_conversation in response.context["conversations"]
         assert len(response.context["user_boards"]) == 2
@@ -2330,6 +2332,8 @@ class TestPrivateConversations(ConversationRecipes):
         response = logged_admin.get(admin_url)
 
         assert len(response.context["conversations"]) == 1
+        assert not response.context["board_is_empty"]
+        assert not response.context["board_was_just_created"]
         assert hiden_conversation in response.context["conversations"]
 
     def test_anonymous_user_should_not_access_board_conversations(
