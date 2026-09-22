@@ -62,7 +62,13 @@ class BoardCreateView(CreateView):
         form = context["form"]
         if form.is_valid_post():
             board = form.save(owner=self.request.user)
-            return redirect(board.get_absolute_url())
+            return redirect(
+                reverse(
+                    "boards:conversation-created",
+                    kwargs={"board_slug": board.slug},
+                )
+            )
+
         return render(self.request, self.template_name, context)
 
     def get_context_data(self):

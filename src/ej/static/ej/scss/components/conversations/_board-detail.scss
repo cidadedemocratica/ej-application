@@ -1,18 +1,119 @@
 .board-detail {
+    &--onboarding {
+        background: $color-brand-lighter;
+        min-height: calc(100vh - 3rem);
+    }
+
+    &__onboarding {
+        align-items: center;
+        box-sizing: border-box;
+        color: $color-board-onboarding-text;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 3rem);
+        padding: 5.125rem 1.5rem 3rem;
+        text-align: center;
+
+        &-heading {
+            color: $color-accent;
+            font-size: 1.5em;
+            font-weight: 700;
+            line-height: 1;
+            margin: 0;
+            max-width: 30rem;
+        }
+
+        &-illustration {
+            height: auto;
+            margin-top: 2.25rem;
+            max-width: 100%;
+            width: 10.875rem;
+        }
+
+        &-prompt {
+            color: $color-board-onboarding-text;
+            font-size: 1.5em;
+            font-weight: 400;
+            line-height: 1;
+            margin: 2.25rem 0 0;
+            max-width: 30rem;
+        }
+
+        &-cta {
+            align-items: center;
+            background: $color-board-onboarding-text;
+            border: 0;
+            border-radius: 0.3125rem;
+            box-sizing: border-box;
+            color: $color-white;
+            display: flex;
+            font-size: 1em;
+            font-weight: 500;
+            height: 3.3125rem;
+            justify-content: center;
+            line-height: 1;
+            margin-top: 1.5rem;
+            padding: 0;
+            text-decoration: none;
+            text-transform: none;
+            width: 7rem;
+
+            &:hover,
+            &:focus-visible {
+                background: lighten($color-board-onboarding-text, 8%) !important;
+                color: $color-white;
+            }
+
+            &:focus-visible {
+                outline: 0.125rem solid $color-accent;
+                outline-offset: 0.125rem;
+            }
+        }
+
+        &-actions {
+            color: $color-board-onboarding-text;
+            font-size: 1em;
+            font-weight: 600;
+            line-height: 1.5em;
+            margin: 3.125rem 0 0;
+        }
+
+        &-action {
+            color: inherit;
+            text-decoration: underline;
+
+            &:hover,
+            &:focus-visible {
+                color: inherit;
+            }
+        }
+
+        @media screen and (max-width: 559px) {
+            min-height: calc(100vh - 3rem);
+            padding: 3rem 1rem 2rem;
+
+            &-heading,
+            &-prompt {
+                max-width: 20rem;
+            }
+
+        }
+    }
+
     .button-container {
         display: flex;
         gap: 2.1875rem;
         margin-top: 1.5rem;
-    
+
         &__edit-button, &__delete-button {
             font-size: 0.75em;
         }
-    
+
         &__delete-button {
             color: $color-red-negative;
         }
     }
-    
+
     &__description {
         color: $color-gray-darker;
     }
@@ -42,23 +143,23 @@
         place-items: baseline;
         justify-content: space-between;
         padding-bottom: 1rem;
-    
+
         &--left-side {
             display: flex;
             place-items: baseline;
-    
+
             h1 {
                 margin-bottom: 0.1rem;
                 color: $color-black !important;
                 font-weight: 400;
             }
-    
+
             i {
                 font-size: 1em;
                 padding-bottom: 0.3125rem;
             }
         }
-    
+
         &--right-side {
             display: none;
 
@@ -70,7 +171,7 @@
                 height: 1.5625rem;
                 background: $color-primary;
                 border-radius: 50%;
-    
+
                 i {
                     color: $color-white;
                 }

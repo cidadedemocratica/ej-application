@@ -6,6 +6,11 @@ conversation_url = "<int:conversation_id>/<slug:slug>"
 
 urlpatterns = [
     path(
+        "created/",
+        views.BoardCreatedView.as_view(),
+        name="created",
+    ),
+    path(
         "",
         views.BoardConversationsView.as_view(),
         name="list",

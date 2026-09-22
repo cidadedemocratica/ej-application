@@ -11,59 +11,99 @@
 {% block menu %}{% include 'ej_conversations/includes/participant-menu.jinja2' %}{% endblock %}
 
 {% block content %}
-<section class="content-grid board-detail">
-    <div class="board-detail__statistics-container">
-
-        <div class="board-detail__title">
-            <div class="board-detail__title--left-side">
-                <h1 class="header-space text-accent">{{ board.title}}</h1>
-            </div>
-            <div onclick="toggleStatisticsMenu()" class="board-detail__title--right-side">
-                <i class="fas fa-info"></i>
-            </div>
+<section class="content-grid board-detail{% if board_is_empty %} board-detail--onboarding{% endif %}">
+    {% if board_is_empty %}
+        {% set illustration = 'board-created.svg' if board_was_just_created else 'board-is-empty.svg' %}
+        <div class="board-detail__onboarding {% if board_was_just_created %}board-detail__onboarding--created{% else %}board-detail__onboarding--empty{% endif %}">
+            <h1 class="board-detail__onboarding-heading">
+                {% if board_was_just_created %}
+                    {{ _('Congratulations! You have just created a board.') }}
+                {% else %}
+                    {{ _('This board has no conversations yet.') }}
+                {% endif %}
+            </h1>
+            <img
+                class="board-detail__onboarding-illustration"
+                src="{{ static('/img/icons/' + illustration) }}"
+                alt=""
+                aria-hidden="true"
+            >
+            <p class="board-detail__onboarding-prompt">
+                {{ _('Ready to create your first conversation?') }}
+            </p>
+            {% if request.user.has_perm('ej.can_add_conversation_to_board', board) %}
+                <a class="button board-detail__onboarding-cta" href="{{ url('boards:conversation-create', board_slug=board.slug) }}">
+                    {{ _('Let\'s go') }}
+                </a>
+            {% endif %}
+            {% if request.user.has_perm('ej.can_edit_board', board) %}
+                <p class="board-detail__onboarding-actions">
+                    {{ _('You can also ') }}
+                    <a class="board-detail__onboarding-action board-detail__onboarding-action--edit" href="{{ url('boards:board-edit', board_slug=board.slug) }}">{{ _('edit') }}</a>
+                    {% if can_delete_board %}
+                        {{ _('or') }}
+                        <a class="board-detail__onboarding-action board-detail__onboarding-action--delete" onclick="showConfirmationDelete()">{{ _('delete') }}</a>
+                    {% endif %}
+                    {{ _('this board.') }}
+                </p>
+                {% include 'ej_conversations/includes/delete-board-modal.jinja2' %}
+            {% endif %}
         </div>
+    {% else %}
+        <div class="board-detail__statistics-container">
 
-        <div class="board-detail__description">
-            <p>{{ _("Welcome to EJ. This is your personal board. Board is where your conversations will be available. Press 'New conversation' to starts collecting yours audience opinion.") }}</p>
-        </div>
-    
-        {% include 'ej_conversations/includes/remove-board-section.jinja2' %}
-
-        <div onclick="toggleStatisticsMenu()" id="bg-modal" class="board-detail__board-statistics--hide"></div>
-        <div class="cards-divider board-detail__board-statistics--hide">
-            <div class="cards-divider-header">
-                <div class="close-btn">
-                    <i onclick="toggleStatisticsMenu()" class="fas fa-times"></i>
+            <div class="board-detail__title">
+                <div class="board-detail__title--left-side">
+                    <h1 class="header-space text-accent">{{ board.title}}</h1>
                 </div>
-                <h2>{{ _("Board statistics") }}</h2>
+                <div onclick="toggleStatisticsMenu()" class="board-detail__title--right-side">
+                    <i class="fas fa-info"></i>
+                </div>
             </div>
-            <div class="cards-divider-body">
-                {% with value=board.statistics()["votes"], title=_('Total votes') %}
-                    {% include 'ej_boards/includes/stats-card.jinja2' %}
-                {% endwith %}
-                {% with value=board.statistics()["participants"], title=_('Total participants') %}
-                    {% include 'ej_boards/includes/stats-card.jinja2' %}
-                {% endwith %}
-                {% with value=board.statistics()["conversations"], title=_('Total conversations') %}
-                    {% include 'ej_boards/includes/stats-card.jinja2' %}
-                {% endwith %}
+
+            <div class="board-detail__description">
+                <p>{{ _("Welcome to EJ. This is your personal board. Board is where your conversations will be available. Press 'New conversation' to starts collecting yours audience opinion.") }}</p>
             </div>
+
+            {% include 'ej_conversations/includes/remove-board-section.jinja2' %}
+
+            <div onclick="toggleStatisticsMenu()" id="bg-modal" class="board-detail__board-statistics--hide"></div>
+            <div class="cards-divider board-detail__board-statistics--hide">
+                <div class="cards-divider-header">
+                    <div class="close-btn">
+                        <i onclick="toggleStatisticsMenu()" class="fas fa-times"></i>
+                    </div>
+                    <h2>{{ _("Board statistics") }}</h2>
+                </div>
+                <div class="cards-divider-body">
+                    {% with value=board.statistics()["votes"], title=_('Total votes') %}
+                        {% include 'ej_boards/includes/stats-card.jinja2' %}
+                    {% endwith %}
+                    {% with value=board.statistics()["participants"], title=_('Total participants') %}
+                        {% include 'ej_boards/includes/stats-card.jinja2' %}
+                    {% endwith %}
+                    {% with value=board.statistics()["conversations"], title=_('Total conversations') %}
+                        {% include 'ej_boards/includes/stats-card.jinja2' %}
+                    {% endwith %}
+                </div>
+            </div>
+
+            {%- if request.user.has_perm('ej.can_add_conversation_to_board', board) %}
+                <a class="is-primary button square" href="{{ url('boards:conversation-create', board_slug=board.slug) }}">{{ _('New conversation') }}</a>
+            {% endif %}
+        </div>
+        <hr>
+        <div class="alternate-cards">
+            {% for conversation in conversations %}
+                <div class="margin-y3">{{ conversation|role('card', url=url('boards:dataviz-dashboard',  **conversation.get_url_kwargs()), button_text=_("Manage!")) }}</div>
+            {% endfor %}
         </div>
 
-        {%- if request.user.has_perm('ej.can_add_conversation_to_board', board) %}
-            <a class="is-primary button square" href="{{ url('boards:conversation-create', board_slug=board.slug) }}">{{ _('New conversation') }}</a>
-        {% endif %}
-    </div>
-    <hr>
-    <div class="alternate-cards">
-        {% for conversation in conversations %}
-            <div class="margin-y3">{{ conversation|role('card', url=url('boards:dataviz-dashboard',  **conversation.get_url_kwargs()), button_text=_("Manage!")) }}</div>
-        {% endfor %}
-    </div>
-
-    {% include 'ej_conversations/includes/favorite-button.jinja2' %}
+        {% include 'ej_conversations/includes/favorite-button.jinja2' %}
+    {% endif %}
 </section>
 
+{% if not board_is_empty %}
 <script>
     cards = document.querySelector(".cards-divider");
     modalBg = document.getElementById('bg-modal');
@@ -82,4 +122,5 @@
     }
 
 </script>
+{% endif %}
 {% endblock %}
