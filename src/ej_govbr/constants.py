@@ -1,0 +1,3 @@
+GOVBR_PROVIDER_ID = "govbr"
+GOVBR_NONCE_SESSION_KEY = "govbr_nonce"
+GOVBR_AUTHENTICATED_SESSION_KEY = "govbr_authenticated"

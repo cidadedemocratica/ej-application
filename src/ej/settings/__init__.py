@@ -2,9 +2,11 @@ import logging
 import os
 
 from boogie.configurations import DjangoConf, env
+from ej_govbr.constants import GOVBR_PROVIDER_ID
 from .apps import InstalledAppsConf
 from .constance import ConstanceConf
 from .email import EmailConf
+from .govbr import validate_govbr_settings
 from .log import LoggingConf
 from .middleware import MiddlewareConf
 from .options import EjOptions
@@ -51,16 +53,38 @@ class Conf(
     # Accounts
     #
     AUTH_USER_MODEL = "ej_users.User"
-    ACCOUNT_AUTHENTICATION_METHOD = "email"
-    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_LOGIN_METHODS = {"email"}
+    ACCOUNT_SIGNUP_FIELDS = ["email*"]
     ACCOUNT_UNIQUE_EMAIL = True
-    ACCOUNT_USERNAME_REQUIRED = False
     ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     LOGIN_REDIRECT_URL = "/"
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
     ACCOUNT_EMAIL_VERIFICATION = "none"
+    ACCOUNT_ADAPTER = "ej_users.adapters.AccountAdapter"
+    ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
     SOCIALACCOUNT_ADAPTER = "ej_users.adapters.SocialAccountAdapter"
+    SOCIALACCOUNT_FORMS = {"signup": "ej_govbr.forms.SignupFormRouter"}
     SOCIALACCOUNT_LOGIN_ON_GET = True
+    SOCIALACCOUNT_STORE_TOKENS = False
+
+    # GOV.BR login is disabled until approved credentials and URLs are set.
+    GOVBR_ENABLED = env(False, name="{attr}")
+    GOVBR_CLIENT_ID = env("", name="{attr}")
+    GOVBR_CLIENT_SECRET = env("", name="{attr}")
+    GOVBR_SUBJECT_HASH_KEY = env("", name="{attr}")
+    GOVBR_REDIRECT_URI = env("", name="{attr}")
+    GOVBR_POST_LOGOUT_REDIRECT_URI = env("", name="{attr}")
+    GOVBR_AUTHORIZE_URL = env(
+        "https://sso.staging.acesso.gov.br/authorize", name="{attr}"
+    )
+    GOVBR_TOKEN_URL = env(
+        "https://sso.staging.acesso.gov.br/token", name="{attr}"
+    )
+    GOVBR_JWKS_URL = env("https://sso.staging.acesso.gov.br/jwk", name="{attr}")
+    GOVBR_LOGOUT_URL = env(
+        "https://sso.staging.acesso.gov.br/logout", name="{attr}"
+    )
+    GOVBR_ISSUER = env("https://sso.staging.acesso.gov.br/", name="{attr}")
     SOCIALACCOUNT_PROVIDERS = {
         "google": {
             "SCOPE": [
@@ -70,7 +94,21 @@ class Conf(
             "AUTH_PARAMS": {
                 "access_type": "online",
             },
-        }
+        },
+        GOVBR_PROVIDER_ID: {
+            "APP": {
+                "name": "GOV.BR",
+                "client_id": GOVBR_CLIENT_ID,
+                "secret": GOVBR_CLIENT_SECRET,
+            },
+            "SCOPE": [
+                "openid",
+                "email",
+                "profile",
+                "govbr_confiabilidades",
+                "govbr_confiabilidades_idtoken",
+            ],
+        },
     }
 
     # MANAGER CONFIGURATION
@@ -182,6 +220,7 @@ class Conf(
 
 
 Conf.save_settings(globals())
+validate_govbr_settings(globals())
 
 #
 # Apply fixes and wait for services to start

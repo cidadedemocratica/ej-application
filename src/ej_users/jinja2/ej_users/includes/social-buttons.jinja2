@@ -1,10 +1,17 @@
-<div class="row flex-center items-center login-form__social-button--padding">
+<div class="login-form__social-buttons">
     {% for button in social_buttons %}
-        <div class="login-form__social-button">
-            <a href="{{button.href}}">
-                <span>{{_("Login with account ")}}<span>{{button.provider}}</span></span>
-                <i class="google-icon {{button.class_}}"></i>
-            </a> 
+        <div id="{{ button.id }}" class="login-form__social-button login-form__social-button--{{ button.provider }}">
+            <a href="{{ button.href }}" aria-label="{{ button.label }}">
+                {% if button.provider == "govbr" %}
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                    <span>{{ _("Sign in with") }} <strong>GOV.BR</strong></span>
+                {% else %}
+                    <span>{{ button.label }}</span>
+                    {% if button.class_ %}
+                        <i class="{{ button.class_ }}" aria-hidden="true"></i>
+                    {% endif %}
+                {% endif %}
+            </a>
         </div>
     {% endfor %}
 </div>

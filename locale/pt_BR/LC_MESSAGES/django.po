@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ej\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-21 22:12-0300\n"
+"POT-Creation-Date: 2026-10-05 15:09-0300\n"
 "PO-Revision-Date: 2022-04-12 13:55-0300\n"
 "Last-Translator: David Carlos <davidcarlos@pencillabs.com.br>\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -981,6 +981,19 @@ msgstr "pulados"
 msgid "channel"
 msgstr "canal"
 
+#: src/ej_govbr/forms.py:29 src/ej_users/models.py:42 src/ej_users/models.py:43
+msgid "Terms of use"
+msgstr "Termos de uso"
+
+#: src/ej_govbr/forms.py:32 src/ej_users/models.py:48
+#, fuzzy
+msgid "Privacy policy"
+msgstr "Política de privacidade"
+
+#: src/ej_govbr/forms.py:39
+msgid "An account already exists with this email address."
+msgstr "Uma conta já existe com este endereço de e-mail."
+
 #: src/ej_integrations/apps.py:7
 #, fuzzy
 msgid "Integrations"
@@ -1438,8 +1451,8 @@ msgstr "Número de telefone"
 msgid "Age"
 msgstr "Idade"
 
-#: src/ej_profiles/models.py:194 src/ej_users/forms.py:102
-#: src/ej_users/forms.py:111
+#: src/ej_profiles/models.py:194 src/ej_users/forms.py:101
+#: src/ej_users/forms.py:110
 msgid "E-mail"
 msgstr "E-mail"
 
@@ -1479,6 +1492,10 @@ msgstr "perfil"
 msgid "Password changed successfully."
 msgstr "Senha alterada com sucesso."
 
+#: src/ej_users/adapters.py:66
+msgid "Unable to sign in with GOV.BR. Please try again."
+msgstr "Não foi possível entrar com o gov.br. Tente novamente."
+
 #: src/ej_users/admin.py:14
 msgid "Permissions"
 msgstr "Permissões"
@@ -1505,28 +1522,28 @@ msgstr ""
 msgid "Users"
 msgstr "Usuários"
 
-#: src/ej_users/forms.py:54 src/ej_users/forms.py:103
+#: src/ej_users/forms.py:53 src/ej_users/forms.py:102
 msgid "Password"
 msgstr "Senha"
 
-#: src/ej_users/forms.py:57
+#: src/ej_users/forms.py:56
 msgid "Password confirmation"
 msgstr "Confirmação de senha"
 
-#: src/ej_users/forms.py:66 src/ej_users/serializers.py:42
+#: src/ej_users/forms.py:65 src/ej_users/serializers.py:42
 msgid "Passwords do not match"
 msgstr "As senhas não são iguais"
 
-#: src/ej_users/forms.py:119
+#: src/ej_users/forms.py:118
 msgid "Yes, I understand the consequences."
 msgstr "Sim, entendo as conseqüências."
 
-#: src/ej_users/forms.py:124
+#: src/ej_users/forms.py:123
 #, fuzzy
 msgid "Current password"
 msgstr "Senha atual"
 
-#: src/ej_users/forms.py:134
+#: src/ej_users/forms.py:133
 #, fuzzy
 msgid "Incorrect current password"
 msgstr "Senha atual está incorreta"
@@ -1596,30 +1613,6 @@ msgstr ""
 msgid "Request to generate a new password"
 msgstr "Pedido para gerar uma nova senha"
 
-#: src/ej_users/jinja2/socialaccount/signup.html:7
-#, fuzzy
-msgid "Signup"
-msgstr "Registrar"
-
-#: src/ej_users/jinja2/socialaccount/signup.html:30
-msgid "Connect to Facebook"
-msgstr ""
-
-#: src/ej_users/jinja2/socialaccount/signup.html:35
-msgid "Connect to Twitter"
-msgstr ""
-
-#: src/ej_users/jinja2/socialaccount/signup.html:43
-msgid "Sign Up"
-msgstr "Registrar"
-
-#: src/ej_users/jinja2/socialaccount/signup.html:45
-#, python-format
-msgid ""
-"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
-msgstr ""
-"Já tem uma conta? Então por favor  <a href=\"%(login_url)s\">faça login</a>."
-
 #: src/ej_users/models.py:32
 #, fuzzy
 msgid "email address"
@@ -1633,17 +1626,8 @@ msgstr "Seu endereço de e-mail"
 msgid "Name used to publicly identify user"
 msgstr "Apelido público usado para identificar o usuário"
 
-#: src/ej_users/models.py:42 src/ej_users/models.py:43
-msgid "Terms of use"
-msgstr "Termos de uso"
-
 #: src/ej_users/models.py:47
 msgid "Agree with privacy policy"
-msgstr "Política de privacidade"
-
-#: src/ej_users/models.py:48
-#, fuzzy
-msgid "Privacy policy"
 msgstr "Política de privacidade"
 
 #: src/ej_users/models.py:68
@@ -1668,19 +1652,27 @@ msgstr "Identificador já existe."
 msgid "Secret ID already exists"
 msgstr "Identificador já existe."
 
-#: src/ej_users/views/account.py:61
+#: src/ej_users/socialbuttons.py:102
+msgid "Sign in with Google"
+msgstr "Entrar com Google"
+
+#: src/ej_users/socialbuttons.py:107
+msgid "Sign in with GOV.BR"
+msgstr "Entrar com GOV.BR"
+
+#: src/ej_users/views/account.py:72
 msgid "You must confirm that you want to remove your account."
 msgstr "Você deve confirmar que deseja remover sua conta."
 
-#: src/ej_users/views/account.py:64
+#: src/ej_users/views/account.py:75
 msgid "Wrong e-mail address"
 msgstr "Endereço de e-mail incorreto"
 
-#: src/ej_users/views/account.py:66
+#: src/ej_users/views/account.py:77
 msgid "Cannot remove superuser accounts"
 msgstr "Não pode remover contas de superusuário"
 
-#: src/ej_users/views/account.py:70
+#: src/ej_users/views/account.py:81
 msgid "We are sorry to see you go :(<br><br>Good luck in your journey."
 msgstr "Lamentamos que você vá :( <br> <br> Boa sorte em sua jornada."
 
@@ -4311,14 +4303,46 @@ msgstr "Autenticação"
 msgid "By clicking, you agree with our privacy policy."
 msgstr "Ao clicar, você concorda com nossa política de privacidade."
 
-#: src/ej_users/jinja2/ej_users/includes/social-buttons.jinja2:5
-#, fuzzy
-msgid "Login with account "
-msgstr "Logar com conta "
+#: src/ej_users/jinja2/ej_users/includes/social-buttons.jinja2:7
+msgid "Sign in with"
+msgstr "Entrar com"
 
 #: src/ej_users/jinja2/ej_users/includes/terms.jinja2:6
 msgid "By clicking, you agree with our user terms."
 msgstr "Ao clicar, você concorda com nossos termos de uso."
+
+#: src/ej_users/jinja2/socialaccount/signup.jinja2:5
+#, fuzzy
+msgid "Complete your registration"
+msgstr "Complete seu perfil, é rapidinho"
+
+#: src/ej_users/jinja2/socialaccount/signup.jinja2:6
+msgid "Enter an email address to finish signing in with GOV.BR."
+msgstr "Informe um endereço de e-mail para concluir a entrada com o gov.br."
+
+#: src/ej_users/jinja2/socialaccount/signup.jinja2:23
+#, fuzzy
+msgid "Complete registration"
+msgstr "Conversa"
+
+#, fuzzy
+#~ msgid "Signup"
+#~ msgstr "Registrar"
+
+#~ msgid "Sign Up"
+#~ msgstr "Registrar"
+
+#, python-format
+#~ msgid ""
+#~ "Already have an account? Then please <a href=\"%(login_url)s\">sign in</"
+#~ "a>."
+#~ msgstr ""
+#~ "Já tem uma conta? Então por favor  <a href=\"%(login_url)s\">faça login</"
+#~ "a>."
+
+#, fuzzy
+#~ msgid "Login with account "
+#~ msgstr "Logar com conta "
 
 #, fuzzy
 #~ msgid "Add member"
@@ -5293,9 +5317,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 #~ msgid "What can EJ do for you today? We want to meet you!"
 #~ msgstr "O que a EJ pode fazer por você hoje? Queremos te conhecer!"
 
-#~ msgid "Complete your profile, it's quick"
-#~ msgstr "Complete seu perfil, é rapidinho"
-
 #, fuzzy
 #~ msgid "%(n)s comments added (Máx. 2)"
 #~ msgstr "%(n)s Comentários adicionados (Máx. 2)"
@@ -6150,9 +6171,6 @@ msgstr "Ao clicar, você concorda com nossos termos de uso."
 
 #~ msgid "Forgot Password?"
 #~ msgstr "Esqueceu a senha?"
-
-#~ msgid "Sign In"
-#~ msgstr "Login"
 
 #~ msgid "Sign Out"
 #~ msgstr "Sair"

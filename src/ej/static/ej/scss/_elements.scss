@@ -263,14 +263,20 @@ ul.errorlist {
         justify-content: center;
         align-items: center;
 
-        span {
+        a {
+            align-items: center;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            width: 100%;
+        }
+
+        > a > span {
             font-weight: 700;
             color: $color-gray-darker;
-            span {
-                text-transform: capitalize;
-            }
         }
-        a i {
+
+        &--google a i {
             background: conic-gradient(
                     from -45deg,
                     #ea4335 110deg,
@@ -286,9 +292,51 @@ ul.errorlist {
             font-size: 1rem !important;
         }
 
-        &--padding {
-            padding: 0 1.5rem;
+        &--govbr {
+            background-color: $color-govbr-blue;
+            border-color: $color-govbr-blue;
+            border-radius: 100em;
+            box-shadow: none;
+            font-size: 1.05em;
+            height: 2rem;
+            padding: 0 1rem;
+            width: auto;
+
+            a {
+                gap: 0.25rem;
+            }
+
+            > a > span {
+                color: $color-white;
+                font-weight: 400;
+            }
+
+            a i {
+                color: $color-white;
+            }
+
+            strong {
+                font-weight: 700;
+            }
+
+            &:hover {
+                background-color: $color-govbr-blue-hover;
+                border-color: $color-govbr-blue-hover;
+            }
+
+            a:focus-visible {
+                outline: 0.1875rem solid $color-govbr-focus;
+                outline-offset: 0.1875rem;
+            }
         }
+    }
+
+    &__social-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        padding: 0 1.5rem;
     }
 }
 

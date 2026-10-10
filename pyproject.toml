@@ -9,7 +9,7 @@ license = "AGPL-3.0"
 python = "^3.12"
 django = "5.2.0"
 django-constance = {version = "^4.3.4", extras = ["database"]}
-django-allauth = "0.59.0"
+django-allauth = {version = "65.19.4", extras = ["socialaccount"]}
 django-taggit = "^6.1.0"
 django-autoslug = "^1.9"
 django-environ = "^0.4.5"
