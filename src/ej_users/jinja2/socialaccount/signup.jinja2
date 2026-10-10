@@ -1,0 +1,26 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+    <section class="login-form pad-t3 form-narrow">
+        <h1>{{ _("Complete your registration") }}</h1>
+        <p>{{ _("Enter an email address to finish signing in with GOV.BR.") }}</p>
+        <form class="signup" id="signup_form" method="post" action="{{ request.path }}">
+            {{ csrf_input }}
+            {{ form.non_field_errors() }}
+            <div class="login-form__input">
+                <label class="login-form__label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+            <div class="login-form__input">
+                {{ form.agree_with_terms }}
+                {{ form.agree_with_terms.errors }}
+            </div>
+            <div class="login-form__input">
+                {{ form.agree_with_privacy_policy }}
+                {{ form.agree_with_privacy_policy.errors }}
+            </div>
+            <button class="button width-full is-primary" type="submit">{{ _("Complete registration") }}</button>
+        </form>
+    </section>
+{% endblock %}

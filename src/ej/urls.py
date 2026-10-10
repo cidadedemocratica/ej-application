@@ -23,6 +23,7 @@ from ej_conversations.api import (
 from ej_profiles.api import ProfileViewSet
 from ej_integrations.api import OpinionComponentViewSet, RasaConversationViewSet
 from ej_users.api import TokenViewSet, UsersViewSet
+from ej_users.views import account as ej_users_views
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView
 from django.contrib.flatpages import views as flat_views
@@ -183,6 +184,11 @@ def get_urlpatterns():
         path("boards/", include("ej_boards.urls", namespace="boards")),
         #
         #  Allauth
+        path(
+            "accounts/social/signup/",
+            ej_users_views.SocialSignupView.as_view(),
+            name="socialaccount_signup",
+        ),
         path("accounts/", include("allauth.urls")),
         # CKEditor 5 upload endpoint
         path("ckeditor5/", include("django_ckeditor_5.urls")),

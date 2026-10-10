@@ -10,6 +10,10 @@ from django.utils.translation import gettext_lazy as _
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from allauth.socialaccount.views import SignupView as AllauthSocialSignupView
+from django.shortcuts import redirect
+
+from ej_govbr.provider import get_logout_redirect_url
 
 from .. import forms
 from .. import models
@@ -37,11 +41,18 @@ class LogoutView(TemplateView):
     template_name = "account/logout.jinja2"
 
     def post(self, request: HttpRequest) -> HttpResponse:
+        logout_redirect_url = get_logout_redirect_url(request)
         auth.logout(request)
+        if logout_redirect_url:
+            return redirect(logout_redirect_url)
         return render(request, self.template_name, {"has_logout": True})
 
     def get_context_data(self, **kwargs: Any):
         return {"has_logout": False}
+
+
+class SocialSignupView(AllauthSocialSignupView):
+    template_name = "socialaccount/signup.jinja2"
 
 
 @method_decorator([login_required], name="dispatch")
